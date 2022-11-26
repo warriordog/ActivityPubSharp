@@ -1,23 +1,27 @@
 using System.Diagnostics.CodeAnalysis;
+using ActivityPub.Common.Types;
 
-namespace ActivityPub.Common.Properties;
+namespace ActivityPub.Common.Util;
+
+// TODO override deserialization to map to/from a single string
+// a plain string is equal to Link with only href set
 
 /// <summary>
-/// Synthetic wrapper for elements that can be referred to by a link or object.
+/// Synthetic wrapper for elements that can be included directly or referenced by a Link.
 /// </summary>
-/// <typeparam name="T">Type of object that can be referenced</typeparam>
-public class LinkableProp<T>
+/// <typeparam name="T">Type of element</typeparam>
+public class Linkable<T>
 {
     public bool HasLink => Link != null;
     public bool HasValue => Link == null;
     
-    public string? Link { get; }
+    public ASLink? Link { get; }
     public T? Value { get; }
 
-    public LinkableProp(string link) => Link = link;
-    public LinkableProp(T value) => Value = value;
+    public Linkable(ASLink link) => Link = link;
+    public Linkable(T value) => Value = value;
 
-    public bool TryGetLink([NotNullWhen(true)] out string? link)
+    public bool TryGetLink([NotNullWhen(true)] out ASLink? link)
     {
         if (Link != null)
         {
@@ -41,14 +45,14 @@ public class LinkableProp<T>
         return false;
     }
 
-    protected bool Equals(LinkableProp<T> other) => Link == other.Link && EqualityComparer<T?>.Default.Equals(Value, other.Value);
+    protected bool Equals(Linkable<T> other) => Equals(Link, other.Link) && EqualityComparer<T?>.Default.Equals(Value, other.Value);
 
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != GetType()) return false;
-        return Equals((LinkableProp<T>)obj);
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((Linkable<T>)obj);
     }
 
     public override int GetHashCode() => HashCode.Combine(Link, Value);

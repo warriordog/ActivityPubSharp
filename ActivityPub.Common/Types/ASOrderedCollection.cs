@@ -6,5 +6,5 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection"/>
 public class ASOrderedCollection : ASCollection
 {
-    public ASOrderedCollection() => Type ??= "OrderedCollection";
+    public ASOrderedCollection(string type = "OrderedCollection") : base(type) {}
 }

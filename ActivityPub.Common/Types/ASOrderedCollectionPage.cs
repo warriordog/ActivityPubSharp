@@ -9,5 +9,11 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
 public class ASOrderedCollectionPage : ASOrderedCollection
 {
-    public ASOrderedCollectionPage() => Type ??= "OrderedCollectionPage";
+    public ASOrderedCollectionPage(string type = "OrderedCollectionPage") : base(type) {}
+    
+    /// <summary>
+    /// A non-negative integer value identifying the relative position within the logical view of a strictly ordered collection. 
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startIndex"/>
+    public int? StartIndex { get; set; }
 }
