@@ -8,6 +8,5 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity"/>
 public class ASActivity : ASObject
 {
-    public override string ASContext => "https://www.w3.org/ns/activitystreams#Activity";
-    public override string Type => "Activity";
+    public ASActivity() => Type ??= "Activity";
 }

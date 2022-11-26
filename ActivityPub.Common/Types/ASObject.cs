@@ -7,10 +7,9 @@ namespace ActivityPub.Common.Types;
 /// The Object type serves as the base type for most of the other kinds of objects defined in the Activity Vocabulary, including other Core types such as Activity, IntransitiveActivity, Collection and OrderedCollection. 
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
-public class ASObject : IASType
+public class ASObject : ASType
 {
-    public virtual string ASContext => "https://www.w3.org/ns/activitystreams#Object";
-    public virtual string Type => "Object";
+    public ASObject() => Type ??= "Object";
     
     /// <summary>
     /// Identifies a resource attached or related to an object that potentially requires special handling.

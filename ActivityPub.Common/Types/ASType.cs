@@ -7,16 +7,10 @@ namespace ActivityPub.Common.Types;
 /// This is a synthetic type created to help adapt ActivityStreams to the .NET object model.
 /// It does not exist in the ActivityStreams standard.
 /// </remarks>
-public interface IASType
+public abstract class ASType
 {
-    //TODO remove this - it is constant
-    /// <summary>
-    /// Maps a term to its IRI
-    /// </summary>
-    public string ASContext { get; }
-    
     /// <summary>
     /// Short name of the definition of this type
     /// </summary>
-    public string Type { get; }
+    public string? Type { get; set; }
 }

@@ -6,6 +6,5 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection"/>
 public class ASOrderedCollection : ASCollection
 {
-    public override string ASContext => "https://www.w3.org/ns/activitystreams#OrderedCollection";
-    public override string Type => "OrderedCollection";
+    public ASOrderedCollection() => Type ??= "OrderedCollection";
 }

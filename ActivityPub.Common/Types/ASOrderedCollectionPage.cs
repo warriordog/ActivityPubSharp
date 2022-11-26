@@ -9,6 +9,5 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
 public class ASOrderedCollectionPage : ASOrderedCollection
 {
-    public override string ASContext => "https://www.w3.org/ns/activitystreams#OrderedCollectionPage";
-    public override string Type => "OrderedCollectionPage";
+    public ASOrderedCollectionPage() => Type ??= "OrderedCollectionPage";
 }

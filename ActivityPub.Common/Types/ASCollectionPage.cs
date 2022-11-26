@@ -9,6 +9,5 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage"/>
 public class ASCollectionPage : ASCollection
 {
-    public override string ASContext => "https://www.w3.org/ns/activitystreams#CollectionPage";
-    public override string Type => "CollectionPage";
+    public ASCollectionPage() => Type ??= "CollectionPage";
 }

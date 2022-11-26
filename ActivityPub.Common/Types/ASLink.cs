@@ -8,8 +8,13 @@ namespace ActivityPub.Common.Types;
 /// Properties of the Link are properties of the reference as opposed to properties of the resource. 
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link"/>
-public class ASLink : IASType
+public class ASLink : ASType
 {
-    public virtual string ASContext => "https://www.w3.org/ns/activitystreams#Link";
-    public virtual string Type => "Link";
+    public ASLink() => Type ??= "Link";
+    
+    /// <summary>
+    /// The target resource pointed to by a Link. 
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-href"/>
+    public required string Href { get; set; }
 }

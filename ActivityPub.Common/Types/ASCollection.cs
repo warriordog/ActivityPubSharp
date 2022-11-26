@@ -11,8 +11,7 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection"/>
 public class ASCollection : ASObject
 {
-    public override string ASContext => "https://www.w3.org/ns/activitystreams#Collection";
-    public override string Type => "Collection";
+    public ASCollection() => Type ??= "Collection";
     
     public LinkableProp<ASLink>? Current { get; set; }
     public LinkableProp<ASLink>? First { get; set; }
