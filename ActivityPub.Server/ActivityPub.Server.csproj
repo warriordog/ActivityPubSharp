@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ActivityPub.Common\ActivityPub.Common.csproj" />
+    </ItemGroup>
+
 </Project>
