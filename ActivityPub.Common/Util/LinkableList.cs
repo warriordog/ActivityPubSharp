@@ -2,8 +2,6 @@ using ActivityPub.Common.Types;
 
 namespace ActivityPub.Common.Util;
 
-// TODO override deserialization to handle a raw object or link
-
 /// <summary>
 /// Synthetic type to represent a list of T or Links to T
 /// </summary>

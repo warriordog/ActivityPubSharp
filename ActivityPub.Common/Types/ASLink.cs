@@ -1,7 +1,5 @@
 namespace ActivityPub.Common.Types;
 
-// TODO implicit cast to/from string url
-
 /// <summary>
 /// A Link is an indirect, qualified reference to a resource identified by a URL.
 /// The fundamental model for links is established by <a href="https://tools.ietf.org/html/rfc5988">RFC5988</a>.
@@ -46,4 +44,7 @@ public class ASLink : ASType
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-rel"/>
     public List<string> Rel { get; set; } = new();
+
+    public static implicit operator string(ASLink link) => link.HRef;
+    public static implicit operator ASLink(string str) => new() { HRef = str };
 }

@@ -3,30 +3,35 @@ using ActivityPub.Common.Types;
 
 namespace ActivityPub.Common.Util;
 
-// TODO implicit cast operators
-// TODO override deserialization to map to/from a single string
-// a plain string is equal to Link with only href set
-
 /// <summary>
 /// Synthetic wrapper for elements that can be included directly or referenced by a Link.
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
 public class Linkable<T>
 {
-    public bool HasLink => Link != null;
-    public bool HasValue => Link == null;
-    
-    public ASLink? Link { get; }
-    public T? Value { get; }
+    public bool HasLink { get; }
 
-    public Linkable(ASLink link) => Link = link;
-    public Linkable(T value) => Value = value;
+    private readonly ASLink? _link;
+    
+    public bool HasValue { get; }
+    private readonly T? _value;
+
+    public Linkable(ASLink link)
+    {
+        _link = link;
+        HasLink = true;
+    }
+    public Linkable(T value)
+    {
+        _value = value;
+        HasValue = true;
+    }
 
     public bool TryGetLink([NotNullWhen(true)] out ASLink? link)
     {
-        if (Link != null)
+        if (HasLink)
         {
-            link = Link;
+            link = _link!;
             return true;
         }
 
@@ -36,9 +41,9 @@ public class Linkable<T>
 
     public bool TryGetValue([NotNullWhen(true)] out T? value)
     {
-        if (Value != null)
+        if (HasValue)
         {
-            value = Value;
+            value = _value!;
             return true;
         }
 
@@ -46,7 +51,7 @@ public class Linkable<T>
         return false;
     }
 
-    protected bool Equals(Linkable<T> other) => Equals(Link, other.Link) && EqualityComparer<T?>.Default.Equals(Value, other.Value);
+    protected bool Equals(Linkable<T> other) => Equals(_link, other._link) && EqualityComparer<T?>.Default.Equals(_value, other._value);
 
     public override bool Equals(object? obj)
     {
@@ -56,5 +61,8 @@ public class Linkable<T>
         return Equals((Linkable<T>)obj);
     }
 
-    public override int GetHashCode() => HashCode.Combine(Link, Value);
+    public override int GetHashCode() => HashCode.Combine(_link, _value);
+    
+    public static implicit operator Linkable<T>(ASLink link) => new(link);
+    public static implicit operator Linkable<T>(T value) => new(value);
 }
