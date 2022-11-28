@@ -39,13 +39,13 @@ public class Range<T1, T2>
         return false;
     }
 
-    public virtual void SetAsType1(T1 value1)
+    public virtual void Set(T1 value1)
     {
         _value1 = value1;
         IsType1 = true;
         IsType2 = false;
     }
-    public virtual void SetAsType2(T2 value2)
+    public virtual void Set(T2 value2)
     {
         _value2 = value2;
         IsType1 = false;
@@ -70,19 +70,19 @@ public class Range<T1, T2, T3> : Range<T1, T2>
         return false;
     }
 
-    public override void SetAsType1(T1 value1)
+    public override void Set(T1 value1)
     {
-        base.SetAsType1(value1);
+        base.Set(value1);
         IsType3 = false;
     }
 
-    public override void SetAsType2(T2 value2)
+    public override void Set(T2 value2)
     {
-        base.SetAsType2(value2);
+        base.Set(value2);
         IsType3 = false;
     }
 
-    public virtual void SetAsType3(T3 value3)
+    public virtual void Set(T3 value3)
     {
         _value3 = value3;
         IsType1 = false;
