@@ -158,4 +158,11 @@ public class ASObject : ASType
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-updated"/>
     public DateTime? Updated { get; set; }
+    
+    /// <summary>
+    /// The source property is intended to convey some sort of source from which the content markup was derived, as a form of provenance, or to support future editing by clients.
+    /// In general, clients do the conversion from source to content, not the other way around. 
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitypub/#source-property"/>
+    public ASObject? Source { get; set; }
 }
