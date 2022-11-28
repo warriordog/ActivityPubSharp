@@ -16,7 +16,7 @@ public class ASLink : ASType
     /// The target resource pointed to by a Link. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-href"/>
-    public required Uri HRef { get; set; }
+    public required string HRef { get; set; }
     
     /// <summary>
     /// Hints as to the language used by the target resource.

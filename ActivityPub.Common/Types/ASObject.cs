@@ -110,7 +110,7 @@ public class ASObject : ASType
     /// Identifies one or more links to representations of the object 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
-    public LinkableList<Uri> Url { get; set; } = new();
+    public LinkableList<string> Url { get; set; } = new();
     
     /// <summary>
     /// The content or textual representation of the Object encoded as a JSON string.
@@ -118,17 +118,7 @@ public class ASObject : ASType
     /// The mediaType property can be used in the object to indicate a different content type.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-content"/>
-    /// <seealso cref="ContentMap"/>
-    public string? Content { get; set; }
-
-    /// <summary>
-    /// The content or textual representation of the Object expressed using multiple language-tagged values encoded as JSON strings.
-    /// By default, the value of content is HTML.
-    /// The mediaType property can be used in the object to indicate a different content type.
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-content"/>
-    /// <seealso cref="Content"/>
-    public Dictionary<string, string>? ContentMap { get; set; }
+    public NaturalLanguageString? Content { get; set; }
     
     /// <summary>
     /// When the object describes a time-bound resource, such as an audio or video, a meeting, etc, the duration property indicates the object's approximate duration.
@@ -161,16 +151,7 @@ public class ASObject : ASType
     /// A natural language summarization of the object encoded as HTML.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-summary"/>
-    /// <seealso cref="SummaryMap"/>
-    public string? Summary { get; set; }
-    
-    /// <summary>
-    /// A natural language summarization of the object encoded as HTML.
-    /// Each entry is a Language -> Summary map
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-summary"/>
-    /// <seealso cref="Summary"/>
-    public Dictionary<string, string>? SummaryMap { get; set; }
+    public NaturalLanguageString? Summary { get; set; }
     
     /// <summary>
     /// The date and time at which the object was updated.

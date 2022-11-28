@@ -15,17 +15,19 @@ Project Structure
 - [ ] OSS License
 
 Types
-- [ ] ActivityStreams Types
-  - [ ] Core Types
-  - [ ] Extended Types
-    - [ ] Activity Types
-    - [ ] Actor Types
-    - [ ] Object Types
-    - [ ] Link Types
+- [x] ActivityStreams Types
+  - [x] Core Types
+  - [x] Extended Types
+    - [x] Activity Types
+    - [x] Actor Types
+    - [x] Object Types
+    - [x] Link Types
 - [ ] ActivityPub Types
-- [ ] Synthetic Types
+- [ ] Synthetic / Utility Types
   - [x] ASType
-  - [ ] TransitiveActivity
+  - [x] TransitiveActivity
+  - [x] NaturalLanguageString
+  - [ ] IRI
 
 JSON-LD
 - [ ] Basic implementation

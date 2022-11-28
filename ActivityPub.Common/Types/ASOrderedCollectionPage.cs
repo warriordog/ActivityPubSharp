@@ -1,3 +1,5 @@
+using ActivityPub.Common.Util;
+
 namespace ActivityPub.Common.Types;
 
 /// <summary>
@@ -7,7 +9,7 @@ namespace ActivityPub.Common.Types;
 /// Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the OrderedCollectionPage type.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
-public class ASOrderedCollectionPage : ASOrderedCollection
+public class ASOrderedCollectionPage : ASOrderedCollection, ICollectionPage
 {
     public ASOrderedCollectionPage(string type = "OrderedCollectionPage") : base(type) {}
     
@@ -16,4 +18,8 @@ public class ASOrderedCollectionPage : ASOrderedCollection
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startIndex"/>
     public int? StartIndex { get; set; }
+    
+    public Linkable<ASCollectionPage>? Next { get; set; }
+    public Linkable<ASCollectionPage>? Prev { get; set; }
+    public Linkable<ASCollection>? PartOf { get; set; }
 }

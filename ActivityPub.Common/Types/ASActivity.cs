@@ -1,4 +1,4 @@
-using ActivityPub.Common.Util;
+﻿using ActivityPub.Common.Util;
 
 namespace ActivityPub.Common.Types;
 
@@ -33,13 +33,6 @@ public class ASActivity : ASObject
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-origin"/>
     public Linkable<ASObject>? Origin { get; set; }
-
-    /// <summary>
-    /// Describes the direct object of the activity.
-    /// For instance, in the activity "John added a movie to his wishlist", the object of the activity is the movie added. 
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
-    public LinkableList<ASObject> Object { get; set; } = new();
     
     /// <summary>
     /// Describes the result of the activity.

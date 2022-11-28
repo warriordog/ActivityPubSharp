@@ -35,6 +35,9 @@ public class ASCollection : ASObject
     /// Identifies the items contained in a collection.
     /// The items might be ordered or unordered. 
     /// </summary>
+    /// <remarks>
+    /// Can also be "orderedItems" in JSON, if this is a subclass of ASOrderedCollection.
+    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-items"/>
     public LinkableList<ASObject> Items { get; set; } = new();
 

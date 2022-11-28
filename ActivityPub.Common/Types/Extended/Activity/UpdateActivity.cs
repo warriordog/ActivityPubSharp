@@ -5,7 +5,7 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// Note, however, that this vocabulary does not define a mechanism for describing the actual set of modifications made to object.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-public class UpdateActivity : ASActivity
+public class UpdateActivity : ASTransitiveActivity
 {
     public UpdateActivity(string type = "Update") : base(type) {}
 }
