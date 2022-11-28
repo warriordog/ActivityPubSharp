@@ -165,4 +165,19 @@ public class ASObject : ASType
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#source-property"/>
     public ASObject? Source { get; set; }
+    
+    /// <summary>
+    /// This is a list of all Like activities with this object as the object property, added as a side effect.
+    /// </summary>
+    /// <remarks>
+    /// Care should be taken to not confuse the the likes collection with the similarly named but different liked collection.
+    /// </remarks>
+    /// <seealso href="https://www.w3.org/TR/activitypub/#likes"/>
+    public Linkable<ASCollection>? Likes { get; set; }
+    
+    /// <summary>
+    /// This is a list of all Announce activities with this object as the object property, added as a side effect.
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitypub/#shares"/>
+    public Linkable<ASCollection>? Shares { get; set; }
 }

@@ -1,5 +1,7 @@
 namespace ActivityPub.Common.Types;
 
+// TODO implicit cast to/from string url
+
 /// <summary>
 /// A Link is an indirect, qualified reference to a resource identified by a URL.
 /// The fundamental model for links is established by <a href="https://tools.ietf.org/html/rfc5988">RFC5988</a>.

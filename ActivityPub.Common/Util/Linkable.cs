@@ -3,6 +3,7 @@ using ActivityPub.Common.Types;
 
 namespace ActivityPub.Common.Util;
 
+// TODO implicit cast operators
 // TODO override deserialization to map to/from a single string
 // a plain string is equal to Link with only href set
 

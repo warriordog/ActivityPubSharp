@@ -28,6 +28,9 @@ Types
   - [x] TransitiveActivity
   - [x] NaturalLanguageString
   - [ ] IRI
+- [ ] Casts and operators
+- [ ] Extensibility - custom properties
+- [ ] Validators
 
 JSON-LD
 - [ ] Basic implementation
@@ -42,7 +45,8 @@ Serialization
   - [ ] Check for ActivityPub context
 - [ ] Serializer
   - [ ] Attach ActivityPub context
-- [ ] Use real JSON-LD
+- [ ] Validate object graphs
+- [ ] Use JSON-LD
 
 Documentation
 
