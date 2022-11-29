@@ -22,31 +22,30 @@ Types
     - [x] Actor Types
     - [x] Object Types
     - [x] Link Types
-- [ ] ActivityPub Types
 - [ ] Synthetic / Utility Types
   - [x] ASType
   - [x] TransitiveActivity
   - [x] NaturalLanguageString
+  - [x] ASActor
+  - [x] ICollectionPage
   - [ ] IRI
-- [ ] Casts and operators
+- [x] Casts and operators
 - [ ] Extensibility - custom properties
-- [ ] Validators
-
-JSON-LD
-- [ ] Basic implementation
-  - [ ] Context mapping
-  - [ ] Parser
-  - [ ] Serializer
-- [ ] Full implementation
 
 Serialization
-- [ ] Simple implementation with basic JSON
 - [ ] Parser
-  - [ ] Check for ActivityPub context
+  - [ ] Check for ActivityStreams context
 - [ ] Serializer
-  - [ ] Attach ActivityPub context
+  - [ ] Attach ActivityStreams context
+- [ ] Allow other contexts to be provided
 - [ ] Validate object graphs
-- [ ] Use JSON-LD
+- [ ] Map extra properties
+
+Client
+
+Server
+
+Federation
 
 Documentation
 
