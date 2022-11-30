@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Client", "Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Common", "ActivityPub.Common\ActivityPub.Common.csproj", "{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Serialization", "ActivityPub.Serialization\ActivityPub.Serialization.csproj", "{EA4C6112-2A0E-443A-BBB7-166E91EB8CB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA4C6112-2A0E-443A-BBB7-166E91EB8CB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA4C6112-2A0E-443A-BBB7-166E91EB8CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA4C6112-2A0E-443A-BBB7-166E91EB8CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA4C6112-2A0E-443A-BBB7-166E91EB8CB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
