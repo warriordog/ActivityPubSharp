@@ -6,5 +6,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class MoveActivity : ASTransitiveActivity
 {
-    public MoveActivity(string type = "Move") : base(type) {}
+    public const string MoveType = "Move";
+    public MoveActivity(string type = MoveType) : base(type) {}
 }

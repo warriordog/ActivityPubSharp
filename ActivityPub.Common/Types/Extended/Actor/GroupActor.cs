@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Actor;
 /// </summary>
 public class GroupActor : ASActor
 {
-    public GroupActor(string type = "Group") : base(type) {}
+    public const string GroupType = "Group";
+    public GroupActor(string type = GroupType) : base(type) {}
 }

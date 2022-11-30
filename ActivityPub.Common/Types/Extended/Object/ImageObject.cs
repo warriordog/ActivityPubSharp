@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class ImageObject : DocumentObject
 {
-    public ImageObject(string type = "Image") : base(type) {}   
+    public const string ImageType = "Image";
+    public ImageObject(string type = ImageType) : base(type) {}   
 }

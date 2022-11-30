@@ -11,7 +11,8 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection"/>
 public class ASCollection : ASObject
 {
-    public ASCollection(string type = "Collection") : base(type) {}
+    public const string CollectionType = "Collection";
+    public ASCollection(string type = CollectionType) : base(type) {}
     
     /// <summary>
     ///  In a paged Collection, indicates the page that contains the most recently updated member items. 

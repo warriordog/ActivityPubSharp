@@ -7,5 +7,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class FollowActivity : ASTransitiveActivity
 {
-    public FollowActivity(string type = "Follow") : base(type) {}
+    public const string FollowType = "Follow";
+    public FollowActivity(string type = FollowType) : base(type) {}
 }

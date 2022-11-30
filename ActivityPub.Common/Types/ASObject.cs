@@ -10,7 +10,9 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
 public class ASObject : ASType
 {
-    public ASObject(string type = "Object") : base(type) {}
+    public const string ObjectType = "Object";
+
+    public ASObject(string type = ObjectType) : base(type) {}
     
     /// <summary>
     /// Identifies a resource attached or related to an object that potentially requires special handling.

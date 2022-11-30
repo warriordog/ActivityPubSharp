@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class CreateActivity : ASTransitiveActivity
 {
-    public CreateActivity(string type = "Create") : base(type) {}
+    public const string CreateType = "Create";
+    public CreateActivity(string type = CreateType) : base(type) {}
 }

@@ -6,5 +6,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class AcceptActivity : ASTransitiveActivity
 {
-    public AcceptActivity(string type = "Accept") : base(type) {}
+    public const string AcceptType = "Accept";
+    public AcceptActivity(string type = AcceptType) : base(type) {}
 }

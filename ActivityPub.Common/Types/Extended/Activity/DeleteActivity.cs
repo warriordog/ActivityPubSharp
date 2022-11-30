@@ -6,5 +6,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class DeleteActivity : ASTransitiveActivity
 {
-    public DeleteActivity(string type = "Delete") : base(type) {}
+    public const string DeleteType = "Delete";
+    public DeleteActivity(string type = DeleteType) : base(type) {}
 }

@@ -7,5 +7,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class UpdateActivity : ASTransitiveActivity
 {
-    public UpdateActivity(string type = "Update") : base(type) {}
+    public const string UndoType = "Update";
+    public UpdateActivity(string type = UndoType) : base(type) {}
 }

@@ -7,5 +7,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class ArriveActivity : ASIntransitiveActivity
 {
-    public ArriveActivity(string type = "Arrive") : base(type) {}
+    public const string ArriveType = "Arrive";
+    public ArriveActivity(string type = ArriveType) : base(type) {}
 }

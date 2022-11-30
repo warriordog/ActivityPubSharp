@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Actor;
 /// </summary>
 public class ApplicationActor : ASActor
 {
-    public ApplicationActor(string type = "Application") : base(type) {}
+    public const string ApplicationType = "Application";
+    public ApplicationActor(string type = ApplicationType) : base(type) {}
 }

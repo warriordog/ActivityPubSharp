@@ -11,7 +11,8 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage"/>
 public class ASCollectionPage : ASCollection, ICollectionPage
 {
-    public ASCollectionPage(string type = "CollectionPage") : base(type) {}
+    public const string CollectionPageType = "CollectionPage";
+    public ASCollectionPage(string type = CollectionPageType) : base(type) {}
     
     public Linkable<ASCollectionPage>? Next { get; set; }
     public Linkable<ASCollectionPage>? Prev { get; set; }

@@ -7,5 +7,6 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-intransitiveactivity"/>
 public class ASIntransitiveActivity : ASActivity
 {
-    public ASIntransitiveActivity(string type = "IntransitiveActivity") : base(type) {}
+    public const string IntransitiveActivityType = "IntransitiveActivity";
+    public ASIntransitiveActivity(string type = IntransitiveActivityType) : base(type) {}
 }

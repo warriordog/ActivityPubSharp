@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Actor;
 /// </summary>
 public class OrganizationActor : ASActor
 {
-    public OrganizationActor(string type = "Organization") : base(type) {}
+    public const string OrganizationType = "Organization";
+    public OrganizationActor(string type = OrganizationType) : base(type) {}
 }

@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class ArticleObject : ASObject
 {
-    public ArticleObject(string type = "Article") : base(type) {}
+    public const string ArticleType = "Article";
+    public ArticleObject(string type = ArticleType) : base(type) {}
 }

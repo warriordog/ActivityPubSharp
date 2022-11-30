@@ -6,5 +6,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class JoinActivity : ASTransitiveActivity
 {
-    public JoinActivity(string type = "Join") : base(type) {}
+    public const string JoinType = "Join";
+    public JoinActivity(string type = JoinType) : base(type) {}
 }

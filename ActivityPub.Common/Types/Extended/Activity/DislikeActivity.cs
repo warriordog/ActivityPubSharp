@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class DislikeActivity : ASTransitiveActivity
 {
-    public DislikeActivity(string type = "Dislike") : base(type) {}
+    public const string DislikeType = "Dislike";
+    public DislikeActivity(string type = DislikeType) : base(type) {}
 }

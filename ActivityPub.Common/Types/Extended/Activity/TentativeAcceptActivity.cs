@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class TentativeAcceptActivity : AcceptActivity
 {
-    public TentativeAcceptActivity(string type = "TentativeAccept") : base(type) {}
+    public const string TentativeAcceptType = "TentativeAccept";
+    public TentativeAcceptActivity(string type = TentativeAcceptType) : base(type) {}
 }

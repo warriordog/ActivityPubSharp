@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class VideoObject : DocumentObject
 {
-    public VideoObject(string type = "Video") : base(type) {}
+    public const string VideoType = "Video";
+    public VideoObject(string type = VideoType) : base(type) {}
 }

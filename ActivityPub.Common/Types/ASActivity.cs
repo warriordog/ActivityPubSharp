@@ -10,7 +10,8 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity"/>
 public class ASActivity : ASObject
 {
-    public ASActivity(string type = "Activity") : base(type) {}
+    public const string ActivityType = "Activity";
+    public ASActivity(string type = ActivityType) : base(type) {}
 
     /// <summary>
     /// Describes one or more entities that either performed or are expected to perform the activity.

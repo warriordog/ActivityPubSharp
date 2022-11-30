@@ -7,5 +7,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class AddActivity : ASTransitiveActivity
 {
-    public AddActivity(string type = "Add") : base(type) {}
+    public const string AddType = "Add";
+    public AddActivity(string type = AddType) : base(type) {}
 }

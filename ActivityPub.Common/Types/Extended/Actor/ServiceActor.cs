@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Actor;
 /// </summary>
 public class ServiceActor : ASActor
 {
-    public ServiceActor(string type = "Service") : base(type) {}
+    public const string ServiceType = "Service";
+    public ServiceActor(string type = ServiceType) : base(type) {}
 }

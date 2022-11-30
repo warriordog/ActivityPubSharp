@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Actor;
 /// </summary>
 public class PersonActor : ASActor
 {
-    public PersonActor(string type = "Person") : base(type) {}
+    public const string PersonType = "Person";
+    public PersonActor(string type = PersonType) : base(type) {}
 }

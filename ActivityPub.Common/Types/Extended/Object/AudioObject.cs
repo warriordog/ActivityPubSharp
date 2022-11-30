@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class AudioObject : DocumentObject
 {
-    
+    public const string AudioType = "Audio";
+    public AudioObject(string type = AudioType) : base(type) {}
 }

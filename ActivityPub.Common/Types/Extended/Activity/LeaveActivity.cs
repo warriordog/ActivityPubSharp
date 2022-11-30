@@ -6,5 +6,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class LeaveActivity : ASTransitiveActivity
 {
-    public LeaveActivity(string type = "Leave") : base(type) {}
+    public const string LeaveType = "Leave";
+    public LeaveActivity(string type = LeaveType) : base(type) {}
 }

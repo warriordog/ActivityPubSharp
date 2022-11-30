@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class InviteActivity : OfferActivity
 {
-    public InviteActivity(string type = "Invite") : base(type) {}
+    public const string InviteType = "Invite";
+    public InviteActivity(string type = InviteType) : base(type) {}
 }

@@ -8,5 +8,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class BlockActivity : IgnoreActivity
 {
-    public BlockActivity(string type = "BlockActivity") : base(type) {}
+    public const string BlockType = "BlockActivity";
+    public BlockActivity(string type = BlockType) : base(type) {}
 }

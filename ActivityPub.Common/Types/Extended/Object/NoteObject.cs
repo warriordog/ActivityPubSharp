@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class NoteObject : ASObject
 {
-    public NoteObject(string type = "Note") : base(type) {}
+    public const string NoteType = "Note";
+    public NoteObject(string type = NoteType) : base(type) {}
 }

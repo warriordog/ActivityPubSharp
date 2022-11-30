@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class ReadActivity : ASTransitiveActivity
 {
-    public ReadActivity(string type = "Read") : base(type) {}
+    public const string ReadType = "Read";
+    public ReadActivity(string type = ReadType) : base(type) {}
 }

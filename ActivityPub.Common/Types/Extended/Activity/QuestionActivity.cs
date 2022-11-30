@@ -10,7 +10,8 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class QuestionActivity : ASIntransitiveActivity
 {
-    public QuestionActivity(string type = "Question") : base(type) {}
+    public const string QuestionType = "Question";
+    public QuestionActivity(string type = QuestionType) : base(type) {}
     
     /// <summary>
     /// Identifies an exclusive option for a Question.

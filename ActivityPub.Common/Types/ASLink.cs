@@ -10,7 +10,8 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link"/>
 public class ASLink : ASType
 {
-    public ASLink(string type = "Link") : base(type) {}
+    public const string LinkType = "Link";
+    public ASLink(string type = LinkType) : base(type) {}
     
     /// <summary>
     /// The target resource pointed to by a Link. 

@@ -6,7 +6,8 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class TombstoneObject : ASObject
 {
-    public TombstoneObject(string type = "Tombstone") : base(type) {}
+    public const string TombstoneType = "Tombstone";
+    public TombstoneObject(string type = TombstoneType) : base(type) {}
     
     /// <summary>
     /// On a Tombstone object, the formerType property identifies the type of the object that was deleted.

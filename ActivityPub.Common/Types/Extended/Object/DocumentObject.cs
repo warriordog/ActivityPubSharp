@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class DocumentObject : ASObject
 {
-    public DocumentObject(string type = "Document") : base(type) {}
+    public const string DocumentType = "Document";
+    public DocumentObject(string type = DocumentType) : base(type) {}
 }

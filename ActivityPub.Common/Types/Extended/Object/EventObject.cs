@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class EventObject : ASObject
 {
-    public EventObject(string type = "Event") : base(type) {}
+    public const string EventType = "Event";
+    public EventObject(string type = EventType) : base(type) {}
 }

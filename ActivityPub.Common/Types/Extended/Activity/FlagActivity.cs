@@ -6,5 +6,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class FlagActivity : ASTransitiveActivity
 {
-    public FlagActivity(string type = "Flag") : base(type) {}
+    public const string FlagType = "Flag";
+    public FlagActivity(string type = FlagType) : base(type) {}
 }

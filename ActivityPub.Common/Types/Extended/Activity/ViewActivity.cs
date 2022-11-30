@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class ViewActivity : ASTransitiveActivity
 {
-    public ViewActivity(string type = "View") : base(type) {}
+    public const string ViewType = "View";
+    public ViewActivity(string type = ViewType) : base(type) {}
 }

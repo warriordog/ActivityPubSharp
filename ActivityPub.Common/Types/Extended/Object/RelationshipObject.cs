@@ -8,7 +8,8 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class RelationshipObject : ASObject
 {
-    public RelationshipObject(string type = "Relationship") : base(type) {}
+    public const string RelationshipType = "Relationship";
+    public RelationshipObject(string type = RelationshipType) : base(type) {}
 
     /// <summary>
     /// Describes the entity to which the subject is related. 

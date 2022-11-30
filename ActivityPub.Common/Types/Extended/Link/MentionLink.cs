@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Link;
 /// </summary>
 public class MentionLink : ASLink
 {
-    public MentionLink(string type = "Mention") : base(type) {}
+    public const string MentionType = "Mention";
+    public MentionLink(string type = MentionType) : base(type) {}
 }

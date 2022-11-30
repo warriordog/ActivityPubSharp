@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Activity;
 /// </summary>
 public class ListenActivity : ASTransitiveActivity
 {
-    public ListenActivity(string type = "Listen") : base(type) {}
+    public const string ListenType = "Listen";
+    public ListenActivity(string type = ListenType) : base(type) {}
 }

@@ -5,7 +5,8 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class PlaceObject : ASObject
 {
-    public PlaceObject(string type = "Place") : base(type) {}
+    public const string PlaceType = "Place";
+    public PlaceObject(string type = PlaceType) : base(type) {}
     
     /// <summary>
     /// Indicates the accuracy of position coordinates on a Place objects.

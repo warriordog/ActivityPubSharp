@@ -11,7 +11,8 @@ namespace ActivityPub.Common.Types;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
 public class ASOrderedCollectionPage : ASOrderedCollection, ICollectionPage
 {
-    public ASOrderedCollectionPage(string type = "OrderedCollectionPage") : base(type) {}
+    public const string OrderedCollectionPageType = "OrderedCollectionPage";
+    public ASOrderedCollectionPage(string type = OrderedCollectionPageType) : base(type) {}
     
     /// <summary>
     /// A non-negative integer value identifying the relative position within the logical view of a strictly ordered collection. 

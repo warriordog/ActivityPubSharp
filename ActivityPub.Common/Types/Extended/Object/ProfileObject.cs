@@ -6,7 +6,8 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class ProfileObject : ASObject
 {
-    public ProfileObject(string type = "Profile") : base(type) {}
+    public const string ProfileType = "Profile";
+    public ProfileObject(string type = ProfileType) : base(type) {}
     
     /// <summary>
     /// On a Profile object, the describes property identifies the object described by the Profile.

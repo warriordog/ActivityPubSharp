@@ -5,5 +5,6 @@ namespace ActivityPub.Common.Types.Extended.Object;
 /// </summary>
 public class PageObject : DocumentObject
 {
-    public PageObject(string type = "Page") : base(type) {}
+    public const string PageType = "Page";
+    public PageObject(string type = PageType) : base(type) {}
 }
