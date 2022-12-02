@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Server", "Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Client", "ActivityPub.Client\ActivityPub.Client.csproj", "{C78E9A73-0816-41B3-A1B0-F80104B0341B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Common", "ActivityPub.Common\ActivityPub.Common.csproj", "{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Types", "ActivityPub.Types\ActivityPub.Types.csproj", "{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
