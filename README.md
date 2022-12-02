@@ -4,6 +4,8 @@
 
 *Please note - this project is incomplete and not ready for production use. The information here describes the design and technical goals of ActivityPubSharp, not the currently implemented functionality. Please see [PROGRESS.md](PROGRESS.md) for details about what is and is not currently supported.*
 
+**branch info - attempting to create a general JSON-LD library, but only supporting @context for now.**
+
 ## About
 ActivityPubSharp is a work-in-progress set of packages to support the use of ActivityPub in .NET applications.
 
