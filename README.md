@@ -4,8 +4,6 @@
 
 *Please note - this project is incomplete and not ready for production use. The information here describes the design and technical goals of ActivityPubSharp, not the currently implemented functionality. Please see [PROGRESS.md](PROGRESS.md) for details about what is and is not currently supported.*
 
-**branch info - attempting to create a general JSON-LD library, but only supporting @context for now.**
-
 ## About
 ActivityPubSharp is a work-in-progress set of packages to support the use of ActivityPub in .NET applications.
 
@@ -13,9 +11,8 @@ ActivityPubSharp is a work-in-progress set of packages to support the use of Act
 As the name suggests, ActivityPubSharp is focused on supporting ActivityPub rather than ActivityStreams or any other related standard.
 If there is ever a conflict between standards, then ActivityPub will be followed.
 
-Currently, ActivityPubSharp does not attempt to support JSON-LD.
-Additional contexts and other JSON-LD operators will be ignored.
-This may change in the future.
+Currently, ActivityPubSharp does not attempt to offer proper JSON-LD support.
+The provided serialization code implements a minimum-viable approach that should most use cases.
 
 ### Abstraction
 A key goal of this project is abstraction - that is, it should be relatively simple to integrate this library at any level of abstraction.
@@ -25,12 +22,11 @@ The main packages are as follows:
 
 | Package                         | Description                                                                                                                                                                    | Use Case                                                                                                                                                                   |
 |---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ActivityPubSharp.Types          | POCO type definitions for ActivityPub types. Includes utility classes to handle polymorphic properties.                                                                        | You only need the ActivityPub object types, and nothing else.                                                                                                              |
+| ActivityPubSharp.Types          | Serializable type definitions for ActivityPub types. Includes utility classes to handle polymorphic properties and a parser/serializer set based on JSON.NET.                  | You only need the ActivityPub object types, and nothing else.                                                                                                              |
 | ActivityPubSharp.Types.Proposed | Extended type definitions for proposed extensions to ActivityStreams.                                                                                                          | You need to use the unreleased ActivityStreams extensions.                                                                                                                 |
 | ActivityPubSharp.Types.Mastodon | Extended type definitions for integration with Mastodon.                                                                                                                       | You are communicating with a Mastodon server.                                                                                                                              |
 | ActivityPubSharp.Types.W3ID     | Extended type definitions for W3ID Security. This only includes the types - actual security logic is handled by ActivityPubSharp.Auth.                                         | You need to secure communications using W3ID security.                                                                                                                     |
 | ActivityPubSharp.Types.Schema   | Extended type definitions for schema.org.                                                                                                                                      | You integrate with an application that expects a schema, or you want to use a related technology like Microdata.                                                           |
-| ActivityPubSharp.JsonLD         | JSON-LD parser and serializer based on Newtonsoft.JSON.                                                                                                                        | You have your own implementation of an [ActivityPub conformance class](https://www.w3.org/TR/activitypub/#conformance), but you don't want to write your own parsing code. |
 | ActivityPubSharp.Auth           | Authentication schemes used by common ActivityPub implementations.                                                                                                             | You will communicate with an external host which requires signatures or other authentication.                                                                              |
 | ActivityPubSharp.Client         | Implementation of the Client conformance class. Supports the client side of [Client to Server interactions](https://www.w3.org/TR/activitypub/#client-to-server-interactions). | You are implementing (at least) the Client conformance class.                                                                                                              |
 | ActivityPubSharp.Server         | Implementation of the Server conformance class. Supports the server side of [Client to Server interactions](https://www.w3.org/TR/activitypub/#client-to-server-interactions). | You are implementing (at least) the Server conformance class.                                                                                                              |
