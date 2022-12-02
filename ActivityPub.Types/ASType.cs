@@ -1,4 +1,6 @@
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
+using Newtonsoft.Json;
 
 namespace ActivityPub.Types;
 
@@ -14,14 +16,20 @@ public abstract class ASType
     protected ASType(string defaultType) => Types.Add(defaultType);
 
     /// <summary>
-    /// Identifies the Object or Link type.
-    /// Multiple values may be specified. 
+    /// Identifies the Object or Link types.
     /// </summary>
-    /// <remarks>
-    /// Property is called "type" in JSON.
-    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-type"/>
-    public List<string> Types { get; set; } = new();
+    [JsonProperty("type")]
+    [JsonConverter(typeof(ListableConverter<string>))]
+    public HashSet<string> Types { get; set; } = new();
+
+    /// <summary>
+    /// Lists the JSON-LD contexts used by this object.
+    /// Should be a full URL
+    /// </summary>
+    [JsonProperty("@context")]
+    [JsonConverter(typeof(ListableConverter<string>))]
+    public HashSet<string> Contexts { get; set; } = new();
 
     /// <summary>
     /// Provides the globally unique identifier for an Object or Link.

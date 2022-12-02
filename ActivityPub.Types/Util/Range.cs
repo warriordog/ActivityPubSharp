@@ -8,7 +8,7 @@ namespace ActivityPub.Types.Util;
 /// <summary>
 /// Synthetic wrapper to handle polymorphic property ranges.
 /// </summary>
-public class Range<T1, T2>
+public class Range<T1, T2> : ASObject
 {
     public bool IsType1 { get; protected set; }
     protected T1? Value1 { get; private set; }
