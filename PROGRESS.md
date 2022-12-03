@@ -31,6 +31,8 @@ Types
   - [ ] IRI
 - [x] Casts and operators
 - [ ] Extensibility - custom properties
+- [ ] Replace string URLs with URI type (not quite correct, but close enough and we get free validation)
+- [ ] Find and implement any missing Range<> types
 
 Serialization
 - [ ] Parser
