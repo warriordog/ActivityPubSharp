@@ -39,3 +39,12 @@ It is possible to use any combination of the Client, Server, and Federation pack
 ActivityPubSharp is designed in a modular fashion intended to support unique or extended use cases.
 For example, parsing code is abstracted to support use with any JSON parser, not just the included one based on Newtonsoft.JSON.
 The packages within ActivityPubSharp are linked via interfaces and assembled through DI, allowing them to be easily extended by user code.
+
+## Technical Details
+
+### Requirements
+* .NET 7 or newer runtime on any supported platform
+
+### Design Goals
+* Minimal dependencies - software supply chain risks are real and very underrated. ActivityPubSharp is developed using minimal external dependencies, but without reinventing all the wheels.
+* Modern .NET - ActivityPubSharp has set .NET 7 as the minimum supported version. This does unfortunately exclude many projects, but it will be beneficial in the long-run. Net7.0 will be relevant for much longer than, say NetStandard2.0 or even 2.1.
