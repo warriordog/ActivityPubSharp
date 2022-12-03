@@ -22,7 +22,7 @@ public class RelationshipObject : ASObject
     /// For instance, for a Relationship object describing "John is related to Sally", subject would refer to John. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-subject"/>
-    public Linkable<ASType>? Subject { get; set; }
+    public Linkable<ASObject>? Subject { get; set; }
     
     /// <summary>
     /// On a Relationship object, the relationship property identifies the kind of relationship that exists between subject and object. 

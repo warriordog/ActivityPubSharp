@@ -1,6 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using ActivityPub.Types.Json;
-using Newtonsoft.Json;
 
 namespace ActivityPub.Types.Util;
 
@@ -8,9 +6,8 @@ namespace ActivityPub.Types.Util;
 /// Synthetic wrapper for elements that can be included directly or referenced by a Link.
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
-[JsonConverter(typeof(LinkableConverter))]
-public class Linkable<T> : ILinkable
-where T : ASType
+public class Linkable<T>
+where T : ASObject
 {
     public bool HasLink { get; }
 
@@ -54,8 +51,6 @@ where T : ASType
         return false;
     }
 
-    public ASType GetValue() => ((ASType?)_link ?? _value)!;
-
     protected bool Equals(Linkable<T> other) => Equals(_link, other._link) && EqualityComparer<T?>.Default.Equals(_value, other._value);
 
     public override bool Equals(object? obj)
@@ -71,10 +66,4 @@ where T : ASType
 
     public static implicit operator Linkable<T>(ASLink link) => new(link);
     public static implicit operator Linkable<T>(T value) => new(value);
-}
-
-public interface ILinkable
-{
-    public ASType GetValue();
-    
 }
