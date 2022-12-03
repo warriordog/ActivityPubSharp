@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Util;
 /// <typeparam name="T">Type of element</typeparam>
 [JsonConverter(typeof(LinkableConverter))]
 public class Linkable<T> : ILinkable
-where T : ASType
+where T : ASObject
 {
     public bool HasLink { get; }
 

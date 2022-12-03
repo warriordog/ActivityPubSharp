@@ -6,8 +6,21 @@ namespace ActivityPub.Types.Json;
 public class ListableConverter<T> : JsonConverter<ICollection<T>>
 where T : class
 {
+    public bool SkipEmpty { get; }
+    
+    public ListableConverter(bool skipEmpty = false)
+    {
+        SkipEmpty = skipEmpty;
+    }
+    
     public override void WriteJson(JsonWriter writer, ICollection<T>? collection, JsonSerializer serializer)
     {
+        // If collection is null/empty and SkipEmpty is set, then don't do anything
+        if (SkipEmpty && (collection == null || collection.Count == 0))
+        {
+            return;
+        }
+        
         // If value is a single-element collection, then unpack it
         if (collection?.Count == 1)
         {

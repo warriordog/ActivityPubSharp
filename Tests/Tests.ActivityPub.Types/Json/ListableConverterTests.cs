@@ -48,11 +48,28 @@ public class ListableConverterTests
         
         [Theory]
         [MemberData(nameof(NoElementData))]
-        public void PreserveCollections_WhenThereAreNoElements(ICollection<string> collection)
+        public void PreserveEmptyCollections_WhenSkipEmptyIsFalse(ICollection<string> collection)
         {
             var testObject = new TestJsonEntity { TestProp = collection };
             var json = JsonConvert.SerializeObject(testObject);
             json.Should().Be("{\"TestProp\":[]}");
+        }
+        
+        [Fact]
+        public void ExcludeEmptyCollections_WhenSkipEmptyIsTrue()
+        {
+            var testObject = new OptionalJsonEntity { OptionalTestProp = new List<string>() };
+            var json = JsonConvert.SerializeObject(testObject);
+            json.Should().Be("{}");
+        }
+
+
+        [Fact]
+        public void ExcludeNullCollections_WhenSkipEmptyIsTrue()
+        {
+            var testObject = new OptionalJsonEntity { OptionalTestProp = null };
+            var json = JsonConvert.SerializeObject(testObject);
+            json.Should().Be("{}");
         }
 
         [JsonObject]
@@ -61,6 +78,14 @@ public class ListableConverterTests
             [JsonProperty]
             [JsonConverter(typeof(ListableConverter<string>))]
             public ICollection<string>? TestProp { get; set; }
+        }
+
+        [JsonObject]
+        internal class OptionalJsonEntity
+        {
+            [JsonProperty]
+            [JsonConverter(typeof(ListableConverter<string>), true)]
+            public ICollection<string>? OptionalTestProp { get; set; }
         }
     }
 
