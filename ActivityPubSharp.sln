@@ -8,6 +8,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Client", "Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Types", "ActivityPub.Types\ActivityPub.Types.csproj", "{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B8F82462-4F12-4EB4-A42E-C8A689BDCABC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Json", "ActivityPub.Json\ActivityPub.Json.csproj", "{1BC57CA5-BFD3-4BD4-8E5A-2C00BA18B515}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Json.Tests", "Test\ActivityPub.Json.Tests\ActivityPub.Json.Tests.csproj", "{84835CD2-89CC-4FA4-9E24-C5E6272DE646}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +36,16 @@ Global
 		{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC57CA5-BFD3-4BD4-8E5A-2C00BA18B515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC57CA5-BFD3-4BD4-8E5A-2C00BA18B515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC57CA5-BFD3-4BD4-8E5A-2C00BA18B515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC57CA5-BFD3-4BD4-8E5A-2C00BA18B515}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84835CD2-89CC-4FA4-9E24-C5E6272DE646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84835CD2-89CC-4FA4-9E24-C5E6272DE646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84835CD2-89CC-4FA4-9E24-C5E6272DE646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84835CD2-89CC-4FA4-9E24-C5E6272DE646}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{84835CD2-89CC-4FA4-9E24-C5E6272DE646} = {B8F82462-4F12-4EB4-A42E-C8A689BDCABC}
 	EndGlobalSection
 EndGlobal
