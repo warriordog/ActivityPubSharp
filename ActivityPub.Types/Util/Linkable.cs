@@ -7,6 +7,7 @@ namespace ActivityPub.Types.Util;
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
 public class Linkable<T>
+where T : ASObject
 {
     public bool HasLink { get; }
 
@@ -62,6 +63,7 @@ public class Linkable<T>
 
     public override int GetHashCode() => HashCode.Combine(_link, _value);
     
+
     public static implicit operator Linkable<T>(ASLink link) => new(link);
     public static implicit operator Linkable<T>(T value) => new(value);
 }
