@@ -112,7 +112,7 @@ public class ASObject : ASType
     /// Identifies one or more links to representations of the object 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
-    public LinkableList<string> Url { get; set; } = new();
+    public LinkableList<Range<string, ASLink>> Url { get; set; } = new();
     
     /// <summary>
     /// The content or textual representation of the Object encoded as a JSON string.
