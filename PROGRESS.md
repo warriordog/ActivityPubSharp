@@ -36,8 +36,6 @@ Serialization
 - [ ] Parser
   - [ ] Check for ActivityStreams context
 - [ ] Serializer
-  - [ ] Attach ActivityStreams context
-- [ ] Allow other contexts to be provided
 - [ ] Validate object graphs
 - [ ] Map extra properties
 

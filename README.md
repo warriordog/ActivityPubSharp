@@ -11,7 +11,7 @@ ActivityPubSharp is a work-in-progress set of packages to support the use of Act
 As the name suggests, ActivityPubSharp is focused on supporting ActivityPub rather than ActivityStreams or any other related standard.
 If there is ever a conflict between standards, then ActivityPub will be followed.
 
-Currently, ActivityPubSharp does not attempt to offer proper JSON-LD support.
+Currently, ActivityPubSharp does not attempt to offer real JSON-LD support.
 The provided serialization code implements a minimum-viable approach that should most use cases.
 
 ### Abstraction
@@ -27,7 +27,6 @@ The main packages are as follows:
 | ActivityPubSharp.Types.Mastodon | Extended type definitions for integration with Mastodon.                                                                                                                        | You are communicating with a Mastodon server.                                                                    |
 | ActivityPubSharp.Types.W3ID     | Extended type definitions for W3ID Security. This only includes the types - actual security logic is handled by ActivityPubSharp.Auth.                                          | You need to secure communications using W3ID security.                                                           |
 | ActivityPubSharp.Types.Schema   | Extended type definitions for schema.org.                                                                                                                                       | You integrate with an application that expects a schema, or you want to use a related technology like Microdata. |
-| ActivityPubSharp.Json           | Serializer and parser for ActivityPub objects based on JSON.NET. Supports only the minimum of JSON-LD needed to implement ActivityPub.                                          | You need to read and/or write ActivityPub objects as JSON, but do not need further logic.                        |
 | ActivityPubSharp.Auth           | Authentication schemes used by common ActivityPub implementations.                                                                                                              | You will communicate with an external host which requires signatures or other authentication.                    |
 | ActivityPubSharp.Client         | Implementation of the Client conformance class. Supports the client side of [Client to Server interactions](https://www.w3.org/TR/activitypub/#client-to-server-interactions).  | You are implementing (at least) the Client conformance class.                                                    |
 | ActivityPubSharp.Server         | Implementation of the Server conformance class. Supports the server side of [Client to Server interactions](https://www.w3.org/TR/activitypub/#client-to-server-interactions).  | You are implementing (at least) the Server conformance class.                                                    |
@@ -43,7 +42,7 @@ The packages within ActivityPubSharp are linked via interfaces and assembled thr
 ## Technical Details
 
 ### Requirements
-* .NET 7 or newer runtime on any supported platform
+* .NET 6 or newer runtime on any supported platform
 
 ### Design Goals
 * Minimal dependencies - software supply chain risks are real and very underrated. ActivityPubSharp is developed using minimal external dependencies, but without reinventing all the wheels.
