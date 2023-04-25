@@ -8,13 +8,13 @@ There is no particular ordering.
 
 TODO - fill this out
 
-Project Structure
+###Project Structure
 - [ ] Match projects to exposed packages
   - [ ] Rename "Common" to "Types"
 - [ ] Create NuGet package definitions
 - [ ] OSS License
 
-Types
+###Types
 - [x] ActivityStreams Types
   - [x] Core Types
   - [x] Extended Types
@@ -32,19 +32,21 @@ Types
 - [x] Casts and operators
 - [ ] Extensibility - custom properties
 
-Serialization
+###Serialization
 - [ ] Parser
   - [ ] Check for ActivityStreams context
 - [ ] Serializer
 - [ ] Validate object graphs
 - [ ] Map extra properties
 
-Client
+###Client
 
-Server
+###Server
 
-Federation
+###Federation
 
-Documentation
+###Federation
 
-Tests
+###Documentation
+
+###Tests
