@@ -1,4 +1,7 @@
-﻿namespace ActivityPub.Types.Util;
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+namespace ActivityPub.Types.Util;
 
 /// <summary>
 /// A string that can be represented as either a single value or as a map from language tag to value.
