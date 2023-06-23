@@ -32,7 +32,7 @@ public abstract class ASType
     /// </summary>
     [JsonPropertyName("@context")]
     [JsonConverter(typeof(ListableConverter))]
-    public HashSet<string> Contexts { get; set; } = new()
+    public HashSet<string> JsonLdContexts { get; set; } = new()
     {
         // We always need the base ActivityStreams context
         "https://www.w3.org/ns/activitystreams"
