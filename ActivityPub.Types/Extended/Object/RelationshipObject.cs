@@ -14,7 +14,11 @@ namespace ActivityPub.Types.Extended.Object;
 public class RelationshipObject : ASObject
 {
     public const string RelationshipType = "Relationship";
-    public RelationshipObject(string type = RelationshipType) : base(type) {}
+
+    [JsonConstructor]
+    public RelationshipObject() : this(RelationshipType) {}
+
+    protected RelationshipObject(string type) : base(type) {}
 
     /// <summary>
     /// Describes the entity to which the subject is related. 
@@ -22,14 +26,14 @@ public class RelationshipObject : ASObject
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
     [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> Object { get; set; } = new();
-    
+
     /// <summary>
     /// On a Relationship object, the subject property identifies one of the connected individuals.
     /// For instance, for a Relationship object describing "John is related to Sally", subject would refer to John. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-subject"/>
     public Linkable<ASObject>? Subject { get; set; }
-    
+
     /// <summary>
     /// On a Relationship object, the relationship property identifies the kind of relationship that exists between subject and object. 
     /// </summary>

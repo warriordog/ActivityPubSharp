@@ -12,7 +12,8 @@ namespace ActivityPub.Types.Json;
 public class LinkableConverter : JsonConverterFactory
 {
     // We only convert Linkable<T>
-    public override bool CanConvert(Type type) => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Linkable<>);
+    public override bool CanConvert(Type type) =>
+        type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Linkable<>);
 
     // Pivot the type into correct instance
     public override JsonConverter? CreateConverter(Type type, JsonSerializerOptions options)
@@ -34,7 +35,7 @@ public class LinkableConverter<T> : JsonConverter<Linkable<T>>
     {
         // TODO cache stuff
     }
-    
+
     public override Linkable<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return null;
@@ -72,13 +73,13 @@ public class LinkableConverter<T> : JsonConverter<Linkable<T>>
     {
         if (reader.TokenType != JsonTokenType.StartObject)
             return false;
-        
+
         while (reader.Read())
         {
             // Empty or unknown object does NOT count as link
             if (reader.TokenType == JsonTokenType.EndObject)
                 return false;
-            
+
             // Skip any nested objects
             if (reader.TokenType == JsonTokenType.StartObject)
                 while (reader.TokenType != JsonTokenType.EndObject)

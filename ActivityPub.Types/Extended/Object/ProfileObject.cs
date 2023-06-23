@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
+
 namespace ActivityPub.Types.Extended.Object;
 
 /// <summary>
@@ -10,8 +12,12 @@ namespace ActivityPub.Types.Extended.Object;
 public class ProfileObject : ASObject
 {
     public const string ProfileType = "Profile";
-    public ProfileObject(string type = ProfileType) : base(type) {}
-    
+
+    [JsonConstructor]
+    public ProfileObject() : this(ProfileType) {}
+
+    protected ProfileObject(string type) : base(type) {}
+
     /// <summary>
     /// On a Profile object, the describes property identifies the object described by the Profile.
     /// </summary>

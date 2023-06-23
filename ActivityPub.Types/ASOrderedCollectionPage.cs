@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -15,14 +16,18 @@ namespace ActivityPub.Types;
 public class ASOrderedCollectionPage : ASOrderedCollection, ICollectionPage
 {
     public const string OrderedCollectionPageType = "OrderedCollectionPage";
-    public ASOrderedCollectionPage(string type = OrderedCollectionPageType) : base(type) {}
-    
+
+    [JsonConstructor]
+    public ASOrderedCollectionPage() : this(OrderedCollectionPageType) {}
+
+    protected ASOrderedCollectionPage(string type) : base(type) {}
+
     /// <summary>
     /// A non-negative integer value identifying the relative position within the logical view of a strictly ordered collection. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startIndex"/>
     public int? StartIndex { get; set; }
-    
+
     public Linkable<ASCollectionPage>? Next { get; set; }
     public Linkable<ASCollectionPage>? Prev { get; set; }
     public Linkable<ASCollection>? PartOf { get; set; }

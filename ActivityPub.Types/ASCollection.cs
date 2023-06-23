@@ -17,20 +17,24 @@ namespace ActivityPub.Types;
 public class ASCollection : ASObject
 {
     public const string CollectionType = "Collection";
-    public ASCollection(string type = CollectionType) : base(type) {}
-    
+
+    [JsonConstructor]
+    public ASCollection() : this(CollectionType) {}
+
+    protected ASCollection(string type) : base(type) {}
+
     /// <summary>
     ///  In a paged Collection, indicates the page that contains the most recently updated member items. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-current"/>
     public Linkable<ASCollectionPage>? Current { get; set; }
-    
+
     /// <summary>
     /// In a paged Collection, indicates the furthest preceeding page of items in the collection. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-first"/>
     public Linkable<ASCollectionPage>? First { get; set; }
-    
+
     /// <summary>
     /// In a paged Collection, indicates the furthest proceeding page of the collection.
     /// </summary>

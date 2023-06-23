@@ -25,20 +25,21 @@ public class NaturalLanguageString
     /// </summary>
     /// <seealso cref="LanguageMap"/>
     public string? SingleString { get; private set; }
-    
+
     /// <summary>
     /// The language-specific values of this string.
     /// Will be empty if there is an indifferent string value.
     /// </summary>
     /// <seealso cref="SingleString"/>
     public IReadOnlyDictionary<string, string> LanguageMap => _languageMap;
+
     private readonly Dictionary<string, string> _languageMap;
-    
+
     /// <summary>
     /// True if this NaturalLanguageString has at least one value.
     /// </summary>
     public bool HasValue => SingleString != null || _languageMap.Any();
-    
+
     /// <summary>
     /// Create a string from a single non-mapped value.
     /// </summary>
@@ -199,7 +200,7 @@ public class NaturalLanguageString
             else Set(language, value);
         }
     }
-    
+
     /// <summary>
     /// Sets the string to single non-mapped value.
     /// All language mappings will be removed.
@@ -233,7 +234,7 @@ public class NaturalLanguageString
     {
         _languageMap.Remove(language);
     }
-    
+
     public static implicit operator string?(NaturalLanguageString nls) => nls.GetOrNull();
     public static implicit operator NaturalLanguageString(string? str) => new(str);
 }

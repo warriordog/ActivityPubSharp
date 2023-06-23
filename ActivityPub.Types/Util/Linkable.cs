@@ -17,7 +17,7 @@ public class Linkable<T>
     public bool HasLink { get; }
 
     private readonly ASLink? _link;
-    
+
     public bool HasValue { get; }
     private readonly T? _value;
 
@@ -26,6 +26,7 @@ public class Linkable<T>
         _link = link;
         HasLink = true;
     }
+
     public Linkable(T value)
     {
         _value = value;
@@ -56,7 +57,8 @@ public class Linkable<T>
         return false;
     }
 
-    protected bool Equals(Linkable<T> other) => Equals(_link, other._link) && EqualityComparer<T?>.Default.Equals(_value, other._value);
+    protected bool Equals(Linkable<T> other) =>
+        Equals(_link, other._link) && EqualityComparer<T?>.Default.Equals(_value, other._value);
 
     public override bool Equals(object? obj)
     {
@@ -67,7 +69,7 @@ public class Linkable<T>
     }
 
     public override int GetHashCode() => HashCode.Combine(_link, _value);
-    
+
 
     public static implicit operator Linkable<T>(ASLink link) => new(link);
     public static implicit operator Linkable<T>(T value) => new(value);

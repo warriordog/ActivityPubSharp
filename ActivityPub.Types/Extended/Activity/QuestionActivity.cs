@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Extended.Activity;
@@ -14,8 +15,12 @@ namespace ActivityPub.Types.Extended.Activity;
 public class QuestionActivity : ASIntransitiveActivity
 {
     public const string QuestionType = "Question";
-    public QuestionActivity(string type = QuestionType) : base(type) {}
-    
+
+    [JsonConstructor]
+    public QuestionActivity() : this(QuestionType) {}
+
+    protected QuestionActivity(string type) : base(type) {}
+
     /// <summary>
     /// Identifies an exclusive option for a Question.
     /// Use of oneOf implies that the Question can have only a single answer.
@@ -23,7 +28,7 @@ public class QuestionActivity : ASIntransitiveActivity
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-oneOf"/>
     public Linkable<ASObject>? OneOf { get; set; }
-    
+
     /// <summary>
     /// Identifies an inclusive option for a Question.
     /// Use of anyOf implies that the Question can have multiple answers.
@@ -69,10 +74,11 @@ public class QuestionActivity : ASIntransitiveActivity
             _closed = value;
             if (value != true)
             {
-                _closedAt = null;   
+                _closedAt = null;
             }
         }
     }
+
     private bool? _closed;
     private DateTime? _closedAt;
 }

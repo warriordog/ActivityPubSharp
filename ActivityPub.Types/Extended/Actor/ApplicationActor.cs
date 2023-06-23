@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
+
 namespace ActivityPub.Types.Extended.Actor;
 
 /// <summary>
@@ -9,5 +11,9 @@ namespace ActivityPub.Types.Extended.Actor;
 public class ApplicationActor : ASActor
 {
     public const string ApplicationType = "Application";
-    public ApplicationActor(string type = ApplicationType) : base(type) {}
+
+    [JsonConstructor]
+    public ApplicationActor() : this(ApplicationType) {}
+
+    protected ApplicationActor(string type) : base(type) {}
 }

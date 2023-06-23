@@ -61,20 +61,20 @@ public abstract class ASType
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/>
     [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> AttributedTo { get; set; } = new();
-    
+
     /// <summary>
     /// Identifies an entity that provides a preview of this object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-preview"/>
     public Linkable<ASObject>? Preview { get; set; }
-    
+
     /// <summary>
     /// A simple, human-readable, plain-text name for the object.
     /// HTML markup MUST NOT be included.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-name"/>
     public NaturalLanguageString? Name { get; set; }
-    
+
     /// <summary>
     /// When used on a Link, identifies the MIME media type of the referenced resource.
     /// When used on an Object, identifies the MIME media type of the value of the content property.

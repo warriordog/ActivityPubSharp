@@ -14,7 +14,7 @@ public static class TypeExtensions
     {
         if (!genericType.IsGenericType)
             throw new ArgumentException($"Type {genericType} is not an generic", nameof(genericType));
-        
+
         // Check if concreteType implements genericType
         var interfaceTypes = concreteType.GetInterfaces();
         if (interfaceTypes.Any(it => it.IsGenericType && it.GetGenericTypeDefinition() == genericType))
@@ -77,7 +77,7 @@ public static class TypeExtensions
                 break;
             }
         }
-        
+
         // If constructedGenericType is still null, then concreteType is not assignable to genericType
         if (constructedGenericType == null)
             throw new ArgumentException($"Type {concreteType} is not assignable to {genericType}", nameof(concreteType));

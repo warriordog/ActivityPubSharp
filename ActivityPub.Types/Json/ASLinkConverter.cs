@@ -18,12 +18,12 @@ public class ASLinkConverter : JsonConverter<ASLink>
             var str = reader.GetString()!;
             return new ASLink { HRef = str };
         }
-        
+
         if (reader.TokenType == JsonTokenType.StartObject)
         {
             return JsonSerializer.Deserialize<ASLink>(ref reader, options);
         }
-        
+
         throw new JsonException($"Cannot convert {reader.TokenType} into ASLink");
     }
 
@@ -39,7 +39,7 @@ public class ASLinkConverter : JsonConverter<ASLink>
         }
     }
 
-    
+
     /// <summary>
     /// True if a link contains a value for <see cref="ASLink.HRef"/> only and can therefore be reduced.
     /// </summary>

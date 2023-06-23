@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
+
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
@@ -9,5 +11,9 @@ namespace ActivityPub.Types.Extended.Activity;
 public class TentativeRejectActivity : RejectActivity
 {
     public const string TentativeRejectType = "TentativeReject";
-    public TentativeRejectActivity(string type = TentativeRejectType) : base(type) {}
+
+    [JsonConstructor]
+    public TentativeRejectActivity() : this(TentativeRejectType) {}
+
+    protected TentativeRejectActivity(string type) : base(type) {}
 }

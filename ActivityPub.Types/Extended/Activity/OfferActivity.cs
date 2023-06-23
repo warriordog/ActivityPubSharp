@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
+
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
@@ -10,5 +12,9 @@ namespace ActivityPub.Types.Extended.Activity;
 public class OfferActivity : ASTransitiveActivity
 {
     public const string OfferType = "Offer";
-    public OfferActivity(string type = OfferType) : base(type) {}
+
+    [JsonConstructor]
+    public OfferActivity() : this(OfferType) {}
+
+    protected OfferActivity(string type) : base(type) {}
 }

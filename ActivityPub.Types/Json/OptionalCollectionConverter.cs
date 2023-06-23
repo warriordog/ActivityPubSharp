@@ -18,7 +18,7 @@ public class OptionalCollectionConverter : JsonConverterFactory
     public override JsonConverter CreateConverter(Type collectionType, JsonSerializerOptions options)
     {
         var itemType = collectionType.GetGenericArgumentsFor(typeof(ICollection<>))[0];
-        
+
         return (JsonConverter)Activator.CreateInstance(
             typeof(OptionalCollectionConverter<,>).MakeGenericType(itemType, collectionType),
             BindingFlags.Instance | BindingFlags.Public,
@@ -30,15 +30,16 @@ public class OptionalCollectionConverter : JsonConverterFactory
 }
 
 public class OptionalCollectionConverter<TItem, TCollection> : JsonConverter<TCollection>
-where TCollection : ICollection<TItem>
+    where TCollection : ICollection<TItem>
 {
     public OptionalCollectionConverter(JsonSerializerOptions options)
     {
         // TODO cache stuff
     }
-    
+
     // Read is a no-op
-    public override TCollection? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => JsonSerializer.Deserialize<TCollection>(ref reader, options);
+    public override TCollection? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        JsonSerializer.Deserialize<TCollection>(ref reader, options);
 
     public override void Write(Utf8JsonWriter writer, TCollection collection, JsonSerializerOptions options)
     {

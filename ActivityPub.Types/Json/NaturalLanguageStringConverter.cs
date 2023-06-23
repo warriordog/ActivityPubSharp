@@ -9,7 +9,8 @@ namespace ActivityPub.Types.Json;
 
 public class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageString>
 {
-    public override NaturalLanguageString? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override NaturalLanguageString? Read(ref Utf8JsonReader reader, Type typeToConvert,
+        JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return null;
 
@@ -18,13 +19,13 @@ public class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageStrin
             var str = reader.GetString()!;
             return new NaturalLanguageString(str);
         }
-        
+
         if (reader.TokenType == JsonTokenType.StartObject)
         {
             var langStrings = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options)!;
             return new NaturalLanguageString(langStrings);
         }
-        
+
         throw new JsonException($"Cannot convert {reader.TokenType} into NaturalLanguageString");
     }
 

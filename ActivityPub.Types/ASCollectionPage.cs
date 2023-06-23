@@ -2,6 +2,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using ActivityPub.Types.Util;
+using System.Text.Json.Serialization;
 
 namespace ActivityPub.Types;
 
@@ -15,8 +16,12 @@ namespace ActivityPub.Types;
 public class ASCollectionPage : ASCollection, ICollectionPage
 {
     public const string CollectionPageType = "CollectionPage";
-    public ASCollectionPage(string type = CollectionPageType) : base(type) {}
-    
+
+    [JsonConstructor]
+    public ASCollectionPage() : this(CollectionPageType) {}
+
+    protected ASCollectionPage(string type) : base(type) {}
+
     public Linkable<ASCollectionPage>? Next { get; set; }
     public Linkable<ASCollectionPage>? Prev { get; set; }
     public Linkable<ASCollection>? PartOf { get; set; }
