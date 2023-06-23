@@ -58,7 +58,8 @@ public abstract class ASType
     /// The attributed entities might not be Actors.
     /// For instance, an object might be attributed to the completion of another activity. 
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/> 
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> AttributedTo { get; set; } = new();
     
     /// <summary>

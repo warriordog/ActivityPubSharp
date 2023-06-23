@@ -51,6 +51,7 @@ public class ASLink : ASType
     /// In the [HTML5], any string not containing the "space" U+0020, "tab" (U+0009), "LF" (U+000A), "FF" (U+000C), "CR" (U+000D) or "," (U+002C) characters can be used as a valid link relation.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-rel"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public List<string> Rel { get; set; } = new();
 
     public static implicit operator string(ASLink link) => link.HRef;

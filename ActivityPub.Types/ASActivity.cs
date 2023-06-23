@@ -1,6 +1,8 @@
 ﻿/* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -22,6 +24,7 @@ public class ASActivity : ASObject
     /// The actor MAY be specified using an indirect Link. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> Actor { get; set; } = new();
     
     /// <summary>

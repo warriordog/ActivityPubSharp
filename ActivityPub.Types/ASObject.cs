@@ -1,7 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
 using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -22,30 +24,35 @@ public class ASObject : ASType
     /// The intent is to provide a model that is at least semantically similar to attachments in email. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> Attachment { get; set; } = new();
 
     /// <summary>
     /// Identifies one or more entities that represent the total population of entities for which the object can considered to be relevant.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-audience"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> Audience { get; set; } = new();
     
     /// <summary>
     /// Identifies one or more Objects that are part of the private secondary audience of this Object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-bcc"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> BCC { get; set; } = new();
     
     /// <summary>
     /// Identifies an Object that is part of the private primary audience of this Object.  
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-bto"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> BTo { get; set; } = new();
     
     /// <summary>
     /// Identifies an Object that is part of the public secondary audience of this Object.   
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-cc"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> CC { get; set; } = new();
     
     /// <summary>
@@ -103,18 +110,21 @@ public class ASObject : ASType
     /// The key difference between attachment and tag is that the former implies association by inclusion, while the latter implies associated by reference. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-tag"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> Tag { get; set; } = new();
 
     /// <summary>
     /// Identifies an entity considered to be part of the public primary audience of an Object 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-to"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> To { get; set; } = new();
 
     /// <summary>
     /// Identifies one or more links to representations of the object 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
+    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASLink> Url { get; set; } = new();
     
     /// <summary>
