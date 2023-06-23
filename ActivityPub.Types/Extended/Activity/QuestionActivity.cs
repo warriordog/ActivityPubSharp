@@ -31,10 +31,48 @@ public class QuestionActivity : ASIntransitiveActivity
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyOf"/>
     public Linkable<ASObject>? AnyOf { get; set; }
-    
+
+    /// <summary>
+    /// Contains the time at which a question was closed.
+    /// </summary>
+    /// <remarks>
+    /// * Won't always be set - can be null even if <see cref="Closed"/> is true.
+    /// * We don't support the Object or Link forms, because what would that even mean??
+    /// * May possibly be in the future? Spec does not specify. 
+    /// </remarks>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
+    public DateTime? ClosedAt
+    {
+        get => _closedAt;
+        set
+        {
+            _closedAt = value;
+            if (_closedAt == null)
+            {
+                _closed = null;
+            }
+        }
+    }
+
     /// <summary>
     /// Indicates that a question has been closed, and answers are no longer accepted. 
     /// </summary>
+    /// <remarks>
+    /// We don't support the Object or Link forms, because what would that even mean??
+    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
-    public Linkable<Range<ASObject, DateTime, bool>>? Closed { get; set; }
+    public bool? Closed
+    {
+        get => _closed ?? _closedAt != null;
+        set
+        {
+            _closed = value;
+            if (value != true)
+            {
+                _closedAt = null;   
+            }
+        }
+    }
+    private bool? _closed;
+    private DateTime? _closedAt;
 }

@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Util;
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
 public class Linkable<T>
-where T : ASObject
+where T : ASType
 {
     public bool HasLink { get; }
 
