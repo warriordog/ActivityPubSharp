@@ -30,6 +30,11 @@ public class LinkableConverter : JsonConverterFactory
 
 public class LinkableConverter<T> : JsonConverter<Linkable<T>>
 {
+    public LinkableConverter(JsonSerializerOptions options)
+    {
+        // TODO cache stuff
+    }
+    
     public override Linkable<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return null;

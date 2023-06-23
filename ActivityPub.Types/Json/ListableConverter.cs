@@ -4,19 +4,19 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Json;
 
 public class ListableConverter : JsonConverterFactory
 {
     // We only convert concrete types deriving from ICollection<T>
-    public override bool CanConvert(Type type) => type.IsConstructedGenericType && type.GetGenericTypeDefinition().IsAssignableTo(typeof(ICollection<>));
+    public override bool CanConvert(Type type) => type.IsAssignableToGenericType(typeof(ICollection<>));
 
     // Pivot the type into correct converter
-    public override JsonConverter? CreateConverter(Type type, JsonSerializerOptions options)
+    public override JsonConverter? CreateConverter(Type collectionType, JsonSerializerOptions options)
     {
-        var collectionType = type.GetGenericArguments()[0];
-        var itemType = collectionType.GetGenericArguments()[0];
+        var itemType = collectionType.GetGenericArgumentsFor(typeof(ICollection<>))[0];
         
         return (JsonConverter)Activator.CreateInstance(
             typeof(ListableConverter<,>).MakeGenericType(itemType, collectionType),
@@ -32,6 +32,11 @@ public class ListableConverter<TItem, TCollection> : JsonConverter<TCollection>
 where TItem : class
 where TCollection : class, ICollection<TItem>, new()
 {
+    public ListableConverter(JsonSerializerOptions options)
+    {
+        // TODO cache stuff
+    }
+    
     public override TCollection? Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return null;

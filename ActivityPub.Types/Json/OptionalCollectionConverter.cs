@@ -5,19 +5,19 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Json;
 
 public class OptionalCollectionConverter : JsonConverterFactory
 {
     // We only convert concrete types deriving from ICollection<T>
-    public override bool CanConvert(Type type) => type.IsConstructedGenericType && type.GetGenericTypeDefinition().IsAssignableTo(typeof(ICollection<>));
+    public override bool CanConvert(Type type) => type.IsAssignableToGenericType(typeof(ICollection<>));
 
     // Pivot the type into correct converter
-    public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)
+    public override JsonConverter CreateConverter(Type collectionType, JsonSerializerOptions options)
     {
-        var collectionType = type.GetGenericArguments()[0];
-        var itemType = collectionType.GetGenericArguments()[0];
+        var itemType = collectionType.GetGenericArgumentsFor(typeof(ICollection<>))[0];
         
         return (JsonConverter)Activator.CreateInstance(
             typeof(OptionalCollectionConverter<,>).MakeGenericType(itemType, collectionType),
@@ -32,6 +32,11 @@ public class OptionalCollectionConverter : JsonConverterFactory
 public class OptionalCollectionConverter<TItem, TCollection> : JsonConverter<TCollection>
 where TCollection : ICollection<TItem>
 {
+    public OptionalCollectionConverter(JsonSerializerOptions options)
+    {
+        // TODO cache stuff
+    }
+    
     // Read is a no-op
     public override TCollection? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => JsonSerializer.Deserialize<TCollection>(ref reader, options);
 
