@@ -2,6 +2,8 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Util;
 
@@ -9,6 +11,7 @@ namespace ActivityPub.Types.Util;
 /// Synthetic wrapper for elements that can be included directly or referenced by a Link.
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
+[JsonConverter(typeof(LinkableConverter))]
 public class Linkable<T>
 {
     public bool HasLink { get; }

@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -20,13 +22,21 @@ public abstract class ASType
     /// Identifies the Object or Link types.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-type"/>
+    [JsonPropertyName("type")]
+    [JsonConverter(typeof(ListableConverter))]
     public HashSet<string> Types { get; set; } = new();
 
     /// <summary>
     /// Lists the JSON-LD contexts used by this object.
     /// Should be a full URL
     /// </summary>
-    public HashSet<string> Contexts { get; set; } = new();
+    [JsonPropertyName("@context")]
+    [JsonConverter(typeof(ListableConverter))]
+    public HashSet<string> Contexts { get; set; } = new()
+    {
+        // We always need the base ActivityStreams context
+        "https://www.w3.org/ns/activitystreams"
+    };
 
     /// <summary>
     /// Provides the globally unique identifier for an Object or Link.
@@ -40,6 +50,7 @@ public abstract class ASType
     /// <remarks>
     /// Based on https://www.w3.org/TR/activitypub/#obj-id
     /// </remarks>
+    [JsonIgnore]
     public bool IsAnonymous => Id == null;
 
     /// <summary>
@@ -47,7 +58,7 @@ public abstract class ASType
     /// The attributed entities might not be Actors.
     /// For instance, an object might be attributed to the completion of another activity. 
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/> 
     public LinkableList<ASObject> AttributedTo { get; set; } = new();
     
     /// <summary>

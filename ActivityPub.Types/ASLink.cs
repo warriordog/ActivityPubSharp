@@ -1,6 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
+
 namespace ActivityPub.Types;
 
 /// <summary>
@@ -11,6 +14,7 @@ namespace ActivityPub.Types;
 /// Properties of the Link are properties of the reference as opposed to properties of the resource. 
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link"/>
+[JsonConverter(typeof(ASLinkConverter))]
 public class ASLink : ASType
 {
     public const string LinkType = "Link";
