@@ -42,7 +42,7 @@ The packages within ActivityPubSharp are linked via interfaces and assembled thr
 ## Technical Details
 
 ### Requirements
-* .NET 6 or newer runtime on any supported platform
+* .NET 7 or newer runtime on any supported platform
 
 ### Design Goals
 * Minimal dependencies - software supply chain risks are real and very underrated. ActivityPubSharp is developed using minimal external dependencies, but without reinventing all the wheels.
