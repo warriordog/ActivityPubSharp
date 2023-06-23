@@ -17,7 +17,7 @@ public class ListableConverter : JsonConverterFactory
     public override JsonConverter? CreateConverter(Type collectionType, JsonSerializerOptions options)
     {
         var itemType = collectionType.GetGenericArgumentsFor(typeof(ICollection<>))[0];
-        
+
         return (JsonConverter)Activator.CreateInstance(
             typeof(ListableConverter<,>).MakeGenericType(itemType, collectionType),
             BindingFlags.Instance | BindingFlags.Public,
@@ -29,30 +29,26 @@ public class ListableConverter : JsonConverterFactory
 }
 
 public class ListableConverter<TItem, TCollection> : JsonConverter<TCollection>
-where TItem : class
-where TCollection : class, ICollection<TItem>, new()
+    where TItem : class
+    where TCollection : class, ICollection<TItem>, new()
 {
     public ListableConverter(JsonSerializerOptions options)
     {
         // TODO cache stuff
     }
-    
+
     public override TCollection? Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return null;
-        
-        if (reader.TokenType == JsonTokenType.StartArray)
-        {
-            return JsonSerializer.Deserialize<TCollection>(ref reader, options);
-        }
 
-        if (reader.TokenType == JsonTokenType.StartObject)
-        {
-            var item = JsonSerializer.Deserialize<TItem>(ref reader, options) ?? throw new JsonException("Failed to deserialize object for Listable");
-            return new TCollection { item };
-        }
-        
-        throw new JsonException($"Cannot convert {reader.TokenType} into Listable<T>");
+        // If array, then deserialize directly to the collection
+        if (reader.TokenType == JsonTokenType.StartArray)
+            return JsonSerializer.Deserialize<TCollection>(ref reader, options);
+
+        // Otherwise we assume (hope) that the next token can be deserialized to TItem
+        var item = JsonSerializer.Deserialize<TItem>(ref reader, options) ??
+                   throw new JsonException("Failed to deserialize object for Listable");
+        return new TCollection { item };
     }
 
     public override void Write(Utf8JsonWriter writer, TCollection collection, JsonSerializerOptions options)
