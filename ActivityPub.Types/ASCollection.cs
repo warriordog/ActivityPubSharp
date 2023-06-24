@@ -2,7 +2,6 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -49,7 +48,6 @@ public class ASCollection : ASObject
     /// Can also be "orderedItems" in JSON, if this is a subclass of ASOrderedCollection.
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-items"/>
-    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> Items { get; set; } = new();
 
     /// <summary>

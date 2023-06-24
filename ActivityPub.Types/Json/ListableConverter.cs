@@ -54,7 +54,7 @@ public class ListableConverter<TItem, TCollection> : JsonConverter<TCollection>
     public override void Write(Utf8JsonWriter writer, TCollection collection, JsonSerializerOptions options)
     {
         // If value is a single-element collection, then unpack it
-        if (collection?.Count == 1)
+        if (collection.Count == 1)
         {
             var item = collection.First();
             JsonSerializer.Serialize(writer, item, options);

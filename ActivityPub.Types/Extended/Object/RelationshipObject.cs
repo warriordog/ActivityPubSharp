@@ -2,7 +2,6 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Extended.Object;
@@ -24,7 +23,6 @@ public class RelationshipObject : ASObject
     /// Describes the entity to which the subject is related. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
-    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> Object { get; set; } = new();
 
     /// <summary>

@@ -1,8 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -22,6 +20,5 @@ public abstract class ASTransitiveActivity : ASActivity
     /// For instance, in the activity "John added a movie to his wishlist", the object of the activity is the movie added. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
-    [JsonConverter(typeof(OptionalCollectionConverter))]
     public LinkableList<ASObject> Object { get; set; } = new();
 }

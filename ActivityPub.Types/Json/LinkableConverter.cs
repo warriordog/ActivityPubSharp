@@ -60,7 +60,7 @@ public class LinkableConverter<T> : JsonConverter<Linkable<T>>
         }
         else if (linkable.TryGetValue(out var value))
         {
-            JsonSerializer.Serialize(writer, value);
+            JsonSerializer.Serialize(writer, value, options);
         }
         else
         {
