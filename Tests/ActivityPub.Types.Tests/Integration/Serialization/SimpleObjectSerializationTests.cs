@@ -1,4 +1,8 @@
-﻿namespace ActivityPub.Types.Tests.Integration.Serialization;
+﻿using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Json;
+using ActivityPub.Types.Util;
+
+namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public class SimpleObjectSerializationTests
 {
@@ -6,7 +10,7 @@ public class SimpleObjectSerializationTests
     {
         protected readonly ASObject ObjectUnderTest = new();
         protected Dictionary<string, JsonElement> JsonUnderTest => SerializeObject(ObjectUnderTest);
-        
+
         [Fact]
         public void ShouldIncludeContext()
         {
@@ -22,22 +26,86 @@ public class SimpleObjectSerializationTests
             JsonUnderTest["type"].ValueKind.Should().Be(JsonValueKind.String);
             JsonUnderTest["type"].GetString().Should().Be("Object");
         }
+    }
 
+    public class FullObject
+    {
         [Fact]
-        public void ShouldNotIncludeOtherFields()
+        public void ShouldIncludeAllProperties()
         {
-            JsonUnderTest
-                .Where(pair => pair.Value.ValueKind != JsonValueKind.Null) // Default serializer leaves empty fields as "null", so we have to remove them
-                .Should()
-                .HaveCount(2); // This needs to be updated if we ever add more "mandatory" fields
+            var obj = new ASObject()
+            {
+                Attachment = new() { new ASObject() },
+                Audience = new() { new ASObject() },
+                BCC = new() { new ASObject() },
+                BTo = new() { new ASObject() },
+                CC = new() { new ASObject() },
+                Context = "context", // this is the worst field name
+                Generator = new ASObject(),
+                Icon = new ImageObject(),
+                Image = new ImageObject(),
+                InReplyTo = new ASObject(),
+                Location = new ASObject(),
+                Replies = new ASCollection(),
+                Tag = new() { new ASObject() },
+                To = new() { new ASObject() },
+                Url = new() { new ASLink { HRef = "https://example.com" } },
+                Content = new NaturalLanguageString("content"),
+                Duration = "PT5S",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now,
+                Published = DateTime.Now,
+                Summary = new NaturalLanguageString("summary"),
+                Updated = DateTime.Now,
+                Source = new ASObject(),
+                Likes = new ASCollection(),
+                Shares = new ASCollection()
+            };
+
+            var json = JsonSerializer.Serialize(obj, JsonLdSerializerOptions.Default);
+
+            json.Should().Contain("\"attachment\":");
+            json.Should().Contain("\"audience\":");
+            json.Should().Contain("\"bcc\":");
+            json.Should().Contain("\"bto\":");
+            json.Should().Contain("\"cc\":");
+            json.Should().Contain("\"context\":"); // I hate this property NAME IT SOMETHING ELSE >:(
+            json.Should().Contain("\"generator\":");
+            json.Should().Contain("\"icon\":");
+            json.Should().Contain("\"image\":");
+            json.Should().Contain("\"inReplyTo\":");
+            json.Should().Contain("\"location\":");
+            json.Should().Contain("\"replies\":");
+            json.Should().Contain("\"tag\":");
+            json.Should().Contain("\"to\":");
+            json.Should().Contain("\"url\":");
+            json.Should().Contain("\"content\":");
+            json.Should().Contain("\"duration\":");
+            json.Should().Contain("\"startTime\":");
+            json.Should().Contain("\"endTime\":");
+            json.Should().Contain("\"published\":");
+            json.Should().Contain("\"summary\":");
+            json.Should().Contain("\"updated\":");
+            json.Should().Contain("\"source\":");
+            json.Should().Contain("\"likes\":");
+            json.Should().Contain("\"shares\":");
         }
     }
-    
-    // TODO rest of tests here
 
-    protected static Dictionary<string, JsonElement> SerializeObject(object obj)
+    public class Subclass
     {
-        var json = JsonSerializer.Serialize(obj);
-        return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json) ?? throw new ApplicationException("Deserialization failed!");
+        [Fact]
+        public void ShouldSerializeToCorrectType()
+        {
+            var obj = new ImageObject();
+            var json = SerializeObject(obj);
+            json["type"].GetString().Should().Be(ImageObject.ImageType);
+        }
+    }
+
+    private static Dictionary<string, JsonElement> SerializeObject(object obj)
+    {
+        var json = JsonSerializer.Serialize(obj, JsonLdSerializerOptions.Default);
+        return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!");
     }
 }

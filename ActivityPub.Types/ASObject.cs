@@ -44,6 +44,7 @@ public class ASObject : ASType
     /// Identifies an Object that is part of the private primary audience of this Object.  
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-bto"/>
+    [JsonPropertyName("bto")] // this property is not in camelcase for some reason
     public LinkableList<ASObject> BTo { get; set; } = new();
 
     /// <summary>
@@ -132,7 +133,8 @@ public class ASObject : ASType
 
     /// <summary>
     /// When the object describes a time-bound resource, such as an audio or video, a meeting, etc, the duration property indicates the object's approximate duration.
-    /// The value MUST be expressed as an xsd:duration as defined by [ xmlschema11-2], section 3.3.6 (e.g. a period of 5 seconds is represented as "PT5S"). 
+    /// The value MUST be expressed as an xsd:duration as defined by [ xmlschema11-2], section 3.3.6 (e.g. a period of 5 seconds is represented as "PT5S").
+    /// TODO create a custom type for this, or map it to a built-in type 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration"/>
     public string? Duration { get; set; }
