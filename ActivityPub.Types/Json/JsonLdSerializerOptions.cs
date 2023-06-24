@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 
 namespace ActivityPub.Types.Json;
 
+// TODO create a non-static version with DI, so that application code can customize the options.
+
 /// <summary>
 /// Recommended JSON serializer options for working with JSON-LD
 /// </summary>
@@ -18,6 +20,7 @@ public static class JsonLdSerializerOptions
         options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         options.PropertyNameCaseInsensitive = true;
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.Converters.Add(new ASTypeConverter());
         return options;
     }
 }

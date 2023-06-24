@@ -1,12 +1,15 @@
-﻿namespace ActivityPub.Types.Tests.Integration.Deserialization;
+﻿using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Json;
+
+namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
 public class SimpleObjectDeserializationTests
 {
     public class EmptyObject
     {
         protected readonly string JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
-        protected ASObject ObjectUnderTest => JsonSerializer.Deserialize<ASObject>(JsonUnderTest) ?? throw new ApplicationException("Deserialization failed!");
-        
+        protected ASObject ObjectUnderTest => JsonSerializer.Deserialize<ASObject>(JsonUnderTest, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!");
+
         [Fact]
         public void ShouldIncludeContext()
         {
@@ -17,6 +20,18 @@ public class SimpleObjectDeserializationTests
         public void ShouldIncludeType()
         {
             ObjectUnderTest.Types.Should().Contain("Object");
+        }
+    }
+
+    public class Subclass
+    {
+        [Fact]
+        public void ShouldDeserializeToCorrectType()
+        {
+            const string json = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Image"}""";
+            var obj = JsonSerializer.Deserialize<ASType>(json, JsonLdSerializerOptions.Default)!;
+            obj.Should().NotBeNull();
+            obj.Should().BeOfType<ImageObject>();
         }
     }
 }

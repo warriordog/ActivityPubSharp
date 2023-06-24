@@ -2,6 +2,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Extended.Activity;
 
@@ -10,6 +11,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// If the target property is not explicitly specified, the target would need to be determined implicitly by context.
 /// The origin can be used to identify the context from which the object originated. 
 /// </summary>
+[ASTypeKey(AddType)]
 public class AddActivity : ASTransitiveActivity
 {
     public const string AddType = "Add";

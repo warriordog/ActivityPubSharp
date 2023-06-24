@@ -2,6 +2,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Extended.Activity;
 
@@ -9,6 +10,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor is removing the object.
 /// If specified, the origin indicates the context from which the object is being removed. 
 /// </summary>
+[ASTypeKey(RemoveType)]
 public class RemoveActivity : ASTransitiveActivity
 {
     public const string RemoveType = "Remove";

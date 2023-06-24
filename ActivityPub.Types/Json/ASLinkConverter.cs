@@ -44,7 +44,7 @@ public class ASLinkConverter : JsonConverter<ASLink>
     /// True if a link contains a value for <see cref="ASLink.HRef"/> only and can therefore be reduced.
     /// </summary>
     /// <remarks>
-    /// This is really a hack and should be replaced.
+    /// TODO: This is really a hack and should be replaced.
     /// Its fragile and must be updated whenever <see cref="ASLink"/> or <see cref="ASType"/> is updated.
     /// </remarks> 
     private static bool HasOnlyHRef(ASLink link) =>

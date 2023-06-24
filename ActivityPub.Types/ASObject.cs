@@ -3,6 +3,7 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -12,6 +13,7 @@ namespace ActivityPub.Types;
 /// The Object type serves as the base type for most of the other kinds of objects defined in the Activity Vocabulary, including other Core types such as Activity, IntransitiveActivity, Collection and OrderedCollection. 
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
+[ASTypeKey(ObjectType)]
 public class ASObject : ASType
 {
     public const string ObjectType = "Object";

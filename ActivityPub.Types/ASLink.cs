@@ -15,6 +15,7 @@ namespace ActivityPub.Types;
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link"/>
 [JsonConverter(typeof(ASLinkConverter))]
+[ASTypeKey(LinkType)]
 public class ASLink : ASType
 {
     public const string LinkType = "Link";

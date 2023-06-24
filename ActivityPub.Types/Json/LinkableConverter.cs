@@ -2,9 +2,9 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Json;
@@ -16,26 +16,16 @@ public class LinkableConverter : JsonConverterFactory
         type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Linkable<>);
 
     // Pivot the type into correct instance
-    public override JsonConverter? CreateConverter(Type type, JsonSerializerOptions options)
+    public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)
     {
         var valueType = type.GetGenericArguments()[0];
-        return (JsonConverter)Activator.CreateInstance(
-            typeof(LinkableConverter<>).MakeGenericType(valueType),
-            BindingFlags.Instance | BindingFlags.Public,
-            binder: null,
-            args: new object[] { options },
-            culture: null
-        )!;
+        var converterType = typeof(LinkableConverter<>).MakeGenericType(valueType);
+        return (JsonConverter)Activator.CreateInstance(converterType)!;
     }
 }
 
-public class LinkableConverter<T> : JsonConverter<Linkable<T>>
+internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
 {
-    public LinkableConverter(JsonSerializerOptions options)
-    {
-        // TODO cache stuff
-    }
-
     public override Linkable<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return null;
@@ -69,47 +59,5 @@ public class LinkableConverter<T> : JsonConverter<Linkable<T>>
     }
 
     // Intentionally NOT passed by ref, to ensure we get a copy
-    private static bool IsASLink(Utf8JsonReader reader)
-    {
-        if (reader.TokenType != JsonTokenType.StartObject)
-            return false;
-
-        while (reader.Read())
-        {
-            // Empty or unknown object does NOT count as link
-            if (reader.TokenType == JsonTokenType.EndObject)
-                return false;
-
-            // Skip any nested objects
-            if (reader.TokenType == JsonTokenType.StartObject)
-                while (reader.TokenType != JsonTokenType.EndObject)
-                    reader.Read();
-
-            // Skip any nested arrays
-            else if (reader.TokenType == JsonTokenType.StartArray)
-                while (reader.TokenType != JsonTokenType.EndArray)
-                    reader.Read();
-
-            // Read the "type" property
-            else if (reader.TokenType == JsonTokenType.PropertyName && reader.GetString() == "type")
-            {
-                reader.Read();
-
-                // Directly compare strings
-                if (reader.TokenType == JsonTokenType.String)
-                    return reader.GetString() == ASLink.LinkType;
-
-                // Search within arrays
-                if (reader.TokenType == JsonTokenType.StartArray)
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                        if (reader.TokenType == JsonTokenType.String && reader.GetString() == ASLink.LinkType)
-                            return true;
-
-                // If we get here, then type is invalid and this isn't a link.
-                return false;
-            }
-        }
-
-        return false;
-    }
+    private static bool IsASLink(Utf8JsonReader reader) => reader.TryGetASObjectType(out var type) && type == ASLink.LinkType;
 }

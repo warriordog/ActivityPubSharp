@@ -1,6 +1,6 @@
-﻿namespace ActivityPub.Types.Util;
+﻿namespace ActivityPub.Types.Internal;
 
-public static class TypeExtensions
+internal static class TypeExtensions
 {
     /// <summary>
     /// Determines if a concrete type can be assigned to an open generic type.
@@ -15,20 +15,18 @@ public static class TypeExtensions
         if (!genericType.IsGenericType)
             throw new ArgumentException($"Type {genericType} is not an generic", nameof(genericType));
 
-        // Check if concreteType implements genericType
-        var interfaceTypes = concreteType.GetInterfaces();
-        if (interfaceTypes.Any(it => it.IsGenericType && it.GetGenericTypeDefinition() == genericType))
-            return true;
+        // Iteratively check the entire type hierarchy
+        for (var type = concreteType; type != null; type = type.BaseType)
+        {
+            // Check if concrete type is a constructed form of genericType
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == genericType)
+                return true;
 
-        // Check if concrete type is a constructed form of genericType
-        if (concreteType.IsGenericType && concreteType.GetGenericTypeDefinition() == genericType)
-            return true;
-
-        // Recursively check the base type.
-        var baseType = concreteType.BaseType;
-        if (baseType != null)
-            // TODO convert recursion to iteration
-            return IsAssignableToGenericType(baseType, genericType);
+            // Check if concreteType implements genericType
+            var interfaceTypes = type.GetInterfaces();
+            if (interfaceTypes.Any(it => it.IsGenericType && it.GetGenericTypeDefinition() == genericType))
+                return true;
+        }
 
         // If nothing matched, then this is not assignable
         return false;

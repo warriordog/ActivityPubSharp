@@ -2,6 +2,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -13,6 +14,7 @@ namespace ActivityPub.Types;
 /// Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the Collection type.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection"/>
+[ASTypeKey(CollectionType)]
 public class ASCollection : ASObject
 {
     public const string CollectionType = "Collection";

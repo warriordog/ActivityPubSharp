@@ -2,6 +2,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Extended.Object;
 
@@ -9,6 +10,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// A Profile is a content object that describes another Object, typically used to describe Actor Type objects.
 /// The describes property is used to reference the object being described by the profile. 
 /// </summary>
+[ASTypeKey(ProfileType)]
 public class ProfileObject : ASObject
 {
     public const string ProfileType = "Profile";

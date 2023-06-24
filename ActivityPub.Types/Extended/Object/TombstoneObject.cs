@@ -2,6 +2,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Extended.Object;
 
@@ -9,6 +10,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// A Tombstone represents a content object that has been deleted.
 /// It can be used in Collections to signify that there used to be an object at this position, but it has been deleted.
 /// </summary>
+[ASTypeKey(TombstoneType)]
 public class TombstoneObject : ASObject
 {
     public const string TombstoneType = "Tombstone";

@@ -2,6 +2,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -13,6 +14,7 @@ namespace ActivityPub.Types;
 /// Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the OrderedCollectionPage type.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
+[ASTypeKey(OrderedCollectionPageType)]
 public class ASOrderedCollectionPage : ASOrderedCollection, ICollectionPage
 {
     public const string OrderedCollectionPageType = "OrderedCollectionPage";
