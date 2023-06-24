@@ -11,20 +11,23 @@ public class ASLinkConverter : JsonConverter<ASLink>
 {
     public override ASLink? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (reader.TokenType == JsonTokenType.Null) return null;
-
-        if (reader.TokenType == JsonTokenType.String)
+        switch (reader.TokenType)
         {
-            var str = reader.GetString()!;
-            return new ASLink { HRef = str };
-        }
+            case JsonTokenType.Null:
+                return null;
 
-        if (reader.TokenType == JsonTokenType.StartObject)
-        {
-            return JsonSerializer.Deserialize<ASLink>(ref reader, options);
-        }
+            case JsonTokenType.String:
+            {
+                var str = reader.GetString()!;
+                return new ASLink { HRef = str };
+            }
 
-        throw new JsonException($"Cannot convert {reader.TokenType} into ASLink");
+            case JsonTokenType.StartObject:
+                return JsonSerializer.Deserialize<ASLink>(ref reader, options);
+
+            default:
+                throw new JsonException($"Cannot convert {reader.TokenType} into ASLink");
+        }
     }
 
     public override void Write(Utf8JsonWriter writer, ASLink link, JsonSerializerOptions options)

@@ -31,7 +31,7 @@ public class ASCollection : ASObject
     public Linkable<ASCollectionPage>? Current { get; set; }
 
     /// <summary>
-    /// In a paged Collection, indicates the furthest preceeding page of items in the collection. 
+    /// In a paged Collection, indicates the furthest preceding page of items in the collection. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-first"/>
     public Linkable<ASCollectionPage>? First { get; set; }

@@ -7,7 +7,7 @@ public class SimpleObjectDeserializationTests
 {
     public class EmptyObject
     {
-        protected readonly string JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
+        protected const string JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
         protected ASObject ObjectUnderTest => JsonSerializer.Deserialize<ASObject>(JsonUnderTest, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!");
 
         [Fact]

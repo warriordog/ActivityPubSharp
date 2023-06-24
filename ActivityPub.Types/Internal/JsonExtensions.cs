@@ -15,6 +15,7 @@ internal static class JsonExtensions
     /// If so, returns true and provides the AS "type" value.
     /// </summary>
     /// <param name="reader">Reader to scan from. Intentionally NOT passed by ref, to ensure we get a copy.</param>
+    /// <param name="type">Extracted type string. NOT normalized - could be in the wrong case!</param>
     /// <returns>Returns true if the reader is pointed as an AS object, false otherwise</returns>
     public static bool TryGetASObjectType(this Utf8JsonReader reader, [NotNullWhen(true)] out string? type)
     {

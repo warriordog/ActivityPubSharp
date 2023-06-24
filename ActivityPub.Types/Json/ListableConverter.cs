@@ -17,7 +17,7 @@ public class ListableConverter : JsonConverterFactory
     {
         var itemType = collectionType.GetGenericArgumentsFor(typeof(ICollection<>))[0];
         var converterType = typeof(ListableConverter<,>).MakeGenericType(itemType, collectionType);
-        return (JsonConverter)Activator.CreateInstance(converterType)!;
+        return (JsonConverter?)Activator.CreateInstance(converterType);
     }
 }
 
@@ -27,16 +27,23 @@ internal class ListableConverter<TItem, TCollection> : JsonConverter<TCollection
 {
     public override TCollection? Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
     {
-        if (reader.TokenType == JsonTokenType.Null) return null;
+        switch (reader.TokenType)
+        {
+            case JsonTokenType.Null:
+                return null;
 
-        // If array, then deserialize directly to the collection
-        if (reader.TokenType == JsonTokenType.StartArray)
-            return JsonSerializer.Deserialize<TCollection>(ref reader, options);
+            // If array, then deserialize directly to the collection
+            case JsonTokenType.StartArray:
+                return JsonSerializer.Deserialize<TCollection>(ref reader, options);
 
-        // Otherwise we assume (hope) that the next token can be deserialized to TItem
-        var item = JsonSerializer.Deserialize<TItem>(ref reader, options) ??
-                   throw new JsonException("Failed to deserialize object for Listable");
-        return new TCollection { item };
+            // Otherwise we assume (hope) that the next token can be deserialized to TItem
+            default:
+            {
+                var item = JsonSerializer.Deserialize<TItem>(ref reader, options) ??
+                           throw new JsonException("Failed to deserialize object for Listable");
+                return new TCollection { item };
+            }
+        }
     }
 
     public override void Write(Utf8JsonWriter writer, TCollection collection, JsonSerializerOptions options)

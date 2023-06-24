@@ -35,11 +35,11 @@ public class SimpleObjectSerializationTests
         {
             var obj = new ASObject()
             {
-                Attachment = new() { new ASObject() },
-                Audience = new() { new ASObject() },
-                BCC = new() { new ASObject() },
-                BTo = new() { new ASObject() },
-                CC = new() { new ASObject() },
+                Attachment = new LinkableList<ASObject> { new ASObject() },
+                Audience = new LinkableList<ASObject> { new ASObject() },
+                BCC = new LinkableList<ASObject> { new ASObject() },
+                BTo = new LinkableList<ASObject> { new ASObject() },
+                CC = new LinkableList<ASObject> { new ASObject() },
                 Context = "context", // this is the worst field name
                 Generator = new ASObject(),
                 Icon = new ImageObject(),
@@ -47,9 +47,9 @@ public class SimpleObjectSerializationTests
                 InReplyTo = new ASObject(),
                 Location = new ASObject(),
                 Replies = new ASCollection(),
-                Tag = new() { new ASObject() },
-                To = new() { new ASObject() },
-                Url = new() { new ASLink { HRef = "https://example.com" } },
+                Tag = new LinkableList<ASObject> { new ASObject() },
+                To = new LinkableList<ASObject> { new ASObject() },
+                Url = new LinkableList<ASLink> { new ASLink { HRef = "https://example.com" } },
                 Content = new NaturalLanguageString("content"),
                 Duration = "PT5S",
                 StartTime = DateTime.Now,

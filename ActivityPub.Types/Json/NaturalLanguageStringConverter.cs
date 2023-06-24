@@ -12,21 +12,26 @@ public class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageStrin
     public override NaturalLanguageString? Read(ref Utf8JsonReader reader, Type typeToConvert,
         JsonSerializerOptions options)
     {
-        if (reader.TokenType == JsonTokenType.Null) return null;
-
-        if (reader.TokenType == JsonTokenType.String)
+        switch (reader.TokenType)
         {
-            var str = reader.GetString()!;
-            return new NaturalLanguageString(str);
-        }
+            case JsonTokenType.Null:
+                return null;
 
-        if (reader.TokenType == JsonTokenType.StartObject)
-        {
-            var langStrings = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options)!;
-            return new NaturalLanguageString(langStrings);
-        }
+            case JsonTokenType.String:
+            {
+                var str = reader.GetString()!;
+                return new NaturalLanguageString(str);
+            }
 
-        throw new JsonException($"Cannot convert {reader.TokenType} into NaturalLanguageString");
+            case JsonTokenType.StartObject:
+            {
+                var langStrings = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options)!;
+                return new NaturalLanguageString(langStrings);
+            }
+
+            default:
+                throw new JsonException($"Cannot convert {reader.TokenType} into NaturalLanguageString");
+        }
     }
 
     public override void Write(Utf8JsonWriter writer, NaturalLanguageString value, JsonSerializerOptions options)
