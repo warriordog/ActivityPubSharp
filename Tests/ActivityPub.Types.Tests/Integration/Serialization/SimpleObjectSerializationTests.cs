@@ -1,16 +1,37 @@
-﻿using ActivityPub.Types.Extended.Object;
+﻿using ActivityPub.Types.Extended.Actor;
+using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public class SimpleObjectSerializationTests
+public abstract class SimpleObjectSerializationTests
 {
-    public class EmptyObject
+    private ASObject ObjectUnderTest
     {
-        protected readonly ASObject ObjectUnderTest = new();
-        protected Dictionary<string, JsonElement> JsonUnderTest => SerializeObject(ObjectUnderTest);
+        get => _objectUnderTest;
+        set
+        {
+            _objectUnderTest = value;
 
+            // TODO maybe we could create a ResettableLazy, then this wouldn't need to be duplicated
+            _jsonUnderTest = new Lazy<Dictionary<string, JsonElement>>(() => SerializeObject(ObjectUnderTest));
+        }
+    }
+
+    private ASObject _objectUnderTest = new();
+
+    // This is cached for performance
+    private Dictionary<string, JsonElement> JsonUnderTest => _jsonUnderTest.Value;
+    private Lazy<Dictionary<string, JsonElement>> _jsonUnderTest;
+
+    protected SimpleObjectSerializationTests()
+    {
+        _jsonUnderTest = new Lazy<Dictionary<string, JsonElement>>(() => SerializeObject(ObjectUnderTest));
+    }
+
+    public class EmptyObject : SimpleObjectSerializationTests
+    {
         [Fact]
         public void ShouldIncludeContext()
         {
@@ -28,13 +49,46 @@ public class SimpleObjectSerializationTests
         }
     }
 
-    public class FullObject
+    public class Subclass : SimpleObjectSerializationTests
+    {
+        [Fact]
+        public void ShouldSerializeToCorrectType()
+        {
+            ObjectUnderTest = new ImageObject();
+            JsonUnderTest["type"].GetString().Should().Be(ImageObject.ImageType);
+        }
+
+        [Fact]
+        public void ShouldIncludePropertiesFromBaseTypes()
+        {
+            ObjectUnderTest = new PersonActor()
+            {
+                // From ASActor
+                Inbox = new ASLink { HRef = "https://example.com/actor/inbox" },
+                Outbox = new ASLink { HRef = "https://example.com/actor/outbox" },
+
+                // From ASObject
+                Image = new ImageObject(),
+
+                // From ASType
+                Id = "https://example.com/actor/id"
+            };
+
+            JsonUnderTest["inbox"].Deserialize<ASLink>()?.HRef.Should().Be("https://example.com/actor/inbox");
+            JsonUnderTest["outbox"].Deserialize<ASLink>()?.HRef.Should().Be("https://example.com/actor/outbox");
+            JsonUnderTest["image"].Deserialize<ImageObject>().Should().NotBeNull();
+            JsonUnderTest["id"].GetString().Should().Be("https://example.com/actor/id");
+        }
+    }
+
+    public class FullObject : SimpleObjectSerializationTests
     {
         [Fact]
         public void ShouldIncludeAllProperties()
         {
-            var obj = new ASObject()
+            ObjectUnderTest = new ASObject()
             {
+                // From ASObject
                 Attachment = new LinkableList<ASObject> { new ASObject() },
                 Audience = new LinkableList<ASObject> { new ASObject() },
                 BCC = new LinkableList<ASObject> { new ASObject() },
@@ -59,47 +113,50 @@ public class SimpleObjectSerializationTests
                 Updated = DateTime.Now,
                 Source = new ASObject(),
                 Likes = new ASCollection(),
-                Shares = new ASCollection()
+                Shares = new ASCollection(),
+
+                // From ASType
+                Id = "https://example.com/some.uri",
+                AttributedTo = new LinkableList<ASObject>() { new ASObject() },
+                Preview = new ASObject(),
+                Name = new NaturalLanguageString("name"),
+                MediaType = new ASObject()
             };
 
-            var json = JsonSerializer.Serialize(obj, JsonLdSerializerOptions.Default);
 
-            json.Should().Contain("\"attachment\":");
-            json.Should().Contain("\"audience\":");
-            json.Should().Contain("\"bcc\":");
-            json.Should().Contain("\"bto\":");
-            json.Should().Contain("\"cc\":");
-            json.Should().Contain("\"context\":"); // I hate this property NAME IT SOMETHING ELSE >:(
-            json.Should().Contain("\"generator\":");
-            json.Should().Contain("\"icon\":");
-            json.Should().Contain("\"image\":");
-            json.Should().Contain("\"inReplyTo\":");
-            json.Should().Contain("\"location\":");
-            json.Should().Contain("\"replies\":");
-            json.Should().Contain("\"tag\":");
-            json.Should().Contain("\"to\":");
-            json.Should().Contain("\"url\":");
-            json.Should().Contain("\"content\":");
-            json.Should().Contain("\"duration\":");
-            json.Should().Contain("\"startTime\":");
-            json.Should().Contain("\"endTime\":");
-            json.Should().Contain("\"published\":");
-            json.Should().Contain("\"summary\":");
-            json.Should().Contain("\"updated\":");
-            json.Should().Contain("\"source\":");
-            json.Should().Contain("\"likes\":");
-            json.Should().Contain("\"shares\":");
-        }
-    }
+            // From ASObject
+            JsonUnderTest.Should().ContainKey("attachment");
+            JsonUnderTest.Should().ContainKey("audience");
+            JsonUnderTest.Should().ContainKey("bcc");
+            JsonUnderTest.Should().ContainKey("bto");
+            JsonUnderTest.Should().ContainKey("cc");
+            JsonUnderTest.Should().ContainKey("context"); // I hate this property NAME IT SOMETHING ELSE >:(
+            JsonUnderTest.Should().ContainKey("generator");
+            JsonUnderTest.Should().ContainKey("icon");
+            JsonUnderTest.Should().ContainKey("image");
+            JsonUnderTest.Should().ContainKey("inReplyTo");
+            JsonUnderTest.Should().ContainKey("location");
+            JsonUnderTest.Should().ContainKey("replies");
+            JsonUnderTest.Should().ContainKey("tag");
+            JsonUnderTest.Should().ContainKey("to");
+            JsonUnderTest.Should().ContainKey("url");
+            JsonUnderTest.Should().ContainKey("content");
+            JsonUnderTest.Should().ContainKey("duration");
+            JsonUnderTest.Should().ContainKey("startTime");
+            JsonUnderTest.Should().ContainKey("endTime");
+            JsonUnderTest.Should().ContainKey("published");
+            JsonUnderTest.Should().ContainKey("summary");
+            JsonUnderTest.Should().ContainKey("updated");
+            JsonUnderTest.Should().ContainKey("source");
+            JsonUnderTest.Should().ContainKey("likes");
+            JsonUnderTest.Should().ContainKey("shares");
 
-    public class Subclass
-    {
-        [Fact]
-        public void ShouldSerializeToCorrectType()
-        {
-            var obj = new ImageObject();
-            var json = SerializeObject(obj);
-            json["type"].GetString().Should().Be(ImageObject.ImageType);
+            // From ASType
+            JsonUnderTest.Should().ContainKey("id");
+            JsonUnderTest.Should().ContainKey("attributedTo");
+            JsonUnderTest.Should().ContainKey("preview");
+            JsonUnderTest.Should().ContainKey("name");
+            JsonUnderTest.Should().ContainKey("mediaType");
         }
     }
 
