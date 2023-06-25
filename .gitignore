@@ -1,5 +1,9 @@
+# Build artifacts
 bin/
 obj/
 /packages/
-riderModule.iml
+
+# Per-user / local IDE data
 /_ReSharper.Caches/
+riderModule.iml
+*.DotSettings.user
