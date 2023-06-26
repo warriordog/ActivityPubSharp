@@ -42,7 +42,20 @@ public abstract class ASType
     /// Provides the globally unique identifier for an Object or Link.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-id"/>
-    public string? Id { get; set; }
+    public string? Id
+    {
+        get => _id;
+        set
+        {
+            if (value == _id) return;
+
+            // Cache this for performance
+            IsAnonymous = string.IsNullOrWhiteSpace(value);
+            _id = value;
+        }
+    }
+
+    private string? _id;
 
     /// <summary>
     /// True if this object is anonymous and should be considered part of its parent context.
@@ -51,7 +64,7 @@ public abstract class ASType
     /// Based on https://www.w3.org/TR/activitypub/#obj-id
     /// </remarks>
     [JsonIgnore]
-    public bool IsAnonymous => Id == null;
+    public bool IsAnonymous { get; private set; } = true;
 
     /// <summary>
     /// Identifies one or more entities to which this object is attributed.
