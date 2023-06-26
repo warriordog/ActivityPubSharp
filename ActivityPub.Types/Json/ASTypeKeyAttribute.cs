@@ -3,7 +3,7 @@
 
 namespace ActivityPub.Types.Json;
 
-[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 public sealed class ASTypeKeyAttribute : Attribute
 {
     /// <summary>

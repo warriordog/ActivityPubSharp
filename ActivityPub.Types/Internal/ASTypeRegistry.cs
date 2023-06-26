@@ -50,19 +50,19 @@ internal class ASTypeRegistry
                     continue;
 
                 // Its a subtype so now check for attribute
-                var asObjectType = type.GetCustomAttribute<ASTypeKeyAttribute>();
-                if (asObjectType == null)
-                    continue;
-
-                // Have to lowercase this for accurate checking 
-                var typeName = asObjectType.Type.ToLower();
-
-                if (typeMap.TryGetValue(typeName, out var originalType))
+                var typeAttributes = type.GetCustomAttributes<ASTypeKeyAttribute>();
+                foreach (var asObjectType in typeAttributes)
                 {
-                    throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
-                }
+                    // Have to lowercase this for accurate checking 
+                    var typeName = asObjectType.Type.ToLower();
 
-                typeMap[typeName] = type;
+                    if (typeMap.TryGetValue(typeName, out var originalType))
+                    {
+                        throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
+                    }
+
+                    typeMap[typeName] = type;
+                }
             }
         }
 
