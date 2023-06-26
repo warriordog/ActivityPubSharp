@@ -12,7 +12,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// The origin can be used to identify the context from which the object originated. 
 /// </summary>
 [ASTypeKey(AddType)]
-public class AddActivity : ASTransitiveActivity
+public class AddActivity : ASTargetedActivity
 {
     public const string AddType = "Add";
 
