@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// If specified, the origin indicates the context from which the object is being removed. 
 /// </summary>
 [ASTypeKey(RemoveType)]
-public class RemoveActivity : ASTransitiveActivity
+public class RemoveActivity : ASTargetedActivity
 {
     public const string RemoveType = "Remove";
 

@@ -59,5 +59,14 @@ public class ASActivity : ASObject
     /// An activity can have more than one target. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target"/>
-    public Linkable<ASObject>? Target { get; set; }
+    public Linkable<ASObject>? Target
+    {
+        get => TargetImpl;
+        set => TargetImpl = value;
+    }
+    
+    /// <summary>
+    /// Overridden in <see cref="ASTargetedActivity"/> to ensure that both properties stay in sync
+    /// </summary>
+    protected virtual Linkable<ASObject>? TargetImpl { get; set; }
 }
