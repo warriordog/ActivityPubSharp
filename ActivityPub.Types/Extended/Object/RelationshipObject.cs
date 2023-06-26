@@ -37,6 +37,9 @@ public class RelationshipObject : ASObject
     /// <summary>
     /// On a Relationship object, the relationship property identifies the kind of relationship that exists between subject and object. 
     /// </summary>
+    /// <remarks>
+    /// This is supposed to be Range = "Object", but all the examples have a string URL
+    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-relationship"/>
-    public string? Relationship { get; set; }
+    public Linkable<ASObject>? Relationship { get; set; }
 }
