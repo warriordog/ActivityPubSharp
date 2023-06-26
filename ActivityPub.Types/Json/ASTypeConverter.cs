@@ -27,8 +27,7 @@ public class ASTypeConverter : JsonConverterFactory
     {
         // Create a copy of options that does not include ASTypeConverter.
         // Without this, we would enter an infinite loop because the converter would call itself.
-        var defaultConverterOptions = new JsonSerializerOptions(options);
-        defaultConverterOptions.Converters.RemoveWhere(c => c is ASTypeConverter);
+        var defaultConverterOptions = new JsonSerializerOptions(options).RemoveConvertersOfType<ASTypeConverter>();
 
         // Create an instance of the generic converter
         var constructedType = typeof(ASTypeConverter<>).MakeGenericType(typeToConvert);

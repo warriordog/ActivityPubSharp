@@ -1,4 +1,5 @@
-﻿using ActivityPub.Types.Extended.Actor;
+﻿using ActivityPub.Types.Collection;
+using ActivityPub.Types.Extended.Actor;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Json;
 
@@ -12,19 +13,19 @@ public abstract class SimpleObjectDeserializationTests
         set
         {
             _jsonUnderTest = value;
-            _objectUnderTest = new Lazy<ASType>(() => JsonSerializer.Deserialize<ASObject>(JsonUnderTest, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!"));
+            _objectUnderTest = new Lazy<ASObject>(() => JsonSerializer.Deserialize<ASObject>(JsonUnderTest, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!"));
         }
     }
 
     private string _jsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
 
     // Cached for performance
-    private ASType ObjectUnderTest => _objectUnderTest.Value;
-    private Lazy<ASType> _objectUnderTest;
+    private ASObject ObjectUnderTest => _objectUnderTest.Value;
+    private Lazy<ASObject> _objectUnderTest;
 
     protected SimpleObjectDeserializationTests()
     {
-        _objectUnderTest = new Lazy<ASType>(() => JsonSerializer.Deserialize<ASObject>(JsonUnderTest, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!"));
+        _objectUnderTest = new Lazy<ASObject>(() => JsonSerializer.Deserialize<ASObject>(JsonUnderTest, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!"));
     }
 
     public class EmptyObject : SimpleObjectDeserializationTests
@@ -73,6 +74,109 @@ public abstract class SimpleObjectDeserializationTests
             personUnderTest.Outbox.HRef.Should().Be("https://example.com/actor/outbox");
             personUnderTest.Image.Should().NotBeNull();
             personUnderTest.Id.Should().Be("https://example.com/actor/id");
+        }
+    }
+
+    public class FullObject : SimpleObjectDeserializationTests
+    {
+        [Fact]
+        public void ShouldIncludeAllProperties()
+        {
+            JsonUnderTest =
+            """
+                {
+                    "attachment":[{}],
+                    "audience":[{}],
+                    "bcc":[{}],
+                    "bto":[{}],
+                    "cc":[{}],
+                    "context":{},
+                    "generator":{},
+                    "icon":{"type":"Image"},
+                    "image":{"type":"Image"},
+                    "inReplyTo":{},
+                    "location":{},
+                    "replies":{
+                        "type":"Collection",
+                        "totalItems":1,
+                        "items":[{}]
+                    },
+                    "tag":[{}],
+                    "to":[{}],
+                    "url":"https://example.com",
+                    "content":"content",
+                    "duration":"PT5S",
+                    "startTime":"2023-06-26T21:30:09.2872331-04:00",
+                    "endTime":"2023-06-26T21:30:09.2873668-04:00",
+                    "published":"2023-06-26T21:30:09.2874915-04:00",
+                    "summary":"summary",
+                    "updated":"2023-06-26T21:30:09.2877318-04:00",
+                    "source":{},
+                    "likes":{
+                        "type":"Collection",
+                        "totalItems":1,
+                        "items":[{}]
+                    },
+                    "shares":{
+                        "type":"Collection",
+                        "totalItems":1,
+                        "items":[{}]
+                    },
+                    "type":"Object",
+                    "@context":"https://www.w3.org/ns/activitystreams",
+                    "id":"https://example.com/some.uri",
+                    "attributedTo":[{}],
+                    "preview":{},
+                    "name":"name",
+                    "mediaType":{}
+                }
+            """;
+
+            ObjectUnderTest.Should().BeOfType<ASObject>();
+            ObjectUnderTest.Attachment.Should().HaveCount(1);
+            ObjectUnderTest.Audience.Should().HaveCount(1);
+            ObjectUnderTest.BCC.Should().HaveCount(1);
+            ObjectUnderTest.BTo.Should().HaveCount(1);
+            ObjectUnderTest.CC.Should().HaveCount(1);
+            ObjectUnderTest.Context.Should().NotBeNull();
+            ObjectUnderTest.Generator.Should().NotBeNull();
+            ObjectUnderTest.Icon.Should().NotBeNull();
+            ObjectUnderTest.Image.Should().NotBeNull();
+            ObjectUnderTest.InReplyTo.Should().NotBeNull();
+            ObjectUnderTest.Location.Should().NotBeNull();
+            
+            ObjectUnderTest.Tag.Should().HaveCount(1);
+            ObjectUnderTest.To.Should().HaveCount(1);
+            ObjectUnderTest.Url.Should().NotBeNull();
+            ObjectUnderTest.Content.Should().NotBeNull();
+            ObjectUnderTest.Duration.Should().NotBeNull();
+            ObjectUnderTest.StartTime.Should().NotBeNull();
+            ObjectUnderTest.EndTime.Should().NotBeNull();
+            ObjectUnderTest.Published.Should().NotBeNull();
+            ObjectUnderTest.Summary.Should().NotBeNull();
+            ObjectUnderTest.Updated.Should().NotBeNull();
+            ObjectUnderTest.Source.Should().NotBeNull();
+            ObjectUnderTest.Id.Should().NotBeNull();
+            ObjectUnderTest.AttributedTo.Should().HaveCount(1);
+            ObjectUnderTest.Preview.Should().NotBeNull();
+            ObjectUnderTest.Name.Should().NotBeNull();
+            ObjectUnderTest.MediaType.Should().NotBeNull();
+            
+            ObjectUnderTest.Replies.Should().BeOfType<ASUnpagedCollection<ASObject>>();
+            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Replies!).TotalItems.Should().Be(1);
+            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Replies!).Items.Should().HaveCount(1);
+            
+            ObjectUnderTest.Likes.Should().NotBeNull();
+            ObjectUnderTest.Likes?.HasValue.Should().BeTrue();
+            ObjectUnderTest.Likes!.Value!.Should().BeOfType<ASUnpagedCollection<ASObject>>();
+            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Likes!.Value!).TotalItems.Should().Be(1);
+            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Likes!.Value!).Items.Should().HaveCount(1);
+            
+            ObjectUnderTest.Shares.Should().NotBeNull();
+            ObjectUnderTest.Shares?.HasValue.Should().BeTrue();
+            ObjectUnderTest.Shares!.Value!.Should().BeOfType<ASUnpagedCollection<ASObject>>();
+            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Shares!.Value!).TotalItems.Should().Be(1);
+            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Shares!.Value!).Items.Should().HaveCount(1);
         }
     }
 }

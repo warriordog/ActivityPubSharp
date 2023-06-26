@@ -4,8 +4,9 @@
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
+using static ActivityPub.Types.Collection.CollectionTypes;
 
-namespace ActivityPub.Types;
+namespace ActivityPub.Types.Collection;
 
 /// <summary>
 /// Used to represent ordered subsets of items from an OrderedCollection.
@@ -15,9 +16,9 @@ namespace ActivityPub.Types;
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
 [ASTypeKey(OrderedCollectionPageType)]
-public class ASOrderedCollectionPage : ASOrderedCollection, ICollectionPage
+public class ASOrderedCollectionPage<T> : ASCollectionPage<T>
+    where T : ASObject
 {
-    public const string OrderedCollectionPageType = "OrderedCollectionPage";
 
     [JsonConstructor]
     public ASOrderedCollectionPage() : this(OrderedCollectionPageType) {}
@@ -30,7 +31,6 @@ public class ASOrderedCollectionPage : ASOrderedCollection, ICollectionPage
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startIndex"/>
     public int? StartIndex { get; set; }
 
-    public Linkable<ASCollectionPage>? Next { get; set; }
-    public Linkable<ASCollectionPage>? Prev { get; set; }
-    public Linkable<ASCollection>? PartOf { get; set; }
+    [JsonPropertyName("orderedItems")]
+    public override LinkableList<T> Items { get; set; } = new();
 }

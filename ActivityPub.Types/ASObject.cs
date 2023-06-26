@@ -2,6 +2,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Collection;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
@@ -103,7 +104,7 @@ public class ASObject : ASType
     /// Identifies a Collection containing objects considered to be responses to this object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-replies"/>
-    public ASCollection? Replies { get; set; }
+    public ASCollection<ASObject>? Replies { get; set; }
 
     /// <summary>
     /// One or more "tags" that have been associated with an objects.
@@ -122,8 +123,11 @@ public class ASObject : ASType
     /// <summary>
     /// Identifies one or more links to representations of the object 
     /// </summary>
+    /// <remarks>
+    /// TODO this needs a special case - it can be a Uri, ASLink, *or* a string
+    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
-    public LinkableList<ASLink> Url { get; set; } = new();
+    public ASLink? Url { get; set; }
 
     /// <summary>
     /// The content or textual representation of the Object encoded as a JSON string.
@@ -187,11 +191,11 @@ public class ASObject : ASType
     /// Care should be taken to not confuse the the likes collection with the similarly named but different liked collection.
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitypub/#likes"/>
-    public Linkable<ASCollection>? Likes { get; set; }
+    public Linkable<ASCollection<ASObject>>? Likes { get; set; }
 
     /// <summary>
     /// This is a list of all Announce activities with this object as the object property, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#shares"/>
-    public Linkable<ASCollection>? Shares { get; set; }
+    public Linkable<ASCollection<ASObject>>? Shares { get; set; }
 }

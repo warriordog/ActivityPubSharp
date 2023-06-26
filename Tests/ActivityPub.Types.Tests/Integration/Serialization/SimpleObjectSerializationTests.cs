@@ -1,4 +1,5 @@
-﻿using ActivityPub.Types.Extended.Actor;
+﻿using ActivityPub.Types.Collection;
+using ActivityPub.Types.Extended.Actor;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
@@ -94,16 +95,23 @@ public abstract class SimpleObjectSerializationTests
                 BCC = new LinkableList<ASObject> { new ASObject() },
                 BTo = new LinkableList<ASObject> { new ASObject() },
                 CC = new LinkableList<ASObject> { new ASObject() },
-                Context = "context", // this is the worst field name
+                Context = (ASLink)"https://example.com/some/context", // this is the worst field name
                 Generator = new ASObject(),
                 Icon = new ImageObject(),
                 Image = new ImageObject(),
                 InReplyTo = new ASObject(),
                 Location = new ASObject(),
-                Replies = new ASCollection(),
+                Replies = new ASUnpagedCollection<ASObject>
+                {
+                    TotalItems = 1,
+                    Items = new LinkableList<ASObject>
+                    {
+                        new ASObject()
+                    }
+                },
                 Tag = new LinkableList<ASObject> { new ASObject() },
                 To = new LinkableList<ASObject> { new ASObject() },
-                Url = new LinkableList<ASLink> { new ASLink { HRef = "https://example.com" } },
+                Url = "https://example.com",
                 Content = new NaturalLanguageString("content"),
                 Duration = "PT5S",
                 StartTime = DateTime.Now,
@@ -112,18 +120,31 @@ public abstract class SimpleObjectSerializationTests
                 Summary = new NaturalLanguageString("summary"),
                 Updated = DateTime.Now,
                 Source = new ASObject(),
-                Likes = new ASCollection(),
-                Shares = new ASCollection(),
+                Likes = new ASUnpagedCollection<ASObject>
+                {
+                    TotalItems = 1,
+                    Items = new LinkableList<ASObject>
+                    {
+                        new ASObject()
+                    }
+                },
+                Shares = new ASUnpagedCollection<ASObject>
+                {
+                    TotalItems = 1,
+                    Items = new LinkableList<ASObject>
+                    {
+                        new ASObject()
+                    }
+                },
 
                 // From ASType
                 Id = "https://example.com/some.uri",
-                AttributedTo = new LinkableList<ASObject>() { new ASObject() },
+                AttributedTo = new LinkableList<ASObject> { new ASObject() },
                 Preview = new ASObject(),
                 Name = new NaturalLanguageString("name"),
                 MediaType = new ASObject()
             };
-
-
+            
             // From ASObject
             JsonUnderTest.Should().ContainKey("attachment");
             JsonUnderTest.Should().ContainKey("audience");

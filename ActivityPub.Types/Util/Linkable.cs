@@ -14,22 +14,23 @@ namespace ActivityPub.Types.Util;
 [JsonConverter(typeof(LinkableConverter))]
 public class Linkable<T>
 {
+    [MemberNotNullWhen(true, nameof(Link))]
     public bool HasLink { get; }
+    public ASLink? Link { get; }
 
-    private readonly ASLink? _link;
-
+    [MemberNotNullWhen(true, nameof(Value))]
     public bool HasValue { get; }
-    private readonly T? _value;
+    public T? Value { get; }
 
     public Linkable(ASLink link)
     {
-        _link = link;
+        Link = link;
         HasLink = true;
     }
 
     public Linkable(T value)
     {
-        _value = value;
+        Value = value;
         HasValue = true;
     }
 
@@ -37,7 +38,7 @@ public class Linkable<T>
     {
         if (HasLink)
         {
-            link = _link!;
+            link = Link!;
             return true;
         }
 
@@ -49,7 +50,7 @@ public class Linkable<T>
     {
         if (HasValue)
         {
-            value = _value!;
+            value = Value!;
             return true;
         }
 
@@ -58,7 +59,7 @@ public class Linkable<T>
     }
 
     protected bool Equals(Linkable<T> other) =>
-        Equals(_link, other._link) && EqualityComparer<T?>.Default.Equals(_value, other._value);
+        Equals(Link, other.Link) && EqualityComparer<T?>.Default.Equals(Value, other.Value);
 
     public override bool Equals(object? obj)
     {
@@ -68,7 +69,7 @@ public class Linkable<T>
         return Equals((Linkable<T>)obj);
     }
 
-    public override int GetHashCode() => HashCode.Combine(_link, _value);
+    public override int GetHashCode() => HashCode.Combine(Link, Value);
 
 
     public static implicit operator Linkable<T>(ASLink link) => new(link);

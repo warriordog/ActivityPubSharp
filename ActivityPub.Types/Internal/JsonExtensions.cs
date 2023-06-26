@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ActivityPub.Types.Internal;
 
@@ -14,6 +15,9 @@ internal static class JsonExtensions
     /// Checks if a JSON reader is pointed to an ActivityStreams object.
     /// If so, returns true and provides the AS "type" value.
     /// </summary>
+    /// <remarks>
+    /// TODO This is a clunky and unstable implementation - replace it with one based on JsonElement
+    /// </remarks>
     /// <param name="reader">Reader to scan from. Intentionally NOT passed by ref, to ensure we get a copy.</param>
     /// <param name="type">Extracted type string. NOT normalized - could be in the wrong case!</param>
     /// <returns>Returns true if the reader is pointed as an AS object, false otherwise</returns>
@@ -106,4 +110,44 @@ internal static class JsonExtensions
         // Final check for success or failure result
         return reader.TokenType == tokenType;
     }
+
+    /// <summary>
+    /// Modifies the JsonSerializerOptions to remove all JsonConverters of the specified type
+    /// </summary>
+    /// <param name="options"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns>Returns the same object for chaining</returns>
+    public static JsonSerializerOptions RemoveConvertersOfType<T>(this JsonSerializerOptions options)
+        where T : JsonConverter
+    {
+        options.Converters.RemoveWhere(c => c is T);
+        return options;
+    }
+
+    /// <summary>
+    /// Attempts to read the element as a string.
+    /// Returns true on success.
+    /// </summary>
+    /// <param name="element">Element to convert</param>
+    /// <param name="str">String that was read</param>
+    /// <returns>True if a string was read, false otherwise</returns>
+    public static bool TryGetString(this JsonElement element, [NotNullWhen(true)] out string? str)
+    {
+        if (element.ValueKind != JsonValueKind.String)
+        {
+            str = null;
+            return false;
+        }
+        
+        str = element.GetString();
+        return str != null;
+    }
+
+    /// <summary>
+    /// Checks if the element contains a property with the given name
+    /// </summary>
+    /// <param name="element"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public static bool HasProperty(this JsonElement element, string name) => element.TryGetProperty(name, out _);
 }
