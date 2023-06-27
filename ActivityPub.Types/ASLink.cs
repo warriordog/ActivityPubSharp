@@ -3,6 +3,7 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
 
@@ -29,7 +30,7 @@ public class ASLink : ASType
     /// The target resource pointed to by a Link. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-href"/>
-    public required string HRef { get; set; }
+    public required ASUri HRef { get; set; }
 
     /// <summary>
     /// Hints as to the language used by the target resource.
@@ -62,5 +63,11 @@ public class ASLink : ASType
     public HashSet<string> Rel { get; set; } = new();
 
     public static implicit operator string(ASLink link) => link.HRef;
-    public static implicit operator ASLink(string str) => new() { HRef = str };
+    public static implicit operator ASLink(string str) => new() { HRef = new(str) };
+
+    public static implicit operator Uri(ASLink link) => link.HRef.Uri;
+    public static implicit operator ASLink(Uri uri) => new() { HRef = new(uri) };
+
+    public static implicit operator ASUri(ASLink link) => link.HRef;
+    public static implicit operator ASLink(ASUri asUri) => new() { HRef = asUri };
 }

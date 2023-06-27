@@ -124,7 +124,7 @@ public class ASObject : ASType
     /// Identifies one or more links to representations of the object 
     /// </summary>
     /// <remarks>
-    /// TODO this needs a special case - it can be a Uri, ASLink, *or* a string
+    /// TODO this needs a special case - it can be a List{ASLink}, ASLink, *or* ASUri
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
     public ASLink? Url { get; set; }
