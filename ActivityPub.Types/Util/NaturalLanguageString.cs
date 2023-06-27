@@ -234,7 +234,4 @@ public class NaturalLanguageString
     {
         _languageMap.Remove(language);
     }
-
-    public static implicit operator string?(NaturalLanguageString nls) => nls.GetOrNull();
-    public static implicit operator NaturalLanguageString(string? str) => new(str);
 }
