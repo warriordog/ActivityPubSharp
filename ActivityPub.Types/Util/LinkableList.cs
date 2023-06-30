@@ -7,8 +7,22 @@ namespace ActivityPub.Types.Util;
 /// Synthetic type to represent a list of T or Links to T
 /// </summary>
 public class LinkableList<T> : List<Linkable<T>>
-where T : ASObject
+    where T : ASObject
 {
+    /// <summary>
+    /// All link items within the collection.
+    /// </summary>
+    public IEnumerable<ASLink> LinkItems => this
+        .Where(linkable => linkable.HasLink)
+        .Select(linkable => linkable.Link!);
+
+    /// <summary>
+    /// All non-link items within the collection
+    /// </summary>
+    public IEnumerable<T> ValueItems => this
+        .Where(linkable => linkable.HasValue)
+        .Select(linkable => linkable.Value!);
+
     public LinkableList() {}
 
     public LinkableList(int capacity) : base(capacity) {}
