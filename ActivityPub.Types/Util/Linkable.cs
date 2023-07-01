@@ -15,10 +15,12 @@ namespace ActivityPub.Types.Util;
 public class Linkable<T>
 {
     [MemberNotNullWhen(true, nameof(Link))]
+    [MemberNotNullWhen(false, nameof(Value))]
     public bool HasLink { get; }
     public ASLink? Link { get; }
 
     [MemberNotNullWhen(true, nameof(Value))]
+    [MemberNotNullWhen(false, nameof(Link))]
     public bool HasValue { get; }
     public T? Value { get; }
 
@@ -32,6 +34,12 @@ public class Linkable<T>
     {
         Value = value;
         HasValue = true;
+    }
+
+    public Linkable(Linkable<T> linkable)
+    {
+        HasValue = linkable.HasValue;
+        Value = linkable.Value;
     }
 
     public bool TryGetLink([NotNullWhen(true)] out ASLink? link)
@@ -58,8 +66,7 @@ public class Linkable<T>
         return false;
     }
 
-    protected bool Equals(Linkable<T> other) =>
-        Equals(Link, other.Link) && EqualityComparer<T?>.Default.Equals(Value, other.Value);
+    protected bool Equals(Linkable<T> other) => Equals(Link, other.Link) && EqualityComparer<T?>.Default.Equals(Value, other.Value);
 
     public override bool Equals(object? obj)
     {
@@ -73,5 +80,10 @@ public class Linkable<T>
 
 
     public static implicit operator Linkable<T>(ASLink link) => new(link);
+    public static implicit operator Linkable<T>(ASUri link) => new((ASLink)link);
+    public static implicit operator Linkable<T>(Uri link) => new((ASLink)link);
+    public static implicit operator Linkable<T>(string link) => new((ASLink)link);
     public static implicit operator Linkable<T>(T value) => new(value);
+    public static implicit operator ASLink?(Linkable<T>? linkable) => linkable?.Link;
+    public static implicit operator T?(Linkable<T>? linkable) => linkable == null ? default : linkable.Value;
 }

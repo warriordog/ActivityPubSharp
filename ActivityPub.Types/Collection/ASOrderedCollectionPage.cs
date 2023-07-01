@@ -32,5 +32,14 @@ public class ASOrderedCollectionPage<T> : ASCollectionPage<T>
     public int? StartIndex { get; set; }
 
     [JsonPropertyName("orderedItems")]
-    public override LinkableList<T> Items { get; set; } = new();
+    public override LinkableList<T>? Items { get; set; }
+
+    
+    public static implicit operator ASOrderedCollectionPage<T>(LinkableList<T> collection) => new() { Items = collection };
+    public static implicit operator ASOrderedCollectionPage<T>(List<Linkable<T>> collection) => new() { Items = new(collection) };
+    public static implicit operator ASOrderedCollectionPage<T>(List<T> collection) => new() { Items = new(collection) };
+    public static implicit operator ASOrderedCollectionPage<T>(List<ASLink> collection) => new() { Items = new(collection) };
+    public static implicit operator ASOrderedCollectionPage<T>(Linkable<T> value) => new() { Items = new() { value } };
+    public static implicit operator ASOrderedCollectionPage<T>(T value) => new() { Items = new() { value } };
+    public static implicit operator ASOrderedCollectionPage<T>(ASLink value) => new() { Items = new() { value } };
 }

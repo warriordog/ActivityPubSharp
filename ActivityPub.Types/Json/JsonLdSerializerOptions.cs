@@ -49,6 +49,6 @@ public static class JsonLdSerializerOptions
     public static void AddConverters(JsonSerializerOptions options)
     {
         options.Converters.Add(new ASTypeConverter());
-        options.Converters.Add(new ASCollectionConverter());
+        // options.Converters.Add(new ASCollectionConverter());
     }
 }

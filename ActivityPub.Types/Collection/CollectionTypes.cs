@@ -1,5 +1,8 @@
 ﻿namespace ActivityPub.Types.Collection;
 
+/// <summary>
+/// Collection AS types are placed here because the implementation types are generic.
+/// </summary>
 public static class CollectionTypes
 {
     public const string CollectionType = "Collection";

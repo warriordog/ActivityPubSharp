@@ -1,5 +1,4 @@
-﻿using ActivityPub.Types.Collection;
-using ActivityPub.Types.Extended.Actor;
+﻿using ActivityPub.Types.Extended.Actor;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Json;
 
@@ -112,16 +111,8 @@ public abstract class SimpleObjectDeserializationTests
                     "summary":"summary",
                     "updated":"2023-06-26T21:30:09.2877318-04:00",
                     "source":{},
-                    "likes":{
-                        "type":"Collection",
-                        "totalItems":1,
-                        "items":[{}]
-                    },
-                    "shares":{
-                        "type":"Collection",
-                        "totalItems":1,
-                        "items":[{}]
-                    },
+                    "likes":"https://example.com/likes.collection",
+                    "shares":"https://example.com/shares.collection",
                     "type":"Object",
                     "@context":"https://www.w3.org/ns/activitystreams",
                     "id":"https://example.com/some.uri",
@@ -162,21 +153,14 @@ public abstract class SimpleObjectDeserializationTests
             ObjectUnderTest.Name.Should().NotBeNull();
             ObjectUnderTest.MediaType.Should().NotBeNull();
             
-            ObjectUnderTest.Replies.Should().BeOfType<ASUnpagedCollection<ASObject>>();
-            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Replies!).TotalItems.Should().Be(1);
-            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Replies!).Items.Should().HaveCount(1);
+            ObjectUnderTest.Replies.Should().NotBeNull();
+            ObjectUnderTest.Replies!.HasItems.Should().BeTrue();
+            ObjectUnderTest.Replies!.HasObjectItems.Should().BeTrue();
+            ObjectUnderTest.Replies!.TotalItems.Should().Be(1);
+            ObjectUnderTest.Replies!.Items!.Count.Should().Be(1);
             
-            ObjectUnderTest.Likes.Should().NotBeNull();
-            ObjectUnderTest.Likes?.HasValue.Should().BeTrue();
-            ObjectUnderTest.Likes!.Value!.Should().BeOfType<ASUnpagedCollection<ASObject>>();
-            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Likes!.Value!).TotalItems.Should().Be(1);
-            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Likes!.Value!).Items.Should().HaveCount(1);
-            
-            ObjectUnderTest.Shares.Should().NotBeNull();
-            ObjectUnderTest.Shares?.HasValue.Should().BeTrue();
-            ObjectUnderTest.Shares!.Value!.Should().BeOfType<ASUnpagedCollection<ASObject>>();
-            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Shares!.Value!).TotalItems.Should().Be(1);
-            ((ASUnpagedCollection<ASObject>)ObjectUnderTest.Shares!.Value!).Items.Should().HaveCount(1);
+            ObjectUnderTest.Likes?.HasLink.Should().BeTrue();
+            ObjectUnderTest.Shares?.HasLink.Should().BeTrue();
         }
     }
 }

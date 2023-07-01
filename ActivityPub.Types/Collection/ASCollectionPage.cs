@@ -16,7 +16,7 @@ namespace ActivityPub.Types.Collection;
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage"/>
 [ASTypeKey(CollectionPageType)]
-public class ASCollectionPage<T> : ASUnpagedCollection<T>
+public class ASCollectionPage<T> : ASCollection<T>
     where T : ASObject
 {
     [JsonConstructor]
@@ -41,4 +41,13 @@ public class ASCollectionPage<T> : ASUnpagedCollection<T>
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-partOf"/>
     public Linkable<ASCollection<T>>? PartOf { get; set; }
+
+    
+    public static implicit operator ASCollectionPage<T>(LinkableList<T> collection) => new() { Items = collection };
+    public static implicit operator ASCollectionPage<T>(List<Linkable<T>> collection) => new() { Items = new(collection) };
+    public static implicit operator ASCollectionPage<T>(List<T> collection) => new() { Items = new(collection) };
+    public static implicit operator ASCollectionPage<T>(List<ASLink> collection) => new() { Items = new(collection) };
+    public static implicit operator ASCollectionPage<T>(Linkable<T> value) => new() { Items = new() { value } };
+    public static implicit operator ASCollectionPage<T>(T value) => new() { Items = new() { value } };
+    public static implicit operator ASCollectionPage<T>(ASLink value) => new() { Items = new() { value } };
 }

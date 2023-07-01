@@ -189,14 +189,14 @@ public class ASObject : ASType
     /// This is a list of all Like activities with this object as the object property, added as a side effect.
     /// </summary>
     /// <remarks>
-    /// Care should be taken to not confuse the the likes collection with the similarly named but different liked collection.
+    /// Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="IActor.Liked"/> collection.
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitypub/#likes"/>
-    public LinkableCollection<LikeActivity>? Likes { get; set; }
+    public Linkable<ASCollection<LikeActivity>>? Likes { get; set; }
 
     /// <summary>
     /// This is a list of all Announce activities with this object as the object property, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#shares"/>
-    public LinkableCollection<AnnounceActivity>? Shares { get; set; }
+    public Linkable<ASCollection<AnnounceActivity>>? Shares { get; set; }
 }

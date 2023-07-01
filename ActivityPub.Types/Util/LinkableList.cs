@@ -7,25 +7,22 @@ namespace ActivityPub.Types.Util;
 /// Synthetic type to represent a list of T or Links to T
 /// </summary>
 public class LinkableList<T> : List<Linkable<T>>
+where T : ASObject
 {
     public LinkableList() {}
 
     public LinkableList(int capacity) : base(capacity) {}
-
     public LinkableList(IEnumerable<Linkable<T>> collection) : base(collection) {}
-
-    public LinkableList(IEnumerable<T> values)
-    {
-        AddRange(values);
-    }
-
-    public LinkableList(IEnumerable<ASLink> links)
-    {
-        AddRange(links);
-    }
+    public LinkableList(IEnumerable<T> values) => AddRange(values);
+    public LinkableList(IEnumerable<ASLink> links) => AddRange(links);
 
     public void Add(T value) => Add(new Linkable<T>(value));
     public void Add(ASLink link) => Add(new Linkable<T>(link));
+    public void Add(Linkable<T> linkable)
+    {
+        if (linkable.HasValue) Add(linkable.Value);
+        else Add(linkable.Link);
+    }
 
     public void AddRange(IEnumerable<T> values)
     {
@@ -34,12 +31,18 @@ public class LinkableList<T> : List<Linkable<T>>
             Add(value);
         }
     }
-
     public void AddRange(IEnumerable<ASLink> links)
     {
         foreach (var link in links)
         {
             Add(link);
+        }
+    }
+    public void AddRange(IEnumerable<Linkable<T>> linkables)
+    {
+        foreach (var linkable in linkables)
+        {
+            Add(linkable);
         }
     }
 }
