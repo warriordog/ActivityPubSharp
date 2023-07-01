@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C54CED61
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Types.Tests", "Tests\ActivityPub.Types.Tests\ActivityPub.Types.Tests.csproj", "{D750AD19-106E-4A0E-9ADB-A64F50713082}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleClient", "Samples\SimpleClient\SimpleClient.csproj", "{95EDC087-659C-412A-9FBD-1B959694FD3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{B8B3D775-1A7F-4C38-B14C-F113016B51D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,8 +42,13 @@ Global
 		{D750AD19-106E-4A0E-9ADB-A64F50713082}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D750AD19-106E-4A0E-9ADB-A64F50713082}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D750AD19-106E-4A0E-9ADB-A64F50713082}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95EDC087-659C-412A-9FBD-1B959694FD3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95EDC087-659C-412A-9FBD-1B959694FD3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95EDC087-659C-412A-9FBD-1B959694FD3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95EDC087-659C-412A-9FBD-1B959694FD3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D750AD19-106E-4A0E-9ADB-A64F50713082} = {C54CED61-32AF-4DF1-BB79-4BB035958584}
+		{95EDC087-659C-412A-9FBD-1B959694FD3F} = {B8B3D775-1A7F-4C38-B14C-F113016B51D1}
 	EndGlobalSection
 EndGlobal
