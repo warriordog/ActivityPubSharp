@@ -32,7 +32,7 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
         if (reader.TokenType == JsonTokenType.Null) return null;
 
         // Objects that aren't ASLink are the payload data
-        if (!IsASLink(reader))
+        if (reader.TokenType == JsonTokenType.StartObject && !IsASLink(reader))
         {
             var obj = JsonSerializer.Deserialize<T>(ref reader, options);
             return (Linkable<T>?)Activator.CreateInstance(typeToConvert, obj);
@@ -47,7 +47,7 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
     {
         if (linkable.TryGetLink(out var link))
         {
-            writer.WriteStringValue(link.HRef);
+            JsonSerializer.Serialize(writer, link, options);
         }
         else if (linkable.TryGetValue(out var value))
         {
