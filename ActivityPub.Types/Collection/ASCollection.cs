@@ -10,7 +10,6 @@ using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
 
-
 /// <summary>
 /// A Collection is a subtype of Object that represents ordered or unordered sets of Object or Link instances.
 /// May be paged or unpaged, and ordered or unordered. 
@@ -26,7 +25,9 @@ namespace ActivityPub.Types.Collection;
 public class ASCollection<T> : ASObject
     where T : ASObject
 {
-    protected ASCollection() : this(CollectionType) {}
+    [JsonConstructor]
+    public ASCollection() : this(CollectionType) {}
+
     protected ASCollection(string type) : base(type) {}
 
     /// <summary>
@@ -60,9 +61,10 @@ public class ASCollection<T> : ASObject
     [Range(0, int.MaxValue)]
     public int TotalItems
     {
-        get => _totalItems ?? Items?.Count ?? 0; 
+        get => _totalItems ?? Items?.Count ?? 0;
         set => _totalItems = Math.Max(value, 0);
     }
+
     private int? _totalItems;
 
     /// <summary>
@@ -84,10 +86,10 @@ public class ASCollection<T> : ASObject
     [JsonIgnore]
     public IEnumerable<ASLink> LinkItems =>
         Items == null
-        ? Enumerable.Empty<ASLink>()
-        : Items
-            .Where(linkable => linkable.HasLink)
-            .Select(linkable => linkable.Link!);
+            ? Enumerable.Empty<ASLink>()
+            : Items
+                .Where(linkable => linkable.HasLink)
+                .Select(linkable => linkable.Link!);
 
     /// <summary>
     /// All non-link objects found in <see cref="Items"/>.
@@ -96,17 +98,17 @@ public class ASCollection<T> : ASObject
     [JsonIgnore]
     public IEnumerable<T> ObjectItems =>
         Items == null
-        ? Enumerable.Empty<T>()
-        : Items
-            .Where(linkable => linkable.HasValue)
-            .Select(linkable => linkable.Value!);
+            ? Enumerable.Empty<T>()
+            : Items
+                .Where(linkable => linkable.HasValue)
+                .Select(linkable => linkable.Value!);
 
     /// <summary>
     /// True if this is a paged collection, false otherwise.
     /// </summary>
     [JsonIgnore]
     public bool IsPaged => Current != null || First != null || Last != null;
-    
+
     /// <summary>
     /// True if this collection instance contains items, false otherwise.
     /// </summary>
