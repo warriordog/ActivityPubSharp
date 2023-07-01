@@ -41,11 +41,6 @@ public class LinkableList<T> : List<Linkable<T>>, ILinkableList
 
     public void Add(T value) => Add(new Linkable<T>(value));
     public void Add(ASLink link) => Add(new Linkable<T>(link));
-    public void Add(Linkable<T> linkable)
-    {
-        if (linkable.HasValue) Add(linkable.Value);
-        else Add(linkable.Link);
-    }
 
     public void AddRange(IEnumerable<T> values)
     {
@@ -54,6 +49,7 @@ public class LinkableList<T> : List<Linkable<T>>, ILinkableList
             Add(value);
         }
     }
+
     public void AddRange(IEnumerable<ASLink> links)
     {
         foreach (var link in links)
@@ -61,14 +57,12 @@ public class LinkableList<T> : List<Linkable<T>>, ILinkableList
             Add(link);
         }
     }
-    public void AddRange(IEnumerable<Linkable<T>> linkables)
-    {
-        foreach (var linkable in linkables)
-        {
-            Add(linkable);
-        }
-    }
-    
+
+    // These are  required for weird type resolution reasons.
+    // If removed, other code wont compile.
+    public new void Add(Linkable<T> linkable) => base.Add(linkable);
+    public new void AddRange(IEnumerable<Linkable<T>> linkables) => base.AddRange(linkables);
+
     ILinkable ILinkableList.Get(int i) => this[i];
 
     void ILinkableList.Set(int i, ASType value)
