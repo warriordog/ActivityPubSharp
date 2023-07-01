@@ -25,6 +25,7 @@ public class LinkableConverter : JsonConverterFactory
 }
 
 internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
+    where T : ASObject
 {
     public override Linkable<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
