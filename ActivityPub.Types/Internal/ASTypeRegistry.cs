@@ -6,38 +6,31 @@ using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Internal;
 
+// TODO make this a service with DI
 internal class ASTypeRegistry
 {
-    private readonly Dictionary<string, Type> _knownTypeMap;
-    public ASTypeRegistry(Dictionary<string, Type> knownTypeMap) => _knownTypeMap = knownTypeMap;
+    private readonly Dictionary<string, TypeRegistryEntry> _knownTypeMap;
+    private ASTypeRegistry(Dictionary<string, TypeRegistryEntry> knownTypeMap) => _knownTypeMap = knownTypeMap;
 
-    public Type GetTypeForName(string name)
+    public Type ReifyType<TDeclaredType>(string name)
+        where TDeclaredType : ASType
     {
-        if (!_knownTypeMap.TryGetValue(name.ToLower(), out var type))
+        // Lookup the entry
+        if (!_knownTypeMap.TryGetValue(name.ToLower(), out var entry))
         {
-            type = typeof(ASType);
+            // Bail out to defaults if unknown.
+            // This will blow up if TDeclaredType is abstract, open generic, or otherwise not constructable.
+            return typeof(TDeclaredType);
         }
 
-        return type;
-    }
-
-    public Type GetTypeForNames(string[] names)
-    {
-        // TODO this is a naive approach - we should handle multiple matches to find the most specific type
-        foreach (var name in names)
-        {
-            if (_knownTypeMap.TryGetValue(name.ToLower(), out var type))
-            {
-                return type;
-            }
-        }
-
-        return typeof(ASType);
+        // Delegate reification to the actual instance.
+        // Inheritance FTW!
+        return entry.ReifyType<TDeclaredType>();
     }
 
     public static ASTypeRegistry Create()
     {
-        var typeMap = new Dictionary<string, Type>();
+        var typeMap = new Dictionary<string, TypeRegistryEntry>();
 
         // Find all defined types
         // TODO don't scan all assemblies
@@ -55,17 +48,82 @@ internal class ASTypeRegistry
                 {
                     // Have to lowercase this for accurate checking 
                     var typeName = asObjectType.Type.ToLower();
-
+                    
+                    // Check for dupes
                     if (typeMap.TryGetValue(typeName, out var originalType))
-                    {
                         throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
-                    }
 
-                    typeMap[typeName] = type;
+                    // Create an appropriate entry for the type
+                    var entry = type.IsOpenGeneric()
+                        ? new GenericTypeRegistryEntry(type, asObjectType.DefaultGenerics)
+                        : new TypeRegistryEntry(type);
+                    
+                    // Done - cache it
+                    typeMap[typeName] = entry;
                 }
             }
         }
 
         return new ASTypeRegistry(typeMap);
+    }
+
+    private class TypeRegistryEntry
+    {
+        internal Type RegisteredType { get; }
+
+        public TypeRegistryEntry(Type registeredType) => RegisteredType = registeredType;
+
+        internal virtual Type ReifyType<TDeclaredType>() where TDeclaredType : ASType => RegisteredType;
+    }
+
+    private class GenericTypeRegistryEntry : TypeRegistryEntry
+    {
+        private Type[]? DefaultGenerics { get; }
+        private readonly Dictionary<Type, Type> _reifiedCache = new();
+
+        public GenericTypeRegistryEntry(Type registeredType, Type[]? defaultGenerics) : base(registeredType)
+        {
+            if (!registeredType.IsOpenGeneric())
+                throw new ArgumentException($"Type {registeredType} is not an open generic", nameof(registeredType));
+            
+            DefaultGenerics = defaultGenerics;
+        }
+
+        internal override Type ReifyType<TDeclaredType>()
+        {
+            var declaredType = typeof(TDeclaredType);
+            
+            // Fast path: check for cache
+            if (_reifiedCache.TryGetValue(declaredType, out var reifiedType))
+                return reifiedType;
+
+            // Populate a list of concrete types to fill generic slots
+            var declaredSlots = declaredType.TryGetGenericArgumentsFor(RegisteredType);
+            var genericSlots = RegisteredType.GetGenericArguments();
+            for (var i = 0; i < genericSlots.Length; i++)
+            {
+                var slot = genericSlots[i];
+
+                // First try to get from declared type
+                if (slot.IsOpenGeneric() && declaredSlots != null && declaredSlots.Length >= genericSlots.Length)
+                    slot = declaredSlots[i];
+
+                // Then try to get from registered defaults
+                if (slot.IsOpenGeneric() && DefaultGenerics != null && DefaultGenerics.Length >= genericSlots.Length)
+                    slot = DefaultGenerics[i];
+
+                // Finally fall back to global default
+                if (slot.IsOpenGeneric())
+                    slot = typeof(ASType);
+
+                genericSlots[i] = slot;
+            }
+            
+            // Construct the type and cache it for performance
+            reifiedType = RegisteredType.MakeGenericType(genericSlots);
+            _reifiedCache[declaredType] = reifiedType;
+            
+            return reifiedType;
+        }
     }
 }

@@ -31,15 +31,18 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
     {
         if (reader.TokenType == JsonTokenType.Null) return null;
 
+        // Parse into abstract form
+        var jsonElement = JsonElement.ParseValue(ref reader);
+        
         // Objects that aren't ASLink are the payload data
-        if (reader.TokenType == JsonTokenType.StartObject && !IsASLink(reader))
+        if (reader.TokenType == JsonTokenType.StartObject && !IsASLink(jsonElement))
         {
-            var obj = JsonSerializer.Deserialize<T>(ref reader, options);
+            var obj = jsonElement.Deserialize<T>(options);
             return (Linkable<T>?)Activator.CreateInstance(typeToConvert, obj);
         }
 
         // Delegate link construction back to the parser
-        var link = JsonSerializer.Deserialize<ASLink>(ref reader, options);
+        var link = jsonElement.Deserialize<ASLink>(options);
         return (Linkable<T>?)Activator.CreateInstance(typeToConvert, link);
     }
 
@@ -59,6 +62,5 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
         }
     }
 
-    // Intentionally NOT passed by ref, to ensure we get a copy
-    private static bool IsASLink(Utf8JsonReader reader) => reader.TryGetASObjectType(out var type) && type == ASLink.LinkType;
+    private static bool IsASLink(JsonElement element) => element.TryGetASType(out var type) && type == ASLink.LinkType;
 }

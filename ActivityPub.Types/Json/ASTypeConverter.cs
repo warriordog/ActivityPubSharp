@@ -59,18 +59,25 @@ internal class ASTypeConverter<T> : JsonConverter<T>
 
     public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
+        // Initially parse into an abstract form.
+        // We will introspect to find the correct subtype, then convert from abstract into concrete POCO.
+        var objectElement = JsonElement.ParseValue(ref reader);
+        
         // We will attempt to narrow these down.
         // On failure, the defaults will be used.
         var actualOptions = _defaultOptions;
         var actualType = typeToConvert;
 
         // If the JSON object maps to a more specific type, then we need to identify it and then re-enter the parser.
-        // This will be false on the second entry which is triggered by the re-entry below.
-        if (reader.TryGetASObjectType(out var asTypeName))
+        // If no type is provided, then we infer it from context (the "T" generic parameter).
+        if (objectElement.TryGetASType(out var asTypeName))
         {
             // Find and check the type.
             // Its possible (even likely) for this to be the exact same type, in which case we should skip re-entry for performance.
-            var asType = _typeRegistry.GetTypeForName(asTypeName);
+            var asType = _typeRegistry.ReifyType<T>(asTypeName);
+            
+            // This will be false on the second entry which is triggered by the re-entry below.
+            // TODO rework this recursion logic using a flag or something
             if (asType != typeToConvert)
             {
                 if (!asType.IsAssignableTo(typeToConvert))
@@ -83,7 +90,7 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         }
 
         // This will either re-enter the serializer with a new type, or will fall through to the default serializer for the original type.
-        return (T?)JsonSerializer.Deserialize(ref reader, actualType, actualOptions);
+        return (T?)objectElement.Deserialize(actualType, actualOptions);
     }
 
     // For writer, we just re-enter the serializer without ASTypeConverter.
