@@ -2,18 +2,18 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Reflection;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Internal;
 
-namespace ActivityPub.Types.Internal;
+namespace ActivityPub.Types.Json;
 
 // TODO make this a service with DI
-internal class ASTypeRegistry
+public class ASTypeRegistry
 {
     private readonly Dictionary<string, TypeRegistryEntry> _knownTypeMap;
     private ASTypeRegistry(Dictionary<string, TypeRegistryEntry> knownTypeMap) => _knownTypeMap = knownTypeMap;
 
     public Type ReifyType<TDeclaredType>(string name)
-        where TDeclaredType : ASType
+        where TDeclaredType : ASType, IJsonConvertible<TDeclaredType>
     {
         // Lookup the entry
         if (!_knownTypeMap.TryGetValue(name.ToLower(), out var entry))
@@ -48,7 +48,7 @@ internal class ASTypeRegistry
                 {
                     // Have to lowercase this for accurate checking 
                     var typeName = asObjectType.Type.ToLower();
-                    
+
                     // Check for dupes
                     if (typeMap.TryGetValue(typeName, out var originalType))
                         throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
@@ -57,7 +57,7 @@ internal class ASTypeRegistry
                     var entry = type.IsOpenGeneric()
                         ? new GenericTypeRegistryEntry(type, asObjectType.DefaultGenerics)
                         : new TypeRegistryEntry(type);
-                    
+
                     // Done - cache it
                     typeMap[typeName] = entry;
                 }
@@ -85,14 +85,14 @@ internal class ASTypeRegistry
         {
             if (!registeredType.IsOpenGeneric())
                 throw new ArgumentException($"Type {registeredType} is not an open generic", nameof(registeredType));
-            
+
             DefaultGenerics = defaultGenerics;
         }
 
         internal override Type ReifyType<TDeclaredType>()
         {
             var declaredType = typeof(TDeclaredType);
-            
+
             // Fast path: check for cache
             if (_reifiedCache.TryGetValue(declaredType, out var reifiedType))
                 return reifiedType;
@@ -118,11 +118,11 @@ internal class ASTypeRegistry
 
                 genericSlots[i] = slot;
             }
-            
+
             // Construct the type and cache it for performance
             reifiedType = RegisteredType.MakeGenericType(genericSlots);
             _reifiedCache[declaredType] = reifiedType;
-            
+
             return reifiedType;
         }
     }

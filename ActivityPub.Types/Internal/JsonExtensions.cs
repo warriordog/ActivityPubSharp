@@ -58,7 +58,7 @@ internal static class JsonExtensions
             str = null;
             return false;
         }
-        
+
         str = element.GetString();
         return str != null;
     }
@@ -78,4 +78,26 @@ internal static class JsonExtensions
         type = null;
         return false;
     }
+
+    // /// <summary>
+    // /// TODO docs
+    // /// </summary>
+    // /// <param name="element"></param>
+    // /// <param name="name"></param>
+    // /// <param name="options"></param>
+    // /// <param name="value"></param>
+    // /// <typeparam name="T"></typeparam>
+    // /// <returns></returns>
+    // /// <exception cref="JsonException"></exception>
+    // public static bool TryGetProperty<T>(this JsonElement element, string name, JsonSerializerOptions options, [NotNullWhen(true)] out T? value)
+    // {
+    //     if (!element.TryGetProperty(name, out var prop))
+    //     {
+    //         value = default;
+    //         return false;
+    //     }
+    //
+    //     value = prop.Deserialize<T>() ?? throw new JsonException($"Conversion to {typeof(T)} failed");
+    //     return true;
+    // }
 }

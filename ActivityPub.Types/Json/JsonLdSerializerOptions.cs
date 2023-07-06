@@ -13,6 +13,9 @@ namespace ActivityPub.Types.Json;
 /// </summary>
 public static class JsonLdSerializerOptions
 {
+    // TODO expose this for DI somehow
+    private static ASTypeRegistry _typeRegistry = ASTypeRegistry.Create();
+
     public static JsonSerializerOptions Default => new JsonSerializerOptions().AddJsonLd();
 
     /// <summary>
@@ -49,6 +52,8 @@ public static class JsonLdSerializerOptions
     public static void AddConverters(JsonSerializerOptions options)
     {
         options.Converters.Add(new ASTypeConverter());
+        options.Converters.Add(new ListableConverter());
         // options.Converters.Add(new ASCollectionConverter());
+        // options.Converters.Add(new JsonConvertibleConverter(_typeRegistry));
     }
 }

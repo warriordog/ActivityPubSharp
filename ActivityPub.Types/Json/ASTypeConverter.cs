@@ -25,9 +25,8 @@ public class ASTypeConverter : JsonConverterFactory
     // Pivot the target type directly to the generic argument, then call the default constructor
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        // Create a copy of options that does not include ASTypeConverter.
-        // Without this, we would enter an infinite loop because the converter would call itself.
-        var defaultConverterOptions = new JsonSerializerOptions(options).RemoveConvertersOfType<ASTypeConverter>();
+        // Create JsonOptions
+        var jsonOptions = new JsonOptions(options, _sharedTypeRegistry);
 
         // Create an instance of the generic converter
         var constructedType = typeof(ASTypeConverter<>).MakeGenericType(typeToConvert);
@@ -35,7 +34,7 @@ public class ASTypeConverter : JsonConverterFactory
             constructedType,
             BindingFlags.Instance | BindingFlags.Public,
             binder: null,
-            args: new object[] { _sharedTypeRegistry, defaultConverterOptions },
+            args: new object[] { jsonOptions },
             culture: null
         )!;
     }
@@ -46,56 +45,52 @@ public class ASTypeConverter : JsonConverterFactory
 /// </summary>
 /// <typeparam name="T">specific type to produce</typeparam>
 internal class ASTypeConverter<T> : JsonConverter<T>
-    where T : ASType
+    where T : ASType, IJsonConvertible<T>
 {
-    private readonly ASTypeRegistry _typeRegistry;
-    private readonly JsonSerializerOptions _defaultOptions;
-
-    public ASTypeConverter(ASTypeRegistry typeRegistry, JsonSerializerOptions defaultOptions)
-    {
-        _typeRegistry = typeRegistry;
-        _defaultOptions = defaultOptions;
-    }
+    private readonly JsonOptions _jsonOptions;
+    public ASTypeConverter(JsonOptions jsonOptions) => _jsonOptions = jsonOptions;
 
     public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Initially parse into an abstract form.
         // We will introspect to find the correct subtype, then convert from abstract into concrete POCO.
         var objectElement = JsonElement.ParseValue(ref reader);
-        
-        // We will attempt to narrow these down.
-        // On failure, the defaults will be used.
-        var actualOptions = _defaultOptions;
-        var actualType = typeToConvert;
 
-        // If the JSON object maps to a more specific type, then we need to identify it and then re-enter the parser.
-        // If no type is provided, then we infer it from context (the "T" generic parameter).
-        if (objectElement.TryGetASType(out var asTypeName))
+        // Narrow the type to construct
+        var actualType = GetTargetType(objectElement, typeToConvert);
+
+        // If different, then re-enter the serializer to correct the type of T
+        if (actualType != typeToConvert)
         {
-            // Find and check the type.
-            // Its possible (even likely) for this to be the exact same type, in which case we should skip re-entry for performance.
-            var asType = _typeRegistry.ReifyType<T>(asTypeName);
-            
-            // This will be false on the second entry which is triggered by the re-entry below.
-            // TODO rework this recursion logic using a flag or something
-            if (asType != typeToConvert)
-            {
-                if (!asType.IsAssignableTo(typeToConvert))
-                    throw new JsonException($"Cannot deserialize JSON message of type {asType} into object of type {typeToConvert}");
+            if (!actualType.IsAssignableTo(typeToConvert))
+                throw new JsonException($"Cannot deserialize JSON message of type {actualType} into object of type {typeToConvert}");
 
-                // Change to the new type, preserving the passed-in options
-                actualType = asType;
-                actualOptions = options;
-            }
+            return (T?)objectElement.Deserialize(actualType, _jsonOptions.SerializerOptions);
         }
 
-        // This will either re-enter the serializer with a new type, or will fall through to the default serializer for the original type.
-        return (T?)objectElement.Deserialize(actualType, actualOptions);
+        // If we get here, then T is the correct type.
+        // That means we can use it to access the per-type logic/
+        return T.Deserialize(objectElement, _jsonOptions);
     }
 
-    // For writer, we just re-enter the serializer without ASTypeConverter.
-    // This does two things:
-    // 1. Selects a more-narrow serializer, if available
-    // 2. Allows the default logic to serialize the object.
-    public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options) => JsonSerializer.Serialize(writer, value, _defaultOptions);
+    private Type GetTargetType(JsonElement objectElement, Type typeToConverter)
+    {
+        // If the object contains a type, then use that to reify as much as possible
+        if (objectElement.TryGetASType(out var asTypeName))
+            return _jsonOptions.TypeRegistry.ReifyType<T>(asTypeName);
+
+        // If not, then use the declared type AS LONG AS its not the base ASType
+        if (typeToConverter != typeof(ASType))
+            return typeToConverter;
+
+        // Finally, fall back to ASObject
+        return typeof(ASObject);
+    }
+
+    // For writer, we just call per-type logic.
+    public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
+    {
+        var node = T.Serialize(value, _jsonOptions);
+        node.WriteTo(writer, options);
+    }
 }
