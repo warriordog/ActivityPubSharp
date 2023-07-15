@@ -3,7 +3,6 @@
 
 using System.Net.Http.Headers;
 using System.Text.Json;
-using ActivityPub.Common.TypeInfo;
 using ActivityPub.Common.Util;
 using ActivityPub.Types;
 using ActivityPub.Types.Json;
@@ -17,13 +16,11 @@ namespace ActivityPub.Client;
 public class ActivityPubClient : IActivityPubClient
 {
     private readonly HttpClient _httpClient = new();
-    private readonly ITypeInfoCache _typeInfoCache;
     private readonly ActivityPubOptions _apOptions;
     private readonly IJsonLdSerializer _jsonLdSerializer;
 
-    public ActivityPubClient(ITypeInfoCache typeInfoCache, ActivityPubOptions apOptions, IJsonLdSerializer jsonLdSerializer)
+    public ActivityPubClient(ActivityPubOptions apOptions, IJsonLdSerializer jsonLdSerializer)
     {
-        _typeInfoCache = typeInfoCache;
         _apOptions = apOptions;
         _jsonLdSerializer = jsonLdSerializer;
 
@@ -57,11 +54,11 @@ public class ActivityPubClient : IActivityPubClient
         if (jsonObj is not ASType obj)
             throw new JsonException($"Failed to deserialize object - parser returned unsupported object {jsonObj?.GetType()}");
 
-        // Recursively populate the object
+        // If its a link, then recursively follow it.
         maxRecursion ??= DefaultGetRecursion;
-        if (maxRecursion > 0)
+        if (maxRecursion > 0 && obj is ASLink link)
         {
-            await Populate(targetType, obj, maxRecursion - 1, cancellationToken);
+            obj = await Get(link.HRef.Uri, targetType, maxRecursion - 1, cancellationToken);
         }
 
         return obj;
@@ -94,54 +91,8 @@ public class ActivityPubClient : IActivityPubClient
         return list;
     }
 
-    public int DefaultPopulateRecursion { get; set; } = 1;
 
-    public async Task<T> Populate<T>(T obj, int? maxRecursion = null, CancellationToken cancellationToken = default)
-        where T : ASObject
-    {
-        await Populate(typeof(T), obj, maxRecursion, cancellationToken);
-        return obj;
-    }
-
-    private async Task Populate(Type type, ASType obj, int? maxRecursion, CancellationToken cancellationToken = default)
-    {
-        maxRecursion ??= DefaultPopulateRecursion;
-        var typeInfo = _typeInfoCache.GetFor(type);
-
-        // Replace Linkables entirely
-        foreach (var (prop, genericType) in typeInfo.LinkableProperties)
-        {
-            if (prop.GetValue(obj) is ILinkable { HasLink: true } linkable)
-            {
-                var propType = prop.GetType();
-
-                var value = await Get(linkable.Link, genericType, maxRecursion - 1, cancellationToken);
-                var linkableWithValue = Activator.CreateInstance(propType, value);
-
-                prop.SetValue(obj, linkableWithValue);
-            }
-        }
-
-        // Modify LinkableLists in-place
-        foreach (var (prop, genericType) in typeInfo.LinkableListProperties)
-        {
-            if (prop.GetValue(obj) is ILinkableList list)
-            {
-                for (var i = 0; i < list.Count; i++)
-                {
-                    var linkable = list.Get(i);
-                    if (linkable.HasLink)
-                    {
-                        var value = await Get(linkable.Link, genericType, maxRecursion - 1, cancellationToken);
-                        list.Set(i, value);
-                    }
-                }
-            }
-        }
-    }
-
-    #region Dispose
-
+#region Dispose
     public void Dispose()
     {
         // Dispose of unmanaged resources.
@@ -165,6 +116,5 @@ public class ActivityPubClient : IActivityPubClient
     }
 
     private bool _disposed;
-
-    #endregion
+#endregion
 }

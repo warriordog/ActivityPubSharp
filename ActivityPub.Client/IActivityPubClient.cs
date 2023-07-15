@@ -17,14 +17,13 @@ public interface IActivityPubClient : IDisposable
     /// Default recursion depth for <see cref="Get{T}"/>. 
     /// </summary>
     /// <seealso cref="DefaultResolveRecursion"/>
-    /// <seealso cref="DefaultPopulateRecursion"/>
     [Range(0, int.MaxValue)]
     [DefaultValue(0)]
     public int DefaultGetRecursion { get; set; }
 
     /// <summary>
     /// Retrieves and validates an ActivityPub object.
-    /// Object is automatically populated using <see cref="Populate{T}"/>, up to <see cref="maxRecursion"/> layers of recursion.
+    /// Links are automatically followed, up to <see cref="maxRecursion"/> layers of recursion.
     /// </summary>
     /// <param name="uri">URI to the object</param>
     /// <param name="maxRecursion">Maximum depth to recurse while populating the returned object. Defaults to <see cref="DefaultGetRecursion"/>.</param>
@@ -37,7 +36,6 @@ public interface IActivityPubClient : IDisposable
     /// Default recursion depth for <see cref="Resolve{T}(Linkable{T}, int?, CancellationToken)"/> and <see cref="Resolve{T}(LinkableList{T}, int?, CancellationToken)"/>
     /// </summary>
     /// <seealso cref="DefaultGetRecursion"/>
-    /// <seealso cref="DefaultPopulateRecursion"/>
     [Range(0, int.MaxValue)]
     [DefaultValue(1)]
     public int DefaultResolveRecursion { get; set; }
@@ -64,24 +62,4 @@ public interface IActivityPubClient : IDisposable
     /// <typeparam name="T">Type of objects to return. The actual returned objects may be subclasses of T.</typeparam>
     /// <returns>Returns a list of resolved objects.</returns>
     public Task<List<T>> Resolve<T>(LinkableList<T> linkables, int? maxRecursion = null, CancellationToken cancellationToken = default) where T : ASObject;
-
-    /// <summary>
-    /// Default recursion depth for <see cref="Populate{T}(T, int?, CancellationToken)"/>
-    /// </summary>
-    /// <seealso cref="DefaultGetRecursion"/>
-    /// <seealso cref="DefaultResolveRecursion"/>
-    [Range(0, int.MaxValue)]
-    [DefaultValue(1)]
-    public int DefaultPopulateRecursion { get; set; }
-
-    /// <summary>
-    /// Resolves all <see cref="Linkable{T}"/> and <see cref="LinkableList{T}"/> properties found within an object.
-    /// Properties are resolved using <see cref="Resolve{T}(Linkable{T}, int?, CancellationToken)"/> and <see cref="Resolve{T}(LinkableList{T}, int?, CancellationToken)"/>.
-    /// </summary>
-    /// <param name="obj">Object to populate in-place</param>
-    /// <param name="maxRecursion">Maximum depth to recurse while populating the object. <see cref="DefaultPopulateRecursion"/>.</param>
-    /// <param name="cancellationToken">Optional cancellation token</param>
-    /// <typeparam name="T">Type of the object</typeparam>
-    /// <returns>Returns the populated object</returns>
-    public Task<T> Populate<T>(T obj, int? maxRecursion = null, CancellationToken cancellationToken = default) where T : ASObject;
 }
