@@ -34,12 +34,17 @@ public abstract class ASType : IJsonConvertible<ASType>
     /// Should be a full URL
     /// </summary>
     [JsonPropertyName("@context")]
-    [JsonConverter(typeof(ListableConverter))]
-    public HashSet<string> JsonLdContexts { get; set; } = new()
+    [JsonConverter(typeof(JsonLDContextPropertyConverter))]
+    public HashSet<JsonLDContext> JsonLdContexts { get; set; } = new()
     {
-        // We always need the base ActivityStreams context
-        "https://www.w3.org/ns/activitystreams"
+        // We always need the base context
+        ActivityStreamsContext
     };
+
+    /// <summary>
+    /// Shared JSON-LD context used by all ActivityStreams objects.
+    /// </summary>
+    public static JsonLDContext ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
 
     /// <summary>
     /// Provides the globally unique identifier for an Object or Link.
