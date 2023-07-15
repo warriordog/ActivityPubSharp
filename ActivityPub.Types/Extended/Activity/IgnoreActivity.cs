@@ -6,6 +6,9 @@ using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Extended.Activity;
 
+/// <summary>
+/// Indicates that the actor is ignoring the object. The target and origin typically have no defined meaning. 
+/// </summary>
 [ASTypeKey(IgnoreType)]
 public class IgnoreActivity : ASTransitiveActivity
 {

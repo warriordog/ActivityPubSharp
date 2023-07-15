@@ -25,6 +25,7 @@ public class RelationshipObject : ASObject
     /// Describes the entity to which the subject is related. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
+    [JsonPropertyName("object")]
     public LinkableList<ASObject> Object { get; set; } = new();
 
     /// <summary>
@@ -32,6 +33,7 @@ public class RelationshipObject : ASObject
     /// For instance, for a Relationship object describing "John is related to Sally", subject would refer to John. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-subject"/>
+    [JsonPropertyName("subject")]
     public Linkable<ASObject>? Subject { get; set; }
 
     /// <summary>
@@ -41,5 +43,6 @@ public class RelationshipObject : ASObject
     /// This is supposed to be Range = "Object", but all the examples have a string URL
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-relationship"/>
+    [JsonPropertyName("relationship")]
     public Linkable<ASObject>? Relationship { get; set; }
 }

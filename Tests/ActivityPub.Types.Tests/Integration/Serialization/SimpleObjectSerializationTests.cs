@@ -1,5 +1,6 @@
 ﻿using ActivityPub.Types.Extended.Actor;
 using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Internal.TypeInfo;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
@@ -7,6 +8,8 @@ namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public abstract class SimpleObjectSerializationTests
 {
+    private readonly IJsonLdSerializer _jsonLdSerializer;
+    
     private ASObject ObjectUnderTest
     {
         get => _objectUnderTest;
@@ -15,37 +18,47 @@ public abstract class SimpleObjectSerializationTests
             _objectUnderTest = value;
 
             // TODO maybe we could create a ResettableLazy, then this wouldn't need to be duplicated
-            _jsonUnderTest = new Lazy<Dictionary<string, JsonElement>>(() => SerializeObject(ObjectUnderTest));
+            _jsonUnderTest = new Lazy<JsonElement>(() => SerializeObject(ObjectUnderTest));
         }
     }
 
     private ASObject _objectUnderTest = new();
 
     // This is cached for performance
-    private Dictionary<string, JsonElement> JsonUnderTest => _jsonUnderTest.Value;
-    private Lazy<Dictionary<string, JsonElement>> _jsonUnderTest;
+    private JsonElement JsonUnderTest => _jsonUnderTest.Value;
+    private Lazy<JsonElement> _jsonUnderTest;
 
     protected SimpleObjectSerializationTests()
     {
-        _jsonUnderTest = new Lazy<Dictionary<string, JsonElement>>(() => SerializeObject(ObjectUnderTest));
+        var jsonTypeInfoCache = new JsonTypeInfoCache();
+        var asTypeInfoCache = new ASTypeInfoCache(jsonTypeInfoCache);
+        asTypeInfoCache.RegisterAllAssemblies();
+        _jsonLdSerializer = new JsonLdSerializer(asTypeInfoCache, jsonTypeInfoCache);
+        _jsonUnderTest = new Lazy<JsonElement>(() => SerializeObject(ObjectUnderTest));
     }
 
     public class EmptyObject : SimpleObjectSerializationTests
     {
         [Fact]
+        public void ShouldWriteObject()
+        {
+            JsonUnderTest.ValueKind.Should().Be(JsonValueKind.Object);
+        }
+        
+        [Fact]
         public void ShouldIncludeContext()
         {
-            JsonUnderTest.Should().ContainKey("@context");
-            JsonUnderTest["@context"].ValueKind.Should().Be(JsonValueKind.String);
-            JsonUnderTest["@context"].GetString().Should().Be("https://www.w3.org/ns/activitystreams");
+            JsonUnderTest.TryGetProperty("@context", out _).Should().BeTrue();
+            JsonUnderTest.GetProperty("@context").ValueKind.Should().Be(JsonValueKind.String);
+            JsonUnderTest.GetProperty("@context").GetString().Should().Be("https://www.w3.org/ns/activitystreams");
         }
 
         [Fact]
         public void ShouldIncludeType()
         {
-            JsonUnderTest.Should().ContainKey("type");
-            JsonUnderTest["type"].ValueKind.Should().Be(JsonValueKind.String);
-            JsonUnderTest["type"].GetString().Should().Be("Object");
+            JsonUnderTest.TryGetProperty("type", out _).Should().BeTrue();
+            JsonUnderTest.GetProperty("type").ValueKind.Should().Be(JsonValueKind.String);
+            JsonUnderTest.GetProperty("type").GetString().Should().Be("Object");
         }
     }
 
@@ -55,7 +68,7 @@ public abstract class SimpleObjectSerializationTests
         public void ShouldSerializeToCorrectType()
         {
             ObjectUnderTest = new ImageObject();
-            JsonUnderTest["type"].GetString().Should().Be(ImageObject.ImageType);
+            JsonUnderTest.GetProperty("type").GetString().Should().Be(ImageObject.ImageType);
         }
 
         [Fact]
@@ -74,10 +87,10 @@ public abstract class SimpleObjectSerializationTests
                 Id = "https://example.com/actor/id"
             };
 
-            JsonUnderTest["inbox"].Deserialize<ASLink>()?.HRef.Should().Be("https://example.com/actor/inbox");
-            JsonUnderTest["outbox"].Deserialize<ASLink>()?.HRef.Should().Be("https://example.com/actor/outbox");
-            JsonUnderTest["image"].Deserialize<ImageObject>().Should().NotBeNull();
-            JsonUnderTest["id"].GetString().Should().Be("https://example.com/actor/id");
+            JsonUnderTest.GetProperty("inbox").GetString().Should().Be("https://example.com/actor/inbox");
+            JsonUnderTest.GetProperty("outbox").GetString().Should().Be("https://example.com/actor/outbox");
+            JsonUnderTest.GetProperty("image").GetProperty("type").GetString().Should().Be("Image");
+            JsonUnderTest.GetProperty("id").GetString().Should().Be("https://example.com/actor/id");
         }
     }
 
@@ -120,48 +133,44 @@ public abstract class SimpleObjectSerializationTests
                 AttributedTo = new() { new ASObject() },
                 Preview = new ASObject(),
                 Name = new NaturalLanguageString("name"),
-                MediaType = new ASObject()
+                MediaType = "text/html"
             };
             
             // From ASObject
-            JsonUnderTest.Should().ContainKey("attachment");
-            JsonUnderTest.Should().ContainKey("audience");
-            JsonUnderTest.Should().ContainKey("bcc");
-            JsonUnderTest.Should().ContainKey("bto");
-            JsonUnderTest.Should().ContainKey("cc");
-            JsonUnderTest.Should().ContainKey("context"); // I hate this property NAME IT SOMETHING ELSE >:(
-            JsonUnderTest.Should().ContainKey("generator");
-            JsonUnderTest.Should().ContainKey("icon");
-            JsonUnderTest.Should().ContainKey("image");
-            JsonUnderTest.Should().ContainKey("inReplyTo");
-            JsonUnderTest.Should().ContainKey("location");
-            JsonUnderTest.Should().ContainKey("replies");
-            JsonUnderTest.Should().ContainKey("tag");
-            JsonUnderTest.Should().ContainKey("to");
-            JsonUnderTest.Should().ContainKey("url");
-            JsonUnderTest.Should().ContainKey("content");
-            JsonUnderTest.Should().ContainKey("duration");
-            JsonUnderTest.Should().ContainKey("startTime");
-            JsonUnderTest.Should().ContainKey("endTime");
-            JsonUnderTest.Should().ContainKey("published");
-            JsonUnderTest.Should().ContainKey("summary");
-            JsonUnderTest.Should().ContainKey("updated");
-            JsonUnderTest.Should().ContainKey("source");
-            JsonUnderTest.Should().ContainKey("likes");
-            JsonUnderTest.Should().ContainKey("shares");
+            JsonUnderTest.TryGetProperty("attachment", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("audience", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("bcc", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("bto", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("cc", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("context", out _).Should().BeTrue(); // I hate this property NAME IT SOMETHING ELSE >:(
+            JsonUnderTest.TryGetProperty("generator", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("icon", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("image", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("inReplyTo", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("location", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("replies", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("tag", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("to", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("url", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("content", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("duration", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("startTime", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("endTime", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("published", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("summary", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("updated", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("source", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("likes", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("shares", out _).Should().BeTrue();
 
             // From ASType
-            JsonUnderTest.Should().ContainKey("id");
-            JsonUnderTest.Should().ContainKey("attributedTo");
-            JsonUnderTest.Should().ContainKey("preview");
-            JsonUnderTest.Should().ContainKey("name");
-            JsonUnderTest.Should().ContainKey("mediaType");
+            JsonUnderTest.TryGetProperty("id", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("attributedTo", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("preview", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("name", out _).Should().BeTrue();
+            JsonUnderTest.TryGetProperty("mediaType", out _).Should().BeTrue();
         }
     }
 
-    private static Dictionary<string, JsonElement> SerializeObject(object obj)
-    {
-        var json = JsonSerializer.Serialize(obj, JsonLdSerializerOptions.Default);
-        return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!");
-    }
+    private JsonElement SerializeObject(object obj) => _jsonLdSerializer.SerializeToElement(obj);
 }

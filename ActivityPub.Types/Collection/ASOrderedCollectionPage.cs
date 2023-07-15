@@ -3,7 +3,6 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
-using ActivityPub.Types.Util;
 using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
@@ -17,7 +16,7 @@ namespace ActivityPub.Types.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
 [ASTypeKey(OrderedCollectionPageType)]
 public class ASOrderedCollectionPage<T> : ASCollectionPage<T>
-    where T : ASObject
+    where T : ASType
 {
 
     [JsonConstructor]
@@ -29,17 +28,12 @@ public class ASOrderedCollectionPage<T> : ASCollectionPage<T>
     /// A non-negative integer value identifying the relative position within the logical view of a strictly ordered collection. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startIndex"/>
+    [JsonPropertyName("startIndex")]
     public int? StartIndex { get; set; }
 
     [JsonPropertyName("orderedItems")]
-    public override LinkableList<T>? Items { get; set; }
-
+    public override List<T>? Items { get; set; }
     
-    public static implicit operator ASOrderedCollectionPage<T>(LinkableList<T> collection) => new() { Items = collection };
-    public static implicit operator ASOrderedCollectionPage<T>(List<Linkable<T>> collection) => new() { Items = new(collection) };
     public static implicit operator ASOrderedCollectionPage<T>(List<T> collection) => new() { Items = new(collection) };
-    public static implicit operator ASOrderedCollectionPage<T>(List<ASLink> collection) => new() { Items = new(collection) };
-    public static implicit operator ASOrderedCollectionPage<T>(Linkable<T> value) => new() { Items = new() { value } };
     public static implicit operator ASOrderedCollectionPage<T>(T value) => new() { Items = new() { value } };
-    public static implicit operator ASOrderedCollectionPage<T>(ASLink value) => new() { Items = new() { value } };
 }

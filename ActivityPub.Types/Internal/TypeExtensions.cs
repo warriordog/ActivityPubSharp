@@ -1,6 +1,6 @@
 ﻿namespace ActivityPub.Types.Internal;
 
-internal static class TypeExtensions
+public static class TypeExtensions
 {
     /// <summary>
     /// Determines if a concrete type can be assigned to an open generic type.
@@ -82,5 +82,52 @@ internal static class TypeExtensions
 
         // Once we have the constructed type, then we can just return its generic arguments as-is.
         return constructedGenericType.GetGenericArguments();
+    }
+
+    /// <summary>
+    /// Attempts to find the concrete type parameters used to fill a generic type.
+    /// Returns null if the types are incompatible.
+    /// </summary>
+    /// <remarks>
+    /// This is inefficient, but its avoids potential exceptions from <see cref="GetGenericArgumentsFor"/> when the conversion fails.
+    /// </remarks>
+    /// <param name="concreteType">Concrete type that extends from genericType</param>
+    /// <param name="genericType">Open generic type</param>
+    /// <returns>Returns array of declared type parameters on success, or null on failure.</returns>
+    /// <seealso cref="GetGenericArgumentsFor"/>
+    /// <seealso cref="IsAssignableToGenericType"/>
+    public static Type[]? TryGetGenericArgumentsFor(this Type concreteType, Type genericType)
+    {
+        if (concreteType.IsAssignableToGenericType(genericType))
+            return concreteType.GetGenericArgumentsFor(genericType);
+
+        return null;
+    }
+
+    /// <summary>
+    /// Checks whether the provided type is an open generic type, as opposed to closed generic or non-generic.
+    /// </summary>
+    /// <param name="type">Type to check</param>
+    /// <returns>Returns true if open generic, closed otherwise.</returns>
+    public static bool IsOpenGeneric(this Type type) => type is { IsGenericType: true, IsConstructedGenericType: false };
+
+    /// <summary>
+    /// Given an open generic type, returns a new type that is the result of filling all open slots with the constraint.
+    /// </summary>
+    /// <remarks>
+    /// This is a naive implementation and may not be 100% accurate.
+    /// </remarks>
+    /// <param name="genericType">Type to populate. Must be an open generic type.</param>
+    public static Type GetDefaultGenericArguments(this Type genericType)
+    {
+        if (!genericType.IsOpenGeneric())
+            throw new ArgumentException($"{genericType} is not an open generic type", nameof(genericType));
+        
+        var genericSlots = genericType.GetGenericArguments();
+        for (var i = 0; i < genericSlots.Length; i++)
+        {
+            genericSlots[i] = genericSlots[i].GetGenericParameterConstraints()[0];    
+        }
+        return genericType.MakeGenericType(genericSlots);
     }
 }

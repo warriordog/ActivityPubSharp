@@ -7,10 +7,23 @@ namespace ActivityPub.Types.Util;
 /// Synthetic type to represent a list of T or Links to T
 /// </summary>
 public class LinkableList<T> : List<Linkable<T>>
-where T : ASObject
+    where T : ASObject
 {
-    public LinkableList() {}
+    /// <summary>
+    /// All link items within the collection.
+    /// </summary>
+    public IEnumerable<ASLink> LinkItems => this
+        .Where(linkable => linkable.HasLink)
+        .Select(linkable => linkable.Link!);
 
+    /// <summary>
+    /// All non-link items within the collection
+    /// </summary>
+    public IEnumerable<T> ValueItems => this
+        .Where(linkable => linkable.HasValue)
+        .Select(linkable => linkable.Value!);
+
+    public LinkableList() {}
     public LinkableList(int capacity) : base(capacity) {}
     public LinkableList(IEnumerable<Linkable<T>> collection) : base(collection) {}
     public LinkableList(IEnumerable<T> values) => AddRange(values);
@@ -18,11 +31,6 @@ where T : ASObject
 
     public void Add(T value) => Add(new Linkable<T>(value));
     public void Add(ASLink link) => Add(new Linkable<T>(link));
-    public void Add(Linkable<T> linkable)
-    {
-        if (linkable.HasValue) Add(linkable.Value);
-        else Add(linkable.Link);
-    }
 
     public void AddRange(IEnumerable<T> values)
     {
@@ -31,6 +39,7 @@ where T : ASObject
             Add(value);
         }
     }
+
     public void AddRange(IEnumerable<ASLink> links)
     {
         foreach (var link in links)
@@ -38,11 +47,9 @@ where T : ASObject
             Add(link);
         }
     }
-    public void AddRange(IEnumerable<Linkable<T>> linkables)
-    {
-        foreach (var linkable in linkables)
-        {
-            Add(linkable);
-        }
-    }
+
+    // These are  required for weird type resolution reasons.
+    // If removed, other code wont compile.
+    public new void Add(Linkable<T> linkable) => base.Add(linkable);
+    public new void AddRange(IEnumerable<Linkable<T>> linkables) => base.AddRange(linkables);
 }

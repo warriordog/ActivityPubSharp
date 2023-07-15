@@ -29,12 +29,14 @@ public class ASActivity : ASObject
     /// The actor MAY be specified using an indirect Link. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    [JsonPropertyName("actor")]
     public LinkableList<ASObject> Actor { get; set; } = new();
 
     /// <summary>
     /// Identifies one or more objects used (or to be used) in the completion of an Activity. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-instrument"/>
+    [JsonPropertyName("instrument")]
     public Linkable<ASObject>? Instrument { get; set; }
 
     /// <summary>
@@ -43,6 +45,7 @@ public class ASActivity : ASObject
     /// For instance, in the activity "John moved an item to List B from List A", the origin of the activity is "List A". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-origin"/>
+    [JsonPropertyName("origin")]
     public Linkable<ASObject>? Origin { get; set; }
 
     /// <summary>
@@ -50,6 +53,7 @@ public class ASActivity : ASObject
     /// For instance, if a particular action results in the creation of a new resource, the result property can be used to describe that new resource. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-result"/>
+    [JsonPropertyName("result")]
     public Linkable<ASObject>? Result { get; set; }
 
     /// <summary>
@@ -59,12 +63,13 @@ public class ASActivity : ASObject
     /// An activity can have more than one target. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target"/>
+    [JsonPropertyName("target")]
     public Linkable<ASObject>? Target
     {
         get => TargetImpl;
         set => TargetImpl = value;
     }
-    
+
     /// <summary>
     /// Overridden in <see cref="ASTargetedActivity"/> to ensure that both properties stay in sync
     /// </summary>

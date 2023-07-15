@@ -10,7 +10,6 @@ using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
 
-
 /// <summary>
 /// A Collection is a subtype of Object that represents ordered or unordered sets of Object or Link instances.
 /// May be paged or unpaged, and ordered or unordered. 
@@ -22,29 +21,33 @@ namespace ActivityPub.Types.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection"/>
 /// <seealso cref="ASOrderedCollection{T}"/>
 [ASTypeKey(CollectionType)]
-[ASTypeKey(OrderedCollectionType)]
 public class ASCollection<T> : ASObject
-    where T : ASObject
+    where T : ASType
 {
-    protected ASCollection() : this(CollectionType) {}
+    [JsonConstructor]
+    public ASCollection() : this(CollectionType) {}
+
     protected ASCollection(string type) : base(type) {}
 
     /// <summary>
     ///  In a paged Collection, indicates the page that contains the most recently updated member items. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-current"/>
+    [JsonPropertyName("current")]
     public Linkable<ASCollectionPage<T>>? Current { get; set; }
 
     /// <summary>
     /// In a paged Collection, indicates the furthest preceding page of items in the collection. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-first"/>
+    [JsonPropertyName("first")]
     public Linkable<ASCollectionPage<T>>? First { get; set; }
 
     /// <summary>
     /// In a paged Collection, indicates the furthest proceeding page of the collection.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    [JsonPropertyName("last")]
     public Linkable<ASCollectionPage<T>>? Last { get; set; }
 
     /// <summary>
@@ -58,11 +61,13 @@ public class ASCollection<T> : ASObject
     /// This cannot be set to less than zero.
     /// </remarks>
     [Range(0, int.MaxValue)]
+    [JsonPropertyName("totalItems")]
     public int TotalItems
     {
-        get => _totalItems ?? Items?.Count ?? 0; 
+        get => _totalItems ?? Items?.Count ?? 0;
         set => _totalItems = Math.Max(value, 0);
     }
+
     private int? _totalItems;
 
     /// <summary>
@@ -75,38 +80,15 @@ public class ASCollection<T> : ASObject
     /// In a paged collection, this MAY be null
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-items"/>
-    public virtual LinkableList<T>? Items { get; set; }
-
-    /// <summary>
-    /// All <see cref="ASLink"/> objects found in <see cref="Items"/>.
-    /// This is equivalent to filtering for entries where <see cref="Linkable{T}.HasLink"/> is true.
-    /// </summary>
-    [JsonIgnore]
-    public IEnumerable<ASLink> LinkItems =>
-        Items == null
-        ? Enumerable.Empty<ASLink>()
-        : Items
-            .Where(linkable => linkable.HasLink)
-            .Select(linkable => linkable.Link!);
-
-    /// <summary>
-    /// All non-link objects found in <see cref="Items"/>.
-    /// This is equivalent to filtering for entries where <see cref="Linkable{T}.HasValue"/> is true.
-    /// </summary>
-    [JsonIgnore]
-    public IEnumerable<T> ObjectItems =>
-        Items == null
-        ? Enumerable.Empty<T>()
-        : Items
-            .Where(linkable => linkable.HasValue)
-            .Select(linkable => linkable.Value!);
+    [JsonPropertyName("items")]
+    public virtual List<T>? Items { get; set; }
 
     /// <summary>
     /// True if this is a paged collection, false otherwise.
     /// </summary>
     [JsonIgnore]
     public bool IsPaged => Current != null || First != null || Last != null;
-    
+
     /// <summary>
     /// True if this collection instance contains items, false otherwise.
     /// </summary>
@@ -114,28 +96,7 @@ public class ASCollection<T> : ASObject
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Items?.Any() == true;
 
-    /// <summary>
-    /// True if this collection instance contains any links, false otherwise.
-    /// </summary>
-    [JsonIgnore]
-    [MemberNotNullWhen(true, nameof(Items))]
-    [MemberNotNullWhen(true, nameof(LinkItems))]
-    public bool HasLinkItems => LinkItems?.Any() == true;
 
-    /// <summary>
-    /// True if this collection instance contains any objects, false otherwise.
-    /// </summary>
-    [JsonIgnore]
-    [MemberNotNullWhen(true, nameof(Items))]
-    [MemberNotNullWhen(true, nameof(ObjectItems))]
-    public bool HasObjectItems => ObjectItems?.Any() == true;
-
-
-    public static implicit operator ASCollection<T>(LinkableList<T> collection) => new() { Items = collection };
-    public static implicit operator ASCollection<T>(List<Linkable<T>> collection) => new() { Items = new(collection) };
     public static implicit operator ASCollection<T>(List<T> collection) => new() { Items = new(collection) };
-    public static implicit operator ASCollection<T>(List<ASLink> collection) => new() { Items = new(collection) };
-    public static implicit operator ASCollection<T>(Linkable<T> value) => new() { Items = new() { value } };
     public static implicit operator ASCollection<T>(T value) => new() { Items = new() { value } };
-    public static implicit operator ASCollection<T>(ASLink value) => new() { Items = new() { value } };
 }

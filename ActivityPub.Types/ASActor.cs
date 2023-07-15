@@ -1,6 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -91,13 +92,28 @@ public class ASActor : ASObject, IActor
 {
     public ASActor(string type) : base(type) {}
 
+    [JsonPropertyName("inbox")]
     public required ASLink Inbox { get; set; }
+
+    [JsonPropertyName("outbox")]
     public required ASLink Outbox { get; set; }
+
+    [JsonPropertyName("following")]
     public ASLink? Following { get; set; }
+
+    [JsonPropertyName("followers")]
     public ASLink? Followers { get; set; }
+
+    [JsonPropertyName("liked")]
     public ASLink? Liked { get; set; }
+
+    [JsonPropertyName("streams")]
     public ASType? Streams { get; set; }
+
+    [JsonPropertyName("preferredUsername")]
     public NaturalLanguageString? PreferredUsername { get; set; }
+
+    [JsonPropertyName("endpoints")]
     public Linkable<ActorEndpoints>? Endpoints { get; set; }
 }
 
@@ -111,26 +127,31 @@ public class ActorEndpoints : ASObject
     /// Endpoint URI so this actor's clients may access remote ActivityStreams objects which require authentication to access.
     /// To use this endpoint, the client posts an x-www-form-urlencoded id parameter with the value being the id of the requested ActivityStreams object. 
     /// </summary>
+    [JsonPropertyName("proxyUrl")]
     public ASLink? ProxyUrl { get; set; }
 
     /// <summary>
     /// If OAuth 2.0 bearer tokens [RFC6749] [RFC6750] are being used for authenticating client to server interactions, this endpoint specifies a URI at which a browser-authenticated user may obtain a new authorization grant.
     /// </summary>
+    [JsonPropertyName("oauthAuthorizationEndpoint")]
     public ASLink? OAuthAuthorizationEndpoint { get; set; }
 
     /// <summary>
     /// If OAuth 2.0 bearer tokens [RFC6749] [RFC6750] are being used for authenticating client to server interactions, this endpoint specifies a URI at which a client may acquire an access token. 
     /// </summary>
+    [JsonPropertyName("oauthTokenEndpoint")]
     public ASLink? OAuthTokenEndpoint { get; set; }
 
     /// <summary>
     /// If Linked Data Signatures and HTTP Signatures are being used for authentication and authorization, this endpoint specifies a URI at which browser-authenticated users may authorize a client's public key for client to server interactions. 
     /// </summary>
+    [JsonPropertyName("provideClientKey")]
     public ASLink? ProvideClientKey { get; set; }
 
     /// <summary>
     /// If Linked Data Signatures and HTTP Signatures are being used for authentication and authorization, this endpoint specifies a URI at which a client key may be signed by the actor's key for a time window to act on behalf of the actor in interacting with foreign servers. 
     /// </summary>
+    [JsonPropertyName("signClientKey")]
     public ASLink? SignClientKey { get; set; }
 
     /// <summary>
@@ -138,5 +159,6 @@ public class ActorEndpoints : ASObject
     /// SharedInbox endpoints SHOULD also be publicly readable OrderedCollection objects containing objects addressed to the Public special collection.
     /// Reading from the sharedInbox endpoint MUST NOT present objects which are not addressed to the Public endpoint. 
     /// </summary>
+    [JsonPropertyName("sharedInbox")]
     public ASLink? SharedInbox { get; set; }
 }

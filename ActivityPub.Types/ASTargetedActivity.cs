@@ -1,4 +1,5 @@
-﻿using ActivityPub.Types.Util;
+﻿using System.Text.Json.Serialization;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
 
@@ -13,6 +14,7 @@ public abstract class ASTargetedActivity : ASTransitiveActivity
 
     /// <inheritdoc cref="ASActivity.Target"/>
     /// <seealso href="https://www.w3.org/TR/activitypub/#client-addressing"/>
+    [JsonPropertyName("target")]
     public required new Linkable<ASObject> Target
     {
         get => base.Target!;

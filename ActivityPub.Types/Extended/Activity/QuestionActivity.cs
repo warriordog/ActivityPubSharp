@@ -23,21 +23,25 @@ public class QuestionActivity : ASIntransitiveActivity
 
     protected QuestionActivity(string type) : base(type) {}
 
+    // TODO split this into subtypes based on OneOf and AnyOf
+
     /// <summary>
     /// Identifies an exclusive option for a Question.
     /// Use of oneOf implies that the Question can have only a single answer.
     /// To indicate that a Question can have multiple answers, use anyOf. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-oneOf"/>
-    public Linkable<ASObject>? OneOf { get; set; }
+    [JsonPropertyName("oneOf")]
+    public LinkableList<ASObject>? OneOf { get; set; }
 
     /// <summary>
     /// Identifies an inclusive option for a Question.
     /// Use of anyOf implies that the Question can have multiple answers.
     /// To indicate that a Question can have only one answer, use oneOf. 
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyOf"/>
-    public Linkable<ASObject>? AnyOf { get; set; }
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyof"/>
+    [JsonPropertyName("anyOf")]
+    public LinkableList<ASObject>? AnyOf { get; set; }
 
     /// <summary>
     /// Contains the time at which a question was closed.
@@ -48,6 +52,7 @@ public class QuestionActivity : ASIntransitiveActivity
     /// * May possibly be in the future? Spec does not specify. 
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
+    [JsonPropertyName("closed")]
     public DateTime? ClosedAt
     {
         get => _closedAt;
@@ -68,6 +73,7 @@ public class QuestionActivity : ASIntransitiveActivity
     /// We don't support the Object or Link forms, because what would that even mean??
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
+    [JsonPropertyName("closed")]
     public bool? Closed
     {
         get => _closed ?? _closedAt != null;

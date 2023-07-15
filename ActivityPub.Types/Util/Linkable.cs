@@ -11,17 +11,19 @@ namespace ActivityPub.Types.Util;
 /// Synthetic wrapper for elements that can be included directly or referenced by a Link.
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
-[JsonConverter(typeof(LinkableConverter))]
 public class Linkable<T>
+    where T : ASObject
 {
     [MemberNotNullWhen(true, nameof(Link))]
     [MemberNotNullWhen(false, nameof(Value))]
     public bool HasLink { get; }
+
     public ASLink? Link { get; }
 
     [MemberNotNullWhen(true, nameof(Value))]
     [MemberNotNullWhen(false, nameof(Link))]
     public bool HasValue { get; }
+
     public T? Value { get; }
 
     public Linkable(ASLink link)

@@ -17,12 +17,12 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
     public override string ToString() => Uri.ToString();
     public override int GetHashCode() => Uri.GetHashCode();
-    
+
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        
+
         if (obj is ASUri asUri)
             return Equals(asUri);
         if (obj is Uri uri)
@@ -38,10 +38,10 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
     public static bool operator ==(ASUri? left, ASUri? right) => AreEqual(left, right);
     public static bool operator !=(ASUri? left, ASUri? right) => !AreEqual(left, right);
-    
+
     public static bool operator ==(ASUri? left, Uri? right) => AreEqual(left, right);
     public static bool operator !=(ASUri? left, Uri? right) => !AreEqual(left, right);
-    
+
     public static bool operator ==(ASUri? left, string? right) => AreEqual(left, right);
     public static bool operator !=(ASUri? left, string? right) => !AreEqual(left, right);
 
@@ -52,15 +52,16 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
             return ReferenceEquals(null, left);
         if (ReferenceEquals(null, left))
             return ReferenceEquals(null, right);
-        
+
         return left.Uri.Equals(right.Uri);
     }
-    public static bool AreEqual(ASUri? left, Uri? right) {
+    public static bool AreEqual(ASUri? left, Uri? right)
+    {
         if (ReferenceEquals(null, right))
             return ReferenceEquals(null, left);
         if (ReferenceEquals(null, left))
             return ReferenceEquals(null, right);
-        
+
         return left.Uri.Equals(right);
     }
     public static bool AreEqual(ASUri? left, string? right)
@@ -69,15 +70,15 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
             return ReferenceEquals(null, left);
         if (ReferenceEquals(null, left))
             return ReferenceEquals(null, right);
-        
+
         // This works - Uri.Equals has a built-in special case for strings
         // ReSharper disable once SuspiciousTypeConversion.Global
         return left.Uri.Equals(right);
     }
-    
+
     public static implicit operator string(ASUri asUri) => asUri.ToString();
     public static implicit operator ASUri(string str) => new(str);
-    
+
     public static implicit operator ASUri(Uri uri) => new(uri);
     public static implicit operator Uri(ASUri asUri) => asUri.Uri;
 }

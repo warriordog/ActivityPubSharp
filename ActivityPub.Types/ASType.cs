@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
@@ -23,7 +24,6 @@ public abstract class ASType
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-type"/>
     [JsonPropertyName("type")]
-    [JsonConverter(typeof(ListableConverter))]
     public HashSet<string> Types { get; set; } = new();
 
     /// <summary>
@@ -31,17 +31,23 @@ public abstract class ASType
     /// Should be a full URL
     /// </summary>
     [JsonPropertyName("@context")]
-    [JsonConverter(typeof(ListableConverter))]
-    public HashSet<string> JsonLdContexts { get; set; } = new()
+    [JsonConverter(typeof(JsonLDContextPropertyConverter))]
+    public HashSet<JsonLDContext> JsonLdContexts { get; set; } = new()
     {
-        // We always need the base ActivityStreams context
-        "https://www.w3.org/ns/activitystreams"
+        // We always need the base context
+        ActivityStreamsContext
     };
+
+    /// <summary>
+    /// Shared JSON-LD context used by all ActivityStreams objects.
+    /// </summary>
+    public static JsonLDContext ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
 
     /// <summary>
     /// Provides the globally unique identifier for an Object or Link.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-id"/>
+    [JsonPropertyName("id")]
     public string? Id
     {
         get => _id;
@@ -64,6 +70,7 @@ public abstract class ASType
     /// Based on https://www.w3.org/TR/activitypub/#obj-id
     /// </remarks>
     [JsonIgnore]
+    [MemberNotNullWhen(false, nameof(Id))]
     public bool IsAnonymous { get; private set; } = true;
 
     /// <summary>
@@ -72,12 +79,14 @@ public abstract class ASType
     /// For instance, an object might be attributed to the completion of another activity. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/>
+    [JsonPropertyName("attributedTo")]
     public LinkableList<ASObject> AttributedTo { get; set; } = new();
 
     /// <summary>
     /// Identifies an entity that provides a preview of this object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-preview"/>
+    [JsonPropertyName("preview")]
     public Linkable<ASObject>? Preview { get; set; }
 
     /// <summary>
@@ -85,6 +94,7 @@ public abstract class ASType
     /// HTML markup MUST NOT be included.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-name"/>
+    [JsonPropertyName("name")]
     public NaturalLanguageString? Name { get; set; }
 
     /// <summary>
@@ -92,6 +102,10 @@ public abstract class ASType
     /// When used on an Object, identifies the MIME media type of the value of the content property.
     /// If not specified, the content property is assumed to contain text/html content. 
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-mediaType"/>
-    public Linkable<ASObject>? MediaType { get; set; }
+    /// <remarks>
+    /// TODO see if we can special-case this to something more specific than "string"
+    /// </remarks>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-mediatype"/>
+    [JsonPropertyName("mediaType")]
+    public string? MediaType { get; set; }
 }
