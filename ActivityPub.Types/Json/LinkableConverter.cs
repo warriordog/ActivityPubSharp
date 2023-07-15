@@ -9,6 +9,9 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Json;
 
+/// <summary>
+/// Converts types that can be either <see cref="ASLink"/> or some other type.
+/// </summary>
 public class LinkableConverter : JsonConverterFactory
 {
     // We only convert Linkable<T>

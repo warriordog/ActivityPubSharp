@@ -7,6 +7,10 @@ using ActivityPub.Types.Internal;
 
 namespace ActivityPub.Types.Json;
 
+/// <summary>
+/// Converts types that can be a list of elements, or a single elements.
+/// Essentially: T | T[]
+/// </summary>
 public class ListableConverter : JsonConverterFactory
 {
     // We only convert concrete types deriving from ICollection<T>
