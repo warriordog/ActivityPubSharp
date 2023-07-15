@@ -15,6 +15,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleClient", "Samples\SimpleClient\SimpleClient.csproj", "{95EDC087-659C-412A-9FBD-1B959694FD3F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{B8B3D775-1A7F-4C38-B14C-F113016B51D1}"
+	ProjectSection(SolutionItems) = preProject
+		Samples\readme.md = Samples\readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Common", "ActivityPub.Common\ActivityPub.Common.csproj", "{B101E7CB-6CA8-444F-8E27-33D65D377F02}"
 EndProject
