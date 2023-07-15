@@ -1,10 +1,12 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Net.Http.Headers;
 using System.Text.Json;
 using ActivityPub.Common.TypeInfo;
 using ActivityPub.Common.Util;
 using ActivityPub.Types;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Client;
@@ -17,8 +19,9 @@ public class ActivityPubClient : IActivityPubClient
     private readonly HttpClient _httpClient = new();
     private readonly ITypeInfoCache _typeInfoCache;
     private readonly ActivityPubOptions _apOptions;
+    private readonly IJsonLdSerializer _jsonLdSerializer;
 
-    public ActivityPubClient(ITypeInfoCache typeInfoCache, ActivityPubOptions apOptions)
+    public ActivityPubClient(ITypeInfoCache typeInfoCache, ActivityPubOptions apOptions, IJsonLdSerializer jsonLdSerializer)
     {
         _typeInfoCache = typeInfoCache;
         _apOptions = apOptions;
@@ -50,7 +53,7 @@ public class ActivityPubClient : IActivityPubClient
             throw new ApplicationException($"Request failed: unsupported content type {mediaType}");
 
         var json = await resp.Content.ReadAsStringAsync(cancellationToken);
-        var jsonObj = JsonSerializer.Deserialize(json, targetType, _apOptions.SerializerOptions);
+        var jsonObj = _jsonLdSerializer.Deserialize(json, targetType);
         if (jsonObj is not ASType obj)
             throw new JsonException($"Failed to deserialize object - parser returned unsupported object {jsonObj?.GetType()}");
 

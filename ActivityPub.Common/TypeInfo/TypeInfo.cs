@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace ActivityPub.Common.TypeInfo;
 
+// TODO move this entire module into the sample app.
+// Why did I put it here in the first place??
+
 public class TypeInfo
 {
     public required Type Type { get; init; }

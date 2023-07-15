@@ -2,10 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Internal;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
@@ -18,7 +15,7 @@ namespace ActivityPub.Types;
 /// This is a synthetic type created to help adapt ActivityStreams to the .NET object model.
 /// It does not exist in the ActivityStreams standard.
 /// </remarks>
-public abstract class ASType : IJsonConvertible<ASType>
+public abstract class ASType
 {
     protected ASType(string defaultType) => Types.Add(defaultType);
 
@@ -108,48 +105,4 @@ public abstract class ASType : IJsonConvertible<ASType>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-mediaType"/>
     [JsonPropertyName("mediaType")]
     public Linkable<ASObject>? MediaType { get; set; }
-
-
-    protected virtual void ReadJson(JsonElement element, JsonOptions options)
-    {
-        if (element.TryGetProperty("type", out var type))
-            Types = type.Deserialize<HashSet<string>>(options.SerializerOptions)!;
-
-        if (element.TryGetProperty("@context", out var ldContext))
-            JsonLdContexts = ldContext.Deserialize<HashSet<string>>(options.SerializerOptions)!;
-
-        if (element.TryGetProperty("id", out var id) && id.TryGetString(out var idStr))
-            Id = idStr;
-
-        if (element.TryGetProperty("attributedTo", out var attributedTo))
-            AttributedTo = attributedTo.Deserialize<LinkableList<ASObject>>(options.SerializerOptions)!;
-
-        if (element.TryGetProperty("preview", out var preview))
-            Preview = preview.Deserialize<Linkable<ASObject>>(options.SerializerOptions)!;
-
-        if (element.TryGetProperty("name", out var name))
-            Name = name.Deserialize<NaturalLanguageString>(options.SerializerOptions)!;
-
-        if (element.TryGetProperty("mediaType", out var mediaType))
-            MediaType = mediaType.Deserialize<Linkable<ASObject>>(options.SerializerOptions)!;
-    }
-
-    protected virtual void WriteJson(JsonNode node, JsonOptions options)
-    {
-        node["type"] = JsonSerializer.SerializeToNode(Types, options.SerializerOptions);
-        node["@context"] = JsonSerializer.SerializeToNode(JsonLdContexts, options.SerializerOptions);
-        if (!IsAnonymous)
-            node["id"] = JsonValue.Create(Id, options.NodeOptions);
-        if (AttributedTo.Count > 0)
-            node["attributedTo"] = JsonSerializer.SerializeToNode(AttributedTo, options.SerializerOptions);
-        if (Preview != null)
-            node["preview"] = JsonSerializer.SerializeToNode(Preview, options.SerializerOptions);
-        if (Name != null)
-            node["name"] = JsonSerializer.SerializeToNode(Name, options.SerializerOptions);
-        if (MediaType != null)
-            node["mediaType"] = JsonSerializer.SerializeToNode(MediaType, options.SerializerOptions);
-    }
-
-    public static ASType Deserialize(JsonElement element, JsonOptions options) => throw new NotSupportedException("ASType is abstract and should be deserialized through a subclass");
-    public static JsonNode Serialize(ASType obj, JsonOptions options) => throw new NotSupportedException("ASType is abstract and should be serialized through a subclass");
 }

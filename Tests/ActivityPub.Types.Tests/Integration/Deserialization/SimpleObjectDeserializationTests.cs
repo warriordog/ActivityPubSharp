@@ -1,34 +1,20 @@
 ﻿using ActivityPub.Types.Extended.Actor;
 using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Internal.TypeInfo;
 using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public abstract class SimpleObjectDeserializationTests
+public abstract class SimpleObjectDeserializationTests : DeserializationTests
 {
-    private string JsonUnderTest
-    {
-        get => _jsonUnderTest;
-        set
-        {
-            _jsonUnderTest = value;
-            _objectUnderTest = new Lazy<ASObject>(() => JsonSerializer.Deserialize<ASObject>(JsonUnderTest, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!"));
-        }
-    }
-
-    private string _jsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
-
-    // Cached for performance
-    private ASObject ObjectUnderTest => _objectUnderTest.Value;
-    private Lazy<ASObject> _objectUnderTest;
-
     protected SimpleObjectDeserializationTests()
     {
-        _objectUnderTest = new Lazy<ASObject>(() => JsonSerializer.Deserialize<ASObject>(JsonUnderTest, JsonLdSerializerOptions.Default) ?? throw new ApplicationException("Deserialization failed!"));
+        JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
     }
-
+    
     public class EmptyObject : SimpleObjectDeserializationTests
     {
+        
         [Fact]
         public void ShouldIncludeContext()
         {

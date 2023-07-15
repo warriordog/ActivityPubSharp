@@ -9,11 +9,9 @@ namespace ActivityPub.Client;
 
 public static class ClientModule
 {
-    public const string ConfigSection = "ClientModule";
-
     public static void TryAddClientModule(this HostApplicationBuilder builder)
     {
-        builder.TryAddCommonModule();
+        builder.Services.TryAddCommonModule();
         builder.Services.TryAddSingleton<IActivityPubClient, ActivityPubClient>();
     }
 }

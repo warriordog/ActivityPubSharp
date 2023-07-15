@@ -3,18 +3,19 @@
 
 using ActivityPub.Common.TypeInfo;
 using ActivityPub.Common.Util;
+using ActivityPub.Types;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 
 namespace ActivityPub.Common;
 
 public static class CommonModule
 {
-    public const string ConfigSection = "CommonModule";
-
-    public static void TryAddCommonModule(this HostApplicationBuilder builder)
+    public static void TryAddCommonModule(this IServiceCollection services)
     {
-        builder.Services.TryAddSingleton<ITypeInfoCache, TypeInfoCache>();
-        builder.Services.TryAddSingleton<ActivityPubOptions>();
+        services.TryAddTypesModule();
+        
+        services.TryAddSingleton<ITypeInfoCache, TypeInfoCache>();
+        services.TryAddSingleton<ActivityPubOptions>();
     }
 }

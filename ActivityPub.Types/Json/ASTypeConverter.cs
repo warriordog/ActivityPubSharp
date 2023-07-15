@@ -3,8 +3,10 @@
 
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Internal;
+using ActivityPub.Types.Internal.TypeInfo;
 
 namespace ActivityPub.Types.Json;
 
@@ -15,26 +17,29 @@ namespace ActivityPub.Types.Json;
 /// Important: this should NOT be used in attribute form!
 /// Please add it to the serializer options to ensure that it applies to all subclasses.
 /// </remarks>
-public class ASTypeConverter : JsonConverterFactory
+internal class ASTypeConverter : JsonConverterFactory
 {
-    private readonly ASTypeRegistry _sharedTypeRegistry = ASTypeRegistry.Create();
+    private readonly IASTypeInfoCache _asTypeInfoCache;
+    private readonly IJsonTypeInfoCache _jsonTypeInfoCache;
 
     // We can convert any subclass of ASType
+    internal ASTypeConverter(IASTypeInfoCache asTypeInfoCache, IJsonTypeInfoCache jsonTypeInfoCache)
+    {
+        _asTypeInfoCache = asTypeInfoCache;
+        _jsonTypeInfoCache = jsonTypeInfoCache;
+    }
     public override bool CanConvert(Type typeToConvert) => typeToConvert.IsAssignableTo(typeof(ASType));
 
     // Pivot the target type directly to the generic argument, then call the default constructor
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        // Create JsonOptions
-        var jsonOptions = new JsonOptions(options, _sharedTypeRegistry);
-
         // Create an instance of the generic converter
         var constructedType = typeof(ASTypeConverter<>).MakeGenericType(typeToConvert);
         return (JsonConverter)Activator.CreateInstance(
             constructedType,
             BindingFlags.Instance | BindingFlags.Public,
             binder: null,
-            args: new object[] { jsonOptions },
+            args: new object[] { _asTypeInfoCache, _jsonTypeInfoCache },
             culture: null
         )!;
     }
@@ -45,52 +50,109 @@ public class ASTypeConverter : JsonConverterFactory
 /// </summary>
 /// <typeparam name="T">specific type to produce</typeparam>
 internal class ASTypeConverter<T> : JsonConverter<T>
-    where T : ASType, IJsonConvertible<T>
+    where T : ASType
 {
-    private readonly JsonOptions _jsonOptions;
-    public ASTypeConverter(JsonOptions jsonOptions) => _jsonOptions = jsonOptions;
-
-    public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    private readonly IASTypeInfoCache _asTypeInfoCache;
+    private readonly IJsonTypeInfoCache _jsonTypeInfoCache;
+    public ASTypeConverter(IASTypeInfoCache asTypeInfoCache, IJsonTypeInfoCache jsonTypeInfoCache)
     {
-        // Initially parse into an abstract form.
-        // We will introspect to find the correct subtype, then convert from abstract into concrete POCO.
-        var objectElement = JsonElement.ParseValue(ref reader);
-
-        // Narrow the type to construct
-        var actualType = GetTargetType(objectElement, typeToConvert);
-
-        // If different, then re-enter the serializer to correct the type of T
-        if (actualType != typeToConvert)
-        {
-            if (!actualType.IsAssignableTo(typeToConvert))
-                throw new JsonException($"Cannot deserialize JSON message of type {actualType} into object of type {typeToConvert}");
-
-            return (T?)objectElement.Deserialize(actualType, _jsonOptions.SerializerOptions);
-        }
-
-        // If we get here, then T is the correct type.
-        // That means we can use it to access the per-type logic/
-        return T.Deserialize(objectElement, _jsonOptions);
+        _asTypeInfoCache = asTypeInfoCache;
+        _jsonTypeInfoCache = jsonTypeInfoCache;
     }
 
-    private Type GetTargetType(JsonElement objectElement, Type typeToConverter)
+    public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        // 1. Parse into abstract form (JsonElement)
+        var inputElement = JsonElement.ParseValue(ref reader);
+
+        // 2. Find serialization info for the appropriate .NET type
+        var typeInfo = GetTargetType(inputElement, typeToConvert);
+
+        // 3. Convert it
+        return ReadObject(inputElement, typeInfo, options);
+    }
+
+    private JsonTypeInfo GetTargetType(JsonElement objectElement, Type typeToConverter)
     {
         // If the object contains a type, then use that to reify as much as possible
         if (objectElement.TryGetASType(out var asTypeName))
-            return _jsonOptions.TypeRegistry.ReifyType<T>(asTypeName);
+            return _asTypeInfoCache.GetJsonTypeInfo<T>(asTypeName);
 
         // If not, then use the declared type AS LONG AS its not the base ASType
         if (typeToConverter != typeof(ASType))
-            return typeToConverter;
+            return _jsonTypeInfoCache.GetForType<T>();
 
         // Finally, fall back to ASObject
-        return typeof(ASObject);
+        return _jsonTypeInfoCache.GetForType<ASObject>();
     }
 
-    // For writer, we just call per-type logic.
+    private static T ReadObject(JsonElement inputElement, JsonTypeInfo typeInfo, JsonSerializerOptions options)
+    {
+        // Attempt to call the custom deserializer
+        if (typeInfo.TryDeserialize(inputElement, options, out var obj))
+            return (T)obj;
+
+        // If it fails or isn't present, then fall back to default (manual) logic
+        return (T)ReadObjectDirectly(inputElement, typeInfo, options);
+    }
+
+    private static object ReadObjectDirectly(JsonElement inputElement, JsonTypeInfo typeInfo, JsonSerializerOptions options)
+    {
+        // Create instance
+        var obj = Activator.CreateInstance(typeInfo.Type);
+        if (obj == null)
+            throw new JsonException($"Failed to construct an instance of {typeInfo.Type}");
+
+        // Populate values
+        foreach (var prop in typeInfo.Setters)
+        {
+            // Attempt to load the value from json
+            if (inputElement.TryGetProperty(prop.Name, out var valueElement))
+            {
+                var value = valueElement.Deserialize(prop.Property.PropertyType, options);
+                prop.Property.SetValue(obj, value);
+                continue;
+            }
+
+            // If missing & required, then throw an exception
+            if (prop.IsRequired)
+                throw new JsonException($"Cannot parse {typeInfo.Type} - missing required property '{prop.Name}'");
+        }
+
+        return obj;
+    }
+
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
-        var node = T.Serialize(value, _jsonOptions);
+        // Lookup type info for T
+        var typeInfo = _jsonTypeInfoCache.GetForType<T>();
+
+        // Create JsonNodeOptions because System.Text.Json has so many different "option" types ...
+        // TODO find out if we can cache this somehow
+        var nodeOptions = new JsonNodeOptions
+        {
+            PropertyNameCaseInsensitive = options.PropertyNameCaseInsensitive
+        };
+
+        // Call custom serializer.
+        // If it fails or is missing, then serialize manually
+        if (!typeInfo.TrySerialize(value, options, nodeOptions, out var node))
+            node = WriteObjectDirectly(value, typeInfo, nodeOptions);
+
+        // Write it to the output stream
         node.WriteTo(writer, options);
+    }
+
+    private static JsonNode WriteObjectDirectly(T value, JsonTypeInfo typeInfo, JsonNodeOptions nodeOptions)
+    {
+        // Manually create an object and append each property.
+        // Its dumb, but this bypasses the design flaw of System.Text.Json.
+        var node = new JsonObject(nodeOptions);
+        foreach (var prop in typeInfo.Getters)
+        {
+            node[prop.Name] = JsonValue.Create(prop.Property.GetValue(value), nodeOptions);
+        }
+
+        return node;
     }
 }

@@ -3,7 +3,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace ActivityPub.Types.Internal;
 
@@ -32,19 +31,6 @@ internal static class JsonExtensions
     }
 
     /// <summary>
-    /// Modifies the JsonSerializerOptions to remove all JsonConverters of the specified type
-    /// </summary>
-    /// <param name="options"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns>Returns the same object for chaining</returns>
-    public static JsonSerializerOptions RemoveConvertersOfType<T>(this JsonSerializerOptions options)
-        where T : JsonConverter
-    {
-        options.Converters.RemoveWhere(c => c is T);
-        return options;
-    }
-
-    /// <summary>
     /// Attempts to read the element as a string.
     /// Returns true on success.
     /// </summary>
@@ -67,37 +53,15 @@ internal static class JsonExtensions
     /// Attempts to read the provided <see cref="JsonElement"/> as an ActivityStreams object and return its type.
     /// Returns false if the element does not contain an object or the object does not contain a valid type.
     /// </summary>
-    /// <param name="objectElement">object to read</param>
+    /// <param name="element">object to read</param>
     /// <param name="type">Set to the AS type on success, or null on failure</param>
     /// <returns>Returns true on success, false on failure</returns>
-    public static bool TryGetASType(this JsonElement objectElement, [NotNullWhen(true)] out string? type)
+    public static bool TryGetASType(this JsonElement element, [NotNullWhen(true)] out string? type)
     {
-        if (objectElement.TryGetProperty("type", out var asTypeElement) && asTypeElement.TryGetString(out type))
+        if (element.ValueKind == JsonValueKind.Object && element.TryGetProperty("type", out var asTypeElement) && asTypeElement.TryGetString(out type))
             return true;
 
         type = null;
         return false;
     }
-
-    // /// <summary>
-    // /// TODO docs
-    // /// </summary>
-    // /// <param name="element"></param>
-    // /// <param name="name"></param>
-    // /// <param name="options"></param>
-    // /// <param name="value"></param>
-    // /// <typeparam name="T"></typeparam>
-    // /// <returns></returns>
-    // /// <exception cref="JsonException"></exception>
-    // public static bool TryGetProperty<T>(this JsonElement element, string name, JsonSerializerOptions options, [NotNullWhen(true)] out T? value)
-    // {
-    //     if (!element.TryGetProperty(name, out var prop))
-    //     {
-    //         value = default;
-    //         return false;
-    //     }
-    //
-    //     value = prop.Deserialize<T>() ?? throw new JsonException($"Conversion to {typeof(T)} failed");
-    //     return true;
-    // }
 }

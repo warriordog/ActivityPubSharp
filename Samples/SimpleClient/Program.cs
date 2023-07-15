@@ -2,6 +2,7 @@
 
 using ActivityPub.Client;
 using ActivityPub.Common.Util;
+using ActivityPub.Types.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ builder.TryAddClientModule();
 builder.Services.AddHostedService<ConsoleService>();
 
 // Enable pretty-printing
-builder.Services.PostConfigure<ActivityPubOptions>(apo => apo.SerializerOptions.WriteIndented = true);
+builder.Services.Configure<IJsonLdSerializer>(serializer => serializer.SerializerOptions.WriteIndented = true);
 
 // Start host
 using var host = builder.Build();

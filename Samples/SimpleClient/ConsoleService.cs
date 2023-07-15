@@ -1,10 +1,10 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json;
 using ActivityPub.Client;
 using ActivityPub.Common.Util;
 using ActivityPub.Types;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 using Microsoft.Extensions.Hosting;
 
@@ -15,16 +15,16 @@ public class ConsoleService : BackgroundService
     private readonly Stack<ASType> _focus = new();
 
     private readonly IActivityPubClient _apClient;
-    private readonly ActivityPubOptions _apOptions;
     private readonly IHostApplicationLifetime _hostLifetime;
+    private readonly IJsonLdSerializer _jsonLdSerializer;
 
     private bool _isRunning = true;
 
-    public ConsoleService(IActivityPubClient apClient, IHostApplicationLifetime hostLifetime, ActivityPubOptions apOptions)
+    public ConsoleService(IActivityPubClient apClient, IHostApplicationLifetime hostLifetime, IJsonLdSerializer jsonLdSerializer)
     {
         _apClient = apClient;
         _hostLifetime = hostLifetime;
-        _apOptions = apOptions;
+        _jsonLdSerializer = jsonLdSerializer;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -141,7 +141,7 @@ public class ConsoleService : BackgroundService
         }
 
         // If param is a URI, then its a new object
-        if (Uri.TryCreate(parameter, UriKind.RelativeOrAbsolute, out var uri))
+        if (Uri.TryCreate(parameter, UriKind.Absolute, out var uri))
         {
             await PushUri(uri, stoppingToken);
             await HandlePrint(null, stoppingToken);
@@ -188,7 +188,7 @@ public class ConsoleService : BackgroundService
             toPrint = await SelectObject<object?>(current, parameter, stoppingToken);
         }
 
-        var json = JsonSerializer.Serialize(toPrint, _apOptions.SerializerOptions);
+        var json = _jsonLdSerializer.Serialize(toPrint);
         await Console.Out.WriteLineAsync(json);
     }
 

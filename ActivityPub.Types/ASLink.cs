@@ -1,10 +1,10 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Internal;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
@@ -18,9 +18,8 @@ namespace ActivityPub.Types;
 /// Properties of the Link are properties of the reference as opposed to properties of the resource. 
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link"/>
-[JsonConverter(typeof(ASLinkConverter))]
 [ASTypeKey(LinkType)]
-public class ASLink : ASType, IJsonConvertible<ASLink>
+public class ASLink : ASType
 {
     public const string LinkType = "Link";
 
@@ -79,77 +78,36 @@ public class ASLink : ASType, IJsonConvertible<ASLink>
     public static implicit operator ASUri(ASLink link) => link.HRef;
     public static implicit operator ASLink(ASUri asUri) => new() { HRef = asUri };
 
-
-    protected override void ReadJson(JsonElement element, JsonOptions options)
+    [CustomJsonDeserializer]
+    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, [NotNullWhen(true)] out ASLink? obj)
     {
-        base.ReadJson(element, options);
-
-        // Skip HRef - it has to be pre-initialized
-        if (element.TryGetProperty("hreflang", out var hRefLang))
-            HRefLang = hRefLang.GetString();
-        if (element.TryGetProperty("width", out var width))
-            Width = width.GetInt32();
-        if (element.TryGetProperty("height", out var height))
-            Height = height.GetInt32();
-        if (element.TryGetProperty("rel", out var rel))
-            Rel = rel.Deserialize<HashSet<string>>(options.SerializerOptions)!;
-    }
-
-    protected override void WriteJson(JsonNode node, JsonOptions options)
-    {
-        base.WriteJson(node, options);
-
-        node["href"] = JsonValue.Create(HRef, options.NodeOptions);
-        if (HRefLang != null)
-            node["hreflang"] = JsonValue.Create(HRefLang, options.NodeOptions);
-        if (Width != null)
-            node["width"] = JsonValue.Create(Width, options.NodeOptions);
-        if (Height != null)
-            node["height"] = JsonValue.Create(Height, options.NodeOptions);
-        if (Rel.Count > 0)
-            node["rel"] = JsonSerializer.SerializeToNode(Rel, options.SerializerOptions);
-    }
-
-    public new static ASLink? Deserialize(JsonElement element, JsonOptions options)
-    {
-        if (element.ValueKind == JsonValueKind.Null)
-            return null;
-
-        // Parse flattened form
+        // We either parse from string, or allow parser to use default logic
         if (element.ValueKind == JsonValueKind.String)
         {
-            return new ASLink()
+            obj = new ASLink
             {
                 HRef = element.GetString()!
             };
+            return true;
         }
 
-        if (element.ValueKind == JsonValueKind.Object && element.TryGetProperty("href", out var href) && href.TryGetString(out var hrefString))
-        {
-            var link = new ASLink
-            {
-                HRef = hrefString
-            };
-            link.ReadJson(element, options);
-            return link;
-        }
 
-        throw new JsonException("Can't deserialize ASLink - not in any supported form");
+        obj = null;
+        return false;
     }
 
-    public static JsonNode? Serialize(ASLink obj, JsonOptions options)
+    [CustomJsonSerializer]
+    public static bool TrySerialize(ASLink obj, JsonSerializerOptions options, JsonNodeOptions nodeOptions, [NotNullWhen(true)] out JsonNode? node)
     {
-        // TODO split ASLink into flat and object form
-
         // If its only a link, then use the flattened form
         if (obj.HasOnlyHRef)
         {
-            return JsonValue.Create(obj.HRef.Uri.ToString(), options.NodeOptions);
+            node = JsonValue.Create(obj.HRef.Uri.ToString(), nodeOptions)!;
+            return true;
         }
 
-        var node = new JsonObject(options.NodeOptions);
-        obj.WriteJson(node, options);
-        return node;
+        node = null;
+        return false;
     }
 
     /// <summary>

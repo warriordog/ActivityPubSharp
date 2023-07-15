@@ -83,7 +83,7 @@ internal static class TypeExtensions
         // Once we have the constructed type, then we can just return its generic arguments as-is.
         return constructedGenericType.GetGenericArguments();
     }
-    
+
     /// <summary>
     /// Attempts to find the concrete type parameters used to fill a generic type.
     /// Returns null if the types are incompatible.
@@ -100,7 +100,7 @@ internal static class TypeExtensions
     {
         if (concreteType.IsAssignableToGenericType(genericType))
             return concreteType.GetGenericArgumentsFor(genericType);
-        
+
         return null;
     }
 
@@ -110,4 +110,23 @@ internal static class TypeExtensions
     /// <param name="type">Type to check</param>
     /// <returns>Returns true if open generic, closed otherwise.</returns>
     public static bool IsOpenGeneric(this Type type) => type is { IsGenericType: true, IsConstructedGenericType: false };
+
+    /// <summary>
+    /// Filters an array of types by removing any open generics.
+    /// The resulting array will consist of either closed types of null.
+    /// This is stable - types will not change position.
+    /// </summary>
+    /// <param name="types">Types to filter</param>
+    public static Type?[] ToConcreteSlots(this Type?[] types)
+    {
+        for (var i = 0; i < types.Length; i++)
+        {
+            if (types[i]?.IsOpenGeneric() == true)
+            {
+                types[i] = null;
+            }
+        }
+
+        return types;
+    }
 }
