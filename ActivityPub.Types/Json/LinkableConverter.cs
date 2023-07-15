@@ -36,17 +36,22 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
 
         // Parse into abstract form
         var jsonElement = JsonElement.ParseValue(ref reader);
-        
-        // Objects that aren't ASLink are the payload data
-        if (reader.TokenType == JsonTokenType.StartObject && !IsASLink(jsonElement))
+
+        // If its a string OR an object of type ASLink, then its a link
+        if (jsonElement.ValueKind == JsonValueKind.String || IsASLink(jsonElement))
         {
-            var obj = jsonElement.Deserialize<T>(options);
-            return (Linkable<T>?)Activator.CreateInstance(typeToConvert, obj);
+            // Delegate link construction back to the parser
+            var link = jsonElement.Deserialize<ASLink>(options);
+            if (link == null)
+                throw new JsonException($"Failed to parse {typeToConvert} - Could not construct link object");
+            return new Linkable<T>(link);
         }
 
-        // Delegate link construction back to the parser
-        var link = jsonElement.Deserialize<ASLink>(options);
-        return (Linkable<T>?)Activator.CreateInstance(typeToConvert, link);
+        // Otherwise, its the payload data
+        var obj = jsonElement.Deserialize<T>(options);
+        if (obj == null)
+            throw new JsonException($"Failed to parse {typeToConvert} - Could not construct value object");
+        return new Linkable<T>(obj);
     }
 
     public override void Write(Utf8JsonWriter writer, Linkable<T> linkable, JsonSerializerOptions options)
