@@ -22,6 +22,15 @@ public class ActivityPubClient : IActivityPubClient
     {
         _typeInfoCache = typeInfoCache;
         _apOptions = apOptions;
+        _jsonLdSerializer = jsonLdSerializer;
+
+        // The fuck?
+        // https://stackoverflow.com/questions/47176104/c-sharp-add-accept-header-to-httpclient
+        foreach (var mimeType in apOptions.RequestContentTypes)
+        {
+            var mediaType = new MediaTypeWithQualityHeaderValue(mimeType);
+            _httpClient.DefaultRequestHeaders.Accept.Add(mediaType);
+        }
     }
 
     public int DefaultGetRecursion { get; set; }
@@ -37,7 +46,7 @@ public class ActivityPubClient : IActivityPubClient
             throw new ApplicationException($"Request failed: got status {resp.StatusCode}");
 
         var mediaType = resp.Content.Headers.ContentType?.MediaType;
-        if (mediaType == null || !_apOptions.ContentTypes.Contains(mediaType))
+        if (mediaType == null || !_apOptions.ResponseContentTypes.Contains(mediaType))
             throw new ApplicationException($"Request failed: unsupported content type {mediaType}");
 
         var json = await resp.Content.ReadAsStringAsync(cancellationToken);
