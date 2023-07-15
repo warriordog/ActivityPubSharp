@@ -8,29 +8,10 @@ using ActivityPub.Types.Json;
 namespace ActivityPub.Types.Util;
 
 /// <summary>
-/// Internal interface for abstract non-generic usage 
-/// </summary>
-internal interface ILinkable
-{
-    [MemberNotNullWhen(true, nameof(Link))]
-    [MemberNotNullWhen(false, nameof(Value))]
-    internal bool HasLink { get; }
-
-    internal ASLink? Link { get; }
-
-    [MemberNotNullWhen(true, nameof(Value))]
-    [MemberNotNullWhen(false, nameof(Link))]
-    internal bool HasValue { get; }
-
-    internal ASObject? Value { get; }
-}
-
-/// <summary>
 /// Synthetic wrapper for elements that can be included directly or referenced by a Link.
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
-[JsonConverter(typeof(LinkableConverter))]
-public class Linkable<T> : ILinkable
+public class Linkable<T>
     where T : ASObject
 {
     [MemberNotNullWhen(true, nameof(Link))]
@@ -44,8 +25,6 @@ public class Linkable<T> : ILinkable
     public bool HasValue { get; }
 
     public T? Value { get; }
-
-    ASObject? ILinkable.Value => Value;
 
     public Linkable(ASLink link)
     {

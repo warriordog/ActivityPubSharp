@@ -4,19 +4,9 @@
 namespace ActivityPub.Types.Util;
 
 /// <summary>
-/// Internal interface to allow abstract, non-generic access through reflection
-/// </summary>
-internal interface ILinkableList
-{
-    internal int Count { get; }
-    internal ILinkable Get(int i);
-    internal void Set(int i, ASType value);
-}
-
-/// <summary>
 /// Synthetic type to represent a list of T or Links to T
 /// </summary>
-public class LinkableList<T> : List<Linkable<T>>, ILinkableList
+public class LinkableList<T> : List<Linkable<T>>
     where T : ASObject
 {
     /// <summary>
@@ -62,14 +52,4 @@ public class LinkableList<T> : List<Linkable<T>>, ILinkableList
     // If removed, other code wont compile.
     public new void Add(Linkable<T> linkable) => base.Add(linkable);
     public new void AddRange(IEnumerable<Linkable<T>> linkables) => base.AddRange(linkables);
-
-    ILinkable ILinkableList.Get(int i) => this[i];
-
-    void ILinkableList.Set(int i, ASType value)
-    {
-        if (value is ASLink link)
-            this[i] = link;
-        else
-            this[i] = (T)value;
-    }
 }
