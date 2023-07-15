@@ -15,8 +15,8 @@ public class ActivityPubOptions
     /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type"/>
     public HashSet<string> ResponseContentTypes { get; set; } = new()
     {
-        "application/ld+json",
         "application/activity+json",
+        "application/ld+json",
         "application/json"
     };
 
