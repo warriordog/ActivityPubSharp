@@ -1,7 +1,5 @@
 ﻿# ActivityPubSharp - C# implementation of ActivityPub
 
----
-
 **Please note - this project is incomplete and not ready for production use.
 The information here describes the design and technical goals of ActivityPubSharp, not the currently implemented functionality.
 Please see [the issues tracker](https://github.com/warriordog/ActivityPubSharp/issues) for detailed status.**
