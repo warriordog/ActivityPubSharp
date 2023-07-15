@@ -43,6 +43,7 @@ public class JsonLdSerializer : IJsonLdSerializer
         };
 
         SerializerOptions.Converters.Add(new ASTypeConverter(asTypeInfoCache, jsonTypeInfoCache));
+        SerializerOptions.Converters.Add(new LinkableConverter(asTypeInfoCache));
         SerializerOptions.Converters.Add(new ListableConverter());
     }
 

@@ -10,6 +10,8 @@ public interface IASTypeInfoCache
 {
     internal JsonTypeInfo GetJsonTypeInfo<TDeclaredType>(string name) where TDeclaredType : ASType;
 
+    internal bool IsASLinkType(string type);
+
     /// <summary>
     /// Find and load all ActivityStreams types in a particular assembly.
     /// </summary>
@@ -26,8 +28,13 @@ public interface IASTypeInfoCache
 
 public class ASTypeInfoCache : IASTypeInfoCache
 {
-    private readonly Dictionary<string, ASTypeInfo> _knownTypeMap = new();
     private readonly HashSet<Type> _allASTypes = new();
+    private readonly Dictionary<string, ASTypeInfo> _knownTypeMap = new();
+    private readonly HashSet<string> _knownLinkTypes = new()
+    {
+        ASLink.LinkType
+    };
+    
     private readonly IJsonTypeInfoCache _jsonTypeInfoCache;
 
     public ASTypeInfoCache(IJsonTypeInfoCache jsonTypeInfoCache)
@@ -42,6 +49,12 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
         // Get info
         return _jsonTypeInfoCache.GetForType(realType);
+    }
+    
+    public bool IsASLinkType(string type)
+    {
+        var typeKey = type.ToLower();
+        return _knownLinkTypes.Contains(typeKey);
     }
 
     private Type ReifyType<TDeclaredType>(string name) where TDeclaredType : ASType
@@ -79,6 +92,10 @@ public class ASTypeInfoCache : IASTypeInfoCache
             if (_allASTypes.Contains(type))
                 continue;
 
+            // Pre-check this here for performance.
+            // Its possible for the loop to run multiple times.
+            var isASLink = type.IsAssignableTo(typeof(ASLink));
+            
             // Process each attribute on the type
             var typeAttributes = type.GetCustomAttributes<ASTypeKeyAttribute>();
             foreach (var typeAttr in typeAttributes)
@@ -93,6 +110,12 @@ public class ASTypeInfoCache : IASTypeInfoCache
                 // Create and cache appropriate entry for the type
                 var entry = CreateASTypeInfo(type);
                 _knownTypeMap[typeName] = entry;
+                
+                // If it derives from ASLink, then record it as an additional link type
+                if (isASLink)
+                {
+                    _knownLinkTypes.Add(typeName);
+                }
             }
 
             // Record it as an AS type, even if we didn't register

@@ -2,9 +2,11 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Internal;
+using ActivityPub.Types.Internal.TypeInfo;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Json;
@@ -14,6 +16,9 @@ namespace ActivityPub.Types.Json;
 /// </summary>
 public class LinkableConverter : JsonConverterFactory
 {
+    private readonly IASTypeInfoCache _asTypeInfoCache;
+    public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
+
     // We only convert Linkable<T>
     public override bool CanConvert(Type type) =>
         type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Linkable<>);
@@ -23,13 +28,22 @@ public class LinkableConverter : JsonConverterFactory
     {
         var valueType = type.GetGenericArguments()[0];
         var converterType = typeof(LinkableConverter<>).MakeGenericType(valueType);
-        return (JsonConverter)Activator.CreateInstance(converterType)!;
+        return (JsonConverter)Activator.CreateInstance(
+            converterType,
+            BindingFlags.Instance | BindingFlags.Public,
+            binder: null,
+            args: new object[] { _asTypeInfoCache },
+            culture: null
+        )!;
     }
 }
 
 internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
     where T : ASObject
 {
+    private readonly IASTypeInfoCache _asTypeInfoCache;
+    public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
+    
     public override Linkable<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return null;
@@ -72,5 +86,5 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
         }
     }
 
-    private static bool IsASLink(JsonElement element) => element.TryGetASType(out var type) && type == ASLink.LinkType;
+    private bool IsASLink(JsonElement element) => element.TryGetASType(out var type) && _asTypeInfoCache.IsASLinkType(type);
 }
