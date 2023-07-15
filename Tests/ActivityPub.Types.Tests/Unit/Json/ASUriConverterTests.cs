@@ -1,12 +1,13 @@
 ﻿using System.Text;
+using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Json;
 
-public abstract class ASUriConverterTests
+public abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConverter>
 {
-    private ASUriConverter ConverterUnderTest { get; set; } = new();
+    protected override ASUriConverter ConverterUnderTest { get; set; } = new();
     
     // Useful: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/use-utf8jsonreader
     public class ReadShould : ASUriConverterTests
@@ -17,9 +18,7 @@ public abstract class ASUriConverterTests
             Assert.Throws<JsonException>(() =>
             {
                 var json = "{}"u8;
-                var reader = new Utf8JsonReader(json);
-                reader.Read();
-                ConverterUnderTest.Read(ref reader, typeof(ASUri), JsonSerializerOptions.Default);
+                Read(json);
             });
         }
 
@@ -27,10 +26,8 @@ public abstract class ASUriConverterTests
         public void WrapInputString()
         {
             var json = "\"https://example.com/some.uri\""u8;
-            var reader = new Utf8JsonReader(json);
-            reader.Read();
-            var asUri = ConverterUnderTest.Read(ref reader, typeof(ASUri), JsonSerializerOptions.Default);
-            asUri.ToString().Should().Be("https://example.com/some.uri");
+            var asUri = Read(json);
+            asUri?.ToString().Should().Be("https://example.com/some.uri");
         }
     }
 
@@ -42,14 +39,10 @@ public abstract class ASUriConverterTests
         {
             const string Input = "https://example.com/some.uri";
             const string ExpectedOutput = $"\"{Input}\"";
-            
-            using var stream = new MemoryStream();
-            using var writer = new Utf8JsonWriter(stream);
             var asUri = new ASUri(Input);
-            ConverterUnderTest.Write(writer, asUri, JsonSerializerOptions.Default);
-            writer.Flush();
-
-            var json = Encoding.UTF8.GetString(stream.ToArray());
+            
+            var json = Write(asUri);
+            
             json.Should().Be(ExpectedOutput);
         }
     }
