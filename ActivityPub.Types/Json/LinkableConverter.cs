@@ -51,6 +51,8 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
 
     public override void Write(Utf8JsonWriter writer, Linkable<T> linkable, JsonSerializerOptions options)
     {
+        // It should be OK to use basic JsonSerializer here, because the important stuff is all in the options instance.
+
         if (linkable.TryGetLink(out var link))
         {
             JsonSerializer.Serialize(writer, link, options);
@@ -61,7 +63,7 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
         }
         else
         {
-            throw new ArgumentException("Linkable<T> is invalid - it has neither a link nor a value");
+            throw new ArgumentException($"{typeof(Linkable<T>)} is invalid - it has neither a link nor a value");
         }
     }
 
