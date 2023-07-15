@@ -4,9 +4,9 @@
 using System.Reflection;
 using ActivityPub.Client;
 using ActivityPub.Types;
-using ActivityPub.Types.Internal;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
+using InternalUtils;
 using Microsoft.Extensions.Hosting;
 
 namespace SimpleClient;

@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using InternalUtils;
 
 namespace ActivityPub.Types.Internal.TypeInfo;
 

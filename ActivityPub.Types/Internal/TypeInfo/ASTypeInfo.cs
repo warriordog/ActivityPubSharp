@@ -1,4 +1,6 @@
-﻿namespace ActivityPub.Types.Internal.TypeInfo;
+﻿using InternalUtils;
+
+namespace ActivityPub.Types.Internal.TypeInfo;
 
 /// <summary>
 /// Metadata singleton for a specific ActivityStreams type

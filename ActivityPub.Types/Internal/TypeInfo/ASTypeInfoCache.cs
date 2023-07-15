@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using ActivityPub.Types.Json;
+using InternalUtils;
 
 namespace ActivityPub.Types.Internal.TypeInfo;
 

@@ -3,7 +3,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Internal;
+using InternalUtils;
 
 namespace ActivityPub.Types.Json;
 
@@ -14,7 +14,6 @@ namespace ActivityPub.Types.Json;
 public class ListableConverter : JsonConverterFactory
 {
     public override bool CanConvert(Type type) =>
-
         // We only convert concrete types deriving from ICollection<T>
         type.IsAssignableToGenericType(typeof(ICollection<>))
 

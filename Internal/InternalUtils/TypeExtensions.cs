@@ -1,6 +1,9 @@
-﻿namespace ActivityPub.Types.Internal;
+﻿namespace InternalUtils;
 
-public static class TypeExtensions
+/// <summary>
+/// Internal utilities for working with .NET types reflectively 
+/// </summary>
+internal static class TypeExtensions
 {
     /// <summary>
     /// Determines if a concrete type can be assigned to an open generic type.
@@ -10,7 +13,7 @@ public static class TypeExtensions
     /// <param name="concreteType">Real, concrete type</param>
     /// <param name="genericType">Open generic type</param>
     /// <returns>True if concreteType can be assigned to genericType, false otherwise</returns>
-    public static bool IsAssignableToGenericType(this Type concreteType, Type genericType)
+    internal static bool IsAssignableToGenericType(this Type concreteType, Type genericType)
     {
         if (!genericType.IsGenericType)
             throw new ArgumentException($"Type {genericType} is not an generic", nameof(genericType));
@@ -49,7 +52,7 @@ public static class TypeExtensions
     /// <param name="concreteType">Concrete type to extract generics from</param>
     /// <param name="genericType">Generic type containing slots to fill</param>
     /// <returns>Returns an array containing the actual type of each generic slot</returns>
-    public static Type[] GetGenericArgumentsFor(this Type concreteType, Type genericType)
+    internal static Type[] GetGenericArgumentsFor(this Type concreteType, Type genericType)
     {
         if (!genericType.IsGenericType)
             throw new ArgumentException($"Type {genericType} is not generic", nameof(genericType));
@@ -96,7 +99,7 @@ public static class TypeExtensions
     /// <returns>Returns array of declared type parameters on success, or null on failure.</returns>
     /// <seealso cref="GetGenericArgumentsFor"/>
     /// <seealso cref="IsAssignableToGenericType"/>
-    public static Type[]? TryGetGenericArgumentsFor(this Type concreteType, Type genericType)
+    internal static Type[]? TryGetGenericArgumentsFor(this Type concreteType, Type genericType)
     {
         if (concreteType.IsAssignableToGenericType(genericType))
             return concreteType.GetGenericArgumentsFor(genericType);
@@ -109,7 +112,7 @@ public static class TypeExtensions
     /// </summary>
     /// <param name="type">Type to check</param>
     /// <returns>Returns true if open generic, closed otherwise.</returns>
-    public static bool IsOpenGeneric(this Type type) => type is { IsGenericType: true, IsConstructedGenericType: false };
+    internal static bool IsOpenGeneric(this Type type) => type is { IsGenericType: true, IsConstructedGenericType: false };
 
     /// <summary>
     /// Given an open generic type, returns a new type that is the result of filling all open slots with the constraint.
@@ -118,7 +121,7 @@ public static class TypeExtensions
     /// This is a naive implementation and may not be 100% accurate.
     /// </remarks>
     /// <param name="genericType">Type to populate. Must be an open generic type.</param>
-    public static Type GetDefaultGenericArguments(this Type genericType)
+    internal static Type GetDefaultGenericArguments(this Type genericType)
     {
         if (!genericType.IsOpenGeneric())
             throw new ArgumentException($"{genericType} is not an open generic type", nameof(genericType));
