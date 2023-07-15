@@ -91,7 +91,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
                     throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
 
                 // Create and cache appropriate entry for the type
-                var entry = CreateASTypeInfo(type, typeAttr);
+                var entry = CreateASTypeInfo(type);
                 _knownTypeMap[typeName] = entry;
             }
 
@@ -100,16 +100,13 @@ public class ASTypeInfoCache : IASTypeInfoCache
         }
     }
 
-    private static ASTypeInfo CreateASTypeInfo(Type type, ASTypeKeyAttribute typeKeyAttr)
+    private static ASTypeInfo CreateASTypeInfo(Type type)
     {
-        // Closed generics are simple
-        if (!type.IsOpenGeneric())
-            return new ClosedASTypeInfo(type);
+        // Open generics require a special type
+        if (type.IsOpenGeneric())
+            return new OpenASTypeInfo(type);
+        
+        return new ClosedASTypeInfo(type);
 
-
-        // Its an open type - we need to preload some details
-        var initialGenerics = type.GetGenericArguments().ToConcreteSlots();
-        var fallbackGenerics = typeKeyAttr.DefaultGenerics?.ToConcreteSlots() ?? new Type[initialGenerics.Length];
-        return new OpenASTypeInfo(type, initialGenerics, fallbackGenerics);
     }
 }

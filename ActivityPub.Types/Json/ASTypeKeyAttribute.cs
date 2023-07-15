@@ -15,15 +15,5 @@ public sealed class ASTypeKeyAttribute : Attribute
     /// <seealso cref="ASType.Types"/>
     public readonly string Type;
 
-    /// <summary>
-    /// Set of types to use in place of <see cref="ASType"/> when <see cref="Type"/> is an open generic and type arguments cannot be inferred from usage.
-    /// Irrelevant if Type is not an open generic.
-    /// </summary>
-    public readonly Type[]? DefaultGenerics;
-
-    public ASTypeKeyAttribute(string type, Type[]? defaultGenerics = null)
-    {
-        Type = type;
-        DefaultGenerics = defaultGenerics;
-    }
+    public ASTypeKeyAttribute(string type) => Type = type;
 }
