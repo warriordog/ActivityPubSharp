@@ -22,7 +22,7 @@ namespace ActivityPub.Types.Collection;
 /// <seealso cref="ASOrderedCollection{T}"/>
 [ASTypeKey(CollectionType)]
 public class ASCollection<T> : ASObject
-    where T : ASObject
+    where T : ASType
 {
     [JsonConstructor]
     public ASCollection() : this(CollectionType) {}
@@ -81,31 +81,7 @@ public class ASCollection<T> : ASObject
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-items"/>
     [JsonPropertyName("items")]
-    public virtual LinkableList<T>? Items { get; set; }
-
-    /// <summary>
-    /// All <see cref="ASLink"/> objects found in <see cref="Items"/>.
-    /// This is equivalent to filtering for entries where <see cref="Linkable{T}.HasLink"/> is true.
-    /// </summary>
-    [JsonIgnore]
-    public IEnumerable<ASLink> LinkItems =>
-        Items == null
-            ? Enumerable.Empty<ASLink>()
-            : Items
-                .Where(linkable => linkable.HasLink)
-                .Select(linkable => linkable.Link!);
-
-    /// <summary>
-    /// All non-link objects found in <see cref="Items"/>.
-    /// This is equivalent to filtering for entries where <see cref="Linkable{T}.HasValue"/> is true.
-    /// </summary>
-    [JsonIgnore]
-    public IEnumerable<T> ObjectItems =>
-        Items == null
-            ? Enumerable.Empty<T>()
-            : Items
-                .Where(linkable => linkable.HasValue)
-                .Select(linkable => linkable.Value!);
+    public virtual List<T>? Items { get; set; }
 
     /// <summary>
     /// True if this is a paged collection, false otherwise.
@@ -120,28 +96,7 @@ public class ASCollection<T> : ASObject
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Items?.Any() == true;
 
-    /// <summary>
-    /// True if this collection instance contains any links, false otherwise.
-    /// </summary>
-    [JsonIgnore]
-    [MemberNotNullWhen(true, nameof(Items))]
-    [MemberNotNullWhen(true, nameof(LinkItems))]
-    public bool HasLinkItems => LinkItems?.Any() == true;
 
-    /// <summary>
-    /// True if this collection instance contains any objects, false otherwise.
-    /// </summary>
-    [JsonIgnore]
-    [MemberNotNullWhen(true, nameof(Items))]
-    [MemberNotNullWhen(true, nameof(ObjectItems))]
-    public bool HasObjectItems => ObjectItems?.Any() == true;
-
-
-    public static implicit operator ASCollection<T>(LinkableList<T> collection) => new() { Items = collection };
-    public static implicit operator ASCollection<T>(List<Linkable<T>> collection) => new() { Items = new(collection) };
     public static implicit operator ASCollection<T>(List<T> collection) => new() { Items = new(collection) };
-    public static implicit operator ASCollection<T>(List<ASLink> collection) => new() { Items = new(collection) };
-    public static implicit operator ASCollection<T>(Linkable<T> value) => new() { Items = new() { value } };
     public static implicit operator ASCollection<T>(T value) => new() { Items = new() { value } };
-    public static implicit operator ASCollection<T>(ASLink value) => new() { Items = new() { value } };
 }

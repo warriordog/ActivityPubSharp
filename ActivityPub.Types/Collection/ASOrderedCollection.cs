@@ -3,7 +3,6 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
-using ActivityPub.Types.Util;
 using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
@@ -15,7 +14,7 @@ namespace ActivityPub.Types.Collection;
 /// <typeparam name="T"></typeparam>
 [ASTypeKey(OrderedCollectionType)]
 public class ASOrderedCollection<T> : ASCollection<T>
-    where T : ASObject
+    where T : ASType
 {
     [JsonConstructor]
     public ASOrderedCollection() : this(OrderedCollectionType) {}
@@ -23,13 +22,8 @@ public class ASOrderedCollection<T> : ASCollection<T>
     protected ASOrderedCollection(string type) : base(type) {}
 
     [JsonPropertyName("orderedItems")]
-    public override LinkableList<T>? Items { get; set; }
+    public override List<T>? Items { get; set; }
 
-    public static implicit operator ASOrderedCollection<T>(LinkableList<T> collection) => new() { Items = collection };
-    public static implicit operator ASOrderedCollection<T>(List<Linkable<T>> collection) => new() { Items = new(collection) };
     public static implicit operator ASOrderedCollection<T>(List<T> collection) => new() { Items = new(collection) };
-    public static implicit operator ASOrderedCollection<T>(List<ASLink> collection) => new() { Items = new(collection) };
-    public static implicit operator ASOrderedCollection<T>(Linkable<T> value) => new() { Items = new() { value } };
     public static implicit operator ASOrderedCollection<T>(T value) => new() { Items = new() { value } };
-    public static implicit operator ASOrderedCollection<T>(ASLink value) => new() { Items = new() { value } };
 }

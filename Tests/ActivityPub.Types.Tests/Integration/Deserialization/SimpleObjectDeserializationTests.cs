@@ -1,7 +1,5 @@
 ﻿using ActivityPub.Types.Extended.Actor;
 using ActivityPub.Types.Extended.Object;
-using ActivityPub.Types.Internal.TypeInfo;
-using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
@@ -141,7 +139,6 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests
             
             ObjectUnderTest.Replies.Should().NotBeNull();
             ObjectUnderTest.Replies!.HasItems.Should().BeTrue();
-            ObjectUnderTest.Replies!.HasObjectItems.Should().BeTrue();
             ObjectUnderTest.Replies!.TotalItems.Should().Be(1);
             ObjectUnderTest.Replies!.Items!.Count.Should().Be(1);
             

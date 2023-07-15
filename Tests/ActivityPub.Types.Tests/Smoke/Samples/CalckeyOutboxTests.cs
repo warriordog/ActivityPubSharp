@@ -56,9 +56,11 @@ public class CalckeyOutboxTests
     {
         var result = _jsonLdSerializer.Deserialize<ASType>(OutboxJson);
 
-        result.Should().BeOfType<ASOrderedCollection<ASObject>>();
+        result.Should().BeOfType<ASOrderedCollection<ASType>>();
         result?.Id.Should().Be("https://enby.life/users/9fpwmts9tv/outbox");
-        result.As<ASOrderedCollection<ASObject>>().TotalItems.Should().Be(371);
+        result.As<ASOrderedCollection<ASType>>().IsPaged.Should().BeTrue();
+        result.As<ASOrderedCollection<ASType>>().HasItems.Should().BeFalse();
+        result.As<ASOrderedCollection<ASType>>().TotalItems.Should().Be(371);
     }
 
     private readonly IJsonLdSerializer _jsonLdSerializer;
