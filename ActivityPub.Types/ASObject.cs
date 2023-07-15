@@ -147,7 +147,7 @@ public class ASObject : ASType
     /// <summary>
     /// The content or textual representation of the Object encoded as a JSON string.
     /// By default, the value of content is HTML.
-    /// The mediaType property can be used in the object to indicate a different content type.
+    /// The <see cref="ASType.MediaType"/> property can be used in the object to indicate a different content type.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-content"/>
     [JsonPropertyName("content")]

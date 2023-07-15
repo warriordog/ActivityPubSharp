@@ -102,7 +102,10 @@ public abstract class ASType
     /// When used on an Object, identifies the MIME media type of the value of the content property.
     /// If not specified, the content property is assumed to contain text/html content. 
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-mediaType"/>
+    /// <remarks>
+    /// TODO see if we can special-case this to something more specific than "string"
+    /// </remarks>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-mediatype"/>
     [JsonPropertyName("mediaType")]
-    public Linkable<ASObject>? MediaType { get; set; }
+    public string? MediaType { get; set; }
 }

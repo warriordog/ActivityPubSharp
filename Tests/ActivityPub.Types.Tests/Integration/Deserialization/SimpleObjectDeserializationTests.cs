@@ -105,7 +105,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests
                     "attributedTo":[{}],
                     "preview":{},
                     "name":"name",
-                    "mediaType":{}
+                    "mediaType":"text/html"
                 }
             """;
 

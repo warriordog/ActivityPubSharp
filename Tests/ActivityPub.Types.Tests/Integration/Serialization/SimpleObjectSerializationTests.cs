@@ -133,7 +133,7 @@ public abstract class SimpleObjectSerializationTests
                 AttributedTo = new() { new ASObject() },
                 Preview = new ASObject(),
                 Name = new NaturalLanguageString("name"),
-                MediaType = new ASObject()
+                MediaType = "text/html"
             };
             
             // From ASObject
