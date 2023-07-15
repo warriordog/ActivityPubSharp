@@ -26,7 +26,6 @@ public class ListableConverter : JsonConverterFactory
 }
 
 internal class ListableConverter<TItem, TCollection> : JsonConverter<TCollection>
-    where TItem : class
     where TCollection : class, ICollection<TItem>, new()
 {
     public override TCollection? Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
