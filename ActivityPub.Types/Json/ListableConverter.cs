@@ -13,8 +13,15 @@ namespace ActivityPub.Types.Json;
 /// </summary>
 public class ListableConverter : JsonConverterFactory
 {
-    // We only convert concrete types deriving from ICollection<T>
-    public override bool CanConvert(Type type) => type.IsAssignableToGenericType(typeof(ICollection<>));
+    public override bool CanConvert(Type type) =>
+
+        // We only convert concrete types deriving from ICollection<T>
+        type.IsAssignableToGenericType(typeof(ICollection<>))
+
+        // This has to be registered globally, which causes it to pick up dictionaries.
+        // The code below ends up with a null key and goes BOOM, which is less than idea.
+        // Its kind of a hack, but we avoid the issue by ignoring all dictionaries.
+        && !type.IsAssignableToGenericType(typeof(IDictionary<,>));
 
     // Pivot the type into correct converter
     public override JsonConverter? CreateConverter(Type collectionType, JsonSerializerOptions options)
