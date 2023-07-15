@@ -1,4 +1,4 @@
-﻿# Samples
+﻿# Sample Projects
 
 Here you can find various sample projects that demonstrate varying usages of ActivityPubSharp.
 

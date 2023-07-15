@@ -9,6 +9,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Types", "ActivityPub.Types\ActivityPub.Types.csproj", "{17F78187-F53C-4D1A-91CC-B664C2A1FA8A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C54CED61-32AF-4DF1-BB79-4BB035958584}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\readme.md = Tests\readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Types.Tests", "Tests\ActivityPub.Types.Tests\ActivityPub.Types.Tests.csproj", "{D750AD19-106E-4A0E-9ADB-A64F50713082}"
 EndProject
@@ -22,6 +25,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Common", "ActivityPub.Common\ActivityPub.Common.csproj", "{B101E7CB-6CA8-444F-8E27-33D65D377F02}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Internal", "Internal", "{13F0203B-DB73-4631-A5C7-FF1F7F724144}"
+	ProjectSection(SolutionItems) = preProject
+		Internal\readme.md = Internal\readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternalUtils", "Internal\InternalUtils\InternalUtils.csproj", "{70BB9650-70E6-402D-961B-CAFA0F246FA3}"
 EndProject
