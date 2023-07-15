@@ -53,32 +53,42 @@ internal class OpenASTypeInfo : ASTypeInfo
         return reifiedType;
     }
     
+    // genericType is the one returned by ASType lookup.
+    // declaredType is taken from a concrete POCO, so it should always be constructable.
     private static Type PopulateGenericType(Type genericType, Type declaredType)
     {
-        // Take an alternate path for non-generic base
-        if (!declaredType.IsGenericType)
-            return PopulateDefaultGenerics(genericType);
+        // Sanity checks
+        if (!genericType.IsOpenGeneric())
+            throw new ArgumentException($"{genericType} is not an open generic type - it must be open", nameof(genericType));
+        if (declaredType.IsOpenGeneric())
+            throw new ArgumentException($"{declaredType} is an open generic type - it must be closed", nameof(declaredType));
         
+        // Case 1 (easy) - genericType is less specific than declaredType.
+        // We can just keep the declared type.
+        if (declaredType.IsAssignableToGenericType(genericType))
+            return declaredType;
         
-        // Put the checks here for performance
-        if (!declaredType.IsConstructedGenericType)
-            throw new ArgumentException("declared type must be a closed generic type", nameof(declaredType));
-        if (!declaredType.IsAssignableToGenericType(genericType))
-            throw new ArgumentException($"declared type {declaredType} must be assignable to generic type {genericType}");
-
-        // Copy the generic type from declaredType to openType
-        var genericSlots = declaredType.GetGenericArgumentsFor(genericType);
-        return genericType.MakeGenericType(genericSlots);
+        // Case 3 - genericType is more specific than declaredType.
+        // We can only infer generic slots from the constraints.
+        if (GenericIsAssignableToDeclared(genericType, declaredType))
+            return genericType.GetDefaultGenericArguments();
+        
+        // Case 2 (bad) - there is no relation between genericType and declaredType.
+        // This is probably an error in JSON or the type definition; nothing we can do.
+        throw new ArgumentException($"generic type {genericType} and declared type {declaredType} don't relate to each other");
     }
-
-    private static Type PopulateDefaultGenerics(Type genericType)
+    
+    private static bool GenericIsAssignableToDeclared(Type genericType, Type declaredType)
     {
-        var genericSlots = genericType.GetGenericArguments();
-        for (var i = 0; i < genericSlots.Length; i++)
+        // Declared type could be a constructed generic type.
+        // If so, we need to de-construct it for comparison.
+        if (declaredType.IsGenericType)
         {
-            // TODO this probably isn't accurate
-            genericSlots[i] = genericSlots[i].GetGenericParameterConstraints()[0];    
+            var openDeclaredType = declaredType.GetGenericTypeDefinition();
+            return genericType.IsAssignableToGenericType(openDeclaredType);
         }
-        return genericType.MakeGenericType(genericSlots);
+        
+        // Otherwise, we check for direct inheritance
+        return genericType.IsAssignableTo(declaredType);
     }
 }

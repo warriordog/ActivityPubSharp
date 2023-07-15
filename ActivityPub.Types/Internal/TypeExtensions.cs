@@ -1,6 +1,6 @@
 ﻿namespace ActivityPub.Types.Internal;
 
-internal static class TypeExtensions
+public static class TypeExtensions
 {
     /// <summary>
     /// Determines if a concrete type can be assigned to an open generic type.
@@ -112,21 +112,22 @@ internal static class TypeExtensions
     public static bool IsOpenGeneric(this Type type) => type is { IsGenericType: true, IsConstructedGenericType: false };
 
     /// <summary>
-    /// Filters an array of types by removing any open generics.
-    /// The resulting array will consist of either closed types of null.
-    /// This is stable - types will not change position.
+    /// Given an open generic type, returns a new type that is the result of filling all open slots with the constraint.
     /// </summary>
-    /// <param name="types">Types to filter</param>
-    public static Type?[] ToConcreteSlots(this Type?[] types)
+    /// <remarks>
+    /// This is a naive implementation and may not be 100% accurate.
+    /// </remarks>
+    /// <param name="genericType">Type to populate. Must be an open generic type.</param>
+    public static Type GetDefaultGenericArguments(this Type genericType)
     {
-        for (var i = 0; i < types.Length; i++)
+        if (!genericType.IsOpenGeneric())
+            throw new ArgumentException($"{genericType} is not an open generic type", nameof(genericType));
+        
+        var genericSlots = genericType.GetGenericArguments();
+        for (var i = 0; i < genericSlots.Length; i++)
         {
-            if (types[i]?.IsOpenGeneric() == true)
-            {
-                types[i] = null;
-            }
+            genericSlots[i] = genericSlots[i].GetGenericParameterConstraints()[0];    
         }
-
-        return types;
+        return genericType.MakeGenericType(genericSlots);
     }
 }
