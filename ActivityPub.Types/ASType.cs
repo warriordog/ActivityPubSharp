@@ -27,7 +27,6 @@ public abstract class ASType : IJsonConvertible<ASType>
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-type"/>
     [JsonPropertyName("type")]
-    [JsonConverter(typeof(ListableConverter))]
     public HashSet<string> Types { get; set; } = new();
 
     /// <summary>
