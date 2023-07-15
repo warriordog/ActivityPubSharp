@@ -1,8 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Reflection;
 using ActivityPub.Client;
-using ActivityPub.Common.Util;
 using ActivityPub.Types;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
@@ -106,7 +106,7 @@ public class ConsoleService : BackgroundService
                 case "expand":
                 case "populate":
                 case "fill":
-                    await HandlePopulate(stoppingToken);
+                    await HandlePopulate(parameter, stoppingToken);
                     break;
 
                 default:
@@ -177,7 +177,7 @@ public class ConsoleService : BackgroundService
     {
         if (!_focus.TryPeek(out var current))
         {
-            await Console.Out.WriteLineAsync("Can't print - no object in focus");
+            await Console.Out.WriteLineAsync("Can't print - no object in focus.");
             return;
         }
 
@@ -192,7 +192,7 @@ public class ConsoleService : BackgroundService
         await Console.Out.WriteLineAsync(json);
     }
 
-    private async Task HandlePopulate(CancellationToken stoppingToken)
+    private async Task HandlePopulate(string? parameter, CancellationToken stoppingToken)
     {
         if (!_focus.TryPeek(out var current))
         {
@@ -202,7 +202,15 @@ public class ConsoleService : BackgroundService
 
         if (current is ASObject asObj)
         {
-            await _apClient.Populate(asObj, cancellationToken: stoppingToken);
+            if (parameter == null)
+            {
+                await Console.Out.WriteLineAsync("Please specify a property to populate.");
+                return;
+            }
+
+            var prop = FindProperty(asObj, parameter);
+            var value = await SelectObject<ASObject>(asObj, prop, stoppingToken);
+            prop.SetValue(asObj, value);
         }
         else if (current is ASLink asLink)
         {
@@ -219,14 +227,15 @@ public class ConsoleService : BackgroundService
 
     private async Task<T> SelectObject<T>(ASType obj, string propertyName, CancellationToken stoppingToken)
     {
-        var property = obj.GetType().GetProperty(propertyName);
-        if (property == null)
-            throw new MissingMemberException("Can't find that property within the object in focus.");
-
+        var property = FindProperty(obj, propertyName);
+        return await SelectObject<T>(obj, property, stoppingToken);
+    }
+    
+    private async Task<T> SelectObject<T>(ASType obj, PropertyInfo property, CancellationToken stoppingToken)
+    {
         // Get and populate property value
         var value = property.GetValue(obj) switch
         {
-            ASObject asValue => await _apClient.Populate(asValue, cancellationToken: stoppingToken),
             ASLink asLink => await _apClient.Get<ASType>(asLink, cancellationToken: stoppingToken),
             Linkable<ASObject> linkable => await _apClient.Resolve(linkable, cancellationToken: stoppingToken),
             LinkableList<ASObject> linkables => await _apClient.Resolve(linkables, cancellationToken: stoppingToken),
@@ -237,5 +246,13 @@ public class ConsoleService : BackgroundService
         if (value is not T typedValue)
             throw new ApplicationException("Selected property is not compatible");
         return typedValue;
+    }
+
+    private static PropertyInfo FindProperty(object obj, string propertyName)
+    {
+        var property = obj.GetType().GetProperty(propertyName);
+        if (property == null)
+            throw new MissingMemberException("Can't find that property within the object in focus.");
+        return property;
     }
 }
