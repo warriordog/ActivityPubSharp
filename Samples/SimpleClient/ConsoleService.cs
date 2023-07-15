@@ -4,6 +4,7 @@
 using System.Reflection;
 using ActivityPub.Client;
 using ActivityPub.Types;
+using ActivityPub.Types.Internal;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +13,7 @@ namespace SimpleClient;
 
 public class ConsoleService : BackgroundService
 {
-    private readonly Stack<ASType> _focus = new();
+    private readonly Stack<object?> _focus = new();
 
     private readonly IActivityPubClient _apClient;
     private readonly IHostApplicationLifetime _hostLifetime;
@@ -106,6 +107,7 @@ public class ConsoleService : BackgroundService
                 case "expand":
                 case "populate":
                 case "fill":
+                case "resolve":
                     await HandlePopulate(parameter, stoppingToken);
                     break;
 
@@ -136,7 +138,7 @@ public class ConsoleService : BackgroundService
     {
         if (string.IsNullOrEmpty(parameter))
         {
-            await Console.Out.WriteLineAsync("Please specify a URI or property to push");
+            await Console.Out.WriteLineAsync("Please specify a URI or property to push.");
             return;
         }
 
@@ -150,6 +152,12 @@ public class ConsoleService : BackgroundService
         // Otherwise, its a selector
         else if (_focus.TryPeek(out var current))
         {
+            if (current == null)
+            {
+                await Console.Out.WriteLineAsync("Can't select from null.");
+                return;
+            }
+            
             await PushSelector(current, parameter, stoppingToken);
             await HandlePrint(null, stoppingToken);
         }
@@ -167,9 +175,9 @@ public class ConsoleService : BackgroundService
         _focus.Push(newObj);
     }
 
-    private async Task PushSelector(ASType current, string parameter, CancellationToken stoppingToken)
+    private async Task PushSelector(object current, string parameter, CancellationToken stoppingToken)
     {
-        var newObject = await SelectObject<ASType>(current, parameter, stoppingToken);
+        var newObject = await SelectObject(current, parameter, stoppingToken);
         _focus.Push(newObject);
     }
 
@@ -185,7 +193,13 @@ public class ConsoleService : BackgroundService
 
         if (parameter != null)
         {
-            toPrint = await SelectObject<object?>(current, parameter, stoppingToken);
+            if (current == null)
+            {
+                await Console.Out.WriteLineAsync("Can't select from null.");
+                return;
+            }
+            
+            toPrint = await SelectObject(current, parameter, stoppingToken);
         }
 
         var json = _jsonLdSerializer.Serialize(toPrint);
@@ -200,6 +214,12 @@ public class ConsoleService : BackgroundService
             return;
         }
 
+        if (current == null)
+        {
+            await Console.Out.WriteLineAsync("Can't populate a null object.");
+            return;
+        }
+
         if (current is ASObject asObj)
         {
             if (parameter == null)
@@ -209,7 +229,12 @@ public class ConsoleService : BackgroundService
             }
 
             var prop = FindProperty(asObj, parameter);
-            var value = await SelectObject<ASObject>(asObj, prop, stoppingToken);
+            var value = await SelectObject(asObj, prop, stoppingToken);
+            
+            // Verify and set
+            if (value != null && !value.GetType().IsAssignableTo(prop.PropertyType))
+                throw new ApplicationException($"Selected property is not compatible: {value.GetType()} is not assignable to {prop.PropertyType}");
+            
             prop.SetValue(asObj, value);
         }
         else if (current is ASLink asLink)
@@ -225,27 +250,71 @@ public class ConsoleService : BackgroundService
         await HandlePrint(null, stoppingToken);
     }
 
-    private async Task<T> SelectObject<T>(ASType obj, string propertyName, CancellationToken stoppingToken)
+    private async Task<object?> SelectObject(object obj, string propertyName, CancellationToken stoppingToken)
     {
         var property = FindProperty(obj, propertyName);
-        return await SelectObject<T>(obj, property, stoppingToken);
+        return await SelectObject(obj, property, stoppingToken);
     }
     
-    private async Task<T> SelectObject<T>(ASType obj, PropertyInfo property, CancellationToken stoppingToken)
+    private async Task<object?> SelectObject(object obj, PropertyInfo property, CancellationToken stoppingToken)
     {
         // Get and populate property value
-        var value = property.GetValue(obj) switch
-        {
-            ASLink asLink => await _apClient.Get<ASType>(asLink, cancellationToken: stoppingToken),
-            Linkable<ASObject> linkable => await _apClient.Resolve(linkable, cancellationToken: stoppingToken),
-            LinkableList<ASObject> linkables => await _apClient.Resolve(linkables, cancellationToken: stoppingToken),
-            var v => v
-        };
+        var value = property.GetValue(obj);
+        return await ResolveValue(value, stoppingToken);
+    }
 
-        // Verify and return
-        if (value is not T typedValue)
-            throw new ApplicationException("Selected property is not compatible");
-        return typedValue;
+    private async Task<object?> ResolveValue(object? value, CancellationToken stoppingToken)
+    {
+        if (value == null)
+            return null;
+        
+        // If its ASLink, then call Get<ASType>
+        if (value is ASLink link)
+            return await _apClient.Get<ASType>(link, cancellationToken: stoppingToken);
+        
+        // If its Linkable<T>, then extract T and call ResolveValueOfLinkable(object) which pivots to ResolveValueOfLinkableOf<T>)(Linkable<T>)
+        if (value.GetType().IsAssignableToGenericType(typeof(Linkable<>)))
+            return await ResolveValueOfLinkable(value, stoppingToken);
+        
+        // If its LinkableList<T>, then extract T and call ResolveValueOfLinkableList(object) which pivots to ResolveValueOfLinkableListOf<T>(LinkableList<T>)
+        if (value.GetType().IsAssignableToGenericType(typeof(LinkableList<>)))
+            return await ResolveValueOfLinkableList(value, stoppingToken);
+
+        // Otherwise, we can't resolve so return as-is
+        return value;
+    }
+
+    private async Task<object?> ResolveValueOfLinkable(object value, CancellationToken stoppingToken)
+    {
+        var slot = value.GetType().GetGenericArgumentsFor(typeof(Linkable<>))[0];
+        var method = typeof(ConsoleService)
+                         .GetMethod(nameof(ResolveValueOfLinkableOf), BindingFlags.NonPublic | BindingFlags.Instance)
+                         ?.MakeGenericMethod(slot)
+                     ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableOf<{slot}>(Linkable<{slot}>, CancellationToken)");
+        return await (Task<object?>)method.Invoke(this, new[] {value, stoppingToken})!;
+    }
+    
+    private async Task<object?> ResolveValueOfLinkableOf<T>(Linkable<T> value, CancellationToken stoppingToken)
+        where T : ASObject
+    {
+        var result = await _apClient.Resolve(value, cancellationToken: stoppingToken);
+        return new Linkable<T>(result);
+    }
+
+    private async Task<object?> ResolveValueOfLinkableList(object value, CancellationToken stoppingToken)
+    {
+        var slot = value.GetType().GetGenericArgumentsFor(typeof(LinkableList<>))[0];
+        var method = typeof(ConsoleService)
+                         .GetMethod(nameof(ResolveValueOfLinkableListOf), BindingFlags.NonPublic | BindingFlags.Instance)
+                         ?.MakeGenericMethod(slot)
+                     ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableListOf<{slot}>(LinkableList<{slot}>, CancellationToken)");
+        return await (Task<object?>)method.Invoke(this, new[] {value, stoppingToken})!;
+    }
+    private async Task<object?> ResolveValueOfLinkableListOf<T>(LinkableList<T> value, CancellationToken stoppingToken)
+        where T : ASObject
+    {
+        var results = await _apClient.Resolve(value, cancellationToken: stoppingToken);
+        return new LinkableList<T>(results);
     }
 
     private static PropertyInfo FindProperty(object obj, string propertyName)
