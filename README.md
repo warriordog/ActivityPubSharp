@@ -48,4 +48,4 @@ The packages within ActivityPubSharp are linked via interfaces and assembled thr
 
 ### Design Goals
 * Minimal dependencies - software supply chain risks are real and very underrated. ActivityPubSharp is developed using minimal external dependencies, but without reinventing all the wheels.
-* Modern .NET - ActivityPubSharp has set .NET 6 as the minimum supported version. This does unfortunately exclude many projects, but it will be beneficial in the long-run. Net7.0 will be relevant for much longer than, say NetStandard2.0 or even 2.1.
+* Modern .NET - ActivityPubSharp has set .NET 7 as the minimum supported version. This does unfortunately exclude many projects, but it will be beneficial in the long-run. Net7.0 will be relevant for much longer than, say NetStandard2.0 or even 2.1.
