@@ -38,17 +38,36 @@ internal class ListableConverter<TItem, TCollection> : JsonConverter<TCollection
 
             // If array, then deserialize directly to the collection
             case JsonTokenType.StartArray:
-                return JsonSerializer.Deserialize<TCollection>(ref reader, options);
+            {
+                var collection = new TCollection();
+                while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                {
+                    var item = ReadItem(ref reader, options);
+                    collection.Add(item);
+                }
+
+                return collection;
+            }
 
             // Otherwise we assume (hope) that the next token can be deserialized to TItem
             default:
             {
-                var item = JsonSerializer.Deserialize<TItem>(ref reader, options) ??
-                           throw new JsonException("Failed to deserialize object for Listable");
+                var item = ReadItem(ref reader, options);
                 return new TCollection { item };
             }
         }
     }
+
+    private static TItem ReadItem(ref Utf8JsonReader reader, JsonSerializerOptions options)
+    {
+        var item = JsonSerializer.Deserialize<TItem>(ref reader, options);
+
+        if (item == null)
+            throw new JsonException($"Failed to deserialize {typeof(TItem)} for {typeof(TCollection)}");
+
+        return item;
+    }
+
 
     public override void Write(Utf8JsonWriter writer, TCollection collection, JsonSerializerOptions options)
     {
@@ -60,7 +79,13 @@ internal class ListableConverter<TItem, TCollection> : JsonConverter<TCollection
         }
         else
         {
-            JsonSerializer.Serialize(writer, collection, options);
+            writer.WriteStartArray();
+            foreach (var item in collection)
+            {
+                JsonSerializer.Serialize(writer, item, options);
+            }
+
+            writer.WriteEndArray();
         }
     }
 }
