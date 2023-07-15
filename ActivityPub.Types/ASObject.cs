@@ -30,18 +30,21 @@ public class ASObject : ASType
     /// The intent is to provide a model that is at least semantically similar to attachments in email. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    [JsonPropertyName("attachment")]
     public LinkableList<ASObject> Attachment { get; set; } = new();
 
     /// <summary>
     /// Identifies one or more entities that represent the total population of entities for which the object can considered to be relevant.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-audience"/>
+    [JsonPropertyName("audience")]
     public LinkableList<ASObject> Audience { get; set; } = new();
 
     /// <summary>
     /// Identifies one or more Objects that are part of the private secondary audience of this Object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-bcc"/>
+    [JsonPropertyName("bcc")]
     public LinkableList<ASObject> BCC { get; set; } = new();
 
     /// <summary>
@@ -55,6 +58,7 @@ public class ASObject : ASType
     /// Identifies an Object that is part of the public secondary audience of this Object.   
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-cc"/>
+    [JsonPropertyName("cc")]
     public LinkableList<ASObject> CC { get; set; } = new();
 
     /// <summary>
@@ -67,12 +71,14 @@ public class ASObject : ASType
     /// An example could be all activities relating to a common project or event.
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-context"/>
+    [JsonPropertyName("context")]
     public Linkable<ASObject>? Context { get; set; }
 
     /// <summary>
     /// Identifies the entity (e.g. an application) that generated the object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-generator"/>
+    [JsonPropertyName("generator")]
     public Linkable<ASObject>? Generator { get; set; }
 
     /// <summary>
@@ -80,6 +86,7 @@ public class ASObject : ASType
     /// The image should have an aspect ratio of one (horizontal) to one (vertical) and should be suitable for presentation at a small size. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-icon"/>
+    [JsonPropertyName("icon")]
     public Linkable<ImageObject>? Icon { get; set; }
 
     /// <summary>
@@ -87,24 +94,28 @@ public class ASObject : ASType
     /// Unlike the icon property, there are no aspect ratio or display size limitations assumed. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-image"/>
+    [JsonPropertyName("image")]
     public Linkable<ImageObject>? Image { get; set; }
 
     /// <summary>
     /// Indicates one or more entities for which this object is considered a response. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-inReplyTo"/>
+    [JsonPropertyName("inReplyTo")]
     public Linkable<ASObject>? InReplyTo { get; set; }
 
     /// <summary>
     /// Indicates one or more physical or logical locations associated with the object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-location"/>
+    [JsonPropertyName("location")]
     public Linkable<ASObject>? Location { get; set; }
 
     /// <summary>
     /// Identifies a Collection containing objects considered to be responses to this object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-replies"/>
+    [JsonPropertyName("replies")]
     public ASCollection<ASObject>? Replies { get; set; }
 
     /// <summary>
@@ -113,12 +124,14 @@ public class ASObject : ASType
     /// The key difference between attachment and tag is that the former implies association by inclusion, while the latter implies associated by reference. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-tag"/>
+    [JsonPropertyName("tag")]
     public LinkableList<ASObject> Tag { get; set; } = new();
 
     /// <summary>
     /// Identifies an entity considered to be part of the public primary audience of an Object 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-to"/>
+    [JsonPropertyName("to")]
     public LinkableList<ASObject> To { get; set; } = new();
 
     /// <summary>
@@ -128,6 +141,7 @@ public class ASObject : ASType
     /// TODO this needs a special case - it can be a List{ASLink}, ASLink, *or* ASUri
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
+    [JsonPropertyName("url")]
     public ASLink? Url { get; set; }
 
     /// <summary>
@@ -136,6 +150,7 @@ public class ASObject : ASType
     /// The mediaType property can be used in the object to indicate a different content type.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-content"/>
+    [JsonPropertyName("content")]
     public NaturalLanguageString? Content { get; set; }
 
     /// <summary>
@@ -144,6 +159,7 @@ public class ASObject : ASType
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration"/>
     /// <seealso href="https://www.w3.org/TR/xmlschema11-2/#duration"/>
+    [JsonPropertyName("duration")]
     public string? Duration { get; set; }
 
     /// <summary>
@@ -151,6 +167,7 @@ public class ASObject : ASType
     /// When used with an Activity object, for instance, the startTime property specifies the moment the activity began or is scheduled to begin. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startTime"/>
+    [JsonPropertyName("startTime")]
     public DateTime? StartTime { get; set; }
 
     /// <summary>
@@ -158,24 +175,28 @@ public class ASObject : ASType
     /// When used with an Activity object, for instance, the endTime property specifies the moment the activity concluded or is expected to conclude. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-endTime"/>
+    [JsonPropertyName("endTime")]
     public DateTime? EndTime { get; set; }
 
     /// <summary>
     /// The date and time at which the object was published.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-published"/>
+    [JsonPropertyName("published")]
     public DateTime? Published { get; set; }
 
     /// <summary>
     /// A natural language summarization of the object encoded as HTML.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-summary"/>
+    [JsonPropertyName("summary")]
     public NaturalLanguageString? Summary { get; set; }
 
     /// <summary>
     /// The date and time at which the object was updated.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-updated"/>
+    [JsonPropertyName("updated")]
     public DateTime? Updated { get; set; }
 
     /// <summary>
@@ -183,6 +204,7 @@ public class ASObject : ASType
     /// In general, clients do the conversion from source to content, not the other way around. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#source-property"/>
+    [JsonPropertyName("source")]
     public ASObject? Source { get; set; }
 
     /// <summary>
@@ -192,11 +214,13 @@ public class ASObject : ASType
     /// Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="IActor.Liked"/> collection.
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitypub/#likes"/>
+    [JsonPropertyName("likes")]
     public Linkable<ASCollection<LikeActivity>>? Likes { get; set; }
 
     /// <summary>
     /// This is a list of all Announce activities with this object as the object property, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#shares"/>
+    [JsonPropertyName("shares")]
     public Linkable<ASCollection<AnnounceActivity>>? Shares { get; set; }
 }

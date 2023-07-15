@@ -29,12 +29,13 @@ public class ASOrderedCollectionPage<T> : ASCollectionPage<T>
     /// A non-negative integer value identifying the relative position within the logical view of a strictly ordered collection. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startIndex"/>
+    [JsonPropertyName("startIndex")]
     public int? StartIndex { get; set; }
 
     [JsonPropertyName("orderedItems")]
     public override LinkableList<T>? Items { get; set; }
 
-    
+
     public static implicit operator ASOrderedCollectionPage<T>(LinkableList<T> collection) => new() { Items = collection };
     public static implicit operator ASOrderedCollectionPage<T>(List<Linkable<T>> collection) => new() { Items = new(collection) };
     public static implicit operator ASOrderedCollectionPage<T>(List<T> collection) => new() { Items = new(collection) };

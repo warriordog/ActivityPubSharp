@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 using static ActivityPub.Types.Collection.CollectionTypes;
 
@@ -12,6 +13,7 @@ namespace ActivityPub.Types.Collection;
 /// May be paged or unpaged.
 /// </summary>
 /// <typeparam name="T"></typeparam>
+[ASTypeKey(OrderedCollectionType)]
 public class ASOrderedCollection<T> : ASCollection<T>
     where T : ASObject
 {
@@ -19,7 +21,7 @@ public class ASOrderedCollection<T> : ASCollection<T>
     public ASOrderedCollection() : this(OrderedCollectionType) {}
 
     protected ASOrderedCollection(string type) : base(type) {}
-    
+
     [JsonPropertyName("orderedItems")]
     public override LinkableList<T>? Items { get; set; }
 

@@ -23,7 +23,8 @@ public class PlaceObject : ASObject
     /// Indicates the accuracy of position coordinates on a Place objects.
     /// Expressed in properties of percentage. e.g. "94.0" means "94.0% accurate". 
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-accuracy"/>
+    [JsonPropertyName("accuracy")]
     public float? Accuracy { get; set; }
 
     /// <summary>
@@ -32,18 +33,21 @@ public class PlaceObject : ASObject
     /// If units is not specified, the default is assumed to be "m" indicating meters. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-altitude"/>
+    [JsonPropertyName("altitude")]
     public float? Altitude { get; set; }
 
     /// <summary>
     /// The latitude of a place.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-latitude"/>
+    [JsonPropertyName("latitude")]
     public float? Latitude { get; set; }
 
     /// <summary>
     /// The longitude of a place.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-longitude"/>
+    [JsonPropertyName("longitude")]
     public float? Longitude { get; set; }
 
     /// <summary>
@@ -52,6 +56,7 @@ public class PlaceObject : ASObject
     /// If units is not specified, the default is assumed to be "m" indicating "meters". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-radius"/>
+    [JsonPropertyName("radius")]
     public float? Radius { get; set; }
 
     /// <summary>
@@ -59,5 +64,6 @@ public class PlaceObject : ASObject
     /// If not specified, the default is assumed to be "m" for "meters". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-units"/>
+    [JsonPropertyName("units")]
     public string? Units { get; set; }
 }

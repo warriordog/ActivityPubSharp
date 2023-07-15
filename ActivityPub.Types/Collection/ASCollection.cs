@@ -34,18 +34,21 @@ public class ASCollection<T> : ASObject
     ///  In a paged Collection, indicates the page that contains the most recently updated member items. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-current"/>
+    [JsonPropertyName("current")]
     public Linkable<ASCollectionPage<T>>? Current { get; set; }
 
     /// <summary>
     /// In a paged Collection, indicates the furthest preceding page of items in the collection. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-first"/>
+    [JsonPropertyName("first")]
     public Linkable<ASCollectionPage<T>>? First { get; set; }
 
     /// <summary>
     /// In a paged Collection, indicates the furthest proceeding page of the collection.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    [JsonPropertyName("last")]
     public Linkable<ASCollectionPage<T>>? Last { get; set; }
 
     /// <summary>
@@ -59,6 +62,7 @@ public class ASCollection<T> : ASObject
     /// This cannot be set to less than zero.
     /// </remarks>
     [Range(0, int.MaxValue)]
+    [JsonPropertyName("totalItems")]
     public int TotalItems
     {
         get => _totalItems ?? Items?.Count ?? 0;
@@ -77,6 +81,7 @@ public class ASCollection<T> : ASObject
     /// In a paged collection, this MAY be null
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-items"/>
+    [JsonPropertyName("items")]
     public virtual LinkableList<T>? Items { get; set; }
 
     /// <summary>

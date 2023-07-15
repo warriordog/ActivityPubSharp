@@ -24,11 +24,13 @@ public class TombstoneObject : ASObject
     /// On a Tombstone object, the formerType property identifies the type of the object that was deleted.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-formerType"/>
+    [JsonPropertyName("formerType")]
     public string? FormerType { get; set; }
 
     /// <summary>
     /// On a Tombstone object, the deleted property is a timestamp for when the object was deleted. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-deleted"/>
+    [JsonPropertyName("deleted")]
     public DateTime? Deleted { get; set; }
 }

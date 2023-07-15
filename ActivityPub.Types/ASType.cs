@@ -45,6 +45,7 @@ public abstract class ASType : IJsonConvertible<ASType>
     /// Provides the globally unique identifier for an Object or Link.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-id"/>
+    [JsonPropertyName("id")]
     public string? Id
     {
         get => _id;
@@ -76,12 +77,14 @@ public abstract class ASType : IJsonConvertible<ASType>
     /// For instance, an object might be attributed to the completion of another activity. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/>
+    [JsonPropertyName("attributedTo")]
     public LinkableList<ASObject> AttributedTo { get; set; } = new();
 
     /// <summary>
     /// Identifies an entity that provides a preview of this object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-preview"/>
+    [JsonPropertyName("preview")]
     public Linkable<ASObject>? Preview { get; set; }
 
     /// <summary>
@@ -89,6 +92,7 @@ public abstract class ASType : IJsonConvertible<ASType>
     /// HTML markup MUST NOT be included.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-name"/>
+    [JsonPropertyName("name")]
     public NaturalLanguageString? Name { get; set; }
 
     /// <summary>
@@ -97,6 +101,7 @@ public abstract class ASType : IJsonConvertible<ASType>
     /// If not specified, the content property is assumed to contain text/html content. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-mediaType"/>
+    [JsonPropertyName("mediaType")]
     public Linkable<ASObject>? MediaType { get; set; }
 
 

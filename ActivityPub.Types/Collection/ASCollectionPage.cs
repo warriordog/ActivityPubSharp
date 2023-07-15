@@ -28,21 +28,24 @@ public class ASCollectionPage<T> : ASCollection<T>
     /// In a paged Collection, indicates the next page of items. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-next"/>
+    [JsonPropertyName("next")]
     public Linkable<ASCollectionPage<T>>? Next { get; set; }
 
     /// <summary>
     /// In a paged Collection, indicates the previous page of items. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-prev"/>
+    [JsonPropertyName("prev")]
     public Linkable<ASCollectionPage<T>>? Prev { get; set; }
 
     /// <summary>
     /// Identifies the Collection to which a CollectionPage objects items belong. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-partOf"/>
+    [JsonPropertyName("partOf")]
     public Linkable<ASCollection<T>>? PartOf { get; set; }
 
-    
+
     public static implicit operator ASCollectionPage<T>(LinkableList<T> collection) => new() { Items = collection };
     public static implicit operator ASCollectionPage<T>(List<Linkable<T>> collection) => new() { Items = new(collection) };
     public static implicit operator ASCollectionPage<T>(List<T> collection) => new() { Items = new(collection) };

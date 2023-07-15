@@ -24,5 +24,6 @@ public class ProfileObject : ASObject
     /// On a Profile object, the describes property identifies the object described by the Profile.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-describes"/>
+    [JsonPropertyName("describes")]
     public ASObject? Describes { get; set; }
 }
