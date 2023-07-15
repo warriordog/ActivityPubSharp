@@ -18,7 +18,7 @@ internal static class JsonExtensions
     /// <param name="reader">Reader, not copied because we don't move it</param>
     /// <param name="type">String that was read</param>
     /// <returns>Returns true if a string was read, false otherwise.</returns>
-    public static bool TryGetString(this Utf8JsonReader reader, [NotNullWhen(true)] out string? type)
+    internal static bool TryGetString(this Utf8JsonReader reader, [NotNullWhen(true)] out string? type)
     {
         if (reader.TokenType != JsonTokenType.String)
         {
@@ -37,7 +37,7 @@ internal static class JsonExtensions
     /// <param name="element">Element to convert</param>
     /// <param name="str">String that was read</param>
     /// <returns>True if a string was read, false otherwise</returns>
-    public static bool TryGetString(this JsonElement element, [NotNullWhen(true)] out string? str)
+    internal static bool TryGetString(this JsonElement element, [NotNullWhen(true)] out string? str)
     {
         if (element.ValueKind != JsonValueKind.String)
         {
@@ -56,7 +56,7 @@ internal static class JsonExtensions
     /// <param name="element">object to read</param>
     /// <param name="type">Set to the AS type on success, or null on failure</param>
     /// <returns>Returns true on success, false on failure</returns>
-    public static bool TryGetASType(this JsonElement element, [NotNullWhen(true)] out string? type)
+    internal static bool TryGetASType(this JsonElement element, [NotNullWhen(true)] out string? type)
     {
         if (element.ValueKind == JsonValueKind.Object && element.TryGetProperty("type", out var asTypeElement) && asTypeElement.TryGetString(out type))
             return true;

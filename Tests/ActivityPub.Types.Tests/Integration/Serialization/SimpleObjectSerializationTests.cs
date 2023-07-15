@@ -3,6 +3,8 @@ using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Internal.TypeInfo;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 

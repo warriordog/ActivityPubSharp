@@ -1,9 +1,11 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+// See https://aka.ms/new-console-template for more information
 
 using ActivityPub.Client;
 using ActivityPub.Types.Json;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SimpleClient;
