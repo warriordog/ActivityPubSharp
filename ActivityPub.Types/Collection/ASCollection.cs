@@ -21,7 +21,6 @@ namespace ActivityPub.Types.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection"/>
 /// <seealso cref="ASOrderedCollection{T}"/>
 [ASTypeKey(CollectionType)]
-[ASTypeKey(OrderedCollectionType)]
 public class ASCollection<T> : ASObject
     where T : ASObject
 {
