@@ -31,17 +31,17 @@ public abstract class ASType
     /// Should be a full URL
     /// </summary>
     [JsonPropertyName("@context")]
-    [JsonConverter(typeof(JsonLDContextPropertyConverter))]
-    public HashSet<JsonLDContext> JsonLdContexts { get; set; } = new()
+    [JsonConverter(typeof(JsonLDContextConverter))]
+    public JsonLDContext JsonLdContexts { get; set; } = new(new HashSet<JsonLDContextObject>
     {
         // We always need the base context
-        ActivityStreamsContext
-    };
-
+        ActivityStreamsContextObject
+    });
+    
     /// <summary>
     /// Shared JSON-LD context used by all ActivityStreams objects.
     /// </summary>
-    public static JsonLDContext ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
+    public static JsonLDContextObject ActivityStreamsContextObject { get; } = new("https://www.w3.org/ns/activitystreams");
 
     /// <summary>
     /// Provides the globally unique identifier for an Object or Link.

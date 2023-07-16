@@ -12,7 +12,7 @@ public abstract class ASTypeTests
         [Fact]
         public void ContainASContext_ByDefault()
         {
-            ObjectUnderTest.JsonLdContexts.Should().Contain("https://www.w3.org/ns/activitystreams");
+            ObjectUnderTest.JsonLdContexts.ContextObjects.Should().Contain("https://www.w3.org/ns/activitystreams");
         }
     }
 
