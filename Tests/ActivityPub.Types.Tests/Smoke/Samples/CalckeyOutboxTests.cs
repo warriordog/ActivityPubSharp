@@ -40,13 +40,14 @@ public class CalckeyOutboxTests
               "vcard": "http://www.w3.org/2006/vcard/ns#"
             }
           ],
-          "id": "https://enby.life/users/9fpwmts9tv/outbox",
+          "id": "https://enby.life/users/9fpnzspgtp/outbox",
           "type": "OrderedCollection",
-          "totalItems": 371,
-          "first": "https://enby.life/users/9fpwmts9tv/outbox?page=true",
-          "last": "https://enby.life/users/9fpwmts9tv/outbox?page=true&since_id=000000000000000000000000"
+          "totalItems": 5,
+          "first": "https://enby.life/users/9fpnzspgtp/outbox?page=true",
+          "last": "https://enby.life/users/9fpnzspgtp/outbox?page=true&since_id=000000000000000000000000"
         }
         """;
+    
     [Fact]
     public void ShouldDeserializeWithoutCrash()
     {
@@ -60,10 +61,10 @@ public class CalckeyOutboxTests
         var result = _jsonLdSerializer.Deserialize<ASType>(OutboxJson);
 
         result.Should().BeOfType<ASOrderedCollection<ASType>>();
-        result?.Id.Should().Be("https://enby.life/users/9fpwmts9tv/outbox");
+        result?.Id.Should().Be("https://enby.life/users/9fpnzspgtp/outbox");
         result.As<ASOrderedCollection<ASType>>().IsPaged.Should().BeTrue();
         result.As<ASOrderedCollection<ASType>>().HasItems.Should().BeFalse();
-        result.As<ASOrderedCollection<ASType>>().TotalItems.Should().Be(371);
+        result.As<ASOrderedCollection<ASType>>().TotalItems.Should().Be(5);
     }
 
     private readonly IJsonLdSerializer _jsonLdSerializer;
