@@ -51,7 +51,7 @@ public abstract class JsonTypeInfo
     /// <param name="options">JSON options - MUST be preserved downstream!</param>
     /// <param name="obj">Output object to contain the resulting instance</param>
     /// <returns>Returns true on success, false otherwise</returns>
-    public abstract bool TryDeserialize(JsonElement element, JsonSerializerOptions options, [NotNullWhen(true)] out object? obj);
+    public abstract bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out object? obj);
 }
 
 internal class JsonTypeInfo<T> : JsonTypeInfo
@@ -69,7 +69,7 @@ internal class JsonTypeInfo<T> : JsonTypeInfo
         return false;
     }
 
-    public override bool TryDeserialize(JsonElement element, JsonSerializerOptions options, [NotNullWhen(true)] out object? obj)
+    public override bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out object? obj)
     {
         if (CustomDeserializer != null && CustomDeserializer(element, options, out var typedObj))
         {

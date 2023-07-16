@@ -79,7 +79,7 @@ public class ASLink : ASType
     public static implicit operator ASLink(ASUri asUri) => new() { HRef = asUri };
 
     [CustomJsonDeserializer]
-    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, [NotNullWhen(true)] out ASLink? obj)
+    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASLink? obj)
     {
         // We either parse from string, or allow parser to use default logic
         if (element.ValueKind == JsonValueKind.String)

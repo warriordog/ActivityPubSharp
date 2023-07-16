@@ -21,4 +21,4 @@ public sealed class CustomJsonDeserializerAttribute : Attribute {}
 /// Return true on success, or false to fall back on the default converter. 
 /// </summary>
 /// <typeparam name="T">Type of object to convert</typeparam>
-public delegate bool TryDeserializeDelegate<T>(JsonElement element, JsonSerializerOptions options, [NotNullWhen(true)] out T? obj);
+public delegate bool TryDeserializeDelegate<T>(JsonElement element, JsonSerializerOptions options, out T? obj);

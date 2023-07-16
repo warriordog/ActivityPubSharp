@@ -61,7 +61,7 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         _jsonTypeInfoCache = jsonTypeInfoCache;
     }
 
-    public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // 1. Parse into abstract form (JsonElement)
         var inputElement = JsonElement.ParseValue(ref reader);
@@ -87,11 +87,11 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         return _jsonTypeInfoCache.GetForType<ASObject>();
     }
 
-    private static T ReadObject(JsonElement inputElement, JsonTypeInfo typeInfo, JsonSerializerOptions options)
+    private static T? ReadObject(JsonElement inputElement, JsonTypeInfo typeInfo, JsonSerializerOptions options)
     {
         // Attempt to call the custom deserializer
         if (typeInfo.TryDeserialize(inputElement, options, out var obj))
-            return (T)obj;
+            return (T?)obj;
 
         // If it fails or isn't present, then fall back to default (manual) logic
         return (T)ReadObjectDirectly(inputElement, typeInfo, options);
