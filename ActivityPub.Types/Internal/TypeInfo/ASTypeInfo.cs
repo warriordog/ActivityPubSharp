@@ -21,8 +21,22 @@ internal abstract class ASTypeInfo
 /// </summary>
 internal class ClosedASTypeInfo : ASTypeInfo
 {
-    // TODO should we validate TDeclaredType?
-    public override Type ReifyType<TDeclaredType>() => RegisteredType;
+    public override Type ReifyType<TDeclaredType>()
+    {
+        var declaredType = typeof(TDeclaredType);
+        
+        // Case 1 - TDeclaredType derives from RegisteredType
+        if (declaredType.IsAssignableTo(RegisteredType))
+            return declaredType;
+        
+        // Case 2 - they are equal OR RegisteredType derives from TDeclaredType
+        if (RegisteredType.IsAssignableTo(declaredType))
+            return RegisteredType;
+        
+        // Case 3 - they are not related!
+        // Time to blow up :(
+        throw new ArgumentException($"registered type {RegisteredType} and declared type {declaredType} don't relate to each other");
+    }
 
     public ClosedASTypeInfo(Type registeredType) : base(registeredType) {}
 }
