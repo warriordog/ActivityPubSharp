@@ -124,6 +124,14 @@ internal class ASTypeConverter<T> : JsonConverter<T>
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
+        // If value is a subtype of T, then we need to re-enter with the correct type
+        var valueType = value.GetType();
+        if (valueType != typeof(T))
+        {
+            JsonSerializer.Serialize(writer, value, valueType, options);
+            return;
+        }
+
         // Lookup type info for T
         var typeInfo = _jsonTypeInfoCache.GetForType<T>();
 
