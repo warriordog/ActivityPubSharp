@@ -51,4 +51,14 @@ public class LinkableList<T> : List<Linkable<T>>
     // If removed, other code wont compile.
     public new void Add(Linkable<T> linkable) => base.Add(linkable);
     public new void AddRange(IEnumerable<Linkable<T>> linkables) => base.AddRange(linkables);
+    
+    public static implicit operator LinkableList<T>(ASLink link) => new() { link };
+    public static implicit operator LinkableList<T>(ASUri link) => new() { (ASLink)link };
+    public static implicit operator LinkableList<T>(Uri link) => new() { (ASLink)link };
+    public static implicit operator LinkableList<T>(string link) => new() { (ASLink)link };
+    public static implicit operator LinkableList<T>(T value) => new() { value };
+    public static implicit operator LinkableList<T>(Linkable<T> linkable) => new() { linkable };
+    
+    public static implicit operator LinkableList<T>(List<T> values) => new(values);
+    public static implicit operator LinkableList<T>(List<ASLink> values) => new(values);
 }
