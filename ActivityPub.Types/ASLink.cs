@@ -67,7 +67,7 @@ public class ASLink : ASType
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-rel"/>
     [JsonPropertyName("rel")]
-    public HashSet<string> Rel { get; set; } = new();
+    public HashSet<LinkRel> Rel { get; set; } = new();
 
     public static implicit operator string(ASLink link) => link.HRef;
     public static implicit operator ASLink(string str) => new() { HRef = new ASUri(str) };
