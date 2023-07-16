@@ -136,4 +136,23 @@ internal static class TypeExtensions
         }
         return genericType.MakeGenericType(genericSlots);
     }
+
+    /// <summary>
+    /// Gets the default value for a specified type.
+    /// Runtime equivalent to calling default(T).
+    /// </summary>
+    /// <remarks>
+    /// Based on https://stackoverflow.com/a/3195792
+    /// </remarks>
+    /// <param name="type">Type of value</param>
+    /// <returns>Returns the default value of the type</returns>
+    internal static object? GetDefaultValue(this Type type)
+    {
+        // The only case where it matters are non-nullable value types
+        if (type.IsValueType && Nullable.GetUnderlyingType(type) == null)
+            return Activator.CreateInstance(type);
+        
+        // For everything else, the correct value is just null
+        return null;
+    }
 }

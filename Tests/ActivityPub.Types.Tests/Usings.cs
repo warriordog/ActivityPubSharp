@@ -4,3 +4,4 @@
 global using Xunit;
 global using System.Text.Json;
 global using FluentAssertions;
+global using ActivityPub.Types.Tests.Util.Assertions;

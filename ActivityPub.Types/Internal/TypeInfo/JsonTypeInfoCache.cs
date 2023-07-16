@@ -1,6 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Collections;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
@@ -101,7 +102,8 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
         foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy))
         {
             // Skip if its ignored
-            if (property.GetCustomAttribute<JsonIgnoreAttribute>() != null)
+            var jsonIgnoreAttr = property.GetCustomAttribute<JsonIgnoreAttribute>();
+            if (jsonIgnoreAttr is { Condition: JsonIgnoreCondition.Always })
                 continue;
 
             // Get the name
@@ -111,11 +113,16 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
             // Create the info obj
             var propInfo = new JsonPropertyInfo
             {
-                Property = property,
+                // Basic property details
                 Name = name,
-
                 // https://stackoverflow.com/questions/74371619/c-sharp-11-detect-required-property-by-reflection
-                IsRequired = Attribute.IsDefined(property, typeof(RequiredMemberAttribute))
+                IsRequired = Attribute.IsDefined(property, typeof(RequiredMemberAttribute)),
+                
+                // Metadata needed for serialization
+                Property = property,
+                TypeDefaultValue = property.PropertyType.GetDefaultValue(),
+                IsCollection = property.PropertyType.IsAssignableTo(typeof(ICollection)),
+                IgnoreCondition = jsonIgnoreAttr?.Condition
             };
 
             // Add to appropriate lists

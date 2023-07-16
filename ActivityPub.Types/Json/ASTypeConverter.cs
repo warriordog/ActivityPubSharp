@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Collections;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -65,7 +66,7 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         // 1. Parse into abstract form (JsonElement)
         var inputElement = JsonElement.ParseValue(ref reader);
 
-        // 2. Find serialization info for the appropriate .NET type
+        // 2. Find serialization info for the appropriate .NET type.
         var typeInfo = GetTargetType(inputElement, typeToConvert);
 
         // 3. Convert it
@@ -141,26 +142,55 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         {
             PropertyNameCaseInsensitive = options.PropertyNameCaseInsensitive
         };
-
+        
         // Call custom serializer.
         // If it fails or is missing, then serialize manually
         if (!typeInfo.TrySerialize(value, options, nodeOptions, out var node))
-            node = WriteObjectDirectly(value, typeInfo, nodeOptions);
+            node = WriteObjectDirectly(value, typeInfo, nodeOptions, options);
 
         // Write it to the output stream
         node.WriteTo(writer, options);
     }
 
-    private static JsonNode WriteObjectDirectly(T value, JsonTypeInfo typeInfo, JsonNodeOptions nodeOptions)
+    private static JsonNode WriteObjectDirectly(T obj, JsonTypeInfo typeInfo, JsonNodeOptions nodeOptions, JsonSerializerOptions options)
     {
         // Manually create an object and append each property.
         // Its dumb, but this bypasses the design flaw of System.Text.Json.
         var node = new JsonObject(nodeOptions);
         foreach (var prop in typeInfo.Getters)
         {
-            node[prop.Name] = JsonValue.Create(prop.Property.GetValue(value), nodeOptions);
+            var value = prop.Property.GetValue(obj);
+            
+            // Emulate JsonIgnoreCondition to clean up output
+            var ignoreCondition = prop.IgnoreCondition ?? options.DefaultIgnoreCondition;
+            var stripNull = ignoreCondition is JsonIgnoreCondition.WhenWritingNull or JsonIgnoreCondition.WhenWritingDefault;
+            var stripDefault = ignoreCondition is JsonIgnoreCondition.WhenWritingDefault;
+            
+            // Check if this is a default value that should be skipped.
+            // TODO - replace "true" with a configuration options
+            if (ShouldSkip(value, prop, stripNull, stripDefault, true))
+                continue;
+            
+            node[prop.Name] = JsonValue.Create(value, nodeOptions);
         }
 
         return node;
+    }
+    
+    private static bool ShouldSkip(object? value, JsonPropertyInfo propInfo, bool stripNull, bool stripDefault, bool stripEmpty)
+    {
+        // Easy case - just check if its null
+        if (stripNull && value == null)
+            return true;
+        
+        // Next case - check if its a default value
+        if (stripDefault && value == propInfo.TypeDefaultValue)
+            return true;
+
+        // Final case - check if its an empty collection
+        if (stripEmpty && propInfo.IsCollection && value != null && ((ICollection)value).Count == 0)
+            return true;
+
+        return false;
     }
 }
