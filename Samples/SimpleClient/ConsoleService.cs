@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Reflection;
+using System.Text.Json.Serialization;
 using ActivityPub.Client;
 using ActivityPub.Types;
 using ActivityPub.Types.Json;
@@ -319,9 +320,19 @@ public class ConsoleService : BackgroundService
 
     private static PropertyInfo FindProperty(object obj, string propertyName)
     {
-        var property = obj.GetType().GetProperty(propertyName);
-        if (property == null)
-            throw new MissingMemberException("Can't find that property within the object in focus.");
-        return property;
+        // Try to find a property with a matching name (case-insensitive)
+        var properties = obj.GetType().GetProperties();
+        var property = Array.Find(properties,p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
+        if (property != null)
+            return property;
+        
+        // Try to find a property with a JsonPropertyName attribute that matches the parameter
+        property = Array.Find(properties, p => 
+                        p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)?? false
+                    );
+        if (property != null)
+            return property;
+
+        throw new MissingMemberException("Can't find that property within the object in focus.");
     }
 }
