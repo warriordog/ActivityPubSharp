@@ -272,25 +272,26 @@ public class ConsoleService : BackgroundService
         if (value is ASLink link)
             return await _apClient.Get<ASType>(link, cancellationToken: stoppingToken);
         
+        var valueType = value.GetType();
+        
         // If its Linkable<T>, then extract T and call ResolveValueOfLinkable(object) which pivots to ResolveValueOfLinkableOf<T>)(Linkable<T>)
-        if (value.GetType().IsAssignableToGenericType(typeof(Linkable<>)))
-            return await ResolveValueOfLinkable(value, stoppingToken);
+        if (valueType.TryGetGenericArgumentsFor(typeof(Linkable<>), out var linkableSlots))
+            return await ResolveValueOfLinkable(value, linkableSlots[0], stoppingToken);
         
         // If its LinkableList<T>, then extract T and call ResolveValueOfLinkableList(object) which pivots to ResolveValueOfLinkableListOf<T>(LinkableList<T>)
-        if (value.GetType().IsAssignableToGenericType(typeof(LinkableList<>)))
-            return await ResolveValueOfLinkableList(value, stoppingToken);
+        if (valueType.TryGetGenericArgumentsFor(typeof(Linkable<>), out var linkableListSlots))
+            return await ResolveValueOfLinkableList(value, linkableListSlots[0], stoppingToken);
 
         // Otherwise, we can't resolve so return as-is
         return value;
     }
 
-    private async Task<object?> ResolveValueOfLinkable(object value, CancellationToken stoppingToken)
+    private async Task<object?> ResolveValueOfLinkable(object value, Type valueType, CancellationToken stoppingToken)
     {
-        var slot = value.GetType().GetGenericArgumentsFor(typeof(Linkable<>))[0];
         var method = typeof(ConsoleService)
                          .GetMethod(nameof(ResolveValueOfLinkableOf), BindingFlags.NonPublic | BindingFlags.Instance)
-                         ?.MakeGenericMethod(slot)
-                     ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableOf<{slot}>(Linkable<{slot}>, CancellationToken)");
+                         ?.MakeGenericMethod(valueType)
+                     ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableOf<{valueType}>(Linkable<{valueType}>, CancellationToken)");
         return await (Task<object?>)method.Invoke(this, new[] {value, stoppingToken})!;
     }
     
@@ -301,13 +302,12 @@ public class ConsoleService : BackgroundService
         return new Linkable<T>(result);
     }
 
-    private async Task<object?> ResolveValueOfLinkableList(object value, CancellationToken stoppingToken)
+    private async Task<object?> ResolveValueOfLinkableList(object value, Type valueType, CancellationToken stoppingToken)
     {
-        var slot = value.GetType().GetGenericArgumentsFor(typeof(LinkableList<>))[0];
         var method = typeof(ConsoleService)
                          .GetMethod(nameof(ResolveValueOfLinkableListOf), BindingFlags.NonPublic | BindingFlags.Instance)
-                         ?.MakeGenericMethod(slot)
-                     ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableListOf<{slot}>(LinkableList<{slot}>, CancellationToken)");
+                         ?.MakeGenericMethod(valueType)
+                     ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableListOf<{valueType}>(LinkableList<{valueType}>, CancellationToken)");
         return await (Task<object?>)method.Invoke(this, new[] {value, stoppingToken})!;
     }
     private async Task<object?> ResolveValueOfLinkableListOf<T>(LinkableList<T> value, CancellationToken stoppingToken)

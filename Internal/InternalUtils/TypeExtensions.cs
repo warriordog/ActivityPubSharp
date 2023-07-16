@@ -1,6 +1,8 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace InternalUtils;
 
 /// <summary>
@@ -92,22 +94,27 @@ internal static class TypeExtensions
 
     /// <summary>
     /// Attempts to find the concrete type parameters used to fill a generic type.
-    /// Returns null if the types are incompatible.
+    /// Returns false/null if the types are incompatible.
     /// </summary>
     /// <remarks>
     /// This is inefficient, but its avoids potential exceptions from <see cref="GetGenericArgumentsFor"/> when the conversion fails.
     /// </remarks>
     /// <param name="concreteType">Concrete type that extends from genericType</param>
     /// <param name="genericType">Open generic type</param>
-    /// <returns>Returns array of declared type parameters on success, or null on failure.</returns>
+    /// <param name="arguments">Array of types used to fill genericType's slots in concreteType</param>
+    /// <returns>return true if parameters were found, false otherwise</returns>
     /// <seealso cref="GetGenericArgumentsFor"/>
     /// <seealso cref="IsAssignableToGenericType"/>
-    internal static Type[]? TryGetGenericArgumentsFor(this Type concreteType, Type genericType)
+    internal static bool TryGetGenericArgumentsFor(this Type concreteType, Type genericType, [NotNullWhen(true)] out Type[]? arguments)
     {
         if (concreteType.IsAssignableToGenericType(genericType))
-            return concreteType.GetGenericArgumentsFor(genericType);
+        {
+            arguments = concreteType.GetGenericArgumentsFor(genericType);
+            return true;
+        }
 
-        return null;
+        arguments = null;
+        return false;
     }
 
     /// <summary>
