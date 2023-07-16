@@ -10,10 +10,13 @@ namespace ActivityPub.Types;
 /// Synthetic base for activities which require a target.
 /// Implemented to overload nullability of <see cref="ASActivity.Target"/>
 /// </summary>
-public abstract class ASTargetedActivity : ASTransitiveActivity
+public class ASTargetedActivity : ASTransitiveActivity
 {
     private Linkable<ASObject>? _targetImpl;
-    protected ASTargetedActivity(string type) : base(type) {}
+    
+    [JsonConstructor]
+    public ASTargetedActivity() {}
+    public ASTargetedActivity(string type) : base(type) {}
 
     /// <inheritdoc cref="ASActivity.Target"/>
     /// <seealso href="https://www.w3.org/TR/activitypub/#client-addressing"/>

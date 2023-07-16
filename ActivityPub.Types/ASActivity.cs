@@ -1,6 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
@@ -74,4 +75,20 @@ public class ASActivity : ASObject
     /// Overridden in <see cref="ASTargetedActivity"/> to ensure that both properties stay in sync
     /// </summary>
     protected virtual Linkable<ASObject>? TargetImpl { get; set; }
+
+    [CustomJsonDeserializer]
+    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASActivity? obj)
+    {
+        // If it has the "object" property, then its Transitive.
+        // Pivot to the narrower type.
+        if (element.TryGetProperty("object", out _))
+        {
+            obj = element.Deserialize<ASTransitiveActivity>(options);
+            return true;
+        }
+
+        // Otherwise we fall back on default
+        obj = null;
+        return false;
+    }
 }
