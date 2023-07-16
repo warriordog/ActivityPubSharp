@@ -6,7 +6,7 @@ using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public abstract class DeserializationTests
+public abstract class DeserializationTests<T>
 {
     private readonly IJsonLdSerializer _jsonLdSerializer;
     
@@ -18,7 +18,7 @@ public abstract class DeserializationTests
         asTypeInfoCache.RegisterAllAssemblies();
         
         _jsonLdSerializer = new JsonLdSerializer(asTypeInfoCache, jsonTypeInfoCache);
-        _objectUnderTest = new Lazy<ASObject>(() => _jsonLdSerializer.Deserialize<ASObject>(JsonUnderTest) ?? throw new ApplicationException("Deserialization failed!"));
+        _objectUnderTest = new Lazy<T>(() => _jsonLdSerializer.Deserialize<T>(JsonUnderTest) ?? throw new ApplicationException("Deserialization failed!"));
     }
 
     protected string JsonUnderTest
@@ -27,12 +27,12 @@ public abstract class DeserializationTests
         set
         {
             _jsonUnderTest = value;
-            _objectUnderTest = new Lazy<ASObject>(() => _jsonLdSerializer.Deserialize<ASObject>(JsonUnderTest) ?? throw new ApplicationException("Deserialization failed!"));
+            _objectUnderTest = new Lazy<T>(() => _jsonLdSerializer.Deserialize<T>(JsonUnderTest) ?? throw new ApplicationException("Deserialization failed!"));
         }
     }
     private string _jsonUnderTest = "null";
 
     // Cached for performance
-    private Lazy<ASObject> _objectUnderTest;
-    protected ASObject ObjectUnderTest => _objectUnderTest.Value;
+    private Lazy<T> _objectUnderTest;
+    protected T ObjectUnderTest => _objectUnderTest.Value;
 }

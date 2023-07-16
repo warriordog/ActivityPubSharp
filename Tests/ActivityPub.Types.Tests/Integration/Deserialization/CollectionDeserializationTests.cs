@@ -4,7 +4,7 @@
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public class CollectionDeserializationTests : DeserializationTests
+public class CollectionDeserializationTests : DeserializationTests<ASObject>
 {
     public class ItemsShould : CollectionDeserializationTests
     {

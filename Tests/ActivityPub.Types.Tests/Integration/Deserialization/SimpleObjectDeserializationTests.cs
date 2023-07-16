@@ -6,7 +6,7 @@ using ActivityPub.Types.Extended.Object;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public abstract class SimpleObjectDeserializationTests : DeserializationTests
+public abstract class SimpleObjectDeserializationTests : DeserializationTests<ASObject>
 {
     protected SimpleObjectDeserializationTests()
     {

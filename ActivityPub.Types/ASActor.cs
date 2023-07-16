@@ -3,6 +3,7 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types;
 
@@ -121,7 +122,8 @@ public class ASActor : ASObject, IActor
 /// A json object which maps additional (typically server/domain-wide) endpoints which may be useful for an actor.
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects"/>
-public class ActorEndpoints : ASObject
+[UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature)]
+public class ActorEndpoints
 {
     /// <summary>
     /// Endpoint URI so this actor's clients may access remote ActivityStreams objects which require authentication to access.
