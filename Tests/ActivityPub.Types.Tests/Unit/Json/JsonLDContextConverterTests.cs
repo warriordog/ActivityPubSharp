@@ -6,12 +6,13 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Json;
 
-public abstract class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, JsonLDContextConverter>
+public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, JsonLDContextConverter>
 {
     protected override JsonLDContextConverter ConverterUnderTest { get; set; } = new();
 
     public class ReadShould : JsonLDContextConverterTests
     {
+
         [Fact]
         public void PassThroughNull()
         {
@@ -21,39 +22,69 @@ public abstract class JsonLDContextConverterTests : JsonConverterTests<JsonLDCon
         }
 
         [Fact]
-        public void ParseStringAsLink()
+        public void ParseStringAsContext()
         {
             var json = "\"https://example.com/context.jsonld\""u8;
             
             var result = Read(json);
             
             result.Should().NotBeNull();
-            result?.IsExternal.Should().BeTrue();
-            result?.ExternalLink?.Should().Be("https://example.com/context.jsonld");
+            result?.ContextObjects.Should().HaveCount(1);
+            result?.ContextObjects.First().IsExternal.Should().BeTrue();
+            result?.ContextObjects.First().ExternalLink?.Should().Be("https://example.com/context.jsonld");
         }
 
-
         [Fact]
-        public void ParseObjectAsTerms()
+        public void ParseObjectAsContext()
         {
-            var json = "{\"name\":\"https://example.com/name\"}"u8;
+            var json = "{\"name\":\"https://example.com/context.jsonld\"}"u8;
             
             var result = Read(json);
             
             result.Should().NotBeNull();
-            result?.IsEmbedded.Should().BeTrue();
-            result?.Terms.Should().NotBeNull();
-            result?.Terms?.Should().HaveCount(1);
-            result?.Terms?.Should().ContainKey("name");
-            result?.Terms?["name"].Id.Should().Be("https://example.com/name");
+            result?.ContextObjects.Should().HaveCount(1);
+            result?.ContextObjects.First().IsEmbedded.Should().BeTrue();
         }
 
+        [Fact]
+        public void DeserializeArrayOfStrings()
+        {
+            var json = "[\"https://example.com/first.jsonld\",\"https://example.com/second.jsonld\"]"u8;
+            
+            var result = Read(json);
+            
+            result.Should().NotBeNull();
+            result?.ContextObjects.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void DeserializeArrayOfObjects()
+        {
+            var json = "[{\"name\":\"https://example.com/name_first\"},{\"name\":\"https://example.com/name_second\"}]"u8;
+            
+            var result = Read(json);
+            
+            result.Should().NotBeNull();
+            result?.ContextObjects.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void DeserializeArrayOfStringsAndObjects()
+        {
+            var json = "[\"https://example.com/first.jsonld\",{\"name\":\"https://example.com/name_second\"}]"u8;
+            
+            var result = Read(json);
+            
+            result.Should().NotBeNull();
+            result?.ContextObjects.Should().HaveCount(2);
+        }
+        
         [Fact]
         public void ThrowJsonException_WhenInputIsUnsupported()
         {
             Assert.Throws<JsonException>(() =>
             {
-                var json = "[]"u8;
+                var json = "0"u8;
                 Read(json);
             });
         }
@@ -62,32 +93,30 @@ public abstract class JsonLDContextConverterTests : JsonConverterTests<JsonLDCon
     public class WriteShould : JsonLDContextConverterTests
     {
         [Fact]
-        public void WriteLinkAsString()
+        public void WriteSingleDirectly()
         {
-            var input = new JsonLDContext("https://example.com/context.jsonld");
+            var input = new JsonLDContext(new HashSet<JsonLDContextObject>()
+            {
+                new JsonLDContextObject("https://example.com/context.jsonld")
+            });
             
             var json = Write(input);
-            
+
             json.Should().Be("\"https://example.com/context.jsonld\"");
         }
 
         [Fact]
-        public void WriteTermsAsObject()
+        public void WriteMultiAsArray()
         {
-            var input = new JsonLDContext(new Dictionary<string, JsonLDTerm>
+            var input = new JsonLDContext(new HashSet<JsonLDContextObject>
             {
-                {
-                    "name",
-                    new JsonLDTerm
-                    {
-                        Id = "https://example.com/name"
-                    }
-                }
+                new JsonLDContextObject("https://example.com/first.jsonld"),
+                new JsonLDContextObject("https://example.com/second.jsonld")
             });
-
+            
             var json = Write(input);
 
-            json.Should().Be("{\"name\":\"https://example.com/name\"}");
+            json.Should().Be("[\"https://example.com/first.jsonld\",\"https://example.com/second.jsonld\"]");
         }
     }
 }

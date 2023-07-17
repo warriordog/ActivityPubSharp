@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Util;
 /// <summary>
 /// Within a context, maps a short word to an IRI. 
 /// </summary>
-/// <seealso cref="JsonLDContext"/>
+/// <seealso cref="JsonLDContextObject"/>
 /// <seealso href="https://www.w3.org/TR/json-ld11/#dfn-term"/>
 /// <seealso href="https://www.w3.org/TR/json-ld11/#terms"/>
 [JsonConverter(typeof(JsonLDTermConverter))]
