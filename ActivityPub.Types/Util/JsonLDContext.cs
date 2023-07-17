@@ -18,7 +18,8 @@ namespace ActivityPub.Types.Util;
 public class JsonLDContext
 {
     public HashSet<JsonLDContextObject> ContextObjects { get; }
-    
+
+    [JsonConstructor]
     public JsonLDContext() {}
 
     public JsonLDContext(HashSet<JsonLDContextObject> contextObjects) => ContextObjects = contextObjects;
