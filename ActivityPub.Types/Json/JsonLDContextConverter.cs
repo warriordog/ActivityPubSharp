@@ -56,7 +56,7 @@ public class JsonLDContextConverter : JsonConverter<JsonLDContext>
     {
         var context = JsonSerializer.Deserialize<JsonLDContextObject>(ref reader, options);
         if (context == null)
-            throw new JsonException($"Failed to parse object-form @context field");
+            throw new JsonException($"Failed to parse @context field - a context was null or invalid");
 
         return context;
     }
