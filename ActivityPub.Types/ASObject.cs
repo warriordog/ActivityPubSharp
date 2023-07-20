@@ -137,9 +137,6 @@ public class ASObject : ASType
     /// <summary>
     /// Identifies one or more links to representations of the object 
     /// </summary>
-    /// <remarks>
-    /// TODO this needs a special case - it can be a List{ASLink}, ASLink, *or* ASUri
-    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
     [JsonPropertyName("url")]
     public ASLink? Url { get; set; }
