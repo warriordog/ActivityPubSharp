@@ -73,7 +73,6 @@ public class ASTypeInfoCache : IASTypeInfoCache
         return entry.ReifyType<TDeclaredType>();
     }
 
-    // TODO track processed assemblies to avoid duplicate work
     public void RegisterAllAssemblies()
     {
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
