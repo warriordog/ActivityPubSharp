@@ -12,7 +12,6 @@ public abstract class SerializationTests
     
     protected SerializationTests()
     {
-        // TODO remove this once we support DI in tests
         var jsonTypeInfoCache = new JsonTypeInfoCache();
         var asTypeInfoCache = new ASTypeInfoCache(jsonTypeInfoCache);
         asTypeInfoCache.RegisterAllAssemblies();

@@ -71,7 +71,6 @@ public class CalckeyOutboxTests
 
     public CalckeyOutboxTests()
     {
-        // TODO remove this once we support DI in tests
         var jsonTypeInfoCache = new JsonTypeInfoCache();
         var asTypeInfoCache = new ASTypeInfoCache(jsonTypeInfoCache);
         asTypeInfoCache.RegisterAllAssemblies();
