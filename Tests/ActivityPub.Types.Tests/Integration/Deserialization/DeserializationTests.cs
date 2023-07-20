@@ -17,19 +17,13 @@ public abstract class DeserializationTests<T>
         asTypeInfoCache.RegisterAllAssemblies();
         
         _jsonLdSerializer = new JsonLdSerializer(asTypeInfoCache, jsonTypeInfoCache);
-        _objectUnderTest = new Lazy<T>(() => _jsonLdSerializer.Deserialize<T>(JsonUnderTest) ?? throw new ApplicationException("Deserialization failed!"));
+        _objectUnderTest = new Lazy<T>(() => throw new ApplicationException("Test error: please set JsonUnderTest before calling ObjectUnderTest"));
     }
 
     protected string JsonUnderTest
     {
-        get => _jsonUnderTest;
-        set
-        {
-            _jsonUnderTest = value;
-            _objectUnderTest = new Lazy<T>(() => _jsonLdSerializer.Deserialize<T>(JsonUnderTest) ?? throw new ApplicationException("Deserialization failed!"));
-        }
+        set => _objectUnderTest = new Lazy<T>(() => _jsonLdSerializer.Deserialize<T>(value) ?? throw new ApplicationException("Deserialization failed!"));
     }
-    private string _jsonUnderTest = "null";
 
     // Cached for performance
     private Lazy<T> _objectUnderTest;

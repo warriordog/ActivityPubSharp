@@ -17,21 +17,15 @@ public abstract class SerializationTests
         asTypeInfoCache.RegisterAllAssemblies();
         
         _jsonLdSerializer = new JsonLdSerializer(asTypeInfoCache, jsonTypeInfoCache);
-        _jsonUnderTest = new Lazy<JsonElement>(() => _jsonLdSerializer.SerializeToElement(ObjectUnderTest));
+        _jsonUnderTest = new Lazy<JsonElement>(() => throw new ApplicationException("Test error: please set ObjectUnderTest before calling JsonUnderTest"));
     }
 
     // This is cached for performance
     protected JsonElement JsonUnderTest => _jsonUnderTest.Value;
     private Lazy<JsonElement> _jsonUnderTest;
 
-    protected ASObject ObjectUnderTest
+    protected ASType ObjectUnderTest
     {
-        get => _objectUnderTest;
-        set
-        {
-            _objectUnderTest = value;
-            _jsonUnderTest = new Lazy<JsonElement>(() => _jsonLdSerializer.SerializeToElement(ObjectUnderTest));
-        }
+        set => _jsonUnderTest = new Lazy<JsonElement>(() => _jsonLdSerializer.SerializeToElement(value));
     }
-    private ASObject _objectUnderTest = new();
 }

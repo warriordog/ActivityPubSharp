@@ -13,7 +13,13 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
     public JsonElementAssertions(JsonElement value) : base(value) {}
 
     public void HaveProperty(string name) => Subject.TryGetProperty(name, out _).Should().BeTrue();
-    public void NotHaveProperty(string name)=> Subject.TryGetProperty(name, out _).Should().BeFalse();
+    public void NotHaveProperty(string name) => Subject.TryGetProperty(name, out _).Should().BeFalse();
+
+    public void BeJsonString(string value)
+    {
+        Subject.ValueKind.Should().Be(JsonValueKind.String);
+        Subject.GetString().Should().Be(value);
+    }
 }
 
 public static class JsonElementAssertionsExtension

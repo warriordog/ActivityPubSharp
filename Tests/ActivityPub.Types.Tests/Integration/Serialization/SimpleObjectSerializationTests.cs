@@ -14,12 +14,14 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         [Fact]
         public void ShouldWriteObject()
         {
+            ObjectUnderTest = new ASObject();
             JsonUnderTest.ValueKind.Should().Be(JsonValueKind.Object);
         }
         
         [Fact]
         public void ShouldIncludeContext()
         {
+            ObjectUnderTest = new ASObject();
             JsonUnderTest.Should().HaveProperty("@context");
             JsonUnderTest.GetProperty("@context").ValueKind.Should().Be(JsonValueKind.String);
             JsonUnderTest.GetProperty("@context").GetString().Should().Be("https://www.w3.org/ns/activitystreams");
@@ -28,6 +30,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         [Fact]
         public void ShouldIncludeType()
         {
+            ObjectUnderTest = new ASObject();
             JsonUnderTest.Should().HaveProperty("type");
             JsonUnderTest.GetProperty("type").ValueKind.Should().Be(JsonValueKind.String);
             JsonUnderTest.GetProperty("type").GetString().Should().Be("Object");
@@ -36,6 +39,8 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         [Fact]
         public void ShouldIncludeOnlyTypeAndContext()
         {
+            ObjectUnderTest = new ASObject();
+            
             var props = JsonUnderTest.EnumerateObject().ToList();
 
             props.Should().HaveCount(2);
