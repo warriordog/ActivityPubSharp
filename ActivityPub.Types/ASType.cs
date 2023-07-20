@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
@@ -18,6 +19,12 @@ namespace ActivityPub.Types;
 public abstract class ASType
 {
     protected ASType(string defaultType) => Types.Add(defaultType);
+
+    /// <summary>
+    /// Populated after deserialization.
+    /// Contains all JSON properties that did not map to any known .NET property.  
+    /// </summary>
+    internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
 
     /// <summary>
     /// Identifies the Object or Link types.

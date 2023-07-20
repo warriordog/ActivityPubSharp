@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace ActivityPub.Types.Internal;
 
@@ -64,4 +65,17 @@ internal static class JsonExtensions
         type = null;
         return false;
     }
+
+    /// <summary>
+    /// Converts a JsonElement to the appropriate JsonNode subtype.
+    /// </summary>
+    /// <param name="element">Element to convert</param>
+    /// <param name="options">Optional options to pass to JsonNode</param>
+    /// <returns>Node containing the same information</returns>
+    internal static JsonNode? ToNode(this JsonElement element, JsonNodeOptions? options = null) => element.ValueKind switch
+    {
+        JsonValueKind.Array => JsonArray.Create(element, options),
+        JsonValueKind.Object => JsonObject.Create(element, options),
+        _ => JsonValue.Create(element, options)
+    };
 }

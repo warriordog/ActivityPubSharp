@@ -79,24 +79,25 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
     {
         var type = typeof(T);
 
-        FindJsonProperties(type, out var getters, out var setters);
+        FindJsonProperties(type, out var getters, out var requiredSetters, out var optionalSetters);
         FindCustomSerializationMethods<T>(type, out var trySerialize, out var tryDeserialize);
 
         return new JsonTypeInfo<T>
         {
             Type = type,
-            Setters = setters.ToArray(),
+            RequiredSetters = requiredSetters,
+            OptionalSetters = optionalSetters,
             Getters = getters.ToArray(),
             CustomSerializer = trySerialize,
             CustomDeserializer = tryDeserialize
         };
     }
-
-
-    private static void FindJsonProperties(Type type, out JsonPropertyInfo[] getters, out JsonPropertyInfo[] setters)
+    
+    private static void FindJsonProperties(Type type, out JsonPropertyInfo[] getters, out Dictionary<string, JsonPropertyInfo> requiredSetters, out Dictionary<string, JsonPropertyInfo> optionalSetters)
     {
+        requiredSetters = new();
+        optionalSetters = new();
         var getterList = new List<JsonPropertyInfo>();
-        var setterList = new List<JsonPropertyInfo>();
 
         //https://stackoverflow.com/a/12330276
         foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy))
@@ -110,13 +111,15 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
             var propertyNameAttr = property.GetCustomAttribute<JsonPropertyNameAttribute>();
             var name = propertyNameAttr?.Name ?? property.Name;
 
+            // https://stackoverflow.com/questions/74371619/c-sharp-11-detect-required-property-by-reflection
+            var isRequired = Attribute.IsDefined(property, typeof(RequiredMemberAttribute));
+            
             // Create the info obj
             var propInfo = new JsonPropertyInfo
             {
                 // Basic property details
                 Name = name,
-                // https://stackoverflow.com/questions/74371619/c-sharp-11-detect-required-property-by-reflection
-                IsRequired = Attribute.IsDefined(property, typeof(RequiredMemberAttribute)),
+                IsRequired = isRequired,
                 
                 // Metadata needed for serialization
                 Property = property,
@@ -125,17 +128,22 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
                 IgnoreCondition = jsonIgnoreAttr?.Condition
             };
 
-            // Add to appropriate lists
+            // Add to appropriate lookups
             if (property.GetMethod != null)
+            {
                 getterList.Add(propInfo);
+            }
             if (property.SetMethod != null)
-                setterList.Add(propInfo);
+            {
+                if (isRequired)
+                    requiredSetters[name] = propInfo;
+                optionalSetters[name] = propInfo;
+            }
         }
 
         // Pack into arrays for efficiency.
         // We're never going to modify these again
         getters = getterList.ToArray();
-        setters = setterList.ToArray();
     }
 
     // This is weird because we're trying to find both methods (which are optional) and check for duplicates all in one pass.

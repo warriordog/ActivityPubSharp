@@ -19,15 +19,33 @@ public abstract class JsonTypeInfo
     public required Type Type { get; init; }
 
     /// <summary>
-    /// All settable JSON properties in the type
+    /// All settable & required JSON properties in the type.
+    /// These will always be parsed from JSON.
     /// </summary>
+    /// <remarks>
+    /// RequiredSetters and OptionalSetters are separated to allow efficient single-pass parsing.
+    /// </remarks>
+    /// <seealso cref="OptionalSetters"/>
     /// <seealso cref="Getters"/>
-    public required JsonPropertyInfo[] Setters { get; init; }
+    public required Dictionary<string, JsonPropertyInfo> RequiredSetters { get; init; }
+    
+    /// <summary>
+    /// All settable & optional JSON properties in the type.
+    /// These will be parsed from JSON only if present.
+    /// </summary>
+    /// <remarks>
+    /// RequiredSetters and OptionalSetters are separated to allow efficient single-pass parsing.
+    /// </remarks>
+    /// <seealso cref="RequiredSetters"/>
+    /// <seealso cref="Getters"/>
+    public required Dictionary<string, JsonPropertyInfo> OptionalSetters { get; init; }
 
     /// <summary>
-    /// All gettable JSON properties in the type
+    /// All readable JSON properties in the type.
+    /// These will be serialized to JSON
     /// </summary>
-    /// <seealso cref="Setters"/>
+    /// <seealso cref="OptionalSetters"/>
+    /// <seealso cref="RequiredSetters"/>
     public required JsonPropertyInfo[] Getters { get; init; }
 
     /// <summary>

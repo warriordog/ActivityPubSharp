@@ -22,7 +22,7 @@ public class ActivitySerializationTests : SerializationTests
     [Fact]
     public void TransitiveActivitiesShould_IncludeObject()
     {
-        ObjectUnderTest = new ASTransitiveActivity()
+        ObjectUnderTest = new ASTransitiveActivity
         {
             Object = new ASObject()
         };
@@ -32,7 +32,7 @@ public class ActivitySerializationTests : SerializationTests
     [Fact]
     public void TransitiveActivitiesShould_NotIncludeTarget()
     {
-        ObjectUnderTest = new ASTransitiveActivity()
+        ObjectUnderTest = new ASTransitiveActivity
         {
             Object = new ASObject()
         };
@@ -42,7 +42,7 @@ public class ActivitySerializationTests : SerializationTests
     [Fact]
     public void TargetedActivitiesShould_IncludeObjectAndTarget()
     {
-        ObjectUnderTest = new ASTransitiveActivity()
+        ObjectUnderTest = new ASTransitiveActivity
         {
             Object = new ASObject(),
             Target = new ASObject()
