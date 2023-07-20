@@ -23,8 +23,6 @@ public class QuestionActivity : ASIntransitiveActivity
 
     protected QuestionActivity(string type) : base(type) {}
 
-    // TODO split this into subtypes based on OneOf and AnyOf
-
     /// <summary>
     /// Identifies an exclusive option for a Question.
     /// Use of oneOf implies that the Question can have only a single answer.
