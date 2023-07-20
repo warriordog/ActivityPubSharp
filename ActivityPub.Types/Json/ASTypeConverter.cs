@@ -152,7 +152,6 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         var typeInfo = _jsonTypeInfoCache.GetForType<T>();
 
         // Create JsonNodeOptions because System.Text.Json has so many different "option" types ...
-        // TODO find out if we can cache this somehow
         var nodeOptions = new JsonNodeOptions
         {
             PropertyNameCaseInsensitive = options.PropertyNameCaseInsensitive
