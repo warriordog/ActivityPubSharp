@@ -162,8 +162,9 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         if (!typeInfo.TrySerialize(value, options, nodeOptions, out var node))
             node = WriteObjectDirectly(value, typeInfo, nodeOptions, options);
 
-        // Write unmapped JSON
-        WriteUnmappedJson(value, node, nodeOptions);
+        // If this is an object, then write all unmapped JSON properties
+        if (node is JsonObject objNode)
+            WriteUnmappedJson(value, objNode, nodeOptions);
         
         // Write it to the output stream
         node.WriteTo(writer, options);
@@ -210,7 +211,7 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         return false;
     }
     
-    private static void WriteUnmappedJson(T obj, JsonNode node, JsonNodeOptions nodeOptions)
+    private static void WriteUnmappedJson(T obj, JsonObject node, JsonNodeOptions nodeOptions)
     {
         foreach (var (name, value) in obj.UnknownJsonProperties)
         {
