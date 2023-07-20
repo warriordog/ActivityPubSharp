@@ -6,7 +6,7 @@ using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Util;
 
-// <summary>
+/// <summary>
 /// A JSON-LD context.
 /// Contains a set of context objects.
 /// </summary>
@@ -20,7 +20,7 @@ public class JsonLDContext
     public HashSet<JsonLDContextObject> ContextObjects { get; }
 
     [JsonConstructor]
-    public JsonLDContext() {}
+    public JsonLDContext() : this(new()) {}
 
     public JsonLDContext(HashSet<JsonLDContextObject> contextObjects) => ContextObjects = contextObjects;
     
