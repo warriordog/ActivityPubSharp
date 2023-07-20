@@ -7,6 +7,8 @@ using ActivityPub.Types.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
+[assembly: InternalsVisibleTo("ActivityPub.Types.Tests")]
+
 [assembly: InternalsVisibleTo("ActivityPub.Common")]
 [assembly: InternalsVisibleTo("ActivityPub.Client")]
 [assembly: InternalsVisibleTo("ActivityPub.Server")]

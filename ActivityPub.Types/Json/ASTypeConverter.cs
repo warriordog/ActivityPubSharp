@@ -100,24 +100,39 @@ internal class ASTypeConverter<T> : JsonConverter<T>
     private static object ReadObjectDirectly(JsonElement inputElement, JsonTypeInfo typeInfo, JsonSerializerOptions options)
     {
         // Create instance
-        var obj = Activator.CreateInstance(typeInfo.Type);
+        var obj = (T?)Activator.CreateInstance(typeInfo.Type);
         if (obj == null)
             throw new JsonException($"Failed to construct an instance of {typeInfo.Type}");
-
-        // Populate values
-        foreach (var prop in typeInfo.Setters)
+        
+        // Populate required props
+        foreach (var objProp in typeInfo.RequiredSetters.Values)
         {
-            // Attempt to load the value from json
-            if (inputElement.TryGetProperty(prop.Name, out var valueElement))
+            // If missing & required, then throw an exception
+            if (!inputElement.TryGetProperty(objProp.Name, out var valueElement))
+                throw new JsonException($"Cannot parse {typeInfo.Type} - missing required property '{objProp.Name}'");
+            
+            // Its there - parse it!
+            var value = valueElement.Deserialize(objProp.Property.PropertyType, options);
+            objProp.Property.SetValue(obj, value);
+        }
+        
+        // Populate optional props
+        foreach (var jsonProp in inputElement.EnumerateObject())
+        {
+            // Skip if its required - we already got it above
+            if (typeInfo.RequiredSetters.ContainsKey(jsonProp.Name))
+                continue;
+            
+            // Attempt to match to a setter
+            if (typeInfo.OptionalSetters.TryGetValue(jsonProp.Name, out var objProp))
             {
-                var value = valueElement.Deserialize(prop.Property.PropertyType, options);
-                prop.Property.SetValue(obj, value);
+                var value = jsonProp.Value.Deserialize(objProp.Property.PropertyType, options);
+                objProp.Property.SetValue(obj, value);
                 continue;
             }
-
-            // If missing & required, then throw an exception
-            if (prop.IsRequired)
-                throw new JsonException($"Cannot parse {typeInfo.Type} - missing required property '{prop.Name}'");
+            
+            // If not found, then store it as overflow
+            obj.UnknownJsonProperties[jsonProp.Name] = jsonProp.Value;
         }
 
         return obj;
@@ -148,6 +163,9 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         if (!typeInfo.TrySerialize(value, options, nodeOptions, out var node))
             node = WriteObjectDirectly(value, typeInfo, nodeOptions, options);
 
+        // Write unmapped JSON
+        WriteUnmappedJson(value, node, nodeOptions);
+        
         // Write it to the output stream
         node.WriteTo(writer, options);
     }
@@ -192,5 +210,14 @@ internal class ASTypeConverter<T> : JsonConverter<T>
             return true;
 
         return false;
+    }
+    
+    private static void WriteUnmappedJson(T obj, JsonNode node, JsonNodeOptions nodeOptions)
+    {
+        foreach (var (name, value) in obj.UnknownJsonProperties)
+        {
+            var valueNode = value.ToNode(nodeOptions);
+            node[name] = valueNode;
+        }
     }
 }
