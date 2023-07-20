@@ -28,8 +28,6 @@ public interface IASTypeInfoCache
     void RegisterAllAssemblies();
 }
 
-// TODO make it case-sensitive
-
 public class ASTypeInfoCache : IASTypeInfoCache
 {
     private readonly HashSet<Type> _allASTypes = new();
