@@ -7,8 +7,6 @@ using JetBrains.Annotations;
 
 namespace ActivityPub.Types;
 
-// TODO find a formal specification somewhere to verify whether these properties should be Link or Linkable<>
-
 /// <summary>
 /// Required properties for an Actor.
 /// Specific Actor implementations should implement this.
