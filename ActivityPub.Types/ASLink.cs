@@ -115,5 +115,5 @@ public class ASLink : ASType
     /// </remarks> 
     private bool HasOnlyHRef =>
         HRefLang == null && Width == null && Height == null && Rel.Count == 0 && Id == null &&
-        AttributedTo.Count == 0 && Preview == null && Name == null && MediaType == null;
+        AttributedTo.Count == 0 && Preview == null && Name == null && MediaType == null && UnknownJsonProperties.Count == 0;
 }
