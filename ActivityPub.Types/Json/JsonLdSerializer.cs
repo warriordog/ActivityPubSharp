@@ -31,8 +31,6 @@ public interface IJsonLdSerializer
     public JsonElement SerializeToElement<T>(T? value);
 }
 
-// TODO encapsulate implementation + dependencies
-
 public class JsonLdSerializer : IJsonLdSerializer
 {
     public JsonSerializerOptions SerializerOptions { get; }
