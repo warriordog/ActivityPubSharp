@@ -8,7 +8,7 @@ public class UnknownObjectDeserializationTests : DeserializationTests<ASObject>
 
     public class ObjectWithKnownAndUnknownTypeShould : UnknownObjectDeserializationTests
     {
-        [Fact] // TODO this will change after #36
+        [Fact] // Note: this behavior is temporary and will change once we support extensions.
         public void DeserializeToObjectOrDeclaredType()
         {
             JsonUnderTest = """{"type":["MadeUpFakeType","Person"]}""";
@@ -18,7 +18,7 @@ public class UnknownObjectDeserializationTests : DeserializationTests<ASObject>
     
     public class ObjectWithOnlyUnknownTypeShould : UnknownObjectDeserializationTests
     {
-        [Fact] // TODO this will change after #36
+        [Fact] // Note: this behavior is temporary and will change once we support extensions.
         public void DeserializeToObjectOrDeclaredType()
         {
             JsonUnderTest = """{"type":"MadeUpFakeType"}""";
