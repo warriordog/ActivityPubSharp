@@ -184,7 +184,6 @@ internal class ASTypeConverter<T> : JsonConverter<T>
             var stripDefault = ignoreCondition is JsonIgnoreCondition.WhenWritingDefault;
             
             // Check if this is a default value that should be skipped.
-            // TODO - replace "true" with a configuration options
             if (ShouldSkip(value, prop, stripNull, stripDefault, true))
                 continue;
             
