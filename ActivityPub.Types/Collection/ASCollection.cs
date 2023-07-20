@@ -16,7 +16,6 @@ namespace ActivityPub.Types.Collection;
 /// </summary>
 /// <remarks>
 /// Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the Collection type.
-/// TODO maybe add a non-generic base between this and ASObject for better DX 
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection"/>
 /// <seealso cref="ASOrderedCollection{T}"/>
