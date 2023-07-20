@@ -111,7 +111,6 @@ public class ASLink : ASType
     /// True if a link contains a value for <see cref="HRef"/> only and can therefore be reduced.
     /// </summary>
     /// <remarks>
-    /// TODO: This is really a hack and should be replaced.
     /// Its fragile and must be updated whenever <see cref="ASLink"/> or <see cref="ASType"/> is updated.
     /// </remarks> 
     private bool HasOnlyHRef =>
