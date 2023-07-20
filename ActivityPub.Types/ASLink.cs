@@ -39,9 +39,6 @@ public class ASLink : ASType
     /// Hints as to the language used by the target resource.
     /// Value MUST be a [BCP47] Language-Tag. 
     /// </summary>
-    /// <remarks>
-    /// TODO make a dedicated type for Language-Tag. maybe use a library?
-    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-hreflang"/>
     [JsonPropertyName("hreflang")]
     public string? HRefLang { get; set; }
