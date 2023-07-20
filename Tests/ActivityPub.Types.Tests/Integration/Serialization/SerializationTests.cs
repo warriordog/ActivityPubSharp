@@ -30,8 +30,6 @@ public abstract class SerializationTests
         set
         {
             _objectUnderTest = value;
-
-            // TODO maybe we could create a ResettableLazy, then this wouldn't need to be duplicated
             _jsonUnderTest = new Lazy<JsonElement>(() => _jsonLdSerializer.SerializeToElement(ObjectUnderTest));
         }
     }
