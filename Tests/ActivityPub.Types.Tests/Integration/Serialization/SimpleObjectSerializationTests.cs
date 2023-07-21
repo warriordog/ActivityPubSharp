@@ -16,25 +16,21 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         public void ShouldWriteObject()
         {
             ObjectUnderTest = new ASObject();
-            JsonUnderTest.ValueKind.Should().Be(JsonValueKind.Object);
+            JsonUnderTest.Should().BeJsonObject();
         }
         
         [Fact]
         public void ShouldIncludeContext()
         {
             ObjectUnderTest = new ASObject();
-            JsonUnderTest.Should().HaveProperty("@context");
-            JsonUnderTest.GetProperty("@context").ValueKind.Should().Be(JsonValueKind.String);
-            JsonUnderTest.GetProperty("@context").GetString().Should().Be("https://www.w3.org/ns/activitystreams");
+            JsonUnderTest.Should().HaveStringProperty("@context", "https://www.w3.org/ns/activitystreams");
         }
 
         [Fact]
         public void ShouldIncludeType()
         {
             ObjectUnderTest = new ASObject();
-            JsonUnderTest.Should().HaveProperty("type");
-            JsonUnderTest.GetProperty("type").ValueKind.Should().Be(JsonValueKind.String);
-            JsonUnderTest.GetProperty("type").GetString().Should().Be("Object");
+            JsonUnderTest.Should().HaveASType(ASObject.ObjectType);
         }
 
         [Fact]
@@ -58,7 +54,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         public void ShouldSerializeToCorrectType()
         {
             ObjectUnderTest = new ImageObject();
-            JsonUnderTest.GetProperty("type").GetString().Should().Be(ImageObject.ImageType);
+            JsonUnderTest.Should().HaveASType(ImageObject.ImageType);
         }
 
         [Fact]
@@ -77,10 +73,10 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Id = "https://example.com/actor/id"
             };
 
-            JsonUnderTest.GetProperty("inbox").GetString().Should().Be("https://example.com/actor/inbox");
-            JsonUnderTest.GetProperty("outbox").GetString().Should().Be("https://example.com/actor/outbox");
-            JsonUnderTest.GetProperty("image").GetProperty("type").GetString().Should().Be("Image");
-            JsonUnderTest.GetProperty("id").GetString().Should().Be("https://example.com/actor/id");
+            JsonUnderTest.Should().HaveStringProperty("inbox", "https://example.com/actor/inbox");
+            JsonUnderTest.Should().HaveStringProperty("outbox",  "https://example.com/actor/outbox");
+            JsonUnderTest.GetProperty("image").Should().HaveASType("Image");
+            JsonUnderTest.Should().HaveStringProperty("id", "https://example.com/actor/id");
         }
         
         public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
@@ -129,38 +125,38 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             };
             
             // From ASObject
-            JsonUnderTest.TryGetProperty("attachment", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("audience", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("bcc", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("bto", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("cc", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("context", out _).Should().BeTrue(); // I hate this property NAME IT SOMETHING ELSE >:(
-            JsonUnderTest.TryGetProperty("generator", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("icon", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("image", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("inReplyTo", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("location", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("replies", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("tag", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("to", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("url", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("content", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("duration", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("startTime", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("endTime", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("published", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("summary", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("updated", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("source", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("likes", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("shares", out _).Should().BeTrue();
+            JsonUnderTest.Should().HaveProperty("attachment");
+            JsonUnderTest.Should().HaveProperty("audience");
+            JsonUnderTest.Should().HaveProperty("bcc");
+            JsonUnderTest.Should().HaveProperty("bto");
+            JsonUnderTest.Should().HaveProperty("cc");
+            JsonUnderTest.Should().HaveProperty("context"); // I hate this property NAME IT SOMETHING ELSE >:(
+            JsonUnderTest.Should().HaveProperty("generator");
+            JsonUnderTest.Should().HaveProperty("icon");
+            JsonUnderTest.Should().HaveProperty("image");
+            JsonUnderTest.Should().HaveProperty("inReplyTo");
+            JsonUnderTest.Should().HaveProperty("location");
+            JsonUnderTest.Should().HaveProperty("replies");
+            JsonUnderTest.Should().HaveProperty("tag");
+            JsonUnderTest.Should().HaveProperty("to");
+            JsonUnderTest.Should().HaveProperty("url");
+            JsonUnderTest.Should().HaveProperty("content");
+            JsonUnderTest.Should().HaveProperty("duration");
+            JsonUnderTest.Should().HaveProperty("startTime");
+            JsonUnderTest.Should().HaveProperty("endTime");
+            JsonUnderTest.Should().HaveProperty("published");
+            JsonUnderTest.Should().HaveProperty("summary");
+            JsonUnderTest.Should().HaveProperty("updated");
+            JsonUnderTest.Should().HaveProperty("source");
+            JsonUnderTest.Should().HaveProperty("likes");
+            JsonUnderTest.Should().HaveProperty("shares");
 
             // From ASType
-            JsonUnderTest.TryGetProperty("id", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("attributedTo", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("preview", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("name", out _).Should().BeTrue();
-            JsonUnderTest.TryGetProperty("mediaType", out _).Should().BeTrue();
+            JsonUnderTest.Should().HaveProperty("id");
+            JsonUnderTest.Should().HaveProperty("attributedTo");
+            JsonUnderTest.Should().HaveProperty("preview");
+            JsonUnderTest.Should().HaveProperty("name");
+            JsonUnderTest.Should().HaveProperty("mediaType");
         }
         
         public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}

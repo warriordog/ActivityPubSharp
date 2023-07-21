@@ -61,13 +61,13 @@ public abstract class UnknownObjectSerializationTests : SerializationTests
         [Fact]
         public void WriteKnownProperties()
         {
-            JsonUnderTest.GetProperty("duration").GetString().Should().Be("PTS5");
+            JsonUnderTest.Should().HaveStringProperty("duration", "PTS5");
         }
 
         [Fact]
         public void WriteUnknownProperties()
         {
-            JsonUnderTest.GetProperty(UnknownPropName).GetString().Should().Be(UnknownPropValue);
+            JsonUnderTest.Should().HaveStringProperty(UnknownPropName, UnknownPropValue);
         }
     }
 

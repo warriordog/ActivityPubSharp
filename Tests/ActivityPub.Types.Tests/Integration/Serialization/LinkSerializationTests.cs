@@ -32,8 +32,7 @@ public abstract class LinkSerializationTests : SerializationTests
                 MediaType = MediaType
             };
             JsonUnderTest.ValueKind.Should().Be(JsonValueKind.Object);
-            JsonUnderTest.Should().HaveProperty("mediaType");
-            JsonUnderTest.GetProperty("mediaType").Should().BeJsonString(MediaType);
+            JsonUnderTest.Should().HaveStringProperty("mediaType", MediaType);
         }
 
 
