@@ -1,28 +1,25 @@
 ﻿# ActivityPubSharp - C# implementation of ActivityPub
 
-**Please note - this project is incomplete and not ready for production use.
+❗❗ **Please note - this project is incomplete and not ready for production use.
 The information here describes the design and technical goals of ActivityPubSharp, not the currently implemented functionality.
 Please see [the issues tracker](https://github.com/warriordog/ActivityPubSharp/issues) for detailed status.**
 
 ## About
-ActivityPubSharp is a work-in-progress toolkit to support the use of ActivityPub in .NET applications.
-Multiple packages are available to fit any use case or application.
+ActivityPubSharp is a toolkit of modular packages that support the use of ActivityPub in .NET applications.
+Low-level APIs offer raw - but safe - access to strongly-typed models, while high-level interfaces support ergonomic and standards-compliant use of the protocol.
+Special utility types and integrated JSON-LD converters further abstract ActivityPub's rougher edges, bringing the user experience up to par with more traditional APIs.
+For more information, see the introduction post - [*What is ActivityPubSharp?*](https://github.com/warriordog/ActivityPubSharp/discussions/63)
 
-### Focus
-As the name suggests, ActivityPubSharp is focused on supporting ActivityPub rather than raw ActivityStreams or any other related standard.
-If there is ever a conflict between standards, then the ActivityPub spec will be followed.
+### Modularity
+Modularity and Abstraction are keys goals of this project.
+It should be simple to integrate this library at any appropriate level of abstraction.
+Low-level apps can utilize the [strongly-typed models](ActivityPub.Types) and utility types, but bring their own parser, logic, and other components.
+Mid-level apps may want to use the [HTTP client](ActivityPub.Client) or [abstract server logic](ActivityPub.Server).
+On the other hand, high-level apps will likely desire framework integration and custom middleware.
 
-At present, ActivityPubSharp does not intend to offer full JSON-LD support.
-The provided serialization code implements a minimum-viable approach that should support most use cases.
-At future, it will be possible to inject a user-provided compaction/normalization layer through DI.
-
-### Abstraction
-Abstraction is a key goal of this project.
-The intent is that it should be relatively simple to integrate this library at any appropriate level of abstraction.
-A client-only app doesn't need tons of server-related code, and a server app shouldn't be bound to any particular web framework.
-To support this, a variety of NuGet packages are produced at increasing levels of abstraction.
-The main packages are as follows:
-
+To support these varying use cases, ActivityPubSharp is split into multiple separate NuGet packages.
+While separate and self-contained, these packages are designed to work together and will seamlessly integrate through Dependency Injection.
+A typical use case will include the highest-level "main" package needed for the application, and then as many "secondary" packages as desired for extra functionality.
 
 | Package                                               | Description                                                                                                                                                                    | Use Case                                                                                                                      |
 |-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
@@ -38,11 +35,21 @@ The main packages are as follows:
 | ActivityPubSharp.AspNetCore                           | Extends Server package with bindings and middleware for ASP.NET Core.                                                                                                          | You are implementing a server that will utilize ASP.NET.                                                                      |
 | ActivityPubSharp                                      | Meta-package that includes all others.                                                                                                                                         | You want ActivityPub with minimal effort, and can accept the library authors' default implementations and 3rd-party bindings. |
 
-It is possible to use multiple of the Client, Server, and Federation packages simultaneously.
+### Non-goals
+As the name suggests, ActivityPubSharp is focused on ActivityPub rather than any other ActivityStreams-based standard.
+While ActivityStreams *is* implemented as an underlying component of ActivityPub, it alone is not a supported use case.
+If there is ever a conflict between specifications, then the [ActivityPub spec](https://www.w3.org/TR/activitypub/) will be considered authoritative.
 
-### Modularity
+At present, ActivityPubSharp intends to offer only a subset of JSON-LD support.
+The included serializers support all features that are necessary for ActivityPub and integration with mainstream fediverse software, but that is all.
+Attempting to parse other forms of linked data may fail catastrophically.
+In the future, it will be possible to inject a user-provided compaction/normalization layer through DI.
+This should be sufficient for all most use cases.
+
+### Customization
 ActivityPubSharp utilizes Dependency Injection to easily support unique or extended use cases.
 For example, included services all utilize the [`IJsonLdSerializer` interface](ActivityPub.Types/Json/JsonLdSerializer.cs) which enables user code to replace or modify the default JSON support.
+Most default implementations expose configuration objects that are compatible with the Options Pattern.
 User-accessible DI services and and options are described in the README for each individual package.
 
 ## Technical Details
@@ -52,5 +59,6 @@ User-accessible DI services and and options are described in the README for each
 * Any platform - no native code is used
 
 ### Design Goals
-* Minimal dependencies - software supply chain risks are real and very underrated. ActivityPubSharp is developed using minimal external dependencies, but without reinventing all the wheels.
+* Minimal dependencies - software supply chain risks are an underappreciated threat. ActivityPubSharp keeps minimal dependencies to reduce the supply chain footprint.
 * Modern .NET - ActivityPubSharp has set .NET 7 as the minimum supported version. This unfortunately excludes some projects, but is critical for System.Text.Json support.
+* Ergonomic and Conventional APIs - mid/high level APIs should feel and function like typical .NET APIs. An important goal (and difficult challenge) of this project is abstracting ActivityPub's dynamic nature to better fit with C#'s strongly-typed model.
