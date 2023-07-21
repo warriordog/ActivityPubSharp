@@ -3,20 +3,17 @@
 
 using ActivityPub.Types.Internal.TypeInfo;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public abstract class SerializationTests
+public abstract class SerializationTests : IClassFixture<JsonLdSerializerFixture>
 {
     private readonly IJsonLdSerializer _jsonLdSerializer;
     
-    protected SerializationTests()
+    protected SerializationTests(JsonLdSerializerFixture fixture)
     {
-        var jsonTypeInfoCache = new JsonTypeInfoCache();
-        var asTypeInfoCache = new ASTypeInfoCache(jsonTypeInfoCache);
-        asTypeInfoCache.RegisterAllAssemblies();
-        
-        _jsonLdSerializer = new JsonLdSerializer(asTypeInfoCache, jsonTypeInfoCache);
+        _jsonLdSerializer = fixture.JsonLdSerializer;
         _jsonUnderTest = new Lazy<JsonElement>(() => throw new ApplicationException("Test error: please set ObjectUnderTest before calling JsonUnderTest"));
     }
 

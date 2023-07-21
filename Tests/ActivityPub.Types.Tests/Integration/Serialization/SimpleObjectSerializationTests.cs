@@ -3,6 +3,7 @@
 
 using ActivityPub.Types.Extended.Actor;
 using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Tests.Util.Fixtures;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
@@ -47,6 +48,8 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             props.Should().Contain(p => p.Name == "type");
             props.Should().Contain(p => p.Name == "@context");
         }
+        
+        public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class Subclass : SimpleObjectSerializationTests
@@ -79,6 +82,8 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             JsonUnderTest.GetProperty("image").GetProperty("type").GetString().Should().Be("Image");
             JsonUnderTest.GetProperty("id").GetString().Should().Be("https://example.com/actor/id");
         }
+        
+        public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class FullObject : SimpleObjectSerializationTests
@@ -157,6 +162,9 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             JsonUnderTest.TryGetProperty("name", out _).Should().BeTrue();
             JsonUnderTest.TryGetProperty("mediaType", out _).Should().BeTrue();
         }
+        
+        public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
+    private SimpleObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

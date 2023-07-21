@@ -2,10 +2,11 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Types.Extended.Actor;
+using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public class ActorDeserializationTests : DeserializationTests<PersonActor>
+public abstract class ActorDeserializationTests : DeserializationTests<PersonActor>
 {
     public class EndpointsShould : ActorDeserializationTests
     {
@@ -61,5 +62,9 @@ public class ActorDeserializationTests : DeserializationTests<PersonActor>
 
             ObjectUnderTest.Endpoints.Should().NotBeNull();
         }
+        
+        public EndpointsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
+
+    private ActorDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

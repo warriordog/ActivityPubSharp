@@ -1,10 +1,12 @@
 ﻿using ActivityPub.Types.Collection;
+using ActivityPub.Types.Tests.Util.Fixtures;
+
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public class CollectionDeserializationTests : DeserializationTests<ASObject>
+public abstract class CollectionDeserializationTests : DeserializationTests<ASObject>
 {
     public class ItemsShould : CollectionDeserializationTests
     {
@@ -51,5 +53,9 @@ public class CollectionDeserializationTests : DeserializationTests<ASObject>
             ObjectUnderTest.As<ASOrderedCollectionPage<ASType>>().Items.Should().NotBeNull();
             ObjectUnderTest.As<ASOrderedCollectionPage<ASType>>().Items.Should().HaveCount(1);
         }
+        
+        public ItemsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
+
+    private CollectionDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

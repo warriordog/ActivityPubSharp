@@ -3,10 +3,11 @@
 
 using ActivityPub.Types.Collection;
 using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public abstract class ValueStripSerializationTests : SerializationTests
+public class ValueStripSerializationTests : SerializationTests
 {
     [Fact]
     public void NullObjectsShould_BeStrippedFromOutput()
@@ -87,4 +88,6 @@ public abstract class ValueStripSerializationTests : SerializationTests
             
         JsonUnderTest.Should().HaveProperty("attachment");
     }
+    
+    public ValueStripSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

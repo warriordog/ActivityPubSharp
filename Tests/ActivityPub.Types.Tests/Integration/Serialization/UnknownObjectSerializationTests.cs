@@ -2,16 +2,17 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Nodes;
+using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public class UnknownObjectSerializationTests : SerializationTests
+public abstract class UnknownObjectSerializationTests : SerializationTests
 {
     public class ObjectWithUnknownTypeShould : UnknownObjectSerializationTests
     {
         private List<string>? TypesUnderTest { get; }
         
-        public ObjectWithUnknownTypeShould()
+        public ObjectWithUnknownTypeShould(JsonLdSerializerFixture fixture) : base(fixture)
         {
             ObjectUnderTest = new ASObject
             {
@@ -45,7 +46,7 @@ public class UnknownObjectSerializationTests : SerializationTests
         private const string UnknownPropName = "special_unknown_property";
         private const string UnknownPropValue = "special_unknown_value";
         
-        public ObjectWithUnknownPropertiesShould()
+        public ObjectWithUnknownPropertiesShould(JsonLdSerializerFixture fixture) : base(fixture)
         {
             ObjectUnderTest = new ASObject
             {
@@ -69,4 +70,6 @@ public class UnknownObjectSerializationTests : SerializationTests
             JsonUnderTest.GetProperty(UnknownPropName).GetString().Should().Be(UnknownPropValue);
         }
     }
+
+    private UnknownObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

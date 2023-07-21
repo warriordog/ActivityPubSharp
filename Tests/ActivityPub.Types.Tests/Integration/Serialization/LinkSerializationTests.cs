@@ -1,9 +1,11 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using ActivityPub.Types.Tests.Util.Fixtures;
+
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public class LinkSerializationTests : SerializationTests
+public abstract class LinkSerializationTests : SerializationTests
 {
     public class ASLinkShould : LinkSerializationTests
     {
@@ -50,5 +52,9 @@ public class LinkSerializationTests : SerializationTests
             JsonUnderTest.ValueKind.Should().Be(JsonValueKind.Object);
             JsonUnderTest.Should().HaveProperty(UnknownProp);
         }
+        
+        public ASLinkShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
+
+    protected LinkSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }
