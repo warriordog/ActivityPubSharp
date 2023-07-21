@@ -62,24 +62,24 @@ public class CalckeyActorTests
                 "name": null
             },
             "image": null,
-             "tag": [],
-             "manuallyApprovesFollowers": false,
-             "discoverable": true,
-             "publicKey": {
-                 "id": "https://enby.life/users/9fpnzspgtp#main-key",
-                 "type": "Key",
-                 "owner": "https://enby.life/users/9fpnzspgtp",
-                 "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAux49fKZK3XxSActEu+Rm\nitMezjOHKhRnQXzbh/UX++nrIrxhk4DJiQSmeOSuoeO3YiwlA8fcgK6ZU8l6RYFp\nhjjVauueWMaB7mrOHCBK2QtY9kPvtyMVtM1lt1cnqbsBsZP7YNWYS+9oZKw0NOCU\nPuapmYhkS+eA1hpBEDDZ0WG74HzNUSlweFD2ssQGeNyy0lTI20LPCvHqfDHO3rI1\nZkouHcf3es2O8CFqz7RIociMFfMWQEzBkmVo8fKxwUdOvrm4u/eKc6dZ5OLKuh3+\nRo8S10zbZvOE8btKosL9HhHF1X51Qg4gbqEU06hnTCKLyyxOvpkrrTFOXCQtaDJu\nypN1xhEEZIYL7j4QfDa+LZSeslzwRT2WywCnLyX2bgIzDvZDCVKeqHxfl/Z5YrX8\nFn+75j8tX/BDyjZs8XGFeesQx5hb/WWGI2FpqHz11GVUm/rcrE9gi4Thghkn43T1\nsY23URvBcKfY5Z+YG4eCkjsoMoJnybLKhLQ08YKY3rap4XGLsvn8SG+XByw7Uk1I\nZlvl/dO+AMJKfjPcme0cj56m85eWrHfmwGXQPOicMcKz6pxQ7u0icDD5Ychm9a8t\ndkgmRv8coB8qCEU5VX5JOK/N826MzmoHX5tG9WBAdXWpDg9wKdNn75ZbbajMm+eV\n5GSCDAq4TtaPFzGu8fKeWuECAwEAAQ==\n-----END PUBLIC KEY-----" 
-             },
-             "isCat": false,
-             "attachment": [
-                 {
-                     "type": "PropertyValue",
-                     "name": "Test",
-                     "value": "Value" 
-                 }
-             ],
-             "vcard:Address": "United States of America"
+            "tag": [],
+            "manuallyApprovesFollowers": false,
+            "discoverable": true,
+            "publicKey": {
+                "id": "https://enby.life/users/9fpnzspgtp#main-key",
+                "type": "Key",
+                "owner": "https://enby.life/users/9fpnzspgtp",
+                "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAux49fKZK3XxSActEu+Rm\nitMezjOHKhRnQXzbh/UX++nrIrxhk4DJiQSmeOSuoeO3YiwlA8fcgK6ZU8l6RYFp\nhjjVauueWMaB7mrOHCBK2QtY9kPvtyMVtM1lt1cnqbsBsZP7YNWYS+9oZKw0NOCU\nPuapmYhkS+eA1hpBEDDZ0WG74HzNUSlweFD2ssQGeNyy0lTI20LPCvHqfDHO3rI1\nZkouHcf3es2O8CFqz7RIociMFfMWQEzBkmVo8fKxwUdOvrm4u/eKc6dZ5OLKuh3+\nRo8S10zbZvOE8btKosL9HhHF1X51Qg4gbqEU06hnTCKLyyxOvpkrrTFOXCQtaDJu\nypN1xhEEZIYL7j4QfDa+LZSeslzwRT2WywCnLyX2bgIzDvZDCVKeqHxfl/Z5YrX8\nFn+75j8tX/BDyjZs8XGFeesQx5hb/WWGI2FpqHz11GVUm/rcrE9gi4Thghkn43T1\nsY23URvBcKfY5Z+YG4eCkjsoMoJnybLKhLQ08YKY3rap4XGLsvn8SG+XByw7Uk1I\nZlvl/dO+AMJKfjPcme0cj56m85eWrHfmwGXQPOicMcKz6pxQ7u0icDD5Ychm9a8t\ndkgmRv8coB8qCEU5VX5JOK/N826MzmoHX5tG9WBAdXWpDg9wKdNn75ZbbajMm+eV\n5GSCDAq4TtaPFzGu8fKeWuECAwEAAQ==\n-----END PUBLIC KEY-----" 
+            },
+            "isCat": false,
+            "attachment": [
+                {
+                    "type": "PropertyValue",
+                    "name": "Test",
+                    "value": "Value" 
+                }
+            ],
+            "vcard:Address": "United States of America"
         }
         """;
 
