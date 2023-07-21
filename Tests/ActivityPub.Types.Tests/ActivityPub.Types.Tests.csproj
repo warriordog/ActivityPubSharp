@@ -26,4 +26,9 @@
       <ProjectReference Include="..\..\ActivityPub.Types\ActivityPub.Types.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Smoke\Samples\**\*.jsonld" />
+      <EmbeddedResource Include="Smoke\Samples\**\*.jsonld" />
+    </ItemGroup>
+
 </Project>
