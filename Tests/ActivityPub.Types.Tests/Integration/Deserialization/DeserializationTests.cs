@@ -8,17 +8,17 @@ namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
 public abstract class DeserializationTests<T> : IClassFixture<JsonLdSerializerFixture>
 {
-    private readonly IJsonLdSerializer _jsonLdSerializer;
-    
+    protected IJsonLdSerializer JsonLdSerializer { get; }
+
     protected DeserializationTests(JsonLdSerializerFixture fixture)
     {
-        _jsonLdSerializer = fixture.JsonLdSerializer;
+        JsonLdSerializer = fixture.JsonLdSerializer;
         _objectUnderTest = new Lazy<T>(() => throw new ApplicationException("Test error: please set JsonUnderTest before calling ObjectUnderTest"));
     }
 
     protected string JsonUnderTest
     {
-        set => _objectUnderTest = new Lazy<T>(() => _jsonLdSerializer.Deserialize<T>(value) ?? throw new ApplicationException("Deserialization failed!"));
+        set => _objectUnderTest = new Lazy<T>(() => JsonLdSerializer.Deserialize<T>(value) ?? throw new ApplicationException("Deserialization failed!"));
     }
 
     // Cached for performance

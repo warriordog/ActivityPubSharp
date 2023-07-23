@@ -8,11 +8,11 @@ namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public abstract class SerializationTests : IClassFixture<JsonLdSerializerFixture>
 {
-    private readonly IJsonLdSerializer _jsonLdSerializer;
-    
+    protected IJsonLdSerializer JsonLdSerializer { get; }
+
     protected SerializationTests(JsonLdSerializerFixture fixture)
     {
-        _jsonLdSerializer = fixture.JsonLdSerializer;
+        JsonLdSerializer = fixture.JsonLdSerializer;
         _jsonUnderTest = new Lazy<JsonElement>(() => throw new ApplicationException("Test error: please set ObjectUnderTest before calling JsonUnderTest"));
     }
 
@@ -22,6 +22,6 @@ public abstract class SerializationTests : IClassFixture<JsonLdSerializerFixture
 
     protected ASType ObjectUnderTest
     {
-        set => _jsonUnderTest = new Lazy<JsonElement>(() => _jsonLdSerializer.SerializeToElement(value));
+        set => _jsonUnderTest = new Lazy<JsonElement>(() => JsonLdSerializer.SerializeToElement(value));
     }
 }
