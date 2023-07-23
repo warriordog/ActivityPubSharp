@@ -47,10 +47,11 @@ internal class ASTypeConverter : JsonConverterFactory
 }
 
 /// <summary>
+/// This is public ONLY due to C# limitation.
 /// Please use <see cref="ASTypeConverter"/> (non-generic factory) instead.
 /// </summary>
 /// <typeparam name="T">specific type to produce</typeparam>
-internal class ASTypeConverter<T> : JsonConverter<T>
+public class ASTypeConverter<T> : JsonConverter<T>
     where T : ASType
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
@@ -147,9 +148,13 @@ internal class ASTypeConverter<T> : JsonConverter<T>
             JsonSerializer.Serialize(writer, value, valueType, options);
             return;
         }
-
+        
         // Lookup type info for T
         var typeInfo = _jsonTypeInfoCache.GetForType<T>();
+        
+        // Check if this is a nested object.
+        // Need this info for some checks below
+        var isNested = writer.CurrentDepth > 0;
 
         // Create JsonNodeOptions because System.Text.Json has so many different "option" types ...
         var nodeOptions = new JsonNodeOptions
@@ -160,7 +165,7 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         // Call custom serializer.
         // If it fails or is missing, then serialize manually
         if (!typeInfo.TrySerialize(value, options, nodeOptions, out var node))
-            node = WriteObjectDirectly(value, typeInfo, nodeOptions, options);
+            node = WriteObjectDirectly(value, typeInfo, nodeOptions, options, isNested);
 
         // If this is an object, then write all unmapped JSON properties
         if (node is JsonObject objNode)
@@ -170,22 +175,28 @@ internal class ASTypeConverter<T> : JsonConverter<T>
         node.WriteTo(writer, options);
     }
 
-    private static JsonNode WriteObjectDirectly(T obj, JsonTypeInfo typeInfo, JsonNodeOptions nodeOptions, JsonSerializerOptions options)
+    private static JsonNode WriteObjectDirectly(T obj, JsonTypeInfo typeInfo, JsonNodeOptions nodeOptions, JsonSerializerOptions options, bool isNested)
     {
         // Manually create an object and append each property.
         // Its dumb, but this bypasses the design flaw of System.Text.Json.
         var node = new JsonObject(nodeOptions);
         foreach (var prop in typeInfo.Getters)
         {
+            // Skip if this is an excluded, non-nestable property
+            if (isNested && prop.IgnoreWhenNested)
+                continue;
+            
+            // Delay getting the value until after early tests, just for that tiny bit of performance.
             var value = prop.Property.GetValue(obj);
             
             // Emulate JsonIgnoreCondition to clean up output
             var ignoreCondition = prop.IgnoreCondition ?? options.DefaultIgnoreCondition;
             var stripNull = ignoreCondition is JsonIgnoreCondition.WhenWritingNull or JsonIgnoreCondition.WhenWritingDefault;
-            var stripDefault = ignoreCondition is JsonIgnoreCondition.WhenWritingDefault;
+            var stripDefault = ignoreCondition == JsonIgnoreCondition.WhenWritingDefault;
+            var stripEmpty = ignoreCondition != JsonIgnoreCondition.Never;
             
             // Check if this is a default value that should be skipped.
-            if (ShouldSkip(value, prop, stripNull, stripDefault, true))
+            if (ShouldSkip(value, prop, stripNull, stripDefault, stripEmpty))
                 continue;
             
             node[prop.Name] = JsonValue.Create(value, nodeOptions);
@@ -201,7 +212,7 @@ internal class ASTypeConverter<T> : JsonConverter<T>
             return true;
         
         // Next case - check if its a default value
-        if (stripDefault && value == propInfo.TypeDefaultValue)
+        if (stripDefault && Equals(value, propInfo.TypeDefaultValue))
             return true;
 
         // Final case - check if its an empty collection

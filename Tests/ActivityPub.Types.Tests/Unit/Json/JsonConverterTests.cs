@@ -10,6 +10,7 @@ public abstract class JsonConverterTests<T, TConverter>
 where TConverter : JsonConverter<T>
 {
     protected abstract TConverter ConverterUnderTest { get; set; }
+    protected JsonSerializerOptions JsonSerializerOptions { get; set; } = JsonSerializerOptions.Default;
 
     // Useful: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/use-utf8jsonreader
     protected T? Read(ReadOnlySpan<byte> json)
@@ -17,7 +18,7 @@ where TConverter : JsonConverter<T>
         var reader = new Utf8JsonReader(json);
         reader.Read();
             
-        return ConverterUnderTest.Read(ref reader, typeof(T), JsonSerializerOptions.Default);
+        return ConverterUnderTest.Read(ref reader, typeof(T), JsonSerializerOptions);
     }
     
     // Useful: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/use-utf8jsonwriter
@@ -26,9 +27,15 @@ where TConverter : JsonConverter<T>
         using var stream = new MemoryStream();
         using var writer = new Utf8JsonWriter(stream);
         
-        ConverterUnderTest.Write(writer, input, JsonSerializerOptions.Default);
+        ConverterUnderTest.Write(writer, input, JsonSerializerOptions);
         
         writer.Flush();
         return Encoding.UTF8.GetString(stream.ToArray());
+    }
+
+    protected JsonElement WriteToElement(T input)
+    {
+        var json = Write(input);
+        return JsonSerializer.Deserialize<JsonElement>(json, JsonSerializerOptions);
     }
 }

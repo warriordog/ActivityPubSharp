@@ -125,7 +125,8 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
                 Property = property,
                 TypeDefaultValue = property.PropertyType.GetDefaultValue(),
                 IsCollection = property.PropertyType.IsAssignableTo(typeof(ICollection)),
-                IgnoreCondition = jsonIgnoreAttr?.Condition
+                IgnoreCondition = jsonIgnoreAttr?.Condition,
+                IgnoreWhenNested = Attribute.IsDefined(property, typeof(JsonIgnoreWhenNestedAttribute))
             };
 
             // Add to appropriate lookups

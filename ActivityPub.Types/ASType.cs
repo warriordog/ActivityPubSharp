@@ -37,6 +37,7 @@ public abstract class ASType
     /// Lists the JSON-LD contexts used by this object.
     /// Should be a full URL
     /// </summary>
+    [JsonIgnoreWhenNested]
     [JsonPropertyName("@context")]
     [JsonConverter(typeof(JsonLDContextConverter))]
     public JsonLDContext JsonLdContexts { get; set; } = new(new HashSet<JsonLDContextObject>

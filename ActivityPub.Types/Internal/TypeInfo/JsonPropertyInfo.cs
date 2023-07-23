@@ -3,6 +3,7 @@
 
 using System.Reflection;
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Json;
 
 namespace ActivityPub.Types.Internal.TypeInfo;
 
@@ -20,6 +21,11 @@ public class JsonPropertyInfo
     /// Will never be <see cref="JsonIgnoreCondition.Always"/>.
     /// </summary>
     public required JsonIgnoreCondition? IgnoreCondition { get; init; }
+    
+    /// <summary>
+    /// True if the property contains a <see cref="JsonIgnoreWhenNestedAttribute"/>
+    /// </summary>
+    public required bool IgnoreWhenNested { get; init; }
     public required object? TypeDefaultValue { get; init; }
     public required bool IsCollection { get; init; }
 }
