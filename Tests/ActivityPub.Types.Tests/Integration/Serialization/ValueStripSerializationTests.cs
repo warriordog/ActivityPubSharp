@@ -1,8 +1,10 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Text.Json.Serialization;
 using ActivityPub.Types.Collection;
 using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.Json;
 using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
@@ -21,14 +23,24 @@ public class ValueStripSerializationTests : SerializationTests
     }
 
     [Fact]
-    public void DefaultValuesShould_BeStrippedFromOutput()
+    public void NullObjectsShould_BePreserved_WhenIgnoreConditionIsNever()
     {
-        ObjectUnderTest = new ASObject
-        {
-            StartTime = default(DateTime)
-        };
-        
-        JsonUnderTest.Should().NotHaveProperty("startTime");
+        ObjectUnderTest = new FakeObjectWithSpecialNullability();
+        JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NeverIgnoreObject));
+    }
+    
+    [Fact]
+    public void DefaultValuesShould_BeStrippedFromOutput_WhenIgnoreConditionIsWritingDefault()
+    {
+        ObjectUnderTest = new FakeObjectWithSpecialNullability();
+        JsonUnderTest.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.IgnoreWhenDefaultInt));
+    }
+    
+    [Fact]
+    public void DefaultValuesShould_BePreserved_WhenIgnoreConditionIsNever()
+    {
+        ObjectUnderTest = new FakeObjectWithSpecialNullability();
+        JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NeverIgnoreInt));
     }
 
     [Fact]
@@ -51,6 +63,26 @@ public class ValueStripSerializationTests : SerializationTests
         };
             
         JsonUnderTest.Should().NotHaveProperty("items");
+    }
+    
+    [Fact]
+    public void NullCollectionsShould_BePreserved_WhenIgnoreConditionIsNever()
+    {
+        ObjectUnderTest = new FakeObjectWithSpecialNullability();
+        JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NeverIgnoreList));
+    }
+
+    [Fact]
+    public void NonNestablePropertiesShould_BeStripped_WhenNested()
+    {
+        ObjectUnderTest = new FakeObjectWithSpecialNullability
+        {
+            Source = new FakeObjectWithSpecialNullability()
+        };
+        JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable) );
+        JsonUnderTest.Should().HaveProperty("source", source =>
+            source.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable) )
+        );
     }
 
     [Fact]
@@ -90,4 +122,25 @@ public class ValueStripSerializationTests : SerializationTests
     }
     
     public ValueStripSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+}
+
+public class FakeObjectWithSpecialNullability : ASObject
+{
+    public const string TypeName = "FakeObjectWithSpecialNullability";
+    public FakeObjectWithSpecialNullability() : base(TypeName) {}
+    
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public ASObject? NeverIgnoreObject { get; set; }
+    
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public int NeverIgnoreInt { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public List<string> NeverIgnoreList { get; set; } = new();
+    
+    [JsonIgnoreWhenNested]
+    public bool NonNestable { get; set; }
+    
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public int IgnoreWhenDefaultInt { get; set; }
 }
