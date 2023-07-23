@@ -10,7 +10,6 @@ public abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConve
 {
     protected override ASUriConverter ConverterUnderTest { get; set; } = new();
     
-    // Useful: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/use-utf8jsonreader
     public class ReadShould : ASUriConverterTests
     {
         [Fact]
@@ -32,7 +31,6 @@ public abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConve
         }
     }
 
-    // Useful: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/use-utf8jsonwriter
     public class WriteShould : ASUriConverterTests
     {
         [Fact]
