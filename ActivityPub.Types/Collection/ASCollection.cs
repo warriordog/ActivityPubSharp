@@ -59,6 +59,7 @@ public class ASCollection<T> : ASObject
     /// If neither is set, returns zero.
     /// This cannot be set to less than zero.
     /// </remarks>
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [Range(0, int.MaxValue)]
     [JsonPropertyName("totalItems")]
     public int TotalItems
