@@ -16,14 +16,16 @@ namespace ActivityPub.Types.Tests.Util.Fixtures;
 [UsedImplicitly]
 public sealed class JsonLdSerializerFixture
 {
+    public IJsonTypeInfoCache JsonTypeInfoCache { get; }
+    public IASTypeInfoCache ASTypeInfoCache { get; }
     public IJsonLdSerializer JsonLdSerializer { get; }
 
     public JsonLdSerializerFixture()
     {
-        var jsonTypeInfoCache = new JsonTypeInfoCache();
-        var asTypeInfoCache = new ASTypeInfoCache(jsonTypeInfoCache);
-        asTypeInfoCache.RegisterAllAssemblies();
+        JsonTypeInfoCache = new JsonTypeInfoCache();
+        ASTypeInfoCache = new ASTypeInfoCache(JsonTypeInfoCache);
+        ASTypeInfoCache.RegisterAllAssemblies();
         
-        JsonLdSerializer = new JsonLdSerializer(asTypeInfoCache, jsonTypeInfoCache);
+        JsonLdSerializer = new JsonLdSerializer(ASTypeInfoCache, JsonTypeInfoCache);
     }
 }
