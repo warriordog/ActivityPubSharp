@@ -45,7 +45,7 @@ public class ASCollection<T> : ASObject
     /// <summary>
     /// In a paged Collection, indicates the furthest proceeding page of the collection.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-last"/>
     [JsonPropertyName("last")]
     public Linkable<ASCollectionPage<T>>? Last { get; set; }
 

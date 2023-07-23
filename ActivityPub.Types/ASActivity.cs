@@ -29,7 +29,7 @@ public class ASActivity : ASObject
     /// Any single activity can have multiple actors.
     /// The actor MAY be specified using an indirect Link. 
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-actor"/>
     [JsonPropertyName("actor")]
     public LinkableList<ASObject> Actor { get; set; } = new();
 
