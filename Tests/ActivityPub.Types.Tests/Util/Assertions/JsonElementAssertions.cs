@@ -15,16 +15,23 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
     public void HaveProperty(string name)
     {
         BeJsonObject();
-        Subject.TryGetProperty(name, out _).Should().BeTrue($"expected object to contain {name}, but no such property was found");
+        
+        if (!Subject.TryGetProperty(name, out _))
+            Assert.Fail($"Expected object to contain property {name}, but it does not");
     }
-    public void HaveProperty(string name, Predicate<JsonElement> predicate)
+    public void HaveProperty(string name, Action<JsonElement> inspector)
     {
         HaveProperty(name);
         var prop = Subject.GetProperty(name);
-        var result = predicate(prop);
-        result.Should().BeTrue("property value did not match the predicate");
+        inspector(prop);
     }
-    public void NotHaveProperty(string name) => Subject.TryGetProperty(name, out _).Should().BeFalse($"expected object to not contain {name}, but it exists");
+    public void NotHaveProperty(string name)
+    {
+        BeJsonObject();
+        
+        if (Subject.TryGetProperty(name, out _))
+            Assert.Fail($"Expected object to not contain property {name}, but it does");
+    }
 
     public void HaveStringProperty(string name, string value)
     {
@@ -59,10 +66,10 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
                 type.EnumerateArray().ToList().Should().Contain(entry => entry.ValueKind == JsonValueKind.String && entry.GetString() == asType);
                 break;
             case JsonValueKind.Null:
-                Assert.Fail($"expected type to be \"{asType}\", but it was null");
+                Assert.Fail($"Expected property \"type\" to be \"{asType}\", but it was null");
                 break;
             default:
-                Assert.Fail($"expected type to be a string, array, or null, but it was {type.ValueKind}");
+                Assert.Fail($"Expected property \"type\" to be a string, array, or null, but it was {type.ValueKind}");
                 break;
         }
     }
