@@ -15,6 +15,7 @@ namespace ActivityPub.Types;
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity"/>
 [ASTypeKey(ActivityType)]
+[CustomJsonDeserializer(nameof(TryDeserialize))]
 public class ASActivity : ASObject
 {
     public const string ActivityType = "Activity";
@@ -76,7 +77,6 @@ public class ASActivity : ASObject
     /// </summary>
     protected virtual Linkable<ASObject>? TargetImpl { get; set; }
 
-    [CustomJsonDeserializer]
     public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASActivity? obj)
     {
         // If it has the "object" property, then its Transitive.

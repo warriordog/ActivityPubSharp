@@ -9,13 +9,21 @@ using JetBrains.Annotations;
 namespace ActivityPub.Types.Json;
 
 /// <summary>
-/// Indicates that the target method should be called to serialize this type.
+/// Indicates that the target method should be called to serialize this type or property.
 /// Only valid on subtypes of <see cref="ASType"/>.
-/// Target method must be public, static, and conform to the signature of <see cref="TrySerializeDelegate{T}"/> where T is substituted for the containing type.
 /// </summary>
-[AttributeUsage(AttributeTargets.Method)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, Inherited = false)]
 [MeansImplicitUse]
-public sealed class CustomJsonSerializerAttribute : Attribute {}
+public sealed class CustomJsonSerializerAttribute : Attribute
+{
+    /// <summary>
+    /// Name of the method that can serialize this type or property.
+    /// Must be public, static, and conform to the signature of <see cref="TrySerializeDelegate{T}"/> where T is substituted for the type or property type.
+    /// </summary>
+    public string MethodName { get; }
+    
+    public CustomJsonSerializerAttribute(string methodName) => MethodName = methodName;
+}
 
 /// <summary>
 /// Serialize the type into JSON.

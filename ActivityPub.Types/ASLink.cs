@@ -19,6 +19,8 @@ namespace ActivityPub.Types;
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link"/>
 [ASTypeKey(LinkType)]
+[CustomJsonDeserializer(nameof(TryDeserialize))]
+[CustomJsonSerializer(nameof(TrySerialize))]
 public class ASLink : ASType
 {
     public const string LinkType = "Link";
@@ -75,7 +77,6 @@ public class ASLink : ASType
     public static implicit operator ASUri(ASLink link) => link.HRef;
     public static implicit operator ASLink(ASUri asUri) => new() { HRef = asUri };
 
-    [CustomJsonDeserializer]
     public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASLink? obj)
     {
         // We either parse from string, or allow parser to use default logic
@@ -93,7 +94,6 @@ public class ASLink : ASType
         return false;
     }
 
-    [CustomJsonSerializer]
     public static bool TrySerialize(ASLink obj, JsonSerializerOptions options, JsonNodeOptions nodeOptions, [NotNullWhen(true)] out JsonNode? node)
     {
         // If its only a link, then use the flattened form

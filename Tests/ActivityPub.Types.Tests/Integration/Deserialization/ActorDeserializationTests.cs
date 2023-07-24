@@ -35,13 +35,12 @@ public abstract class ActorDeserializationTests : DeserializationTests<PersonAct
             """;
 
             ObjectUnderTest.Endpoints.Should().NotBeNull();
-            ObjectUnderTest.Endpoints!.HasValue.Should().BeTrue();
-            ObjectUnderTest.Endpoints!.Value!.ProxyUrl?.HRef.Uri.ToString().Should().Be("https://example.com/proxyUrl");
-            ObjectUnderTest.Endpoints!.Value!.OAuthAuthorizationEndpoint?.HRef.Uri.ToString().Should().Be("https://example.com/oauthAuthorizationEndpoint");
-            ObjectUnderTest.Endpoints!.Value!.OAuthTokenEndpoint?.HRef.Uri.ToString().Should().Be("https://example.com/oauthTokenEndpoint");
-            ObjectUnderTest.Endpoints!.Value!.ProvideClientKey?.HRef.Uri.ToString().Should().Be("https://example.com/provideClientKey");
-            ObjectUnderTest.Endpoints!.Value!.SignClientKey?.HRef.Uri.ToString().Should().Be("https://example.com/signClientKey");
-            ObjectUnderTest.Endpoints!.Value!.SharedInbox?.HRef.Uri.ToString().Should().Be("https://example.com/sharedInbox");
+            ObjectUnderTest.Endpoints!.ProxyUrl?.HRef.Uri.ToString().Should().Be("https://example.com/proxyUrl");
+            ObjectUnderTest.Endpoints!.OAuthAuthorizationEndpoint?.HRef.Uri.ToString().Should().Be("https://example.com/oauthAuthorizationEndpoint");
+            ObjectUnderTest.Endpoints!.OAuthTokenEndpoint?.HRef.Uri.ToString().Should().Be("https://example.com/oauthTokenEndpoint");
+            ObjectUnderTest.Endpoints!.ProvideClientKey?.HRef.Uri.ToString().Should().Be("https://example.com/provideClientKey");
+            ObjectUnderTest.Endpoints!.SignClientKey?.HRef.Uri.ToString().Should().Be("https://example.com/signClientKey");
+            ObjectUnderTest.Endpoints!.SharedInbox?.HRef.Uri.ToString().Should().Be("https://example.com/sharedInbox");
         }
         
         [Fact]

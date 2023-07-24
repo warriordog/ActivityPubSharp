@@ -14,6 +14,7 @@ namespace ActivityPub.Types;
 /// <remarks>
 /// This is a synthetic type, and not part of the ActivityStreams standard.
 /// </remarks>
+[CustomJsonDeserializer(nameof(TryDeserialize))]
 public class ASTransitiveActivity : ASActivity
 {
     [JsonConstructor]
@@ -28,7 +29,6 @@ public class ASTransitiveActivity : ASActivity
     [JsonPropertyName("object")]
     public LinkableList<ASObject> Object { get; set; } = new();
     
-    [CustomJsonDeserializer]
     public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASTransitiveActivity? obj)
     {
         // If it has the "target" property, then its Targeted.

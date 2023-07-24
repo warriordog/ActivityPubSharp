@@ -61,7 +61,7 @@ public abstract class JsonTypeInfo
     public abstract bool TrySerialize(object obj, JsonSerializerOptions options, JsonNodeOptions nodeOptions, [NotNullWhen(true)] out JsonNode? node);
 
     /// <summary>
-    /// Attempt to serialize an instance of <see cref="Type"/> using its <see cref="TryDeserializeDelegate{T}"/>.
+    /// Attempt to deserialize an instance of <see cref="Type"/> using its <see cref="TryDeserializeDelegate{T}"/>.
     /// If the type has no custom deserializer, then false is returned.
     /// False will trigger the default deserializer to process <see cref="obj"/>.
     /// </summary>
