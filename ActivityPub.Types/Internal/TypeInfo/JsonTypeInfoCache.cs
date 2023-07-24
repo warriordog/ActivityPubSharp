@@ -131,20 +131,6 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
                 FindCustomSerializer(type, property),
                 FindCustomDeserializer(type, property)
             );
-            // var propInfo = new JsonPropertyInfo
-            // {
-            //     // Basic property details
-            //     Name = name,
-            //     IsRequired = isRequired,
-            //     
-            //     // Metadata needed for serialization
-            //     Property = property,
-            //     TypeDefaultValue = property.PropertyType.GetDefaultValue(),
-            //     IsCollection = property.PropertyType.IsAssignableTo(typeof(ICollection)),
-            //     IgnoreCondition = jsonIgnoreAttr?.Condition,
-            //     IgnoreWhenNested = Attribute.IsDefined(property, typeof(JsonIgnoreWhenNestedAttribute)),
-            //     CustomConverterType = property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType
-            // };
 
             // Add to appropriate lookups
             if (property.GetMethod != null)
@@ -166,24 +152,6 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
 
     private static JsonPropertyInfo CreatePropertyInfo(string name, bool isRequired, PropertyInfo property, object? typeDefaultValue, bool isCollection, JsonIgnoreCondition? ignoreCondition, bool ignoreWhenNested, Type? customConverterType, MethodInfo? customSerializerMethod, MethodInfo? customDeserializerMethod)
     {
-        // // Find custom converters
-        // TrySerializeDelegate<T>? customSerializer = null;
-        // if (customSerializerName != null)
-        // {
-        //     var method = containingType.GetMethod(customSerializerName);
-        //     if (method == null)
-        //         throw new MissingMethodException(containingType.Name, customSerializerName);
-        //     customSerializer = method.CreateDelegate<TrySerializeDelegate<T>>();
-        // }
-        // TryDeserializeDelegate<T>? customDeserializer = null;
-        // if (customDeserializerName != null)
-        // {
-        //     var method = containingType.GetMethod(customDeserializerName);
-        //     if (method == null)
-        //         throw new MissingMethodException(containingType.Name, customDeserializerName);
-        //     customDeserializer = method.CreateDelegate<TryDeserializeDelegate<T>>();
-        // }
-        
         // Pivot to generic method
         // TODO cache it as a delegate
         var method = typeof(JsonTypeInfoCache)
@@ -218,36 +186,6 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
             CustomSerializer = customSerializer
         };
     }
-
-    // This is weird because we're trying to find both methods (which are optional) and check for duplicates all in one pass.
-    // private static void FindCustomSerializationMethods<T>(Type type, out TrySerializeDelegate<T>? trySerialize, out TryDeserializeDelegate<T>? tryDeserialize)
-    // {
-    //     trySerialize = null;
-    //     tryDeserialize = null;
-    //
-    //     foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly))
-    //     {
-    //         // Check if its the serializer
-    //         var serializeAttr = method.GetCustomAttribute<CustomJsonSerializerAttribute>();
-    //         if (serializeAttr != null)
-    //         {
-    //             if (trySerialize != null)
-    //                 throw new ApplicationException($"Malformed AS entity {type}: only one method can be annotated with {nameof(CustomJsonSerializerAttribute)}");
-    //
-    //             trySerialize = method.CreateDelegate<TrySerializeDelegate<T>>();
-    //         }
-    //
-    //         // Check if its the deserializer
-    //         var deserializeAttr = method.GetCustomAttribute<CustomJsonDeserializerAttribute>();
-    //         if (deserializeAttr != null)
-    //         {
-    //             if (tryDeserialize != null)
-    //                 throw new ApplicationException($"Malformed AS entity {type}: only one method can be annotated with {nameof(CustomJsonDeserializerAttribute)}");
-    //
-    //             tryDeserialize = method.CreateDelegate<TryDeserializeDelegate<T>>();
-    //         }
-    //     }
-    // }
     
     private static MethodInfo? FindCustomSerializer(Type type, MemberInfo member)
     {
