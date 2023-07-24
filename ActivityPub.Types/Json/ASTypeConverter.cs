@@ -77,7 +77,7 @@ public class ASTypeConverter<T> : JsonConverter<T>
     private JsonTypeInfo GetTargetType(JsonElement objectElement, Type typeToConverter)
     {
         // If the object contains a type, then use that to reify as much as possible
-        if (objectElement.TryGetASType(out var asTypeName))
+        if (objectElement.TryGetASType(out var asTypeName) && _asTypeInfoCache.IsKnownASType(asTypeName))
             return _asTypeInfoCache.GetJsonTypeInfo<T>(asTypeName);
 
         // If not, then use the declared type AS LONG AS its not the base ASType

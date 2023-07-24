@@ -16,6 +16,19 @@ public abstract class ASTypeConverterTests : JsonConverterTests<ASType, ASTypeCo
         JsonSerializerOptions = fixture.JsonLdSerializer.SerializerOptions;
     }
 
+    public class ReadShould : ASTypeConverterTests
+    {
+        public ReadShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+        
+        [Fact]
+        public void DeserializeToObject_WhenTypeIsUnknownAndBaseIsASType()
+        {
+            var json = """{"type":"MadeUpType"}"""u8;
+            var obj = Read(json);
+            obj.Should().BeOfType<ASObject>();
+        }
+    }
+
     public class WriteShould : ASTypeConverterTests
     {
         public WriteShould(JsonLdSerializerFixture fixture) : base(fixture) {}

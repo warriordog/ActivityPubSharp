@@ -13,6 +13,8 @@ namespace ActivityPub.Types.Internal.TypeInfo;
 public interface IASTypeInfoCache
 {
     internal JsonTypeInfo GetJsonTypeInfo<TDeclaredType>(string name) where TDeclaredType : ASType;
+    
+    internal bool IsKnownASType(string asTypeName);
 
     internal bool IsASLinkType(string type);
 
@@ -52,7 +54,9 @@ public class ASTypeInfoCache : IASTypeInfoCache
         // Get info
         return _jsonTypeInfoCache.GetForType(realType);
     }
-    
+
+    public bool IsKnownASType(string asTypeName) => _knownTypeMap.ContainsKey(asTypeName.ToLower());
+
     public bool IsASLinkType(string type)
     {
         var typeKey = type.ToLower();
