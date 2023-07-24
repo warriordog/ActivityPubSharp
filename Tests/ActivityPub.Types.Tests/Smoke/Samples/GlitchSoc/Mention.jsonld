@@ -1,0 +1,19 @@
+﻿{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    {
+      "ostatus": "http://ostatus.org#",
+      "atomUri": "ostatus:atomUri",
+      "inReplyToAtomUri": "ostatus:inReplyToAtomUri",
+      "conversation": "ostatus:conversation",
+      "sensitive": "as:sensitive",
+      "toot": "http://joinmastodon.org/ns#",
+      "votersCount": "toot:votersCount",
+      "litepub": "http://litepub.social/ns#",
+      "directMessage": "litepub:directMessage"
+    }
+  ],
+  "type": "Mention",
+  "href": "https://enby.life/users/9fpwmts9tv",
+  "name": "@hazelnoot@enby.life"
+}

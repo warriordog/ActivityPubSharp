@@ -56,6 +56,7 @@ public class ASTypeConverter<T> : JsonConverter<T>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     private readonly IJsonTypeInfoCache _jsonTypeInfoCache;
+    
     public ASTypeConverter(IASTypeInfoCache asTypeInfoCache, IJsonTypeInfoCache jsonTypeInfoCache)
     {
         _asTypeInfoCache = asTypeInfoCache;
@@ -138,7 +139,7 @@ public class ASTypeConverter<T> : JsonConverter<T>
 
         return obj;
     }
-
+    
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
         // If value is a subtype of T, then we need to re-enter with the correct type

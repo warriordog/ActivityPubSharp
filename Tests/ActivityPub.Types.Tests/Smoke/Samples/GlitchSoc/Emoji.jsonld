@@ -1,0 +1,22 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    {
+      "toot": "http://joinmastodon.org/ns#",
+      "Emoji": "toot:Emoji",
+      "focalPoint": {
+        "@container": "@list",
+        "@id": "toot:focalPoint"
+      }
+    }
+  ],
+  "id": "https://mastodon.koehlercode.dev/emojis/15777",
+  "type": "Emoji",
+  "name": ":blobfoxsweating:",
+  "updated": "2023-02-08T02:39:24Z",
+  "icon": {
+    "type": "Image",
+    "mediaType": "image/png",
+    "url": "https://mastodon.koehlercode.dev/system/custom_emojis/images/000/015/777/original/blobfoxsweating.png"
+  }
+}

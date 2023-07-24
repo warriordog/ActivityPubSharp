@@ -15,3 +15,19 @@ If the `csproj` file must ever be regenerated, then make sure to include these l
       <EmbeddedResource Include="Smoke\Samples\**\*.jsonld" />
     </ItemGroup>
 ```
+
+## Current samples:
+
+| Software                           | Type          | Notes            | Tests                                                        |
+|------------------------------------|---------------|------------------|--------------------------------------------------------------|
+| [Firefish (AKA Calckey)](Firefish) | Microblogging | Fork of Misskey  | [FirefishSampleTests.cs](Firefish/FirefishSampleTests.cs)    |
+| [Glitch-Soc](GlitchSoc)            | Microblogging | Fork of Mastodon | [GlitchSocSampleTests.cs](GlitchSoc/GlitchSocSampleTests.cs) |
+
+## Tips:
+* Download `Person` from Mastodon / Glitch-soc / Misskey / Foundkey / Firefish (Calckey):
+  ```powershell
+  $output = "Person.jsonld"
+  $instance = "https://example.com"
+  $user = "name / id"
+  Invoke-WebRequest -Headers @{"accept"="application/activity+json"} "$instance/users/$user" -OutFile $output -UseBasicParsing
+  ```

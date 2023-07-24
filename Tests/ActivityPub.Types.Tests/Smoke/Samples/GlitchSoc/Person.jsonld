@@ -1,0 +1,135 @@
+﻿{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    "https://w3id.org/security/v1",
+    {
+      "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+      "toot": "http://joinmastodon.org/ns#",
+      "featured": {
+        "@id": "toot:featured",
+        "@type": "@id"
+      },
+      "featuredTags": {
+        "@id": "toot:featuredTags",
+        "@type": "@id"
+      },
+      "alsoKnownAs": {
+        "@id": "as:alsoKnownAs",
+        "@type": "@id"
+      },
+      "movedTo": {
+        "@id": "as:movedTo",
+        "@type": "@id"
+      },
+      "schema": "http://schema.org#",
+      "PropertyValue": "schema:PropertyValue",
+      "value": "schema:value",
+      "discoverable": "toot:discoverable",
+      "Device": "toot:Device",
+      "Ed25519Signature": "toot:Ed25519Signature",
+      "Ed25519Key": "toot:Ed25519Key",
+      "Curve25519Key": "toot:Curve25519Key",
+      "EncryptedMessage": "toot:EncryptedMessage",
+      "publicKeyBase64": "toot:publicKeyBase64",
+      "deviceId": "toot:deviceId",
+      "claim": {
+        "@type": "@id",
+        "@id": "toot:claim"
+      },
+      "fingerprintKey": {
+        "@type": "@id",
+        "@id": "toot:fingerprintKey"
+      },
+      "identityKey": {
+        "@type": "@id",
+        "@id": "toot:identityKey"
+      },
+      "devices": {
+        "@type": "@id",
+        "@id": "toot:devices"
+      },
+      "messageFranking": "toot:messageFranking",
+      "messageType": "toot:messageType",
+      "cipherText": "toot:cipherText",
+      "suspended": "toot:suspended",
+      "Hashtag": "as:Hashtag",
+      "focalPoint": {
+        "@container": "@list",
+        "@id": "toot:focalPoint"
+      }
+    }
+  ],
+  "id": "https://mastodon.koehlercode.dev/users/hazel",
+  "type": "Person",
+  "following": "https://mastodon.koehlercode.dev/users/hazel/following",
+  "followers": "https://mastodon.koehlercode.dev/users/hazel/followers",
+  "inbox": "https://mastodon.koehlercode.dev/users/hazel/inbox",
+  "outbox": "https://mastodon.koehlercode.dev/users/hazel/outbox",
+  "featured": "https://mastodon.koehlercode.dev/users/hazel/collections/featured",
+  "featuredTags": "https://mastodon.koehlercode.dev/users/hazel/collections/tags",
+  "preferredUsername": "hazel",
+  "name": "Hazelnoot",
+  "summary": "\u003cp\u003eHazel (they/she) - Demigirl software developer with an interest in gaming and retrocomputing.\u003c/p\u003e\u003cp\u003eBefore following, please have a public bio / introduction and at least a few posts. I accept almost any follow request, but these precautions are needed for safety and to prevent spam.\u003c/p\u003e\u003cp\u003e\u003ca href=\"https://mastodon.koehlercode.dev/tags/NoBot\" class=\"mention hashtag\" rel=\"tag\"\u003e#\u003cspan\u003eNoBot\u003c/span\u003e\u003c/a\u003e \u003ca href=\"https://mastodon.koehlercode.dev/tags/NoArchive\" class=\"mention hashtag\" rel=\"tag\"\u003e#\u003cspan\u003eNoArchive\u003c/span\u003e\u003c/a\u003e \u003ca href=\"https://mastodon.koehlercode.dev/tags/NoIndex\" class=\"mention hashtag\" rel=\"tag\"\u003e#\u003cspan\u003eNoIndex\u003c/span\u003e\u003c/a\u003e \u003ca href=\"https://mastodon.koehlercode.dev/tags/NoSearch\" class=\"mention hashtag\" rel=\"tag\"\u003e#\u003cspan\u003eNoSearch\u003c/span\u003e\u003c/a\u003e\u003c/p\u003e",
+  "url": "https://mastodon.koehlercode.dev/@hazel",
+  "manuallyApprovesFollowers": true,
+  "discoverable": true,
+  "published": "2022-11-16T00:00:00Z",
+  "devices": "https://mastodon.koehlercode.dev/users/hazel/collections/devices",
+  "publicKey": {
+    "id": "https://mastodon.koehlercode.dev/users/hazel#main-key",
+    "owner": "https://mastodon.koehlercode.dev/users/hazel",
+    "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA40Db7z69KZHpk907Nr7N\nzb0N5I7q9zY42xYExPqxhhWKMSa/ZtGPracwnXwKYyOl1aX6hlxnuy/2FLz03Kxu\n0P+ET2paJq9DikfrsRE9iDx9hgMVeKsIlLmJq/+M0DQdS84bFYStlktoQFJe9r6F\nZePbrbnCMbJAcMqqqvrux09pS0n9vy9Lui72pH1LpSM9i7jZlJO+rO5TBqq78vsl\nGBxCqVMC438CbBIZkob9IKrOM2lrItSXPFEDd8ekUqDLJmNvEeo21Chb60puEECT\nunZ8qCXP7CklR8SqKQpAuCeI4g600IuHodkaxnsV7Bj/KcI77LzsMrCZ1GRD+c/G\ntwIDAQAB\n-----END PUBLIC KEY-----\n"
+  },
+  "tag": [
+    {
+      "type": "Hashtag",
+      "href": "https://mastodon.koehlercode.dev/tags/noarchive",
+      "name": "#noarchive"
+    },
+    {
+      "type": "Hashtag",
+      "href": "https://mastodon.koehlercode.dev/tags/noindex",
+      "name": "#noindex"
+    },
+    {
+      "type": "Hashtag",
+      "href": "https://mastodon.koehlercode.dev/tags/nosearch",
+      "name": "#nosearch"
+    },
+    {
+      "type": "Hashtag",
+      "href": "https://mastodon.koehlercode.dev/tags/nobot",
+      "name": "#nobot"
+    }
+  ],
+  "attachment": [
+    {
+      "type": "PropertyValue",
+      "name": "About me",
+      "value": "\u003ca href=\"https://example.com/redacted\" target=\"_blank\" rel=\"nofollow noopener noreferrer me\" translate=\"no\"\u003e\u003cspan class=\"invisible\"\u003ehttps://\u003c/span\u003e\u003cspan class=\"\"\u003eexample.com/redacted\u003c/span\u003e\u003cspan class=\"invisible\"\u003e\u003c/span\u003e\u003c/a\u003e"
+    },
+    {
+      "type": "PropertyValue",
+      "name": "Itch.io",
+      "value": "\u003ca href=\"https://example.com/redacted/\" target=\"_blank\" rel=\"nofollow noopener noreferrer me\" translate=\"no\"\u003e\u003cspan class=\"invisible\"\u003ehttps://\u003c/span\u003e\u003cspan class=\"\"\u003eexample.com/redacted/\u003c/span\u003e\u003cspan class=\"invisible\"\u003e\u003c/span\u003e\u003c/a\u003e"
+    },
+    {
+      "type": "PropertyValue",
+      "name": "Github",
+      "value": "\u003ca href=\"https://example.com/redacted\" target=\"_blank\" rel=\"nofollow noopener noreferrer me\" translate=\"no\"\u003e\u003cspan class=\"invisible\"\u003ehttps://\u003c/span\u003e\u003cspan class=\"\"\u003eexample.com/redacted\u003c/span\u003e\u003cspan class=\"invisible\"\u003e\u003c/span\u003e\u003c/a\u003e"
+    },
+    {
+      "type": "PropertyValue",
+      "name": "Lemmy",
+      "value": "\u003ca href=\"https://example.com/redacted\" target=\"_blank\" rel=\"nofollow noopener noreferrer me\" translate=\"no\"\u003e\u003cspan class=\"invisible\"\u003ehttps://\u003c/span\u003e\u003cspan class=\"\"\u003eexample.com/redacted\u003c/span\u003e\u003cspan class=\"invisible\"\u003e\u003c/span\u003e\u003c/a\u003e"
+    }
+  ],
+  "endpoints": {
+    "sharedInbox": "https://mastodon.koehlercode.dev/inbox"
+  },
+  "icon": {
+    "type": "Image",
+    "mediaType": "image/png",
+    "url": "https://mastodon.koehlercode.dev/system/accounts/avatars/109/354/601/709/677/010/original/2b7a54fb57971003.png"
+  }
+}

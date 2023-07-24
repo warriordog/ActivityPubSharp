@@ -1,0 +1,12 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://mastodon.koehlercode.dev/users/hazel/statuses/110766460416606152/replies",
+  "type": "Collection",
+  "first": {
+    "id": "https://mastodon.koehlercode.dev/users/hazel/statuses/110766460416606152/replies?page=true",
+    "type": "CollectionPage",
+    "next": "https://mastodon.koehlercode.dev/users/hazel/statuses/110766460416606152/replies?only_other_accounts=true\u0026page=true",
+    "partOf": "https://mastodon.koehlercode.dev/users/hazel/statuses/110766460416606152/replies",
+    "items": []
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://mastodon.koehlercode.dev/users/hazel/statuses/110766405629063068/activity",
+  "type": "Announce",
+  "actor": "https://mastodon.koehlercode.dev/users/hazel",
+  "published": "2023-07-24T01:13:38Z",
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "cc": [
+    "https://mastodon.social/users/TodayInTwitter",
+    "https://mastodon.koehlercode.dev/users/hazel/followers"
+  ],
+  "object": "https://mastodon.social/users/TodayInTwitter/statuses/110766248965248102"
+}

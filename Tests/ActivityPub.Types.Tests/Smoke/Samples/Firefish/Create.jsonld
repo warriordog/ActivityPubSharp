@@ -1,0 +1,63 @@
+﻿{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    "https://w3id.org/security/v1",
+    {
+      "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+      "movedToUri": "as:movedTo",
+      "sensitive": "as:sensitive",
+      "Hashtag": "as:Hashtag",
+      "quoteUri": "fedibird:quoteUri",
+      "quoteUrl": "as:quoteUrl",
+      "toot": "http://joinmastodon.org/ns#",
+      "Emoji": "toot:Emoji",
+      "featured": "toot:featured",
+      "discoverable": "toot:discoverable",
+      "schema": "http://schema.org#",
+      "PropertyValue": "schema:PropertyValue",
+      "value": "schema:value",
+      "misskey": "https://misskey-hub.net/ns#",
+      "_misskey_content": "misskey:_misskey_content",
+      "_misskey_quote": "misskey:_misskey_quote",
+      "_misskey_reaction": "misskey:_misskey_reaction",
+      "_misskey_votes": "misskey:_misskey_votes",
+      "_misskey_talk": "misskey:_misskey_talk",
+      "isCat": "misskey:isCat",
+      "fedibird": "http://fedibird.com/ns#",
+      "vcard": "http://www.w3.org/2006/vcard/ns#"
+    }
+  ],
+  "id": "https://enby.life/notes/9h203ewltks9dbfb/activity",
+  "actor": "https://enby.life/users/9fpnzspgtp",
+  "type": "Create",
+  "published": "2023-07-11T15:17:48.213Z",
+  "object": {
+    "id": "https://enby.life/notes/9h203ewltks9dbfb",
+    "type": "Note",
+    "attributedTo": "https://enby.life/users/9fpnzspgtp",
+    "summary": null,
+    "content": "<p><span>Source for the instance background: </span><a href=\"https://tech.lgbt/@Gingeh/110117861681527722\">https://tech.lgbt/@Gingeh/110117861681527722</a></p>",
+    "_misskey_content": "Source for the instance background: https://tech.lgbt/@Gingeh/110117861681527722",
+    "source": {
+      "content": "Source for the instance background: https://tech.lgbt/@Gingeh/110117861681527722",
+      "mediaType": "text/x.misskeymarkdown"
+    },
+    "published": "2023-07-11T15:17:48.213Z",
+    "to": [
+      "https://www.w3.org/ns/activitystreams#Public"
+    ],
+    "cc": [
+      "https://enby.life/users/9fpnzspgtp/followers"
+    ],
+    "inReplyTo": null,
+    "attachment": [],
+    "sensitive": false,
+    "tag": []
+  },
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "cc": [
+    "https://enby.life/users/9fpnzspgtp/followers"
+  ]
+}

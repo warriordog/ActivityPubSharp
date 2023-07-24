@@ -1,0 +1,8 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://mastodon.koehlercode.dev/users/hazel/outbox",
+  "type": "OrderedCollection",
+  "totalItems": 4875,
+  "first": "https://mastodon.koehlercode.dev/users/hazel/outbox?page=true",
+  "last": "https://mastodon.koehlercode.dev/users/hazel/outbox?min_id=0\u0026page=true"
+}

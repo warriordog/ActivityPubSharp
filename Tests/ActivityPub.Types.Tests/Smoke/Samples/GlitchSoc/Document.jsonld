@@ -1,0 +1,34 @@
+﻿{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    {
+      "ostatus": "http://ostatus.org#",
+      "atomUri": "ostatus:atomUri",
+      "inReplyToAtomUri": "ostatus:inReplyToAtomUri",
+      "conversation": "ostatus:conversation",
+      "sensitive": "as:sensitive",
+      "toot": "http://joinmastodon.org/ns#",
+      "votersCount": "toot:votersCount",
+      "litepub": "http://litepub.social/ns#",
+      "directMessage": "litepub:directMessage",
+      "Emoji": "toot:Emoji",
+      "focalPoint": {
+        "@container": "@list",
+        "@id": "toot:focalPoint"
+      },
+      "blurhash": "toot:blurhash",
+      "Hashtag": "as:Hashtag"
+    }
+  ],
+  "type": "Document",
+  "mediaType": "image/png",
+  "url": "https://mastodon.koehlercode.dev/system/media_attachments/files/110/766/447/490/754/403/original/6ba3f4033297d373.png",
+  "name": "exert from the help file for the Invoke-WebRequest module in PowerShell. The documentation states that if the response is a web page, it will be parsed and scripts within the page may be silently executed.",
+  "blurhash": "U05X=K?Xoj%NtCa+xoj;01IVRiWAM@t0RXoh",
+  "focalPoint": [
+    -0.67,
+    0.04
+  ],
+  "width": 1760,
+  "height": 205
+}

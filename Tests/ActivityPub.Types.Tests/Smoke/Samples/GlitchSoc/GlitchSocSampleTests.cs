@@ -8,32 +8,45 @@ using ActivityPub.Types.Extended.Link;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
 
-namespace ActivityPub.Types.Tests.Smoke.Samples.Firefish;
+namespace ActivityPub.Types.Tests.Smoke.Samples.GlitchSoc;
 
-public class FirefishSampleTests : SampleTests
+public class GlitchSocSampleTests : SampleTests
 {
-    public FirefishSampleTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+    public GlitchSocSampleTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+    
+    [Fact]
+    public void AnnounceShouldConvert() => TestSample(typeof(AnnounceActivity), AnnounceActivity.AnnounceType);
+    
+    
+    [Fact]
+    public void CollectionShouldConvert() => TestSample(typeof(ASCollection<ASObject>), CollectionTypes.CollectionType);
+
+    [Fact]
+    public void CollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage<ASObject>), CollectionTypes.CollectionPageType);
 
     [Fact]
     public void CreateShouldConvert() => TestSample(typeof(CreateActivity), CreateActivity.CreateType);
 
     [Fact]
-    public void HashtagShouldConvert() => TestSample(typeof(ASObject), "Hashtag");
+    public void DocumentShouldConvert() => TestSample(typeof(DocumentObject), DocumentObject.DocumentType);
     
+    [Fact]
+    public void EmojiShouldConvert() => TestSample(typeof(ASObject), "Emoji");
+
+    [Fact]
+    public void HashtagShouldConvert() => TestSample(typeof(ASObject), "Hashtag");
+
     [Fact]
     public void ImageShouldConvert() => TestSample(typeof(ImageObject), ImageObject.ImageType);
-    
+
     [Fact]
-    public void KeyShouldConvert() => TestSample(typeof(ASObject), "Key");
-    
+    public void KeyShouldConvert() => TestSample(typeof(ASObject), ASObject.ObjectType, "Key");
+
     [Fact]
     public void MentionShouldConvert() => TestSample(typeof(MentionLink), MentionLink.MentionType);
 
     [Fact]
     public void NoteShouldConvert() => TestSample(typeof(NoteObject), NoteObject.NoteType);
-
-    [Fact]
-    public void ObjectShouldConvert() => TestSample(typeof(ASObject), ASObject.ObjectType);
 
     [Fact]
     public void OrderedCollectionShouldConvert() => TestSample(typeof(ASOrderedCollection<ASObject>), CollectionTypes.OrderedCollectionType);
