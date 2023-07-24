@@ -200,6 +200,9 @@ public class ASObject : ASType
     /// The source property is intended to convey some sort of source from which the content markup was derived, as a form of provenance, or to support future editing by clients.
     /// In general, clients do the conversion from source to content, not the other way around. 
     /// </summary>
+    /// <remarks>
+    /// This property is defined by ActivityPub, not ActivityStreams. 
+    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitypub/#source-property"/>
     [JsonPropertyName("source")]
     public ASObject? Source { get; set; }
