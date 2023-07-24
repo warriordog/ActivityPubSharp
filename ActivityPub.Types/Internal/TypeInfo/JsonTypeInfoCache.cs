@@ -64,8 +64,12 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
     // Ugly hack to pivot from Method(Type) to Method<Type>()
     private static readonly MethodInfo CreateForTypeMethod =
         typeof(JsonTypeInfoCache)
-            .GetMethod(nameof(CreateForType), BindingFlags.NonPublic | BindingFlags.Static, Type.EmptyTypes)
+            .GetMethod(nameof(CreateForType), BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly, Type.EmptyTypes)
         ?? throw new ApplicationException($"Runtime error - can't find {nameof(JsonTypeInfoCache)}.{nameof(CreateForType)}()");
+    private static readonly MethodInfo CreatePropertyInfoOfMethod =
+        typeof(JsonTypeInfoCache)
+            .GetMethod(nameof(CreatePropertyInfoOf), BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)
+        ?? throw new MissingMemberException(nameof(JsonTypeInfoCache), nameof(CreatePropertyInfoOf));
 
     // Pivot to the generic overload.
     // Its an inefficient hack, but this is only called *at most* once per type.  
@@ -153,13 +157,8 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
     private static JsonPropertyInfo CreatePropertyInfo(string name, bool isRequired, PropertyInfo property, object? typeDefaultValue, bool isCollection, JsonIgnoreCondition? ignoreCondition, bool ignoreWhenNested, Type? customConverterType, MethodInfo? customSerializerMethod, MethodInfo? customDeserializerMethod)
     {
         // Pivot to generic method
-        // TODO cache it as a delegate
-        var method = typeof(JsonTypeInfoCache)
-            .GetMethod(nameof(CreatePropertyInfoOf), BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.NonPublic)
-            ?.MakeGenericMethod(property.PropertyType)
-            ?? throw new MissingMemberException(nameof(JsonTypeInfoCache), nameof(CreatePropertyInfoOf));
-        
-        return ( JsonPropertyInfo)method.Invoke(null, new[] { name, isRequired, property, typeDefaultValue, isCollection, ignoreCondition, ignoreWhenNested, customConverterType, customSerializerMethod, customDeserializerMethod })!;
+        var method = CreatePropertyInfoOfMethod.MakeGenericMethod(property.PropertyType);
+        return (JsonPropertyInfo)method.Invoke(null, new[] { name, isRequired, property, typeDefaultValue, isCollection, ignoreCondition, ignoreWhenNested, customConverterType, customSerializerMethod, customDeserializerMethod })!;
     }
     
     private static JsonPropertyInfo<T> CreatePropertyInfoOf<T>(string name, bool isRequired, PropertyInfo property, object? typeDefaultValue, bool isCollection, JsonIgnoreCondition? ignoreCondition, bool ignoreWhenNested, Type? customConverterType, MethodInfo? customSerializerMethod, MethodInfo? customDeserializerMethod)
