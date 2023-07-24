@@ -3,6 +3,7 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Util;
 using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
@@ -16,7 +17,7 @@ namespace ActivityPub.Types.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
 [ASTypeKey(OrderedCollectionPageType)]
 public class ASOrderedCollectionPage<T> : ASCollectionPage<T>
-    where T : ASType
+    where T : ASObject
 {
 
     [JsonConstructor]
@@ -32,7 +33,7 @@ public class ASOrderedCollectionPage<T> : ASCollectionPage<T>
     public int? StartIndex { get; set; }
 
     [JsonPropertyName("orderedItems")]
-    public override List<T>? Items { get; set; }
+    public override LinkableList<T>? Items { get; set; }
     
     public static implicit operator ASOrderedCollectionPage<T>(List<T> collection) => new() { Items = new(collection) };
     public static implicit operator ASOrderedCollectionPage<T>(T value) => new() { Items = new() { value } };

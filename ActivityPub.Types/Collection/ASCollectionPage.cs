@@ -17,7 +17,7 @@ namespace ActivityPub.Types.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage"/>
 [ASTypeKey(CollectionPageType)]
 public class ASCollectionPage<T> : ASCollection<T>
-    where T : ASType
+    where T : ASObject
 {
     [JsonConstructor]
     public ASCollectionPage() : this(CollectionPageType) {}

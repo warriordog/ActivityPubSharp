@@ -21,7 +21,7 @@ namespace ActivityPub.Types.Collection;
 /// <seealso cref="ASOrderedCollection{T}"/>
 [ASTypeKey(CollectionType)]
 public class ASCollection<T> : ASObject
-    where T : ASType
+    where T : ASObject
 {
     [JsonConstructor]
     public ASCollection() : this(CollectionType) {}
@@ -81,7 +81,7 @@ public class ASCollection<T> : ASObject
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-items"/>
     [JsonPropertyName("items")]
-    public virtual List<T>? Items { get; set; }
+    public virtual LinkableList<T>? Items { get; set; }
 
     /// <summary>
     /// True if this is a paged collection, false otherwise.
@@ -95,8 +95,7 @@ public class ASCollection<T> : ASObject
     [JsonIgnore]
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Items?.Any() == true;
-
-
+    
     public static implicit operator ASCollection<T>(List<T> collection) => new() { Items = new(collection) };
     public static implicit operator ASCollection<T>(T value) => new() { Items = new() { value } };
 }

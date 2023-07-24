@@ -3,6 +3,7 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Util;
 using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
@@ -14,7 +15,7 @@ namespace ActivityPub.Types.Collection;
 /// <typeparam name="T"></typeparam>
 [ASTypeKey(OrderedCollectionType)]
 public class ASOrderedCollection<T> : ASCollection<T>
-    where T : ASType
+    where T : ASObject
 {
     [JsonConstructor]
     public ASOrderedCollection() : this(OrderedCollectionType) {}
@@ -22,7 +23,7 @@ public class ASOrderedCollection<T> : ASCollection<T>
     protected ASOrderedCollection(string type) : base(type) {}
 
     [JsonPropertyName("orderedItems")]
-    public override List<T>? Items { get; set; }
+    public override LinkableList<T>? Items { get; set; }
 
     public static implicit operator ASOrderedCollection<T>(List<T> collection) => new() { Items = new(collection) };
     public static implicit operator ASOrderedCollection<T>(T value) => new() { Items = new() { value } };
