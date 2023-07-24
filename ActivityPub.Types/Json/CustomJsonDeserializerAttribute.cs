@@ -7,13 +7,21 @@ using JetBrains.Annotations;
 namespace ActivityPub.Types.Json;
 
 /// <summary>
-/// Indicates that the target method should be called to deserialize this type.
+/// Indicates that the target method should be called to deserialize this type or property.
 /// Only valid on subtypes of <see cref="ASType"/>.
-/// Target method must be public, static, and conform to the signature of <see cref="TryDeserializeDelegate{T}"/> where T is substituted for the containing type.
 /// </summary>
-[AttributeUsage(AttributeTargets.Method)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, Inherited = false)]
 [MeansImplicitUse]
-public sealed class CustomJsonDeserializerAttribute : Attribute {}
+public sealed class CustomJsonDeserializerAttribute : Attribute
+{
+    /// <summary>
+    /// Name of the method that can parse this type or property.
+    /// Must be public, static, and conform to the signature of <see cref="TryDeserializeDelegate{T}"/> where T is substituted for the type or property type.
+    /// </summary>
+    public string MethodName { get; }
+
+    public CustomJsonDeserializerAttribute(string methodName) => MethodName = methodName;
+}
 
 /// <summary>
 /// Deserialize the type from JSON.
