@@ -70,7 +70,10 @@ public interface IActor
     /// A json object which maps additional (typically server/domain-wide) endpoints which may be useful either for this actor or someone referencing this actor.
     /// This mapping may be nested inside the actor document as the value or may be a link to a JSON-LD document with these properties. 
     /// </summary>
-    public Linkable<ActorEndpoints>? Endpoints { get; set; }
+    /// <remarks>
+    /// This should technically be a Linkable{ActorEndpoints}, but ActorEndpoints does not extend ASType
+    /// </remarks>
+    public ActorEndpoints? Endpoints { get; set; }
 }
 
 /// <summary>
@@ -113,7 +116,7 @@ public class ASActor : ASObject, IActor
     public NaturalLanguageString? PreferredUsername { get; set; }
 
     [JsonPropertyName("endpoints")]
-    public Linkable<ActorEndpoints>? Endpoints { get; set; }
+    public ActorEndpoints? Endpoints { get; set; }
 }
 
 /// <summary>

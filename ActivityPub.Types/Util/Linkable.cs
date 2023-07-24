@@ -10,6 +10,7 @@ namespace ActivityPub.Types.Util;
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
 public class Linkable<T>
+where T : ASObject
 {
     [MemberNotNullWhen(true, nameof(Link))]
     [MemberNotNullWhen(false, nameof(Value))]

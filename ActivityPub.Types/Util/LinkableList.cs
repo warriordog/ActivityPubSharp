@@ -7,6 +7,7 @@ namespace ActivityPub.Types.Util;
 /// Synthetic type to represent a list of T or Links to T
 /// </summary>
 public class LinkableList<T> : List<Linkable<T>>
+where T : ASObject
 {
     /// <summary>
     /// All link items within the collection.
