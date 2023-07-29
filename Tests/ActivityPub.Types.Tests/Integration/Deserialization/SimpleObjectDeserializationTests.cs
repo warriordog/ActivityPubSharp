@@ -68,6 +68,27 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
+    public class ObjectWithUrl : SimpleObjectDeserializationTests
+    {
+        [Fact]
+        public void ShouldDeserializeUrlList()
+        {
+            JsonUnderTest = """{"url":["https://example.com/example1", "https://example.com/example2"]}""";
+            ObjectUnderTest.Url.Should().NotBeNull();
+            ObjectUnderTest.Url.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void ShouldDeserializeSingleUrl()
+        {
+            JsonUnderTest = """{"url":"https://example.com"}""";
+            ObjectUnderTest.Url.Should().NotBeNull();
+            ObjectUnderTest.Url.Should().HaveCount(1);
+        }
+
+        public ObjectWithUrl(JsonLdSerializerFixture fixture) : base(fixture) { }
+    }
+
     public class FullObject : SimpleObjectDeserializationTests
     {
         [Fact]
@@ -131,6 +152,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             ObjectUnderTest.Tag.Should().HaveCount(1);
             ObjectUnderTest.To.Should().HaveCount(1);
             ObjectUnderTest.Url.Should().NotBeNull();
+            ObjectUnderTest.Url.Should().HaveCount(1);
             ObjectUnderTest.Content.Should().NotBeNull();
             ObjectUnderTest.Duration.Should().NotBeNull();
             ObjectUnderTest.StartTime.Should().NotBeNull();
