@@ -139,7 +139,7 @@ public class ASObject : ASType
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
     [JsonPropertyName("url")]
-    public List<ASLink>? Url { get; set; }
+    public List<ASLink> Url { get; set; } = new();
 
     /// <summary>
     /// The content or textual representation of the Object encoded as a JSON string.
