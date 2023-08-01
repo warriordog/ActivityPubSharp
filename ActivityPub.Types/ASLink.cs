@@ -18,7 +18,7 @@ namespace ActivityPub.Types;
 /// Properties of the Link are properties of the reference as opposed to properties of the resource. 
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link"/>
-[ASTypeKey(LinkType)]
+[APType(LinkType)]
 [CustomJsonDeserializer(nameof(TryDeserialize))]
 [CustomJsonSerializer(nameof(TrySerialize))]
 public class ASLink : ASType
