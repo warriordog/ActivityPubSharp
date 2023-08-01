@@ -7,7 +7,6 @@ using ActivityPub.Types.Extended.Activity;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace ActivityPub.Types;
 
