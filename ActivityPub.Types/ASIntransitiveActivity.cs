@@ -11,7 +11,7 @@ namespace ActivityPub.Types;
 /// The object property is therefore inappropriate for these activities. 
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-intransitiveactivity"/>
-[ASTypeKey(IntransitiveActivityType)]
+[APType(IntransitiveActivityType)]
 public class ASIntransitiveActivity : ASActivity
 {
     public const string IntransitiveActivityType = "IntransitiveActivity";
