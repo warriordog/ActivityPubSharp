@@ -180,7 +180,7 @@ public class ASObject : ASType
     /// Identifies one or more links to representations of the object 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
-    public ASLink? Url
+    public List<ASLink> Url
     {
         get => Entity.Url;
         set => Entity.Url = value;
@@ -368,7 +368,7 @@ public sealed class ASObjectEntity : ASBase
 
     /// <inheritdoc cref="ASObject.Url"/>
     [JsonPropertyName("url")]
-    public ASLink? Url { get; set; }
+    public List<ASLink> Url { get; set; } = new();
 
     /// <inheritdoc cref="ASObject.Content"/>
     [JsonPropertyName("content")]
