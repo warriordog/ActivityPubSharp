@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// The origin can be used to identify the context from which the actor originated.
 /// The target typically has no defined meaning. 
 /// </summary>
-[ASTypeKey(ArriveType)]
+[APType(ArriveType)]
 public class ArriveActivity : ASIntransitiveActivity
 {
     public const string ArriveType = "Arrive";
