@@ -14,7 +14,7 @@ namespace ActivityPub.Types;
 /// It is important to note that the Activity type itself does not carry any specific semantics about the kind of action being taken. 
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity"/>
-[ASTypeKey(ActivityType)]
+[APType(ActivityType)]
 [CustomJsonDeserializer(nameof(TryDeserialize))]
 public class ASActivity : ASObject
 {
