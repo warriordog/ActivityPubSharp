@@ -15,7 +15,7 @@ namespace ActivityPub.Types.Collection;
 /// Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the CollectionPage type.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage"/>
-[ASTypeKey(CollectionPageType)]
+[APType(CollectionPageType)]
 public class ASCollectionPage<T> : ASCollection<T>
     where T : ASObject
 {
