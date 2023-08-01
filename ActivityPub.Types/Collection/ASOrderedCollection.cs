@@ -13,7 +13,7 @@ namespace ActivityPub.Types.Collection;
 /// May be paged or unpaged.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[ASTypeKey(OrderedCollectionType)]
+[APType(OrderedCollectionType)]
 public class ASOrderedCollection<T> : ASCollection<T>
     where T : ASObject
 {
