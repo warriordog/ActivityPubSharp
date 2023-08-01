@@ -34,6 +34,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{3DAD3C87-2551-48A9-A484-289C5C3F6B22}"
 	ProjectSection(SolutionItems) = preProject
 		Docs\Type Graph Example.drawio.png = Docs\Type Graph Example.drawio.png
+		Docs\Type Graph 2 Example.drawio.png = Docs\Type Graph 2 Example.drawio.png
 	EndProjectSection
 EndProject
 Global
