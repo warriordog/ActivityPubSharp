@@ -6,34 +6,6 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
 
-// TODO model here is WIP
-
-// public interface IAPType
-// {
-//     static abstract string APTypeName { get; }
-// }
-
-// public interface IAPInstance
-// {
-//     /// <summary>
-//     /// Graph of all ActivityStreams types in the current object.
-//     /// Can be used to safely navigate from one type to any other.
-//     /// </summary>
-//     public TypeMap TypeMap { get; }
-//     
-//     /// <inheritdoc cref="TypeMap.Is{T}()"/>
-//     public bool Is<T>() where T : IAPInstance
-//         => TypeMap.Is<T>();
-//
-//     /// <inheritdoc cref="TypeMap.Is{T}(out T?)"/>
-//     public bool Is<T>([NotNullWhen(true)] out T? instance) where T : IAPInstance
-//         => TypeMap.Is(out instance);
-//
-//     /// <inheritdoc cref="TypeMap.As{T}"/>
-//     public T As<T>() where T : IAPInstance
-//         => TypeMap.As<T>();
-// }
-
 public class TypeMap
 {
     /// <summary>
@@ -112,10 +84,9 @@ public class TypeMap
     /// Adds a new typed instance to the object.
     /// </summary>
     /// <remarks>
-    /// This method is internal, as it should only be called by ASType constructor.
+    /// This method is internal, as it should only be called by <see cref="ASBase"/> constructor.
     /// User code should instead add a new type by passing an existing TypeMap into the constructor.
     /// This is not a technical limitation, but rather an intentional choice to avoid merge logic by making object graphs append-only.
-    /// TODO make this generic, if compatible with upstream code.
     /// </remarks>
     /// <throws cref="InvalidOperationException">If an object of this type already exists in the graph</throws>
     internal void Add<T>(T instance) where T : ASBase
