@@ -9,13 +9,19 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a short written work typically less than a single paragraph in length. 
 /// </summary>
-[ASTypeKey(NoteType)]
 public class NoteObject : ASObject
+{
+    private NoteObjectEntity Entity { get; }
+    
+    public NoteObject() => Entity = new NoteObjectEntity(TypeMap);
+    public NoteObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<NoteObjectEntity>();
+}
+
+/// <inheritdoc cref="NoteObject"/>
+[ASTypeKey(NoteType)]
+public sealed class NoteObjectEntity : ASBase
 {
     public const string NoteType = "Note";
 
-    [JsonConstructor]
-    public NoteObject() : this(NoteType) {}
-
-    protected NoteObject(string type) : base(type) {}
+    public NoteObjectEntity(TypeMap typeMap) : base(NoteType, typeMap) {}
 }

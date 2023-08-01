@@ -7,50 +7,83 @@ using JetBrains.Annotations;
 
 namespace ActivityPub.Types;
 
+// TODO implicitly include this with any actor-compatible input JSON
+
 /// <summary>
-/// Required properties for an Actor.
-/// Specific Actor implementations should implement this.
+/// An object that implements the required properties of an ActivityPub Actor.
 /// </summary>
 /// <remarks>
-/// This is a synthetic type included for convenience
+/// This is a synthetic class included for utility.
+/// It does not exist in the ActivityStreams or ActivityPub standards.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects"/>
-public interface IActor
+public class ASActor : ASObject
 {
+    private ASActorEntity Entity { get; }
+ 
+    
+    public ASActor() => Entity = new ASActorEntity(TypeMap)
+    {
+        Inbox = null!,
+        Outbox = null!
+    };
+    public ASActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASActorEntity>();
+    
+    
     /// <summary>
     /// A reference to an ActivityStreams OrderedCollection comprised of all the messages received by the actor.
     /// The inbox stream contains all activities received by the actor.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#inbox"/>
-    public ASLink Inbox { get; set; }
+    public required ASLink Inbox
+    {
+        get => Entity.Inbox;
+        set => Entity.Inbox = value;
+    }
 
     /// <summary>
     /// A reference to an ActivityStreams OrderedCollection comprised of all the messages produced by the actor.
     /// The outbox stream contains activities the user has published, subject to the ability of the requester to retrieve the activity.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#outbox"/>
-    public ASLink Outbox { get; set; }
+    public required ASLink Outbox
+    {
+        get => Entity.Outbox;
+        set => Entity.Outbox = value;
+    }
 
     /// <summary>
     /// A reference to an ActivityStreams collection of the actors that this actor is following.
     /// This is a list of everybody that the actor has followed, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#following"/>
-    public ASLink? Following { get; set; }
+    public ASLink? Following 
+    {
+        get => Entity.Following;
+        set => Entity.Following = value;
+    }
 
     /// <summary>
     /// A reference to an ActivityStreams collection of the actors that follow this actor.
     /// This is a list of everyone who has sent a Follow activity for the actor, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#followers"/>
-    public ASLink? Followers { get; set; }
+    public ASLink? Followers 
+    {
+        get => Entity.Followers;
+        set => Entity.Followers = value;
+    }
 
     /// <summary>
     /// A reference to an ActivityStreams collection of objects this actor has liked.
     /// This is a list of every object from all of the actor's Like activities, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#liked"/>
-    public ASLink? Liked { get; set; }
+    public ASLink? Liked 
+    {
+        get => Entity.Liked;
+        set => Entity.Liked = value;
+    }
 
     /// <summary>
     /// A list of supplementary Collections which may be of interest. 
@@ -59,12 +92,20 @@ public interface IActor
     /// Not sure what type this is.
     /// Maybe a link to a collection?
     /// </remarks>
-    public ASType? Streams { get; set; }
+    public ASType? Streams
+    {
+        get => Entity.Streams;
+        set => Entity.Streams = value;
+    }
 
     /// <summary>
     /// A short username which may be used to refer to the actor, with no uniqueness guarantees. 
     /// </summary>
-    public NaturalLanguageString? PreferredUsername { get; set; }
+    public NaturalLanguageString? PreferredUsername
+    {
+        get => Entity.PreferredUsername;
+        set => Entity.PreferredUsername = value;
+    }
 
     /// <summary>
     /// A json object which maps additional (typically server/domain-wide) endpoints which may be useful either for this actor or someone referencing this actor.
@@ -73,49 +114,49 @@ public interface IActor
     /// <remarks>
     /// This should technically be a Linkable{ActorEndpoints}, but ActorEndpoints does not extend ASType
     /// </remarks>
-    public ActorEndpoints? Endpoints { get; set; }
+    public ActorEndpoints? Endpoints
+    {
+        get => Entity.Endpoints;
+        set => Entity.Endpoints = value;
+    }
 }
 
-/// <summary>
-/// An object that implements the required properties of an ActivityPub Actor.
-/// </summary>
-/// <remarks>
-/// This base type is not required for implementing an actor.
-/// Any ASObject can be used as long as it implements the required properties.
-/// You can use <see cref="IActor"/> if you need to extend another base type.
-///
-/// This class can be constructed directly with a custom DefaultType to quickly create a custom Actor.
-///
-/// This is a synthetic class included for utility.
-/// It does not exist in the ActivityStreams or ActivityPub standards.
-/// </remarks>
-/// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects"/>
-public class ASActor : ASObject, IActor
+/// <inheritdoc cref="ASActor"/>
+public sealed class ASActorEntity : ASBase
 {
-    public ASActor(string type) : base(type) {}
-
+    public ASActorEntity(TypeMap typeMap) : base(null, typeMap) {}
+ 
+    
+    /// <inheritdoc cref="ASActor.Inbox"/>
     [JsonPropertyName("inbox")]
     public required ASLink Inbox { get; set; }
-
+    
+    /// <inheritdoc cref="ASActor.Outbox"/>
     [JsonPropertyName("outbox")]
     public required ASLink Outbox { get; set; }
 
+    /// <inheritdoc cref="ASActor.Following"/>
     [JsonPropertyName("following")]
     public ASLink? Following { get; set; }
 
+    /// <inheritdoc cref="ASActor.Followers"/>
     [JsonPropertyName("followers")]
     public ASLink? Followers { get; set; }
 
+    /// <inheritdoc cref="ASActor.Liked"/>
     [JsonPropertyName("liked")]
     public ASLink? Liked { get; set; }
 
+    /// <inheritdoc cref="ASActor.Streams"/>
     [JsonPropertyName("streams")]
     public ASType? Streams { get; set; }
 
+    /// <inheritdoc cref="ASActor.PreferredUsername"/>
     [JsonPropertyName("preferredUsername")]
     public NaturalLanguageString? PreferredUsername { get; set; }
 
-    [JsonPropertyName("endpoints")]
+    /// <inheritdoc cref="ASActor.Endpoints"/>
+    [JsonPropertyName("Endpoints")]
     public ActorEndpoints? Endpoints { get; set; }
 }
 

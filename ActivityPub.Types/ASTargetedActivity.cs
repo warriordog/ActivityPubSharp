@@ -8,29 +8,41 @@ namespace ActivityPub.Types;
 
 /// <summary>
 /// Synthetic base for activities which require a target.
-/// Implemented to overload nullability of <see cref="ASActivity.Target"/>
 /// </summary>
 public class ASTargetedActivity : ASTransitiveActivity
 {
-    private Linkable<ASObject>? _targetImpl;
-    
-    [JsonConstructor]
-    public ASTargetedActivity() {}
-    public ASTargetedActivity(string type) : base(type) {}
+    private ASTargetedActivityEntity Entity { get; }
 
-    /// <inheritdoc cref="ASActivity.Target"/>
+
+    public ASTargetedActivity() => Entity = new ASTargetedActivityEntity(TypeMap)
+    {
+        Target = null!
+    };
+    public ASTargetedActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASTargetedActivityEntity>();
+
+    
+    /// <summary>
+    /// Describes the indirect object, or target, of the activity.
+    /// The precise meaning of the target is largely dependent on the type of action being described but will often be the object of the English preposition "to".
+    /// For instance, in the activity "John added a movie to his wishlist", the target of the activity is John's wishlist.
+    /// An activity can have more than one target. 
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target"/>
     /// <seealso href="https://www.w3.org/TR/activitypub/#client-addressing"/>
     [JsonPropertyName("target")]
-    public required new Linkable<ASObject> Target
+    public required LinkableList<ASObject> Target
     {
-        get => base.Target!;
-        set => base.Target = value;
+        get => Entity.Target;
+        set => Entity.Target = value;
     }
+}
 
-    // This is such a hack but I can't think of any other option
-    protected override Linkable<ASObject>? TargetImpl
-    {
-        get => _targetImpl;
-        set => _targetImpl = value ?? throw new NotSupportedException("ASTargetedActivity.Target cannot be set to null");
-    }
+/// <inheritdoc cref="ASTargetedActivity"/>
+public sealed class ASTargetedActivityEntity : ASBase
+{
+    public ASTargetedActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
+
+    /// <inheritdoc cref="ASTargetedActivity.Target"/>
+    [JsonPropertyName("target")]
+    public required LinkableList<ASObject> Target { get; set; }
 }

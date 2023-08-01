@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor is offering the object.
 /// If specified, the target indicates the entity to which the object is being offered. 
 /// </summary>
-[ASTypeKey(OfferType)]
 public class OfferActivity : ASTransitiveActivity
+{
+    private OfferActivityEntity Entity { get; }
+    
+    public OfferActivity() => Entity = new OfferActivityEntity(TypeMap);
+    public OfferActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<OfferActivityEntity>();
+}
+
+
+/// <inheritdoc cref="OfferActivity"/>
+[ASTypeKey(OfferType)]
+public sealed class OfferActivityEntity : ASBase
 {
     public const string OfferType = "Offer";
 
-    [JsonConstructor]
-    public OfferActivity() : this(OfferType) {}
-
-    protected OfferActivity(string type) : base(type) {}
+    public OfferActivityEntity(TypeMap typeMap) : base(OfferType, typeMap) {}
 }

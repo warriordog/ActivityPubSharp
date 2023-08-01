@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor has viewed the object. 
 /// </summary>
-[ASTypeKey(ViewType)]
 public class ViewActivity : ASTransitiveActivity
+{
+    private ViewActivityEntity Entity { get; }
+    
+    public ViewActivity() => Entity = new ViewActivityEntity(TypeMap);
+    public ViewActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ViewActivityEntity>();
+}
+
+
+/// <inheritdoc cref="ViewActivity"/>
+[ASTypeKey(ViewType)]
+public sealed class ViewActivityEntity : ASBase
 {
     public const string ViewType = "View";
 
-    [JsonConstructor]
-    public ViewActivity() : this(ViewType) {}
-
-    protected ViewActivity(string type) : base(type) {}
+    public ViewActivityEntity(TypeMap typeMap) : base(ViewType, typeMap) {}
 }

@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor accepts the object.
 /// The target property can be used in certain circumstances to indicate the context into which the object has been accepted. 
 /// </summary>
+public class AcceptActivity : ASActor
+{
+    private AcceptActivityEntity Entity { get; }
+    
+    public AcceptActivity() => Entity = new AcceptActivityEntity(TypeMap);
+    public AcceptActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<AcceptActivityEntity>();
+}
+
+
+/// <inheritdoc cref="AcceptActivity"/>
 [ASTypeKey(AcceptType)]
-public class AcceptActivity : ASTransitiveActivity
+public sealed class AcceptActivityEntity : ASBase
 {
     public const string AcceptType = "Accept";
 
-    [JsonConstructor]
-    public AcceptActivity() : this(AcceptType) {}
-
-    protected AcceptActivity(string type) : base(type) {}
+    public AcceptActivityEntity(TypeMap typeMap) : base(AcceptType, typeMap) {}
 }

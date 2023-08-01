@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor is calling the target's attention the object.
 /// The origin typically has no defined meaning. 
 /// </summary>
-[ASTypeKey(AnnounceType)]
 public class AnnounceActivity : ASTransitiveActivity
+{
+    private AnnounceActivityEntity Entity { get; }
+    
+    public AnnounceActivity() => Entity = new AnnounceActivityEntity(TypeMap);
+    public AnnounceActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<AnnounceActivityEntity>();
+}
+
+
+/// <inheritdoc cref="AnnounceActivity"/>
+[ASTypeKey(AnnounceType)]
+public sealed class AnnounceActivityEntity : ASBase
 {
     public const string AnnounceType = "Announce";
 
-    [JsonConstructor]
-    public AnnounceActivity() : this(AnnounceType) {}
-
-    protected AnnounceActivity(string type) : base(type) {}
+    public AnnounceActivityEntity(TypeMap typeMap) : base(AnnounceType, typeMap) {}
 }

@@ -13,15 +13,12 @@ namespace ActivityPub.Types.Extended.Activity;
 /// That is, the Question object is an Activity, but the direct object is the question itself and therefore it would not contain an object property.
 /// Either of the anyOf and oneOf properties MAY be used to express possible answers, but a Question object MUST NOT have both properties. 
 /// </summary>
-[ASTypeKey(QuestionType)]
 public class QuestionActivity : ASIntransitiveActivity
 {
-    public const string QuestionType = "Question";
-
-    [JsonConstructor]
-    public QuestionActivity() : this(QuestionType) {}
-
-    protected QuestionActivity(string type) : base(type) {}
+    private QuestionActivityEntity Entity { get; }
+    
+    public QuestionActivity() => Entity = new QuestionActivityEntity(TypeMap);
+    public QuestionActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<QuestionActivityEntity>();
 
     /// <summary>
     /// Identifies an exclusive option for a Question.
@@ -29,8 +26,11 @@ public class QuestionActivity : ASIntransitiveActivity
     /// To indicate that a Question can have multiple answers, use anyOf. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-oneOf"/>
-    [JsonPropertyName("oneOf")]
-    public LinkableList<ASObject>? OneOf { get; set; }
+    public LinkableList<ASObject>? OneOf
+    {
+        get => Entity.OneOf;
+        set => Entity.OneOf = value;
+    }
 
     /// <summary>
     /// Identifies an inclusive option for a Question.
@@ -38,8 +38,11 @@ public class QuestionActivity : ASIntransitiveActivity
     /// To indicate that a Question can have only one answer, use oneOf. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyof"/>
-    [JsonPropertyName("anyOf")]
-    public LinkableList<ASObject>? AnyOf { get; set; }
+    public LinkableList<ASObject>? AnyOf 
+    {
+        get => Entity.AnyOf;
+        set => Entity.AnyOf = value;
+    }
 
     /// <summary>
     /// Contains the time at which a question was closed.
@@ -50,6 +53,44 @@ public class QuestionActivity : ASIntransitiveActivity
     /// * May possibly be in the future? Spec does not specify. 
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
+    public DateTime? ClosedAt
+    {
+        get => Entity.ClosedAt;
+        set => Entity.ClosedAt = value;
+    }
+
+    /// <summary>
+    /// Indicates that a question has been closed, and answers are no longer accepted. 
+    /// </summary>
+    /// <remarks>
+    /// We don't support the Object or Link forms, because what would that even mean??
+    /// </remarks>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
+    public bool? Closed
+    {
+        get => Entity.Closed;
+        set => Entity.Closed = value;
+    }
+}
+
+
+/// <inheritdoc cref="QuestionActivity"/>
+[ASTypeKey(QuestionType)]
+public sealed class QuestionActivityEntity : ASBase
+{
+    public const string QuestionType = "Question";
+
+    public QuestionActivityEntity(TypeMap typeMap) : base(QuestionType, typeMap) {}
+
+    /// <inheritdoc cref="QuestionActivity.OneOf"/>
+    [JsonPropertyName("oneOf")]
+    public LinkableList<ASObject>? OneOf { get; set; }
+
+    /// <inheritdoc cref="QuestionActivity.AnyOf"/>
+    [JsonPropertyName("anyOf")]
+    public LinkableList<ASObject>? AnyOf { get; set; }
+
+    /// <inheritdoc cref="QuestionActivity.ClosedAt"/>
     [JsonPropertyName("closed")]
     public DateTime? ClosedAt
     {
@@ -64,13 +105,7 @@ public class QuestionActivity : ASIntransitiveActivity
         }
     }
 
-    /// <summary>
-    /// Indicates that a question has been closed, and answers are no longer accepted. 
-    /// </summary>
-    /// <remarks>
-    /// We don't support the Object or Link forms, because what would that even mean??
-    /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
+    /// <inheritdoc cref="QuestionActivity.Closed"/>
     [JsonPropertyName("closed")]
     public bool? Closed
     {

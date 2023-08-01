@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Represents a formal or informal collective of Actors. 
 /// </summary>
-[ASTypeKey(GroupType)]
 public class GroupActor : ASActor
+{
+    private GroupActorEntity Entity { get; }
+    
+    public GroupActor() => Entity = new GroupActorEntity(TypeMap);
+    public GroupActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<GroupActorEntity>();
+}
+
+
+/// <inheritdoc cref="GroupActor"/>
+[ASTypeKey(GroupType)]
+public sealed class GroupActorEntity : ASBase
 {
     public const string GroupType = "Group";
 
-    [JsonConstructor]
-    public GroupActor() : this(GroupType) {}
-
-    protected GroupActor(string type) : base(type) {}
+    public GroupActorEntity(TypeMap typeMap) : base(GroupType, typeMap) {}
 }

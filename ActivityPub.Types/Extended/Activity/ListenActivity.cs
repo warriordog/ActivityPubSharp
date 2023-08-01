@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor has listened to the object. 
 /// </summary>
-[ASTypeKey(ListenType)]
 public class ListenActivity : ASTransitiveActivity
+{
+    private ListenActivityEntity Entity { get; }
+    
+    public ListenActivity() => Entity = new ListenActivityEntity(TypeMap);
+    public ListenActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ListenActivityEntity>();
+}
+
+
+/// <inheritdoc cref="ListenActivity"/>
+[ASTypeKey(ListenType)]
+public sealed class ListenActivityEntity : ASBase
 {
     public const string ListenType = "Listen";
 
-    [JsonConstructor]
-    public ListenActivity() : this(ListenType) {}
-
-    protected ListenActivity(string type) : base(type) {}
+    public ListenActivityEntity(TypeMap typeMap) : base(ListenType, typeMap) {}
 }

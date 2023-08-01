@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor likes, recommends or endorses the object.
 /// The target and origin typically have no defined meaning.
 /// </summary>
-[ASTypeKey(LikeType)]
 public class LikeActivity : ASTransitiveActivity
+{
+    private LikeActivityEntity Entity { get; }
+    
+    public LikeActivity() => Entity = new LikeActivityEntity(TypeMap);
+    public LikeActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<LikeActivityEntity>();
+}
+
+
+/// <inheritdoc cref="LikeActivity"/>
+[ASTypeKey(LikeType)]
+public sealed class LikeActivityEntity : ASBase
 {
     public const string LikeType = "Like";
 
-    [JsonConstructor]
-    public LikeActivity() : this(LikeType) {}
-
-    protected LikeActivity(string type) : base(type) {}
+    public LikeActivityEntity(TypeMap typeMap) : base(LikeType, typeMap) {}
 }

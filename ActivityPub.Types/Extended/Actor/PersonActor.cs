@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Represents an individual person. 
 /// </summary>
-[ASTypeKey(PersonType)]
 public class PersonActor : ASActor
+{
+    private PersonActorEntity Entity { get; }
+    
+    public PersonActor() => Entity = new PersonActorEntity(TypeMap);
+    public PersonActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PersonActorEntity>();
+}
+
+
+/// <inheritdoc cref="PersonActor"/>
+[ASTypeKey(PersonType)]
+public sealed class PersonActorEntity : ASBase
 {
     public const string PersonType = "Person";
 
-    [JsonConstructor]
-    public PersonActor() : this(PersonType) {}
-
-    protected PersonActor(string type) : base(type) {}
+    public PersonActorEntity(TypeMap typeMap) : base(PersonType, typeMap) {}
 }

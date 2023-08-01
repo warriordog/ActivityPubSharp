@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor has moved object from origin to target.
 /// If the origin or target are not specified, either can be determined by context. 
 /// </summary>
-[ASTypeKey(MoveType)]
 public class MoveActivity : ASTransitiveActivity
+{
+    private MoveActivityEntity Entity { get; }
+    
+    public MoveActivity() => Entity = new MoveActivityEntity(TypeMap);
+    public MoveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<MoveActivityEntity>();
+}
+
+
+/// <inheritdoc cref="MoveActivity"/>
+[ASTypeKey(MoveType)]
+public sealed class MoveActivityEntity : ASBase
 {
     public const string MoveType = "Move";
 
-    [JsonConstructor]
-    public MoveActivity() : this(MoveType) {}
-
-    protected MoveActivity(string type) : base(type) {}
+    public MoveActivityEntity(TypeMap typeMap) : base(MoveType, typeMap) {}
 }

@@ -9,13 +9,19 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents any kind of event.
 /// </summary>
-[ASTypeKey(EventType)]
 public class EventObject : ASObject
+{
+    private EventObjectEntity Entity { get; }
+    
+    public EventObject() => Entity = new EventObjectEntity(TypeMap);
+    public EventObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<EventObjectEntity>();
+}
+
+/// <inheritdoc cref="EventObject"/>
+[ASTypeKey(EventType)]
+public sealed class EventObjectEntity : ASBase
 {
     public const string EventType = "Event";
 
-    [JsonConstructor]
-    public EventObject() : this(EventType) {}
-
-    protected EventObject(string type) : base(type) {}
+    public EventObjectEntity(TypeMap typeMap) : base(EventType, typeMap) {}
 }

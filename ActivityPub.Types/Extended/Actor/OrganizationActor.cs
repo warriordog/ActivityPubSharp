@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Represents an organization. 
 /// </summary>
-[ASTypeKey(OrganizationType)]
 public class OrganizationActor : ASActor
+{
+    private OrganizationActorEntity Entity { get; }
+    
+    public OrganizationActor() => Entity = new OrganizationActorEntity(TypeMap);
+    public OrganizationActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<OrganizationActorEntity>();
+}
+
+
+/// <inheritdoc cref="OrganizationActor"/>
+[ASTypeKey(OrganizationType)]
+public sealed class OrganizationActorEntity : ASBase
 {
     public const string OrganizationType = "Organization";
 
-    [JsonConstructor]
-    public OrganizationActor() : this(OrganizationType) {}
-
-    protected OrganizationActor(string type) : base(type) {}
+    public OrganizationActorEntity(TypeMap typeMap) : base(OrganizationType, typeMap) {}
 }

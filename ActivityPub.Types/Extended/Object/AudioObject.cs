@@ -9,13 +9,19 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents an audio document of any kind. 
 /// </summary>
-[ASTypeKey(AudioType)]
 public class AudioObject : DocumentObject
+{
+    private AudioObjectEntity Entity { get; }
+    
+    public AudioObject() => Entity = new AudioObjectEntity(TypeMap);
+    public AudioObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<AudioObjectEntity>();
+}
+
+/// <inheritdoc cref="AudioObject"/>
+[ASTypeKey(AudioType)]
+public sealed class AudioObjectEntity : ASBase
 {
     public const string AudioType = "Audio";
 
-    [JsonConstructor]
-    public AudioObject() : this(AudioType) {}
-
-    protected AudioObject(string type) : base(type) {}
+    public AudioObjectEntity(TypeMap typeMap) : base(AudioType, typeMap) {}
 }

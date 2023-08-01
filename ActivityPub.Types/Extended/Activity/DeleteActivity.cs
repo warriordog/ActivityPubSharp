@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor has deleted the object.
 /// If specified, the origin indicates the context from which the object was deleted. 
 /// </summary>
-[ASTypeKey(DeleteType)]
 public class DeleteActivity : ASTransitiveActivity
+{
+    private DeleteActivityEntity Entity { get; }
+    
+    public DeleteActivity() => Entity = new DeleteActivityEntity(TypeMap);
+    public DeleteActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<DeleteActivityEntity>();
+}
+
+
+/// <inheritdoc cref="DeleteActivity"/>
+[ASTypeKey(DeleteType)]
+public sealed class DeleteActivityEntity : ASBase
 {
     public const string DeleteType = "Delete";
 
-    [JsonConstructor]
-    public DeleteActivity() : this(DeleteType) {}
-
-    protected DeleteActivity(string type) : base(type) {}
+    public DeleteActivityEntity(TypeMap typeMap) : base(DeleteType, typeMap) {}
 }

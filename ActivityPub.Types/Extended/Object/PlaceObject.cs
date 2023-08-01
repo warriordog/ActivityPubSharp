@@ -9,23 +9,24 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a logical or physical location.
 /// </summary>
-[ASTypeKey(PlaceType)]
 public class PlaceObject : ASObject
 {
-    public const string PlaceType = "Place";
+    private PlaceObjectEntity Entity { get; }
 
-    [JsonConstructor]
-    public PlaceObject() : this(PlaceType) {}
 
-    protected PlaceObject(string type) : base(type) {}
+    public PlaceObject() => Entity = new PlaceObjectEntity(TypeMap);
+    public PlaceObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PlaceObjectEntity>();
 
     /// <summary>
     /// Indicates the accuracy of position coordinates on a Place objects.
     /// Expressed in properties of percentage. e.g. "94.0" means "94.0% accurate". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-accuracy"/>
-    [JsonPropertyName("accuracy")]
-    public float? Accuracy { get; set; }
+    public float? Accuracy
+    {
+        get => Entity.Accuracy;
+        set => Entity.Accuracy = value;
+    }
 
     /// <summary>
     /// Indicates the altitude of a place.
@@ -33,22 +34,31 @@ public class PlaceObject : ASObject
     /// If units is not specified, the default is assumed to be "m" indicating meters. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-altitude"/>
-    [JsonPropertyName("altitude")]
-    public float? Altitude { get; set; }
+    public float? Altitude
+    {
+        get => Entity.Altitude;
+        set => Entity.Altitude = value;
+    }
 
     /// <summary>
     /// The latitude of a place.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-latitude"/>
-    [JsonPropertyName("latitude")]
-    public float? Latitude { get; set; }
+    public float? Latitude
+    {
+        get => Entity.Latitude;
+        set => Entity.Latitude = value;
+    }
 
     /// <summary>
     /// The longitude of a place.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-longitude"/>
-    [JsonPropertyName("longitude")]
-    public float? Longitude { get; set; }
+    public float? Longitude
+    {
+        get => Entity.Longitude;
+        set => Entity.Longitude = value;
+    }
 
     /// <summary>
     /// The radius from the given latitude and longitude for a Place.
@@ -56,14 +66,53 @@ public class PlaceObject : ASObject
     /// If units is not specified, the default is assumed to be "m" indicating "meters". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-radius"/>
-    [JsonPropertyName("radius")]
-    public float? Radius { get; set; }
+    public float? Radius 
+    {
+        get => Entity.Radius;
+        set => Entity.Radius = value;
+    }
 
     /// <summary>
     /// Specifies the measurement units for the radius and altitude properties on a Place object.
     /// If not specified, the default is assumed to be "m" for "meters". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-units"/>
+    public string? Units 
+    {
+        get => Entity.Units;
+        set => Entity.Units = value;
+    }
+}
+
+/// <inheritdoc cref="PlaceObject"/>
+[ASTypeKey(PlaceType)]
+public sealed class PlaceObjectEntity : ASBase
+{
+    public const string PlaceType = "Place";
+
+    public PlaceObjectEntity(TypeMap typeMap) : base(PlaceType, typeMap) {}
+
+    /// <inheritdoc cref="PlaceObject.Accuracy"/>
+    [JsonPropertyName("accuracy")]
+    public float? Accuracy { get; set; }
+
+    /// <inheritdoc cref="PlaceObject.Altitude"/>
+    [JsonPropertyName("altitude")]
+    public float? Altitude { get; set; }
+
+    /// <inheritdoc cref="PlaceObject.Latitude"/>
+    [JsonPropertyName("latitude")]
+    public float? Latitude { get; set; }
+
+    /// <inheritdoc cref="PlaceObject.Longitude"/>
+    [JsonPropertyName("longitude")]
+    public float? Longitude { get; set; }
+
+    /// <inheritdoc cref="PlaceObject.Radius"/>
+    [JsonPropertyName("radius")]
+    public float? Radius { get; set; }
+
+    /// <inheritdoc cref="PlaceObject.Units"/>
     [JsonPropertyName("units")]
     public string? Units { get; set; }
 }

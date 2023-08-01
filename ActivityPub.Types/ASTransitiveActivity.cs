@@ -14,12 +14,17 @@ namespace ActivityPub.Types;
 /// <remarks>
 /// This is a synthetic type, and not part of the ActivityStreams standard.
 /// </remarks>
-[CustomJsonDeserializer(nameof(TryDeserialize))]
 public class ASTransitiveActivity : ASActivity
 {
-    [JsonConstructor]
-    public ASTransitiveActivity() {}
-    public ASTransitiveActivity(string type) : base(type) {}
+    private ASTransitiveActivityEntity Entity { get; }
+
+
+    public ASTransitiveActivity() => Entity = new ASTransitiveActivityEntity(TypeMap)
+    {
+        Object = null!
+    };
+    public ASTransitiveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASTransitiveActivityEntity>();
+    
 
     /// <summary>
     /// Describes the direct object of the activity.
@@ -27,15 +32,32 @@ public class ASTransitiveActivity : ASActivity
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
     [JsonPropertyName("object")]
-    public LinkableList<ASObject> Object { get; set; } = new();
+    public required LinkableList<ASObject> Object 
+    {
+        get => Entity.Object;
+        set => Entity.Object = value;
+    }
+}
+
+/// <inheritdoc cref="ASTransitiveActivity"/>
+[CustomJsonDeserializer(nameof(TryDeserialize))]
+public sealed class ASTransitiveActivityEntity : ASBase
+{
+    public ASTransitiveActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
+
     
-    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASTransitiveActivity? obj)
+    /// <inheritdoc cref="ASTransitiveActivity.Object"/>
+    [JsonPropertyName("object")]
+    public required LinkableList<ASObject> Object { get; set; } = new();
+    
+    
+    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASTransitiveActivityEntity? obj)
     {
         // If it has the "target" property, then its Targeted.
         // Pivot to the narrower type.
         if (element.TryGetProperty("target", out _))
         {
-            obj = element.Deserialize<ASTargetedActivity>(options);
+            obj = element.Deserialize<ASTransitiveActivityEntity>(options);
             return true;
         }
 

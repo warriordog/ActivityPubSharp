@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor is "flagging" the object.
 /// Flagging is defined in the sense common to many social platforms as reporting content as being inappropriate for any number of reasons. 
 /// </summary>
-[ASTypeKey(FlagType)]
 public class FlagActivity : ASTransitiveActivity
+{
+    private FlagActivityEntity Entity { get; }
+    
+    public FlagActivity() => Entity = new FlagActivityEntity(TypeMap);
+    public FlagActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<FlagActivityEntity>();
+}
+
+
+/// <inheritdoc cref="FlagActivity"/>
+[ASTypeKey(FlagType)]
+public sealed class FlagActivityEntity : ASBase
 {
     public const string FlagType = "Flag";
 
-    [JsonConstructor]
-    public FlagActivity() : this(FlagType) {}
-
-    protected FlagActivity(string type) : base(type) {}
+    public FlagActivityEntity(TypeMap typeMap) : base(FlagType, typeMap) {}
 }

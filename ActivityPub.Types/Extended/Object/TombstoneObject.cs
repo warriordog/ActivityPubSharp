@@ -10,27 +10,49 @@ namespace ActivityPub.Types.Extended.Object;
 /// A Tombstone represents a content object that has been deleted.
 /// It can be used in Collections to signify that there used to be an object at this position, but it has been deleted.
 /// </summary>
-[ASTypeKey(TombstoneType)]
 public class TombstoneObject : ASObject
 {
-    public const string TombstoneType = "Tombstone";
+    private TombstoneObjectEntity Entity { get; }
 
-    [JsonConstructor]
-    public TombstoneObject() : this(TombstoneType) {}
 
-    protected TombstoneObject(string type) : base(type) {}
+    public TombstoneObject() => Entity = new TombstoneObjectEntity(TypeMap);
+    public TombstoneObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TombstoneObjectEntity>();
 
     /// <summary>
     /// On a Tombstone object, the formerType property identifies the type of the object that was deleted.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-formerType"/>
-    [JsonPropertyName("formerType")]
-    public string? FormerType { get; set; }
+    public string? FormerType
+    {
+        get => Entity.FormerType;
+        set => Entity.FormerType = value;
+    }
 
     /// <summary>
     /// On a Tombstone object, the deleted property is a timestamp for when the object was deleted. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-deleted"/>
+    public DateTime? Deleted 
+    {
+        get => Entity.Deleted;
+        set => Entity.Deleted = value;
+    }
+}
+
+
+/// <inheritdoc cref="TombstoneObject"/>
+[ASTypeKey(TombstoneType)]
+public sealed class TombstoneObjectEntity : ASBase
+{
+    public const string TombstoneType = "Tombstone";
+
+    public TombstoneObjectEntity(TypeMap typeMap) : base(TombstoneType, typeMap) {}
+
+    /// <inheritdoc cref="TombstoneObject.FormerType"/>
+    [JsonPropertyName("formerType")]
+    public string? FormerType { get; set; }
+
+    /// <inheritdoc cref="TombstoneObject.Deleted"/>
     [JsonPropertyName("deleted")]
     public DateTime? Deleted { get; set; }
 }

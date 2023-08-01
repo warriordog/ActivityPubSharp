@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor has joined the object.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(JoinType)]
 public class JoinActivity : ASTransitiveActivity
+{
+    private JoinActivityEntity Entity { get; }
+    
+    public JoinActivity() => Entity = new JoinActivityEntity(TypeMap);
+    public JoinActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<JoinActivityEntity>();
+}
+
+
+/// <inheritdoc cref="JoinActivity"/>
+[ASTypeKey(JoinType)]
+public sealed class JoinActivityEntity : ASBase
 {
     public const string JoinType = "Join";
 
-    [JsonConstructor]
-    public JoinActivity() : this(JoinType) {}
-
-    protected JoinActivity(string type) : base(type) {}
+    public JoinActivityEntity(TypeMap typeMap) : base(JoinType, typeMap) {}
 }

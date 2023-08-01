@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor has read the object. 
 /// </summary>
-[ASTypeKey(ReadType)]
 public class ReadActivity : ASTransitiveActivity
+{
+    private ReadActivityEntity Entity { get; }
+    
+    public ReadActivity() => Entity = new ReadActivityEntity(TypeMap);
+    public ReadActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ReadActivityEntity>();
+}
+
+
+/// <inheritdoc cref="ReadActivity"/>
+[ASTypeKey(ReadType)]
+public sealed class ReadActivityEntity : ASBase
 {
     public const string ReadType = "Read";
 
-    [JsonConstructor]
-    public ReadActivity() : this(ReadType) {}
-
-    protected ReadActivity(string type) : base(type) {}
+    public ReadActivityEntity(TypeMap typeMap) : base(ReadType, typeMap) {}
 }

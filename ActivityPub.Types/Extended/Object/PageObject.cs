@@ -9,13 +9,19 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a Web Page. 
 /// </summary>
-[ASTypeKey(PageType)]
 public class PageObject : DocumentObject
+{
+    private PageObjectEntity Entity { get; }
+    
+    public PageObject() => Entity = new PageObjectEntity(TypeMap);
+    public PageObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PageObjectEntity>();
+}
+
+/// <inheritdoc cref="PageObject"/>
+[ASTypeKey(PageType)]
+public sealed class PageObjectEntity : ASBase
 {
     public const string PageType = "Page";
 
-    [JsonConstructor]
-    public PageObject() : this(PageType) {}
-
-    protected PageObject(string type) : base(type) {}
+    public PageObjectEntity(TypeMap typeMap) : base(PageType, typeMap) {}
 }

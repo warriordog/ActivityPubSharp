@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor is ignoring the object. The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(IgnoreType)]
 public class IgnoreActivity : ASTransitiveActivity
+{
+    private IgnoreActivityEntity Entity { get; }
+    
+    public IgnoreActivity() => Entity = new IgnoreActivityEntity(TypeMap);
+    public IgnoreActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<IgnoreActivityEntity>();
+}
+
+
+/// <inheritdoc cref="IgnoreActivity"/>
+[ASTypeKey(IgnoreType)]
+public sealed class IgnoreActivityEntity : ASBase
 {
     public const string IgnoreType = "Ignore";
 
-    [JsonConstructor]
-    public IgnoreActivity() : this(IgnoreType) {}
-
-    protected IgnoreActivity(string type) : base(type) {}
+    public IgnoreActivityEntity(TypeMap typeMap) : base(IgnoreType, typeMap) {}
 }

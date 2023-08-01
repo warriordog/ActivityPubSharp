@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor is rejecting the object.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(RejectType)]
 public class RejectActivity : ASTransitiveActivity
+{
+    private RejectActivityEntity Entity { get; }
+    
+    public RejectActivity() => Entity = new RejectActivityEntity(TypeMap);
+    public RejectActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<RejectActivityEntity>();
+}
+
+
+/// <inheritdoc cref="RejectActivity"/>
+[ASTypeKey(RejectType)]
+public sealed class RejectActivityEntity : ASBase
 {
     public const string RejectType = "Reject";
 
-    [JsonConstructor]
-    public RejectActivity() : this(RejectType) {}
-
-    protected RejectActivity(string type) : base(type) {}
+    public RejectActivityEntity(TypeMap typeMap) : base(RejectType, typeMap) {}
 }

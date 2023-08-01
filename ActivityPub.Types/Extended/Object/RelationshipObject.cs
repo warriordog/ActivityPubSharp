@@ -11,30 +11,34 @@ namespace ActivityPub.Types.Extended.Object;
 /// Describes a relationship between two individuals.
 /// The subject and object properties are used to identify the connected individuals.
 /// </summary>
-[ASTypeKey(RelationshipType)]
 public class RelationshipObject : ASObject
 {
-    public const string RelationshipType = "Relationship";
+    private RelationshipObjectEntity Entity { get; }
 
-    [JsonConstructor]
-    public RelationshipObject() : this(RelationshipType) {}
 
-    protected RelationshipObject(string type) : base(type) {}
+    public RelationshipObject() => Entity = new RelationshipObjectEntity(TypeMap);
+    public RelationshipObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<RelationshipObjectEntity>();
 
     /// <summary>
     /// Describes the entity to which the subject is related. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
-    [JsonPropertyName("object")]
-    public LinkableList<ASObject> Object { get; set; } = new();
+    public LinkableList<ASObject> Object 
+    {
+        get => Entity.Object;
+        set => Entity.Object = value;
+    }
 
     /// <summary>
     /// On a Relationship object, the subject property identifies one of the connected individuals.
     /// For instance, for a Relationship object describing "John is related to Sally", subject would refer to John. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-subject"/>
-    [JsonPropertyName("subject")]
-    public Linkable<ASObject>? Subject { get; set; }
+    public Linkable<ASObject>? Subject
+    {
+        get => Entity.Subject;
+        set => Entity.Subject = value;
+    }
 
     /// <summary>
     /// On a Relationship object, the relationship property identifies the kind of relationship that exists between subject and object. 
@@ -43,6 +47,30 @@ public class RelationshipObject : ASObject
     /// This is supposed to be Range = "Object", but all the examples have a string URL
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-relationship"/>
+    public Linkable<ASObject>? Relationship
+    {
+        get => Entity.Relationship;
+        set => Entity.Relationship = value;
+    }
+}
+
+/// <inheritdoc cref="RelationshipObject"/>
+[ASTypeKey(RelationshipType)]
+public sealed class RelationshipObjectEntity : ASBase
+{
+    public const string RelationshipType = "Relationship";
+
+    public RelationshipObjectEntity(TypeMap typeMap) : base(RelationshipType, typeMap) {}
+
+    /// <inheritdoc cref="RelationshipObject.Object"/>
+    [JsonPropertyName("object")]
+    public LinkableList<ASObject> Object { get; set; } = new();
+
+    /// <inheritdoc cref="RelationshipObject.Subject"/>
+    [JsonPropertyName("subject")]
+    public Linkable<ASObject>? Subject { get; set; }
+
+    /// <inheritdoc cref="RelationshipObject.Relationship"/>
     [JsonPropertyName("relationship")]
     public Linkable<ASObject>? Relationship { get; set; }
 }

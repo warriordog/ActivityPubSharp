@@ -9,13 +9,19 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// An image document of any kind 
 /// </summary>
-[ASTypeKey(ImageType)]
 public class ImageObject : DocumentObject
+{
+    private ImageObjectEntity Entity { get; }
+    
+    public ImageObject() => Entity = new ImageObjectEntity(TypeMap);
+    public ImageObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ImageObjectEntity>();
+}
+
+/// <inheritdoc cref="ImageObject"/>
+[ASTypeKey(ImageType)]
+public sealed class ImageObjectEntity : ASBase
 {
     public const string ImageType = "Image";
 
-    [JsonConstructor]
-    public ImageObject() : this(ImageType) {}
-
-    protected ImageObject(string type) : base(type) {}
+    public ImageObjectEntity(TypeMap typeMap) : base(ImageType, typeMap) {}
 }

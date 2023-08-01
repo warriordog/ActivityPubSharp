@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor has left the object.
 /// The target and origin typically have no meaning.
 /// </summary>
-[ASTypeKey(LeaveType)]
 public class LeaveActivity : ASTransitiveActivity
+{
+    private LeaveActivityEntity Entity { get; }
+    
+    public LeaveActivity() => Entity = new LeaveActivityEntity(TypeMap);
+    public LeaveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<LeaveActivityEntity>();
+}
+
+
+/// <inheritdoc cref="LeaveActivity"/>
+[ASTypeKey(LeaveType)]
+public sealed class LeaveActivityEntity : ASBase
 {
     public const string LeaveType = "Leave";
 
-    [JsonConstructor]
-    public LeaveActivity() : this(LeaveType) {}
-
-    protected LeaveActivity(string type) : base(type) {}
+    public LeaveActivityEntity(TypeMap typeMap) : base(LeaveType, typeMap) {}
 }

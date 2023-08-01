@@ -18,25 +18,142 @@ namespace ActivityPub.Types;
 /// </remarks>
 public abstract class ASType
 {
-    protected ASType(string defaultType) => Types.Add(defaultType);
+    private ASTypeEntity Entity { get; }
+
+    protected ASType()
+    {
+        TypeMap = new TypeMap();
+        Entity = new ASTypeEntity(TypeMap);
+    }
+    protected ASType(TypeMap typeMap)
+    {
+        TypeMap = typeMap;
+        Entity = typeMap.AsEntity<ASTypeEntity>();
+    }
+
+    /// <summary>
+    /// Type graph that contains this object.
+    /// </summary>
+    public TypeMap TypeMap { get; }
 
     /// <summary>
     /// Populated after deserialization.
     /// Contains all JSON properties that did not map to any known .NET property.  
     /// </summary>
-    internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
+    internal Dictionary<string, JsonElement> UnknownJsonProperties => Entity.UnknownJsonProperties;
 
     /// <summary>
     /// Identifies the Object or Link types.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-type"/>
-    [JsonPropertyName("type")]
-    public HashSet<string> Types { get; set; } = new();
+    public IReadOnlySet<string> Types => TypeMap.ASTypes;
 
     /// <summary>
     /// Lists the JSON-LD contexts used by this object.
     /// Should be a full URL
     /// </summary>
+    public JsonLDContext JsonLdContexts => TypeMap.LDContexts;
+
+    /// <summary>
+    /// Provides the globally unique identifier for an Object or Link.
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-id"/>
+    public string? Id
+    {
+        get => Entity.Id;
+        set => Entity.Id = value;
+    }
+
+    /// <summary>
+    /// True if this object is anonymous and should be considered part of its parent context.
+    /// </summary>
+    /// <remarks>
+    /// Based on https://www.w3.org/TR/activitypub/#obj-id
+    /// </remarks>
+    [MemberNotNullWhen(false, nameof(Id))]
+    public bool IsAnonymous => Entity.IsAnonymous;
+
+    /// <summary>
+    /// Identifies one or more entities to which this object is attributed.
+    /// The attributed entities might not be Actors.
+    /// For instance, an object might be attributed to the completion of another activity. 
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/>
+    public LinkableList<ASObject> AttributedTo
+    {
+        get => Entity.AttributedTo;
+        set => Entity.AttributedTo = value;
+    }
+
+    /// <summary>
+    /// Identifies an entity that provides a preview of this object. 
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-preview"/>
+    public Linkable<ASObject>? Preview
+    {
+        get => Entity.Preview;
+        set => Entity.Preview = value;
+    }
+
+    /// <summary>
+    /// A simple, human-readable, plain-text name for the object.
+    /// HTML markup MUST NOT be included.
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-name"/>
+    public NaturalLanguageString? Name
+    {
+        get => Entity.Name;
+        set => Entity.Name = value;
+    }
+
+    /// <summary>
+    /// When used on a Link, identifies the MIME media type of the referenced resource.
+    /// When used on an Object, identifies the MIME media type of the value of the content property.
+    /// If not specified, the content property is assumed to contain text/html content. 
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-mediatype"/>
+    public string? MediaType
+    {
+        get => Entity.MediaType;
+        set => Entity.MediaType = value;
+    }
+    
+    
+    /// <inheritdoc cref="TypeMap.IsType{T}()"/>
+    public bool Is<T>() where T : ASType
+        => TypeMap.IsType<T>();
+
+    /// <inheritdoc cref="TypeMap.IsType{T}(out T?)"/>
+    public bool Is<T>([NotNullWhen(true)] out T? instance) where T : ASType
+        => TypeMap.IsType(out instance);
+
+    /// <inheritdoc cref="TypeMap.AsType{T}"/>
+    public T As<T>() where T : ASType
+        => TypeMap.AsType<T>();
+}
+
+/// <inheritdoc cref="ASType"/>
+public sealed class ASTypeEntity : ASBase
+{
+    /// <summary>
+    /// Shared JSON-LD context used by all ActivityStreams objects.
+    /// </summary>
+    public static JsonLDContextObject ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
+    
+    
+    /// <summary>
+    /// Constructs a new ASType with a new Type Graph.
+    /// </summary>
+    public ASTypeEntity(TypeMap typeMap) : base(null, typeMap) {}
+
+    
+    /// <inheritdoc cref="ASType.UnknownJsonProperties"/>
+    internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
+
+    /// <inheritdoc cref="ASType.Types"/>
+    public HashSet<string> Types { get; set; } = new();
+    
+    /// <inheritdoc cref="ASType.JsonLdContexts"/>
     [JsonIgnoreWhenNested]
     [JsonPropertyName("@context")]
     [JsonConverter(typeof(JsonLDContextConverter))]
@@ -45,16 +162,8 @@ public abstract class ASType
         // We always need the base context
         ActivityStreamsContext
     });
-    
-    /// <summary>
-    /// Shared JSON-LD context used by all ActivityStreams objects.
-    /// </summary>
-    public static JsonLDContextObject ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
 
-    /// <summary>
-    /// Provides the globally unique identifier for an Object or Link.
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-id"/>
+    /// <inheritdoc cref="ASType.Id"/>
     [JsonPropertyName("id")]
     public string? Id
     {
@@ -70,47 +179,25 @@ public abstract class ASType
     }
 
     private string? _id;
-
-    /// <summary>
-    /// True if this object is anonymous and should be considered part of its parent context.
-    /// </summary>
-    /// <remarks>
-    /// Based on https://www.w3.org/TR/activitypub/#obj-id
-    /// </remarks>
+    
+    /// <inheritdoc cref="ASType.IsAnonymous"/>
     [JsonIgnore]
     [MemberNotNullWhen(false, nameof(Id))]
     public bool IsAnonymous { get; private set; } = true;
 
-    /// <summary>
-    /// Identifies one or more entities to which this object is attributed.
-    /// The attributed entities might not be Actors.
-    /// For instance, an object might be attributed to the completion of another activity. 
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attributedTo"/>
+    /// <inheritdoc cref="ASType.AttributedTo"/>
     [JsonPropertyName("attributedTo")]
     public LinkableList<ASObject> AttributedTo { get; set; } = new();
 
-    /// <summary>
-    /// Identifies an entity that provides a preview of this object. 
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-preview"/>
+    /// <inheritdoc cref="ASType.Preview"/>
     [JsonPropertyName("preview")]
     public Linkable<ASObject>? Preview { get; set; }
 
-    /// <summary>
-    /// A simple, human-readable, plain-text name for the object.
-    /// HTML markup MUST NOT be included.
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-name"/>
+    /// <inheritdoc cref="ASType.Name"/>
     [JsonPropertyName("name")]
     public NaturalLanguageString? Name { get; set; }
 
-    /// <summary>
-    /// When used on a Link, identifies the MIME media type of the referenced resource.
-    /// When used on an Object, identifies the MIME media type of the value of the content property.
-    /// If not specified, the content property is assumed to contain text/html content. 
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-mediatype"/>
+    /// <inheritdoc cref="ASType.MediaType"/>
     [JsonPropertyName("mediaType")]
     public string? MediaType { get; set; }
 }

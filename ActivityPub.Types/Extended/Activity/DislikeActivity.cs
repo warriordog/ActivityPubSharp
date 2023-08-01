@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor dislikes the object. 
 /// </summary>
-[ASTypeKey(DislikeType)]
 public class DislikeActivity : ASTransitiveActivity
+{
+    private DislikeActivityEntity Entity { get; }
+    
+    public DislikeActivity() => Entity = new DislikeActivityEntity(TypeMap);
+    public DislikeActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<DislikeActivityEntity>();
+}
+
+
+/// <inheritdoc cref="DislikeActivity"/>
+[ASTypeKey(DislikeType)]
+public sealed class DislikeActivityEntity : ASBase
 {
     public const string DislikeType = "Dislike";
 
-    [JsonConstructor]
-    public DislikeActivity() : this(DislikeType) {}
-
-    protected DislikeActivity(string type) : base(type) {}
+    public DislikeActivityEntity(TypeMap typeMap) : base(DislikeType, typeMap) {}
 }

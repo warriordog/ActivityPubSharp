@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Represents a service of any kind.
 /// </summary>
-[ASTypeKey(ServiceType)]
 public class ServiceActor : ASActor
+{
+    private ServiceActorEntity Entity { get; }
+    
+    public ServiceActor() => Entity = new ServiceActorEntity(TypeMap);
+    public ServiceActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ServiceActorEntity>();
+}
+
+
+/// <inheritdoc cref="ServiceActor"/>
+[ASTypeKey(ServiceType)]
+public sealed class ServiceActorEntity : ASBase
 {
     public const string ServiceType = "Service";
 
-    [JsonConstructor]
-    public ServiceActor() : this(ServiceType) {}
-
-    protected ServiceActor(string type) : base(type) {}
+    public ServiceActorEntity(TypeMap typeMap) : base(ServiceType, typeMap) {}
 }

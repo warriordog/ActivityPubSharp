@@ -9,13 +9,19 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a document of any kind. 
 /// </summary>
-[ASTypeKey(DocumentType)]
 public class DocumentObject : ASObject
+{
+    private DocumentObjectEntity Entity { get; }
+    
+    public DocumentObject() => Entity = new DocumentObjectEntity(TypeMap);
+    public DocumentObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<DocumentObjectEntity>();
+}
+
+/// <inheritdoc cref="DocumentObject"/>
+[ASTypeKey(DocumentType)]
+public sealed class DocumentObjectEntity : ASBase
 {
     public const string DocumentType = "Document";
 
-    [JsonConstructor]
-    public DocumentObject() : this(DocumentType) {}
-
-    protected DocumentObject(string type) : base(type) {}
+    public DocumentObjectEntity(TypeMap typeMap) : base(DocumentType, typeMap) {}
 }

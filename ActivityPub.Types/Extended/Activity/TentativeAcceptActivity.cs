@@ -7,15 +7,22 @@ using ActivityPub.Types.Json;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// A specialization of Accept indicating that the acceptance is tentative.
+/// A specialization of TentativeAccept indicating that the tentativeAcceptance is tentative.
 /// </summary>
-[ASTypeKey(TentativeAcceptType)]
 public class TentativeAcceptActivity : AcceptActivity
+{
+    private TentativeAcceptActivityEntity Entity { get; }
+    
+    public TentativeAcceptActivity() => Entity = new TentativeAcceptActivityEntity(TypeMap);
+    public TentativeAcceptActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TentativeAcceptActivityEntity>();
+}
+
+
+/// <inheritdoc cref="TentativeAcceptActivity"/>
+[ASTypeKey(TentativeAcceptType)]
+public sealed class TentativeAcceptActivityEntity : ASBase
 {
     public const string TentativeAcceptType = "TentativeAccept";
 
-    [JsonConstructor]
-    public TentativeAcceptActivity() : this(TentativeAcceptType) {}
-
-    protected TentativeAcceptActivity(string type) : base(type) {}
+    public TentativeAcceptActivityEntity(TypeMap typeMap) : base(TentativeAcceptType, typeMap) {}
 }

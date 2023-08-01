@@ -11,13 +11,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// The origin can be used to identify the context from which the actor originated.
 /// The target typically has no defined meaning. 
 /// </summary>
-[ASTypeKey(ArriveType)]
 public class ArriveActivity : ASIntransitiveActivity
+{
+    private ArriveActivityEntity Entity { get; }
+    
+    public ArriveActivity() => Entity = new ArriveActivityEntity(TypeMap);
+    public ArriveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ArriveActivityEntity>();
+}
+
+
+/// <inheritdoc cref="ArriveActivity"/>
+[ASTypeKey(ArriveType)]
+public sealed class ArriveActivityEntity : ASBase
 {
     public const string ArriveType = "Arrive";
 
-    [JsonConstructor]
-    public ArriveActivity() : this(ArriveType) {}
-
-    protected ArriveActivity(string type) : base(type) {}
+    public ArriveActivityEntity(TypeMap typeMap) : base(ArriveType, typeMap) {}
 }

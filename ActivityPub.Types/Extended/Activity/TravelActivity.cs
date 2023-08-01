@@ -11,13 +11,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Travel is an IntransitiveObject whose actor specifies the direct object.
 /// If the target or origin are not specified, either can be determined by context.
 /// </summary>
-[ASTypeKey(TravelType)]
 public class TravelActivity : ASIntransitiveActivity
+{
+    private TravelActivityEntity Entity { get; }
+    
+    public TravelActivity() => Entity = new TravelActivityEntity(TypeMap);
+    public TravelActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TravelActivityEntity>();
+}
+
+
+/// <inheritdoc cref="TravelActivity"/>
+[ASTypeKey(TravelType)]
+public sealed class TravelActivityEntity : ASBase
 {
     public const string TravelType = "Travel";
 
-    [JsonConstructor]
-    public TravelActivity() : this(TravelType) {}
-
-    protected TravelActivity(string type) : base(type) {}
+    public TravelActivityEntity(TypeMap typeMap) : base(TravelType, typeMap) {}
 }

@@ -11,13 +11,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// In most cases, the object will be an Activity describing some previously performed action (for instance, a person may have previously "liked" an article but, for whatever reason, might choose to undo that like at some later point in time).
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(UndoType)]
 public class UndoActivity : ASTransitiveActivity
+{
+    private UndoActivityEntity Entity { get; }
+    
+    public UndoActivity() => Entity = new UndoActivityEntity(TypeMap);
+    public UndoActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<UndoActivityEntity>();
+}
+
+
+/// <inheritdoc cref="UndoActivity"/>
+[ASTypeKey(UndoType)]
+public sealed class UndoActivityEntity : ASBase
 {
     public const string UndoType = "Undo";
 
-    [JsonConstructor]
-    public UndoActivity() : this(UndoType) {}
-
-    protected UndoActivity(string type) : base(type) {}
+    public UndoActivityEntity(TypeMap typeMap) : base(UndoType, typeMap) {}
 }

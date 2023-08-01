@@ -11,13 +11,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Note, however, that this vocabulary does not define a mechanism for describing the actual set of modifications made to object.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(UndoType)]
 public class UpdateActivity : ASTransitiveActivity
 {
-    public const string UndoType = "Update";
+    private UpdateActivityEntity Entity { get; }
+    
+    public UpdateActivity() => Entity = new UpdateActivityEntity(TypeMap);
+    public UpdateActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<UpdateActivityEntity>();
+}
 
-    [JsonConstructor]
-    public UpdateActivity() : this(UndoType) {}
 
-    protected UpdateActivity(string type) : base(type) {}
+/// <inheritdoc cref="UpdateActivity"/>
+[ASTypeKey(UpdateType)]
+public sealed class UpdateActivityEntity : ASBase
+{
+    public const string UpdateType = "Update";
+
+    public UpdateActivityEntity(TypeMap typeMap) : base(UpdateType, typeMap) {}
 }

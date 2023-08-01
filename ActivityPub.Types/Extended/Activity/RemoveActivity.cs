@@ -10,13 +10,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor is removing the object.
 /// If specified, the origin indicates the context from which the object is being removed. 
 /// </summary>
-[ASTypeKey(RemoveType)]
 public class RemoveActivity : ASTargetedActivity
+{
+    private RemoveActivityEntity Entity { get; }
+    
+    public RemoveActivity() => Entity = new RemoveActivityEntity(TypeMap);
+    public RemoveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<RemoveActivityEntity>();
+}
+
+
+/// <inheritdoc cref="RemoveActivity"/>
+[ASTypeKey(RemoveType)]
+public sealed class RemoveActivityEntity : ASBase
 {
     public const string RemoveType = "Remove";
 
-    [JsonConstructor]
-    public RemoveActivity() : this(RemoveType) {}
-
-    protected RemoveActivity(string type) : base(type) {}
+    public RemoveActivityEntity(TypeMap typeMap) : base(RemoveType, typeMap) {}
 }

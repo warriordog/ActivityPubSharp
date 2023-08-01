@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// A specialization of Offer in which the actor is extending an invitation for the object to the target. 
 /// </summary>
-[ASTypeKey(InviteType)]
 public class InviteActivity : OfferActivity
+{
+    private InviteActivityEntity Entity { get; }
+    
+    public InviteActivity() => Entity = new InviteActivityEntity(TypeMap);
+    public InviteActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<InviteActivityEntity>();
+}
+
+
+/// <inheritdoc cref="InviteActivity"/>
+[ASTypeKey(InviteType)]
+public sealed class InviteActivityEntity : ASBase
 {
     public const string InviteType = "Invite";
 
-    [JsonConstructor]
-    public InviteActivity() : this(InviteType) {}
-
-    protected InviteActivity(string type) : base(type) {}
+    public InviteActivityEntity(TypeMap typeMap) : base(InviteType, typeMap) {}
 }

@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Describes a software application. 
 /// </summary>
-[ASTypeKey(ApplicationType)]
 public class ApplicationActor : ASActor
+{
+    private ApplicationActorEntity Entity { get; }
+    
+    public ApplicationActor() => Entity = new ApplicationActorEntity(TypeMap);
+    public ApplicationActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ApplicationActorEntity>();
+}
+
+
+/// <inheritdoc cref="ApplicationActor"/>
+[ASTypeKey(ApplicationType)]
+public sealed class ApplicationActorEntity : ASBase
 {
     public const string ApplicationType = "Application";
 
-    [JsonConstructor]
-    public ApplicationActor() : this(ApplicationType) {}
-
-    protected ApplicationActor(string type) : base(type) {}
+    public ApplicationActorEntity(TypeMap typeMap) : base(ApplicationType, typeMap) {}
 }

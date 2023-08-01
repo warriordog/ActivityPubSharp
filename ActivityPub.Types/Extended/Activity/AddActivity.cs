@@ -11,13 +11,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// If the target property is not explicitly specified, the target would need to be determined implicitly by context.
 /// The origin can be used to identify the context from which the object originated. 
 /// </summary>
-[ASTypeKey(AddType)]
 public class AddActivity : ASTargetedActivity
+{
+    private AddActivityEntity Entity { get; }
+    
+    public AddActivity() => Entity = new AddActivityEntity(TypeMap);
+    public AddActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<AddActivityEntity>();
+}
+
+
+/// <inheritdoc cref="AddActivity"/>
+[ASTypeKey(AddType)]
+public sealed class AddActivityEntity : ASBase
 {
     public const string AddType = "Add";
 
-    [JsonConstructor]
-    public AddActivity() : this(AddType) {}
-
-    protected AddActivity(string type) : base(type) {}
+    public AddActivityEntity(TypeMap typeMap) : base(AddType, typeMap) {}
 }

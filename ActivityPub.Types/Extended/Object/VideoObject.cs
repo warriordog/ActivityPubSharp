@@ -9,13 +9,19 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a video document of any kind. 
 /// </summary>
-[ASTypeKey(VideoType)]
 public class VideoObject : DocumentObject
+{
+    private VideoObjectEntity Entity { get; }
+    
+    public VideoObject() => Entity = new VideoObjectEntity(TypeMap);
+    public VideoObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<VideoObjectEntity>();
+}
+
+/// <inheritdoc cref="VideoObject"/>
+[ASTypeKey(VideoType)]
+public sealed class VideoObjectEntity : ASBase
 {
     public const string VideoType = "Video";
 
-    [JsonConstructor]
-    public VideoObject() : this(VideoType) {}
-
-    protected VideoObject(string type) : base(type) {}
+    public VideoObjectEntity(TypeMap typeMap) : base(VideoType, typeMap) {}
 }

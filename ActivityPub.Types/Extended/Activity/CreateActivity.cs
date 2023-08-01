@@ -9,13 +9,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor has created the object.
 /// </summary>
-[ASTypeKey(CreateType)]
 public class CreateActivity : ASTransitiveActivity
+{
+    private CreateActivityEntity Entity { get; }
+    
+    public CreateActivity() => Entity = new CreateActivityEntity(TypeMap);
+    public CreateActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<CreateActivityEntity>();
+}
+
+
+/// <inheritdoc cref="CreateActivity"/>
+[ASTypeKey(CreateType)]
+public sealed class CreateActivityEntity : ASBase
 {
     public const string CreateType = "Create";
 
-    [JsonConstructor]
-    public CreateActivity() : this(CreateType) {}
-
-    protected CreateActivity(string type) : base(type) {}
+    public CreateActivityEntity(TypeMap typeMap) : base(CreateType, typeMap) {}
 }

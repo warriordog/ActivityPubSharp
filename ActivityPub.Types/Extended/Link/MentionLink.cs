@@ -10,15 +10,14 @@ namespace ActivityPub.Types.Extended.Link;
 /// <summary>
 /// A specialized Link that represents an @mention. 
 /// </summary>
-[ASTypeKey(MentionType)]
 public class MentionLink : ASLink
 {
-    public const string MentionType = "Mention";
-
-    [JsonConstructor]
-    public MentionLink() : this(MentionType) {}
-
-    protected MentionLink(string type) : base(type) {}
+    private MentionLinkEntity Entity { get; }
+    
+    
+    public MentionLink() => Entity = new MentionLinkEntity(TypeMap);
+    public MentionLink(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<MentionLinkEntity>();
+    
     
     public static implicit operator string(MentionLink link) => link.HRef;
     public static implicit operator MentionLink(string str) => new() { HRef = new ASUri(str) };
@@ -28,4 +27,15 @@ public class MentionLink : ASLink
 
     public static implicit operator ASUri(MentionLink link) => link.HRef;
     public static implicit operator MentionLink(ASUri asUri) => new() { HRef = asUri };
+}
+
+/// <summary>
+/// A specialized Link that represents an @mention. 
+/// </summary>
+[ASTypeKey(MentionType)]
+public sealed class MentionLinkEntity : ASBase
+{
+    public const string MentionType = "Mention";
+
+    public MentionLinkEntity(TypeMap typeMap) : base(MentionType, typeMap) {}
 }

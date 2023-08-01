@@ -34,10 +34,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
 {
     private readonly HashSet<Type> _allASTypes = new();
     private readonly Dictionary<string, ASTypeInfo> _knownTypeMap = new();
-    private readonly HashSet<string> _knownLinkTypes = new()
-    {
-        ASLink.LinkType
-    };
+    private readonly HashSet<string> _knownLinkTypes = new(); // TODO we may need to manually add ASLink here
     
     private readonly IJsonTypeInfoCache _jsonTypeInfoCache;
 

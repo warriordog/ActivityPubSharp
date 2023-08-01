@@ -12,13 +12,20 @@ namespace ActivityPub.Types.Extended.Activity;
 /// The typical use is to support social systems that allow one user to block activities or content of other users.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(BlockType)]
 public class BlockActivity : IgnoreActivity
 {
-    public const string BlockType = "BlockActivity";
+    private BlockActivityEntity Entity { get; }
+    
+    public BlockActivity() => Entity = new BlockActivityEntity(TypeMap);
+    public BlockActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<BlockActivityEntity>();
+}
 
-    [JsonConstructor]
-    public BlockActivity() : this(BlockType) {}
 
-    protected BlockActivity(string type) : base(type) {}
+/// <inheritdoc cref="BlockActivity"/>
+[ASTypeKey(BlockType)]
+public sealed class BlockActivityEntity : ASBase
+{
+    public const string BlockType = "Block";
+
+    public BlockActivityEntity(TypeMap typeMap) : base(BlockType, typeMap) {}
 }

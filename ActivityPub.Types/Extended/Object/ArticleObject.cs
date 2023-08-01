@@ -9,13 +9,19 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents any kind of multi-paragraph written work.
 /// </summary>
-[ASTypeKey(ArticleType)]
 public class ArticleObject : ASObject
+{
+    private ArticleObjectEntity Entity { get; }
+    
+    public ArticleObject() => Entity = new ArticleObjectEntity(TypeMap);
+    public ArticleObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ArticleObjectEntity>();
+}
+
+/// <inheritdoc cref="ArticleObject"/>
+[ASTypeKey(ArticleType)]
+public sealed class ArticleObjectEntity : ASBase
 {
     public const string ArticleType = "Article";
 
-    [JsonConstructor]
-    public ArticleObject() : this(ArticleType) {}
-
-    protected ArticleObject(string type) : base(type) {}
+    public ArticleObjectEntity(TypeMap typeMap) : base(ArticleType, typeMap) {}
 }
