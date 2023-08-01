@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// If the target property is not explicitly specified, the target would need to be determined implicitly by context.
 /// The origin can be used to identify the context from which the object originated. 
 /// </summary>
-[ASTypeKey(AddType)]
+[APType(AddType)]
 public class AddActivity : ASTargetedActivity
 {
     public const string AddType = "Add";
