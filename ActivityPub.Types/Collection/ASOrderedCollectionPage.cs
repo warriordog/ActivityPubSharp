@@ -15,7 +15,7 @@ namespace ActivityPub.Types.Collection;
 /// Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the OrderedCollectionPage type.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
-[ASTypeKey(OrderedCollectionPageType)]
+[APType(OrderedCollectionPageType)]
 public class ASOrderedCollectionPage<T> : ASCollectionPage<T>
     where T : ASObject
 {
