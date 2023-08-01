@@ -4,6 +4,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Json.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -18,11 +19,11 @@ public class ASActivity : ASObject
 {
     private ASActivityEntity Entity { get; }
 
-    
+
     public ASActivity() => Entity = new ASActivityEntity(TypeMap);
     public ASActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASActivityEntity>();
-    
-    
+
+
     /// <summary>
     /// Describes one or more entities that either performed or are expected to perform the activity.
     /// Any single activity can have multiple actors.
@@ -40,7 +41,7 @@ public class ASActivity : ASObject
     /// Identifies one or more objects used (or to be used) in the completion of an Activity. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-instrument"/>
-    public Linkable<ASObject>? Instrument 
+    public Linkable<ASObject>? Instrument
     {
         get => Entity.Instrument;
         set => Entity.Instrument = value;
@@ -52,7 +53,7 @@ public class ASActivity : ASObject
     /// For instance, in the activity "John moved an item to List B from List A", the origin of the activity is "List A". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-origin"/>
-    public Linkable<ASObject>? Origin 
+    public Linkable<ASObject>? Origin
     {
         get => Entity.Origin;
         set => Entity.Origin = value;
@@ -63,24 +64,23 @@ public class ASActivity : ASObject
     /// For instance, if a particular action results in the creation of a new resource, the result property can be used to describe that new resource. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-result"/>
-    public Linkable<ASObject>? Result 
+    public Linkable<ASObject>? Result
     {
         get => Entity.Result;
         set => Entity.Result = value;
     }
 }
 
-
 /// <inheritdoc cref="ASActivity"/>
 [ASTypeKey(ActivityType)]
-[CustomJsonDeserializer(nameof(TryDeserialize))]
+[NarrowJsonType(nameof(NarrowType))]
 public sealed class ASActivityEntity : ASBase
 {
     public const string ActivityType = "Activity";
 
-    
+
     public ASActivityEntity(TypeMap typeMap) : base(ActivityType, typeMap) {}
-    
+
 
     /// <inheritdoc cref="ASActivity.Actor"/>
     [JsonPropertyName("actor")]
@@ -98,18 +98,15 @@ public sealed class ASActivityEntity : ASBase
     [JsonPropertyName("result")]
     public Linkable<ASObject>? Result { get; set; }
 
-    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASActivityEntity? obj)
+    /// <inheritdoc cref="NarrowTypeDelegate"/>
+    public static Type NarrowType(JsonElement element, DeserializationMetadata meta)
     {
         // If it has the "object" property, then its Transitive.
-        // Pivot to the narrower type.
-        if (element.TryGetProperty("object", out _))
-        {
-            obj = element.Deserialize<ASActivityEntity>(options);
-            return true;
-        }
+        var isTransient = element.TryGetProperty("object", out _);
 
-        // Otherwise we fall back on default
-        obj = null;
-        return false;
+        // Pivot to the correct type.
+        return isTransient
+            ? typeof(ASTransitiveActivityEntity)
+            : typeof(ASActivityEntity);
     }
 }

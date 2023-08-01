@@ -4,7 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Json.Attributes;
 
 namespace ActivityPub.Types.Internal.TypeInfo;
 
@@ -28,7 +28,7 @@ public abstract class JsonTypeInfo
     /// <seealso cref="OptionalSetters"/>
     /// <seealso cref="Getters"/>
     public required Dictionary<string, JsonPropertyInfo> RequiredSetters { get; init; }
-    
+
     /// <summary>
     /// All settable & optional JSON properties in the type.
     /// These will be parsed from JSON only if present.

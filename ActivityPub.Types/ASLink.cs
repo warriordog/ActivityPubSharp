@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Json.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -28,6 +29,7 @@ public class ASLink : ASType
         // TODO see if there's a better way to do this
         HRef = null!
     };
+
     public ASLink(TypeMap typeMap) : base(typeMap) => Entity = typeMap.AsEntity<ASLinkEntity>();
 
     /// <summary>
@@ -77,7 +79,7 @@ public class ASLink : ASType
     /// In the [HTML5], any string not containing the "space" U+0020, "tab" (U+0009), "LF" (U+000A), "FF" (U+000C), "CR" (U+000D) or "," (U+002C) characters can be used as a valid link relation.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-rel"/>
-    public HashSet<LinkRel> Rel 
+    public HashSet<LinkRel> Rel
     {
         get => Entity.Rel;
         set => Entity.Rel = value;
@@ -94,15 +96,14 @@ public class ASLink : ASType
     public static implicit operator ASLink(ASUri asUri) => new() { HRef = asUri };
 }
 
-
 /// <inheritdoc cref="ASLink"/>
 [ASTypeKey(LinkType)]
 [CustomJsonDeserializer(nameof(TryDeserialize))]
-[CustomJsonSerializer(nameof(TrySerialize))]
+[CustomJsonValueSerializer(nameof(TrySerializeIntoValue))]
 public sealed class ASLinkEntity : ASBase
 {
     public const string LinkType = "Link";
-    
+
     private readonly ASTypeEntity _typeEntity;
 
 
@@ -130,12 +131,13 @@ public sealed class ASLinkEntity : ASBase
     [JsonPropertyName("rel")]
     public HashSet<LinkRel> Rel { get; set; } = new();
 
-    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASLinkEntity? obj)
+    /// <inheritdoc cref="TryDeserializeDelegate{ASLinkEntity}"/>
+    public static bool TryDeserialize(JsonElement element, DeserializationMetadata meta, out ASLinkEntity? obj)
     {
         // We either parse from string, or allow parser to use default logic
         if (element.ValueKind == JsonValueKind.String)
         {
-            obj = new ASLinkEntity
+            obj = new ASLinkEntity(meta.TypeMap)
             {
                 HRef = element.GetString()!
             };
@@ -147,12 +149,14 @@ public sealed class ASLinkEntity : ASBase
         return false;
     }
 
-    public static bool TrySerialize(ASLinkEntity obj, JsonSerializerOptions options, JsonNodeOptions nodeOptions, [NotNullWhen(true)] out JsonNode? node)
+    /// <inheritdoc cref="TrySerializeIntoValueDelegate{ASLinkEntity}"/>
+    public static bool TrySerializeIntoValue(ASLinkEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node)
     {
         // If its only a link, then use the flattened form
         if (obj.HasOnlyHRef)
         {
-            node = JsonValue.Create(obj.HRef.Uri.ToString(), nodeOptions)!;
+            var str = obj.HRef.Uri.ToString();
+            node = JsonValue.Create(str, meta.JsonNodeOptions)!;
             return true;
         }
 

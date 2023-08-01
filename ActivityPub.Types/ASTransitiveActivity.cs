@@ -4,6 +4,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Json.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -23,8 +24,9 @@ public class ASTransitiveActivity : ASActivity
     {
         Object = null!
     };
+
     public ASTransitiveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASTransitiveActivityEntity>();
-    
+
 
     /// <summary>
     /// Describes the direct object of the activity.
@@ -32,7 +34,7 @@ public class ASTransitiveActivity : ASActivity
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
     [JsonPropertyName("object")]
-    public required LinkableList<ASObject> Object 
+    public required LinkableList<ASObject> Object
     {
         get => Entity.Object;
         set => Entity.Object = value;
@@ -40,29 +42,25 @@ public class ASTransitiveActivity : ASActivity
 }
 
 /// <inheritdoc cref="ASTransitiveActivity"/>
-[CustomJsonDeserializer(nameof(TryDeserialize))]
+[NarrowJsonType(nameof(NarrowType))]
 public sealed class ASTransitiveActivityEntity : ASBase
 {
     public ASTransitiveActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
 
-    
+
     /// <inheritdoc cref="ASTransitiveActivity.Object"/>
     [JsonPropertyName("object")]
     public required LinkableList<ASObject> Object { get; set; } = new();
-    
-    
-    public static bool TryDeserialize(JsonElement element, JsonSerializerOptions options, out ASTransitiveActivityEntity? obj)
+
+    /// <inheritdoc cref="NarrowTypeDelegate"/>
+    public static Type NarrowType(JsonElement element, DeserializationMetadata meta)
     {
         // If it has the "target" property, then its Targeted.
-        // Pivot to the narrower type.
-        if (element.TryGetProperty("target", out _))
-        {
-            obj = element.Deserialize<ASTransitiveActivityEntity>(options);
-            return true;
-        }
+        var isTransient = element.TryGetProperty("object", out _);
 
-        // Otherwise we fall back on default
-        obj = null;
-        return false;
+        // Pivot to the correct type.
+        return isTransient
+            ? typeof(ASTargetedActivityEntity)
+            : typeof(ASTransitiveActivityEntity);
     }
 }

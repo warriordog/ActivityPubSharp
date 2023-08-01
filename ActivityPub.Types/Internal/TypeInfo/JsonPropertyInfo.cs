@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Json.Attributes;
 
 namespace ActivityPub.Types.Internal.TypeInfo;
 
@@ -18,22 +19,23 @@ public abstract class JsonPropertyInfo
     public required PropertyInfo Property { get; init; }
     public required string Name { get; init; }
     public required bool IsRequired { get; init; }
-    
+
     /// <summary>
     /// Property-specific ignore condition.
     /// Will never be <see cref="JsonIgnoreCondition.Always"/>.
     /// </summary>
     /// <seealso cref="JsonIgnoreAttribute"/>
     public required JsonIgnoreCondition? IgnoreCondition { get; init; }
-    
+
     /// <summary>
     /// True if the property should be ignored when nested inside two or more objects.
     /// </summary>
     /// <seealso cref="JsonIgnoreWhenNestedAttribute"/>
     public required bool IgnoreWhenNested { get; init; }
+
     public required object? TypeDefaultValue { get; init; }
     public required bool IsCollection { get; init; }
-    
+
     /// <summary>
     /// Optional custom JSON converter to use for the property
     /// </summary>

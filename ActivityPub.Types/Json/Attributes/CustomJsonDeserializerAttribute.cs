@@ -4,11 +4,11 @@
 using System.Text.Json;
 using JetBrains.Annotations;
 
-namespace ActivityPub.Types.Json;
+namespace ActivityPub.Types.Json.Attributes;
 
 /// <summary>
 /// Indicates that the target method should be called to deserialize this type or property.
-/// Only valid on subtypes of <see cref="ASType"/>.
+/// Only valid on subtypes of <see cref="ASBase"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, Inherited = false)]
 [MeansImplicitUse]
@@ -25,7 +25,11 @@ public sealed class CustomJsonDeserializerAttribute : Attribute
 
 /// <summary>
 /// Deserialize the type from JSON.
-/// Return true on success, or false to fall back on the default converter. 
 /// </summary>
-/// <typeparam name="T">Type of object to convert</typeparam>
-public delegate bool TryDeserializeDelegate<T>(JsonElement element, JsonSerializerOptions options, out T? obj);
+/// <param name="element">Element containing JSON data for this object</param>
+/// <param name="meta">Context for the conversion</param>
+/// <param name="obj">Object constructed by the converter</param>
+/// <returns>Return true on success, or false to fall back on default logic.</returns>
+/// <typeparam name="T">Type of object to convert. Must derive from <see cref="ASBase"/>.</typeparam>
+public delegate bool TryDeserializeDelegate<T>(JsonElement element, DeserializationMetadata meta, out T? obj)
+    where T : ASBase;

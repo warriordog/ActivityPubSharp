@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Json;
+using ActivityPub.Types.Json.Attributes;
 using InternalUtils;
 
 namespace ActivityPub.Types.Internal.TypeInfo;
@@ -48,6 +49,7 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
 
         return info;
     }
+
     public JsonTypeInfo GetForType<T>()
     {
         var type = typeof(T);
@@ -66,6 +68,7 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
         typeof(JsonTypeInfoCache)
             .GetMethod(nameof(CreateForType), BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly, Type.EmptyTypes)
         ?? throw new ApplicationException($"Runtime error - can't find {nameof(JsonTypeInfoCache)}.{nameof(CreateForType)}()");
+
     private static readonly MethodInfo CreatePropertyInfoOfMethod =
         typeof(JsonTypeInfoCache)
             .GetMethod(nameof(CreatePropertyInfoOf), BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)
@@ -95,7 +98,7 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
             CustomDeserializer = FindCustomDeserializer(type, type)?.CreateDelegate<TryDeserializeDelegate<T>>()
         };
     }
-    
+
     private static void FindJsonProperties(Type type, out JsonPropertyInfo[] getters, out Dictionary<string, JsonPropertyInfo> requiredSetters, out Dictionary<string, JsonPropertyInfo> optionalSetters)
     {
         requiredSetters = new();
@@ -116,20 +119,20 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
 
             // https://stackoverflow.com/questions/74371619/c-sharp-11-detect-required-property-by-reflection
             var isRequired = Attribute.IsDefined(property, typeof(RequiredMemberAttribute));
-            
+
             // Create the info obj
             var propInfo = CreatePropertyInfo(
                 // Basic property details
                 name,
                 isRequired,
-                
+
                 // Metadata needed for serialization
                 property,
                 property.PropertyType.GetDefaultValue(),
                 property.PropertyType.IsAssignableTo(typeof(ICollection)),
                 jsonIgnoreAttr?.Condition,
                 Attribute.IsDefined(property, typeof(JsonIgnoreWhenNestedAttribute)),
-                
+
                 // Custom converters
                 property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType,
                 FindCustomSerializer(type, property),
@@ -141,6 +144,7 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
             {
                 getterList.Add(propInfo);
             }
+
             if (property.SetMethod != null)
             {
                 if (isRequired)
@@ -160,12 +164,12 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
         var method = CreatePropertyInfoOfMethod.MakeGenericMethod(property.PropertyType);
         return (JsonPropertyInfo)method.Invoke(null, new[] { name, isRequired, property, typeDefaultValue, isCollection, ignoreCondition, ignoreWhenNested, customConverterType, customSerializerMethod, customDeserializerMethod })!;
     }
-    
+
     private static JsonPropertyInfo<T> CreatePropertyInfoOf<T>(string name, bool isRequired, PropertyInfo property, object? typeDefaultValue, bool isCollection, JsonIgnoreCondition? ignoreCondition, bool ignoreWhenNested, Type? customConverterType, MethodInfo? customSerializerMethod, MethodInfo? customDeserializerMethod)
     {
         var customSerializer = customSerializerMethod?.CreateDelegate<TrySerializeDelegate<T>>();
         var customDeserializer = customDeserializerMethod?.CreateDelegate<TryDeserializeDelegate<T>>();
-        
+
         return new JsonPropertyInfo<T>
         {
             // Basic property details
@@ -185,26 +189,26 @@ public class JsonTypeInfoCache : IJsonTypeInfoCache
             CustomSerializer = customSerializer
         };
     }
-    
+
     private static MethodInfo? FindCustomSerializer(Type type, MemberInfo member)
     {
         var customSerializerAttribute = member.GetCustomAttribute<CustomJsonSerializerAttribute>();
         if (customSerializerAttribute?.MethodName == null)
             return null;
-        
+
         var customSerializer = type.GetMethod(customSerializerAttribute.MethodName);
         if (customSerializer == null)
             throw new MissingMethodException(type.Name, customSerializerAttribute.MethodName);
 
         return customSerializer;
     }
-    
+
     private static MethodInfo? FindCustomDeserializer(Type type, MemberInfo member)
     {
         var customDeserializerAttribute = member.GetCustomAttribute<CustomJsonDeserializerAttribute>();
         if (customDeserializerAttribute?.MethodName == null)
             return null;
-        
+
         var customDeserializer = type.GetMethod(customDeserializerAttribute.MethodName);
         if (customDeserializer == null)
             throw new MissingMethodException(type.Name, customDeserializerAttribute.MethodName);
