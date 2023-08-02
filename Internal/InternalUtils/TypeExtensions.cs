@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection.Emit;
 
 namespace InternalUtils;
 
@@ -135,12 +136,13 @@ internal static class TypeExtensions
     {
         if (!genericType.IsOpenGeneric())
             throw new ArgumentException($"{genericType} is not an open generic type", nameof(genericType));
-        
+
         var genericSlots = genericType.GetGenericArguments();
         for (var i = 0; i < genericSlots.Length; i++)
         {
-            genericSlots[i] = genericSlots[i].GetGenericParameterConstraints()[0];    
+            genericSlots[i] = genericSlots[i].GetGenericParameterConstraints()[0];
         }
+
         return genericType.MakeGenericType(genericSlots);
     }
 
@@ -158,8 +160,35 @@ internal static class TypeExtensions
         // The only case where it matters are non-nullable value types
         if (type.IsValueType && Nullable.GetUnderlyingType(type) == null)
             return Activator.CreateInstance(type);
-        
+
         // For everything else, the correct value is just null
         return null;
+    }
+
+    // Based on https://stackoverflow.com/a/23433748
+    // More info - https://learn.microsoft.com/en-us/dotnet/api/system.reflection.emit.dynamicmethod?view=net-7.0
+    // More info - https://learn.microsoft.com/en-us/dotnet/api/system.reflection.emit.opcodes?view=net-7.0
+    internal static DynamicMethod CreateDynamicConstructor(this Type type, params Type[] paramTypes)
+    {
+        if (paramTypes.Length > 4)
+            throw new ArgumentException("Can't create dynamic constructor: no more than 4 parameters can be provided");
+
+        var constructor = type.GetConstructor(paramTypes)
+                          ?? throw new ArgumentException($"Can't create dynamic constructor: {type}.({string.Join<Type>(", ", paramTypes)}) for {type} does not exist");
+
+        var dynamicMethod = new DynamicMethod($"DynamicConstructor_{paramTypes.Length}", type, paramTypes, true);
+        var il = dynamicMethod.GetILGenerator();
+        if (paramTypes.Length > 0)
+            il.Emit(OpCodes.Ldarg_0);
+        if (paramTypes.Length > 1)
+            il.Emit(OpCodes.Ldarg_1);
+        if (paramTypes.Length > 2)
+            il.Emit(OpCodes.Ldarg_2);
+        if (paramTypes.Length > 3)
+            il.Emit(OpCodes.Ldarg_3);
+        il.Emit(OpCodes.Newobj, constructor);
+        il.Emit(OpCodes.Ret);
+
+        return dynamicMethod;
     }
 }
