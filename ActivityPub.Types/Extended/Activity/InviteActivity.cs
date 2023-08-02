@@ -24,5 +24,10 @@ public sealed class InviteActivityEntity : ASBase
 {
     public const string InviteType = "Invite";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public InviteActivityEntity(TypeMap typeMap) : base(InviteType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public InviteActivityEntity() : base(InviteType) {}
 }

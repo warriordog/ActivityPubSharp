@@ -24,5 +24,10 @@ public sealed class ViewActivityEntity : ASBase
 {
     public const string ViewType = "View";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ViewActivityEntity(TypeMap typeMap) : base(ViewType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ViewActivityEntity() : base(ViewType) {}
 }

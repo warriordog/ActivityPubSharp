@@ -45,7 +45,12 @@ public class ASTransitiveActivity : ASActivity
 [NarrowJsonType(nameof(NarrowType))]
 public sealed class ASTransitiveActivityEntity : ASBase
 {
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASTransitiveActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ASTransitiveActivityEntity() : base(null) {}
 
 
     /// <inheritdoc cref="ASTransitiveActivity.Object"/>

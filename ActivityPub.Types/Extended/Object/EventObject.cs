@@ -23,5 +23,10 @@ public sealed class EventObjectEntity : ASBase
 {
     public const string EventType = "Event";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public EventObjectEntity(TypeMap typeMap) : base(EventType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public EventObjectEntity() : base(EventType) {}
 }

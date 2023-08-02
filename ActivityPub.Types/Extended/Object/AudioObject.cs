@@ -23,5 +23,10 @@ public sealed class AudioObjectEntity : ASBase
 {
     public const string AudioType = "Audio";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public AudioObjectEntity(TypeMap typeMap) : base(AudioType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public AudioObjectEntity() : base(AudioType) {}
 }

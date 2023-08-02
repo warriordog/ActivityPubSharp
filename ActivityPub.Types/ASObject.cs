@@ -306,7 +306,12 @@ public sealed class ASObjectEntity : ASBase
     public const string ObjectType = "Object";
 
     
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASObjectEntity(TypeMap typeMap) : base(ObjectType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ASObjectEntity() : base(ObjectType) {}
 
     
     /// <inheritdoc cref="ASObject.Attachment"/>

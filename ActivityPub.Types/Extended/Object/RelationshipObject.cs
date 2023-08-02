@@ -60,7 +60,12 @@ public sealed class RelationshipObjectEntity : ASBase
 {
     public const string RelationshipType = "Relationship";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public RelationshipObjectEntity(TypeMap typeMap) : base(RelationshipType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public RelationshipObjectEntity() : base(RelationshipType) {}
 
     /// <inheritdoc cref="RelationshipObject.Object"/>
     [JsonPropertyName("object")]

@@ -24,5 +24,10 @@ public sealed class ServiceActorEntity : ASBase
 {
     public const string ServiceType = "Service";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ServiceActorEntity(TypeMap typeMap) : base(ServiceType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ServiceActorEntity() : base(ServiceType) {}
 }

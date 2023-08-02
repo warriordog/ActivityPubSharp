@@ -26,5 +26,10 @@ public sealed class FollowActivityEntity : ASBase
 {
     public const string FollowType = "Follow";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public FollowActivityEntity(TypeMap typeMap) : base(FollowType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public FollowActivityEntity() : base(FollowType) {}
 }

@@ -23,5 +23,10 @@ public sealed class ImageObjectEntity : ASBase
 {
     public const string ImageType = "Image";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ImageObjectEntity(TypeMap typeMap) : base(ImageType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ImageObjectEntity() : base(ImageType) {}
 }

@@ -24,5 +24,10 @@ public sealed class TentativeAcceptActivityEntity : ASBase
 {
     public const string TentativeAcceptType = "TentativeAccept";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public TentativeAcceptActivityEntity(TypeMap typeMap) : base(TentativeAcceptType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public TentativeAcceptActivityEntity() : base(TentativeAcceptType) {}
 }

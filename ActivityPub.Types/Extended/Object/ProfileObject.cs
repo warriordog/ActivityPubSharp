@@ -34,7 +34,12 @@ public sealed class ProfileObjectEntity : ASBase
 {
     public const string ProfileType = "Profile";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ProfileObjectEntity(TypeMap typeMap) : base(ProfileType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ProfileObjectEntity() : base(ProfileType) {}
 
     /// <inheritdoc cref="ProfileObject.Describes"/>
     [JsonPropertyName("describes")]

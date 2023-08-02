@@ -25,5 +25,10 @@ public sealed class RemoveActivityEntity : ASBase
 {
     public const string RemoveType = "Remove";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public RemoveActivityEntity(TypeMap typeMap) : base(RemoveType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public RemoveActivityEntity() : base(RemoveType) {}
 }

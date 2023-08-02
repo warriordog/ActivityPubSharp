@@ -25,5 +25,10 @@ public sealed class JoinActivityEntity : ASBase
 {
     public const string JoinType = "Join";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public JoinActivityEntity(TypeMap typeMap) : base(JoinType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public JoinActivityEntity() : base(JoinType) {}
 }

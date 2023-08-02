@@ -37,5 +37,10 @@ public sealed class MentionLinkEntity : ASBase
 {
     public const string MentionType = "Mention";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public MentionLinkEntity(TypeMap typeMap) : base(MentionType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public MentionLinkEntity() : base(MentionType) {}
 }

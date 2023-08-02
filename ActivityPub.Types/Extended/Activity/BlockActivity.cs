@@ -27,5 +27,10 @@ public sealed class BlockActivityEntity : ASBase
 {
     public const string BlockType = "Block";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public BlockActivityEntity(TypeMap typeMap) : base(BlockType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public BlockActivityEntity() : base(BlockType) {}
 }

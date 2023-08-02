@@ -23,5 +23,10 @@ public sealed class NoteObjectEntity : ASBase
 {
     public const string NoteType = "Note";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public NoteObjectEntity(TypeMap typeMap) : base(NoteType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public NoteObjectEntity() : base(NoteType) {}
 }

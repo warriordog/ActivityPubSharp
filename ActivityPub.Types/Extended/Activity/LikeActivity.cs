@@ -25,5 +25,10 @@ public sealed class LikeActivityEntity : ASBase
 {
     public const string LikeType = "Like";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public LikeActivityEntity(TypeMap typeMap) : base(LikeType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public LikeActivityEntity() : base(LikeType) {}
 }

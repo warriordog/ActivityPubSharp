@@ -40,7 +40,12 @@ public class ASTargetedActivity : ASTransitiveActivity
 /// <inheritdoc cref="ASTargetedActivity"/>
 public sealed class ASTargetedActivityEntity : ASBase
 {
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASTargetedActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ASTargetedActivityEntity() : base(null) {}
 
     /// <inheritdoc cref="ASTargetedActivity.Target"/>
     [JsonPropertyName("target")]

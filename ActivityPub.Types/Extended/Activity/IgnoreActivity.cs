@@ -24,5 +24,10 @@ public sealed class IgnoreActivityEntity : ASBase
 {
     public const string IgnoreType = "Ignore";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public IgnoreActivityEntity(TypeMap typeMap) : base(IgnoreType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public IgnoreActivityEntity() : base(IgnoreType) {}
 }

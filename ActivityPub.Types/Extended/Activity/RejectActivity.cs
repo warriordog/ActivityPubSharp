@@ -25,5 +25,10 @@ public sealed class RejectActivityEntity : ASBase
 {
     public const string RejectType = "Reject";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public RejectActivityEntity(TypeMap typeMap) : base(RejectType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public RejectActivityEntity() : base(RejectType) {}
 }

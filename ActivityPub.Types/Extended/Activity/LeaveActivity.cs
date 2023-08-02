@@ -25,5 +25,10 @@ public sealed class LeaveActivityEntity : ASBase
 {
     public const string LeaveType = "Leave";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public LeaveActivityEntity(TypeMap typeMap) : base(LeaveType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public LeaveActivityEntity() : base(LeaveType) {}
 }

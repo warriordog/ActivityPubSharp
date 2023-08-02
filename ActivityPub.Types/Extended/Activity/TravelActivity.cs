@@ -26,5 +26,10 @@ public sealed class TravelActivityEntity : ASBase
 {
     public const string TravelType = "Travel";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public TravelActivityEntity(TypeMap typeMap) : base(TravelType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public TravelActivityEntity() : base(TravelType) {}
 }

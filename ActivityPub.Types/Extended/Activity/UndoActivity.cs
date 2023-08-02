@@ -26,5 +26,10 @@ public sealed class UndoActivityEntity : ASBase
 {
     public const string UndoType = "Undo";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public UndoActivityEntity(TypeMap typeMap) : base(UndoType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public UndoActivityEntity() : base(UndoType) {}
 }

@@ -25,5 +25,10 @@ public sealed class FlagActivityEntity : ASBase
 {
     public const string FlagType = "Flag";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public FlagActivityEntity(TypeMap typeMap) : base(FlagType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public FlagActivityEntity() : base(FlagType) {}
 }

@@ -80,7 +80,12 @@ public sealed class QuestionActivityEntity : ASBase
 {
     public const string QuestionType = "Question";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public QuestionActivityEntity(TypeMap typeMap) : base(QuestionType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public QuestionActivityEntity() : base(QuestionType) {}
 
     /// <inheritdoc cref="QuestionActivity.OneOf"/>
     [JsonPropertyName("oneOf")]

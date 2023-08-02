@@ -104,11 +104,13 @@ public sealed class ASLinkEntity : ASBase
 {
     public const string LinkType = "Link";
 
-    private readonly ASTypeEntity _typeEntity;
 
-
-    public ASLinkEntity(TypeMap typeMap) : base(LinkType, typeMap)
-        => _typeEntity = typeMap.AsEntity<ASTypeEntity>();
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    public ASLinkEntity(TypeMap typeMap) : base(LinkType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ASLinkEntity() : base(LinkType) {}
 
 
     /// <inheritdoc cref="ASLink.HRef"/>
@@ -166,11 +168,12 @@ public sealed class ASLinkEntity : ASBase
 
     /// <summary>
     /// True if a link contains a value for <see cref="HRef"/> only and can therefore be reduced.
+    /// TODO currently broken and needs to be replaced
     /// </summary>
     /// <remarks>
     /// Its fragile and must be updated whenever <see cref="ASLink"/> or <see cref="ASType"/> is updated.
     /// </remarks> 
-    private bool HasOnlyHRef =>
-        HRefLang == null && Width == null && Height == null && Rel.Count == 0 && _typeEntity.Id == null &&
-        _typeEntity.AttributedTo.Count == 0 && _typeEntity.Preview == null && _typeEntity.Name == null && _typeEntity.MediaType == null && _typeEntity.UnknownJsonProperties.Count == 0;
+    private bool HasOnlyHRef => false;
+        // HRefLang == null && Width == null && Height == null && Rel.Count == 0 && _typeEntity.Id == null &&
+        // _typeEntity.AttributedTo.Count == 0 && _typeEntity.Preview == null && _typeEntity.Name == null && _typeEntity.MediaType == null && _typeEntity.UnknownJsonProperties.Count == 0;
 }

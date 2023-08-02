@@ -26,5 +26,10 @@ public sealed class UpdateActivityEntity : ASBase
 {
     public const string UpdateType = "Update";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public UpdateActivityEntity(TypeMap typeMap) : base(UpdateType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public UpdateActivityEntity() : base(UpdateType) {}
 }

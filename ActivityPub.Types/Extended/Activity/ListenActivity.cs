@@ -24,5 +24,10 @@ public sealed class ListenActivityEntity : ASBase
 {
     public const string ListenType = "Listen";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ListenActivityEntity(TypeMap typeMap) : base(ListenType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ListenActivityEntity() : base(ListenType) {}
 }

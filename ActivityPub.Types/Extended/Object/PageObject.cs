@@ -23,5 +23,10 @@ public sealed class PageObjectEntity : ASBase
 {
     public const string PageType = "Page";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public PageObjectEntity(TypeMap typeMap) : base(PageType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public PageObjectEntity() : base(PageType) {}
 }

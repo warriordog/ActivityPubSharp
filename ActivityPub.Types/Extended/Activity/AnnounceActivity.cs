@@ -25,5 +25,10 @@ public sealed class AnnounceActivityEntity : ASBase
 {
     public const string AnnounceType = "Announce";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public AnnounceActivityEntity(TypeMap typeMap) : base(AnnounceType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public AnnounceActivityEntity() : base(AnnounceType) {}
 }

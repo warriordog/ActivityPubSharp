@@ -124,7 +124,12 @@ public class ASActor : ASObject
 /// <inheritdoc cref="ASActor"/>
 public sealed class ASActorEntity : ASBase
 {
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASActorEntity(TypeMap typeMap) : base(null, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ASActorEntity() : base(null) {}
  
     
     /// <inheritdoc cref="ASActor.Inbox"/>

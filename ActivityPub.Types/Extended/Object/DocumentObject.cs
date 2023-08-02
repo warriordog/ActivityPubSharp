@@ -23,5 +23,10 @@ public sealed class DocumentObjectEntity : ASBase
 {
     public const string DocumentType = "Document";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public DocumentObjectEntity(TypeMap typeMap) : base(DocumentType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public DocumentObjectEntity() : base(DocumentType) {}
 }

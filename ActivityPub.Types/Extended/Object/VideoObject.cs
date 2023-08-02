@@ -23,5 +23,10 @@ public sealed class VideoObjectEntity : ASBase
 {
     public const string VideoType = "Video";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public VideoObjectEntity(TypeMap typeMap) : base(VideoType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public VideoObjectEntity() : base(VideoType) {}
 }

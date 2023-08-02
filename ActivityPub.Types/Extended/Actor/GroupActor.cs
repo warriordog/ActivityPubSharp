@@ -24,5 +24,10 @@ public sealed class GroupActorEntity : ASBase
 {
     public const string GroupType = "Group";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public GroupActorEntity(TypeMap typeMap) : base(GroupType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public GroupActorEntity() : base(GroupType) {}
 }

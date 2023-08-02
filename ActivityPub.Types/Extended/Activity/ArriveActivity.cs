@@ -26,5 +26,10 @@ public sealed class ArriveActivityEntity : ASBase
 {
     public const string ArriveType = "Arrive";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ArriveActivityEntity(TypeMap typeMap) : base(ArriveType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ArriveActivityEntity() : base(ArriveType) {}
 }

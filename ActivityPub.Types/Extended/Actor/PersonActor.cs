@@ -24,5 +24,10 @@ public sealed class PersonActorEntity : ASBase
 {
     public const string PersonType = "Person";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public PersonActorEntity(TypeMap typeMap) : base(PersonType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public PersonActorEntity() : base(PersonType) {}
 }

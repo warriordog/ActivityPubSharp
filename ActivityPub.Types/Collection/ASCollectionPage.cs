@@ -81,7 +81,12 @@ public class ASCollectionPage<T> : ASCollection<T>
 public sealed class ASCollectionPageEntity<T> : ASBase
     where T : ASObject
 {
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASCollectionPageEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ASCollectionPageEntity() : base(CollectionType) {}
 
     /// <inheritdoc cref="ASCollectionPage{T}.Next"/>
     [JsonPropertyName("next")]

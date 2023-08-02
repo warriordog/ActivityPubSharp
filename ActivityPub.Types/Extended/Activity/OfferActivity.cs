@@ -25,5 +25,10 @@ public sealed class OfferActivityEntity : ASBase
 {
     public const string OfferType = "Offer";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public OfferActivityEntity(TypeMap typeMap) : base(OfferType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public OfferActivityEntity() : base(OfferType) {}
 }

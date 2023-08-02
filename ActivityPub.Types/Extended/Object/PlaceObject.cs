@@ -90,7 +90,12 @@ public sealed class PlaceObjectEntity : ASBase
 {
     public const string PlaceType = "Place";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public PlaceObjectEntity(TypeMap typeMap) : base(PlaceType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public PlaceObjectEntity() : base(PlaceType) {}
 
     /// <inheritdoc cref="PlaceObject.Accuracy"/>
     [JsonPropertyName("accuracy")]

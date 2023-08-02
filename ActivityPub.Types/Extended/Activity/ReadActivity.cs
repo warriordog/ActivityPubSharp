@@ -24,5 +24,10 @@ public sealed class ReadActivityEntity : ASBase
 {
     public const string ReadType = "Read";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ReadActivityEntity(TypeMap typeMap) : base(ReadType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ReadActivityEntity() : base(ReadType) {}
 }

@@ -127,7 +127,12 @@ public class ASCollection<T> : ASObject
 public sealed class ASCollectionEntity<T> : ASBase
     where T : ASObject
 {
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASCollectionEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ASCollectionEntity() : base(CollectionType) {}
 
     /// <inheritdoc cref="ASCollection{T}.Current"/>
     [JsonPropertyName("current")]

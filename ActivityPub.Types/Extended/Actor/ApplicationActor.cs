@@ -24,5 +24,10 @@ public sealed class ApplicationActorEntity : ASBase
 {
     public const string ApplicationType = "Application";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ApplicationActorEntity(TypeMap typeMap) : base(ApplicationType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ApplicationActorEntity() : base(ApplicationType) {}
 }

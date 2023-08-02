@@ -46,7 +46,12 @@ public sealed class TombstoneObjectEntity : ASBase
 {
     public const string TombstoneType = "Tombstone";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public TombstoneObjectEntity(TypeMap typeMap) : base(TombstoneType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public TombstoneObjectEntity() : base(TombstoneType) {}
 
     /// <inheritdoc cref="TombstoneObject.FormerType"/>
     [JsonPropertyName("formerType")]

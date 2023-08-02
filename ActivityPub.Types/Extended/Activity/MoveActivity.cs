@@ -25,5 +25,10 @@ public sealed class MoveActivityEntity : ASBase
 {
     public const string MoveType = "Move";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public MoveActivityEntity(TypeMap typeMap) : base(MoveType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public MoveActivityEntity() : base(MoveType) {}
 }

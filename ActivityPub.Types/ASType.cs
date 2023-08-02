@@ -141,18 +141,23 @@ public sealed class ASTypeEntity : ASBase
     public static JsonLDContextObject ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
     
     
-    /// <summary>
-    /// Constructs a new ASType with a new Type Graph.
-    /// </summary>
-    public ASTypeEntity(TypeMap typeMap) : base(null, typeMap) {}
 
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    public ASTypeEntity(TypeMap typeMap) : base(null, typeMap) {}
     
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public ASTypeEntity() : base(null) {}
+
+
     /// <inheritdoc cref="ASType.UnknownJsonProperties"/>
     internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
 
-    /// <inheritdoc cref="ASType.Types"/>
+    // TODO wrong
+    /// <inheritdoc cref="ASType.Types"/> 
     public HashSet<string> Types { get; set; } = new();
     
+    // TODO wrong
     /// <inheritdoc cref="ASType.JsonLdContexts"/>
     [JsonIgnoreWhenNested]
     [JsonPropertyName("@context")]

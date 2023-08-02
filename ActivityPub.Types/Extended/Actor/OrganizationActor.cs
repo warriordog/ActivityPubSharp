@@ -24,5 +24,10 @@ public sealed class OrganizationActorEntity : ASBase
 {
     public const string OrganizationType = "Organization";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public OrganizationActorEntity(TypeMap typeMap) : base(OrganizationType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public OrganizationActorEntity() : base(OrganizationType) {}
 }

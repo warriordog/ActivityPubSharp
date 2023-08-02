@@ -24,5 +24,10 @@ public sealed class DislikeActivityEntity : ASBase
 {
     public const string DislikeType = "Dislike";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public DislikeActivityEntity(TypeMap typeMap) : base(DislikeType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public DislikeActivityEntity() : base(DislikeType) {}
 }

@@ -24,5 +24,10 @@ public sealed class CreateActivityEntity : ASBase
 {
     public const string CreateType = "Create";
 
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public CreateActivityEntity(TypeMap typeMap) : base(CreateType, typeMap) {}
+    
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public CreateActivityEntity() : base(CreateType) {}
 }
