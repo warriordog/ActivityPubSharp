@@ -21,14 +21,14 @@ public class FlagActivity : ASTransitiveActivity
 /// <inheritdoc cref="FlagActivity"/>
 [ASTypeKey(FlagType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class FlagActivityEntity : ASBase
+public sealed class FlagActivityEntity : ASBase<FlagActivity>
 {
     public const string FlagType = "Flag";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public FlagActivityEntity(TypeMap typeMap) : base(FlagType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public FlagActivityEntity() : base(FlagType) {}
 }

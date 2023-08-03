@@ -34,14 +34,14 @@ public class MentionLink : ASLink
 /// </summary>
 [ASTypeKey(MentionType)]
 [ImpliesOtherEntity(typeof(ASLinkEntity))]
-public sealed class MentionLinkEntity : ASBase
+public sealed class MentionLinkEntity : ASBase<MentionLink>
 {
     public const string MentionType = "Mention";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public MentionLinkEntity(TypeMap typeMap) : base(MentionType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public MentionLinkEntity() : base(MentionType) {}
 }

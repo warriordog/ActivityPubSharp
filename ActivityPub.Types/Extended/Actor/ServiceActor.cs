@@ -20,14 +20,14 @@ public class ServiceActor : ASActor
 /// <inheritdoc cref="ServiceActor"/>
 [ASTypeKey(ServiceType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
-public sealed class ServiceActorEntity : ASBase
+public sealed class ServiceActorEntity : ASBase<ServiceActor>
 {
     public const string ServiceType = "Service";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ServiceActorEntity(TypeMap typeMap) : base(ServiceType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ServiceActorEntity() : base(ServiceType) {}
 }

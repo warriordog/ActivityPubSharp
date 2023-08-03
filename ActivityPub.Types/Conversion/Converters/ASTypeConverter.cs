@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using InternalUtils;
 
-namespace ActivityPub.Types.Conversion;
+namespace ActivityPub.Types.Conversion.Converters;
 
 public class ASTypeConverter : JsonConverterFactory
 {
@@ -25,14 +25,14 @@ public class ASTypeConverter : JsonConverterFactory
 internal class ASTypeConverter<T> : JsonConverter<T>
     where T : ASType
 {
-    private readonly Func<TypeMap, T> _typeConstructor = TypeUtils.CreateDynamicConstructor<TypeMap, T>();
+    private static readonly Func<TypeMap, T> TypeConstructor = TypeUtils.CreateDynamicConstructor<TypeMap, T>();
 
     public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var typeMap = JsonSerializer.Deserialize<TypeMap>(ref reader, options)
                       ?? throw new JsonException($"Can't convert {typeof(T)}: conversion to TypeMap returned null");
 
-        return _typeConstructor(typeMap);
+        return TypeConstructor(typeMap);
     }
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)

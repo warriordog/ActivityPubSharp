@@ -20,14 +20,14 @@ public class DislikeActivity : ASTransitiveActivity
 /// <inheritdoc cref="DislikeActivity"/>
 [ASTypeKey(DislikeType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class DislikeActivityEntity : ASBase
+public sealed class DislikeActivityEntity : ASBase<DislikeActivity>
 {
     public const string DislikeType = "Dislike";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public DislikeActivityEntity(TypeMap typeMap) : base(DislikeType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public DislikeActivityEntity() : base(DislikeType) {}
 }

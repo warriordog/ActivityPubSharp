@@ -125,13 +125,13 @@ public class ASCollection<T> : ASObject
 [ASTypeKey(CollectionType)]
 [ASTypeKey(OrderedCollectionType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASCollectionEntity<T> : ASBase
+public sealed class ASCollectionEntity<T> : ASBase<ASCollection<T>>
     where T : ASObject
 {
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ASCollectionEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ASCollectionEntity() : base(CollectionType) {}
 

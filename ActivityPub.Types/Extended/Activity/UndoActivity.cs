@@ -22,14 +22,14 @@ public class UndoActivity : ASTransitiveActivity
 /// <inheritdoc cref="UndoActivity"/>
 [ASTypeKey(UndoType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class UndoActivityEntity : ASBase
+public sealed class UndoActivityEntity : ASBase<UndoActivity>
 {
     public const string UndoType = "Undo";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public UndoActivityEntity(TypeMap typeMap) : base(UndoType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public UndoActivityEntity() : base(UndoType) {}
 }

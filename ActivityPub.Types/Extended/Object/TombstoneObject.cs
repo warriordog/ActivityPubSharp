@@ -42,14 +42,14 @@ public class TombstoneObject : ASObject
 /// <inheritdoc cref="TombstoneObject"/>
 [ASTypeKey(TombstoneType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class TombstoneObjectEntity : ASBase
+public sealed class TombstoneObjectEntity : ASBase<TombstoneObject>
 {
     public const string TombstoneType = "Tombstone";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public TombstoneObjectEntity(TypeMap typeMap) : base(TombstoneType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public TombstoneObjectEntity() : base(TombstoneType) {}
 

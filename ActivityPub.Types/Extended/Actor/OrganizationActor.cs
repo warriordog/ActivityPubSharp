@@ -20,14 +20,14 @@ public class OrganizationActor : ASActor
 /// <inheritdoc cref="OrganizationActor"/>
 [ASTypeKey(OrganizationType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
-public sealed class OrganizationActorEntity : ASBase
+public sealed class OrganizationActorEntity : ASBase<OrganizationActor>
 {
     public const string OrganizationType = "Organization";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public OrganizationActorEntity(TypeMap typeMap) : base(OrganizationType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public OrganizationActorEntity() : base(OrganizationType) {}
 }

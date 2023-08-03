@@ -20,14 +20,14 @@ public class ImageObject : DocumentObject
 /// <inheritdoc cref="ImageObject"/>
 [ASTypeKey(ImageType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class ImageObjectEntity : ASBase
+public sealed class ImageObjectEntity : ASBase<ImageObject>
 {
     public const string ImageType = "Image";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ImageObjectEntity(TypeMap typeMap) : base(ImageType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ImageObjectEntity() : base(ImageType) {}
 }

@@ -22,14 +22,14 @@ public class UpdateActivity : ASTransitiveActivity
 /// <inheritdoc cref="UpdateActivity"/>
 [ASTypeKey(UpdateType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class UpdateActivityEntity : ASBase
+public sealed class UpdateActivityEntity : ASBase<UpdateActivity>
 {
     public const string UpdateType = "Update";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public UpdateActivityEntity(TypeMap typeMap) : base(UpdateType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public UpdateActivityEntity() : base(UpdateType) {}
 }

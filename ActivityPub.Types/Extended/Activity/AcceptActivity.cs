@@ -21,14 +21,14 @@ public class AcceptActivity : ASTransitiveActivity
 /// <inheritdoc cref="AcceptActivity"/>
 [ASTypeKey(AcceptType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class AcceptActivityEntity : ASBase
+public sealed class AcceptActivityEntity : ASBase<AcceptActivity>
 {
     public const string AcceptType = "Accept";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public AcceptActivityEntity(TypeMap typeMap) : base(AcceptType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public AcceptActivityEntity() : base(AcceptType) {}
 }

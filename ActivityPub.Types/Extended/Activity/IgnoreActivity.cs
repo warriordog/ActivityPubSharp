@@ -20,14 +20,14 @@ public class IgnoreActivity : ASTransitiveActivity
 /// <inheritdoc cref="IgnoreActivity"/>
 [ASTypeKey(IgnoreType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class IgnoreActivityEntity : ASBase
+public sealed class IgnoreActivityEntity : ASBase<IgnoreActivity>
 {
     public const string IgnoreType = "Ignore";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public IgnoreActivityEntity(TypeMap typeMap) : base(IgnoreType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public IgnoreActivityEntity() : base(IgnoreType) {}
 }

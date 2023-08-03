@@ -20,14 +20,14 @@ public class VideoObject : DocumentObject
 /// <inheritdoc cref="VideoObject"/>
 [ASTypeKey(VideoType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class VideoObjectEntity : ASBase
+public sealed class VideoObjectEntity : ASBase<VideoObject>
 {
     public const string VideoType = "Video";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public VideoObjectEntity(TypeMap typeMap) : base(VideoType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public VideoObjectEntity() : base(VideoType) {}
 }

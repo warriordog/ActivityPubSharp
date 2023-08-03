@@ -125,12 +125,12 @@ public class ASActor : ASObject
 
 /// <inheritdoc cref="ASActor"/>
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASActorEntity : ASBase
+public sealed class ASActorEntity : ASBase<ASActor>
 {
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ASActorEntity(TypeMap typeMap) : base(null, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ASActorEntity() : base(null) {}
 

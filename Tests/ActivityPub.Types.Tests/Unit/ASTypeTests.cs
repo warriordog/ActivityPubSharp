@@ -74,14 +74,14 @@ public abstract class ASTypeTests
     }
 
     [ImpliesOtherEntity(typeof(ASTypeEntity))]
-    private sealed class StubASTypeEntity : ASBase
+    private sealed class StubASTypeEntity : ASBase<StubASType>
     {
         public const string StubType = "Stub";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+        /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
         public StubASTypeEntity(TypeMap typeMap) : base(StubType, typeMap) {}
 
-        /// <inheritdoc cref="ASBase(string?)"/>
+        /// <inheritdoc cref="ASBase{T}(string?)"/>
         [JsonConstructor]
         public StubASTypeEntity() : base(StubType) {}
     }

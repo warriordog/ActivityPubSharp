@@ -20,14 +20,14 @@ public class CreateActivity : ASTransitiveActivity
 /// <inheritdoc cref="CreateActivity"/>
 [ASTypeKey(CreateType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class CreateActivityEntity : ASBase
+public sealed class CreateActivityEntity : ASBase<CreateActivity>
 {
     public const string CreateType = "Create";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public CreateActivityEntity(TypeMap typeMap) : base(CreateType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public CreateActivityEntity() : base(CreateType) {}
 }

@@ -4,7 +4,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
-using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 
@@ -44,12 +43,12 @@ public class ASTransitiveActivity : ASActivity
 
 /// <inheritdoc cref="ASTransitiveActivity"/>
 [ImpliesOtherEntity(typeof(ASActivityEntity))]
-public sealed class ASTransitiveActivityEntity : ASBase, ISubTypeDeserialized
+public sealed class ASTransitiveActivityEntity : ASBase<ASTransitiveActivity>, ISubTypeDeserialized
 {
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ASTransitiveActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ASTransitiveActivityEntity() : base(null) {}
 

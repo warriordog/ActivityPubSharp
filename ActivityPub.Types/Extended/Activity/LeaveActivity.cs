@@ -21,14 +21,14 @@ public class LeaveActivity : ASTransitiveActivity
 /// <inheritdoc cref="LeaveActivity"/>
 [ASTypeKey(LeaveType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class LeaveActivityEntity : ASBase
+public sealed class LeaveActivityEntity : ASBase<LeaveActivity>
 {
     public const string LeaveType = "Leave";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public LeaveActivityEntity(TypeMap typeMap) : base(LeaveType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public LeaveActivityEntity() : base(LeaveType) {}
 }

@@ -20,14 +20,14 @@ public class AudioObject : DocumentObject
 /// <inheritdoc cref="AudioObject"/>
 [ASTypeKey(AudioType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class AudioObjectEntity : ASBase
+public sealed class AudioObjectEntity : ASBase<AudioObject>
 {
     public const string AudioType = "Audio";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public AudioObjectEntity(TypeMap typeMap) : base(AudioType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public AudioObjectEntity() : base(AudioType) {}
 }

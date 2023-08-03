@@ -148,15 +148,15 @@ public class FakeObjectWithSpecialNullability : ASObject
 }
 
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class FakeObjectWithSpecialNullabilityEntity : ASBase
+public sealed class FakeObjectWithSpecialNullabilityEntity : ASBase<FakeObjectWithSpecialNullability>
 {
     public const string TypeName = "FakeObjectWithSpecialNullability";
 
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public FakeObjectWithSpecialNullabilityEntity(TypeMap typeMap) : base(TypeName, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public FakeObjectWithSpecialNullabilityEntity() : base(TypeName) {}
 

@@ -57,14 +57,14 @@ public class RelationshipObject : ASObject
 /// <inheritdoc cref="RelationshipObject"/>
 [ASTypeKey(RelationshipType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class RelationshipObjectEntity : ASBase
+public sealed class RelationshipObjectEntity : ASBase<RelationshipObject>
 {
     public const string RelationshipType = "Relationship";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public RelationshipObjectEntity(TypeMap typeMap) : base(RelationshipType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public RelationshipObjectEntity() : base(RelationshipType) {}
 

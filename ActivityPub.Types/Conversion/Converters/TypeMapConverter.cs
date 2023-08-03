@@ -9,7 +9,7 @@ using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Conversion;
+namespace ActivityPub.Types.Conversion.Converters;
 
 public class TypeMapConverter : JsonConverter<TypeMap>
 {

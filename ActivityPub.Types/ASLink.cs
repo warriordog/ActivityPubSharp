@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
-using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 
@@ -100,15 +99,15 @@ public class ASLink : ASType
 /// <inheritdoc cref="ASLink"/>
 [ASTypeKey(LinkType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
-public sealed class ASLinkEntity : ASBase, ICustomJsonDeserialized<ASLinkEntity>, IJsonValueSerialized<ASLinkEntity>
+public sealed class ASLinkEntity : ASBase<ASLink>, ICustomJsonDeserialized<ASLinkEntity>, IJsonValueSerialized<ASLinkEntity>
 {
     public const string LinkType = "Link";
 
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ASLinkEntity(TypeMap typeMap) : base(LinkType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ASLinkEntity() : base(LinkType) {}
 

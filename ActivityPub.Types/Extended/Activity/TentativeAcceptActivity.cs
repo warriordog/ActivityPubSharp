@@ -20,14 +20,14 @@ public class TentativeAcceptActivity : AcceptActivity
 /// <inheritdoc cref="TentativeAcceptActivity"/>
 [ASTypeKey(TentativeAcceptType)]
 [ImpliesOtherEntity(typeof(AcceptActivityEntity))]
-public sealed class TentativeAcceptActivityEntity : ASBase
+public sealed class TentativeAcceptActivityEntity : ASBase<TentativeAcceptActivity>
 {
     public const string TentativeAcceptType = "TentativeAccept";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public TentativeAcceptActivityEntity(TypeMap typeMap) : base(TentativeAcceptType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public TentativeAcceptActivityEntity() : base(TentativeAcceptType) {}
 }

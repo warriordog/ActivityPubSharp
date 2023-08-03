@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Conversion;
+namespace ActivityPub.Types.Conversion.Overrides;
 
 /// <summary>
 /// Context for a particular JSON conversion operation.

@@ -23,14 +23,14 @@ public class BlockActivity : IgnoreActivity
 /// <inheritdoc cref="BlockActivity"/>
 [ASTypeKey(BlockType)]
 [ImpliesOtherEntity(typeof(IgnoreActivityEntity))]
-public sealed class BlockActivityEntity : ASBase
+public sealed class BlockActivityEntity : ASBase<BlockActivity>
 {
     public const string BlockType = "Block";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public BlockActivityEntity(TypeMap typeMap) : base(BlockType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public BlockActivityEntity() : base(BlockType) {}
 }

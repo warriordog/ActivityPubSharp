@@ -31,14 +31,14 @@ public class ProfileObject : ASObject
 /// <inheritdoc cref="ProfileObject"/>
 [ASTypeKey(ProfileType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ProfileObjectEntity : ASBase
+public sealed class ProfileObjectEntity : ASBase<ProfileObject>
 {
     public const string ProfileType = "Profile";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ProfileObjectEntity(TypeMap typeMap) : base(ProfileType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ProfileObjectEntity() : base(ProfileType) {}
 

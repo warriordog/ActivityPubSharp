@@ -20,14 +20,14 @@ public class InviteActivity : OfferActivity
 /// <inheritdoc cref="InviteActivity"/>
 [ASTypeKey(InviteType)]
 [ImpliesOtherEntity(typeof(OfferActivityEntity))]
-public sealed class InviteActivityEntity : ASBase
+public sealed class InviteActivityEntity : ASBase<InviteActivity>
 {
     public const string InviteType = "Invite";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public InviteActivityEntity(TypeMap typeMap) : base(InviteType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public InviteActivityEntity() : base(InviteType) {}
 }

@@ -20,14 +20,14 @@ public class ReadActivity : ASTransitiveActivity
 /// <inheritdoc cref="ReadActivity"/>
 [ASTypeKey(ReadType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class ReadActivityEntity : ASBase
+public sealed class ReadActivityEntity : ASBase<ReadActivity>
 {
     public const string ReadType = "Read";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ReadActivityEntity(TypeMap typeMap) : base(ReadType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ReadActivityEntity() : base(ReadType) {}
 }

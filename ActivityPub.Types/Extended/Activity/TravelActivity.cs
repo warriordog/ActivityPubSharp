@@ -22,14 +22,14 @@ public class TravelActivity : ASIntransitiveActivity
 /// <inheritdoc cref="TravelActivity"/>
 [ASTypeKey(TravelType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
-public sealed class TravelActivityEntity : ASBase
+public sealed class TravelActivityEntity : ASBase<TravelActivity>
 {
     public const string TravelType = "Travel";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public TravelActivityEntity(TypeMap typeMap) : base(TravelType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public TravelActivityEntity() : base(TravelType) {}
 }

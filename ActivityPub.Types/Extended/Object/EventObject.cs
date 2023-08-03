@@ -20,14 +20,14 @@ public class EventObject : ASObject
 /// <inheritdoc cref="EventObject"/>
 [ASTypeKey(EventType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class EventObjectEntity : ASBase
+public sealed class EventObjectEntity : ASBase<EventObject>
 {
     public const string EventType = "Event";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public EventObjectEntity(TypeMap typeMap) : base(EventType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public EventObjectEntity() : base(EventType) {}
 }

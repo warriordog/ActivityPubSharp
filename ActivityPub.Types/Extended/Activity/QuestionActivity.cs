@@ -76,14 +76,14 @@ public class QuestionActivity : ASIntransitiveActivity
 /// <inheritdoc cref="QuestionActivity"/>
 [ASTypeKey(QuestionType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
-public sealed class QuestionActivityEntity : ASBase
+public sealed class QuestionActivityEntity : ASBase<QuestionActivity>
 {
     public const string QuestionType = "Question";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public QuestionActivityEntity(TypeMap typeMap) : base(QuestionType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public QuestionActivityEntity() : base(QuestionType) {}
 

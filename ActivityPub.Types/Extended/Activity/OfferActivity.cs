@@ -21,14 +21,14 @@ public class OfferActivity : ASTransitiveActivity
 /// <inheritdoc cref="OfferActivity"/>
 [ASTypeKey(OfferType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class OfferActivityEntity : ASBase
+public sealed class OfferActivityEntity : ASBase<OfferActivity>
 {
     public const string OfferType = "Offer";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public OfferActivityEntity(TypeMap typeMap) : base(OfferType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public OfferActivityEntity() : base(OfferType) {}
 }

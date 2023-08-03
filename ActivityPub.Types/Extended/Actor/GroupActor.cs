@@ -20,14 +20,14 @@ public class GroupActor : ASActor
 /// <inheritdoc cref="GroupActor"/>
 [ASTypeKey(GroupType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
-public sealed class GroupActorEntity : ASBase
+public sealed class GroupActorEntity : ASBase<GroupActor>
 {
     public const string GroupType = "Group";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public GroupActorEntity(TypeMap typeMap) : base(GroupType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public GroupActorEntity() : base(GroupType) {}
 }

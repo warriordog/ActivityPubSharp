@@ -20,14 +20,14 @@ public class NoteObject : ASObject
 /// <inheritdoc cref="NoteObject"/>
 [ASTypeKey(NoteType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class NoteObjectEntity : ASBase
+public sealed class NoteObjectEntity : ASBase<NoteObject>
 {
     public const string NoteType = "Note";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public NoteObjectEntity(TypeMap typeMap) : base(NoteType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public NoteObjectEntity() : base(NoteType) {}
 }

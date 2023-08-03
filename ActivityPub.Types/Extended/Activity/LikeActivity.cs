@@ -21,14 +21,14 @@ public class LikeActivity : ASTransitiveActivity
 /// <inheritdoc cref="LikeActivity"/>
 [ASTypeKey(LikeType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class LikeActivityEntity : ASBase
+public sealed class LikeActivityEntity : ASBase<LikeActivity>
 {
     public const string LikeType = "Like";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public LikeActivityEntity(TypeMap typeMap) : base(LikeType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public LikeActivityEntity() : base(LikeType) {}
 }

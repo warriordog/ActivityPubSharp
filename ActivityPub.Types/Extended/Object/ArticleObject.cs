@@ -20,14 +20,14 @@ public class ArticleObject : ASObject
 /// <inheritdoc cref="ArticleObject"/>
 [ASTypeKey(ArticleType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ArticleObjectEntity : ASBase
+public sealed class ArticleObjectEntity : ASBase<ArticleObject>
 {
     public const string ArticleType = "Article";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ArticleObjectEntity(TypeMap typeMap) : base(ArticleType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ArticleObjectEntity() : base(ArticleType) {}
 }

@@ -22,14 +22,14 @@ public class AddActivity : ASTargetedActivity
 /// <inheritdoc cref="AddActivity"/>
 [ASTypeKey(AddType)]
 [ImpliesOtherEntity(typeof(ASTargetedActivityEntity))]
-public sealed class AddActivityEntity : ASBase
+public sealed class AddActivityEntity : ASBase<AddActivity>
 {
     public const string AddType = "Add";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public AddActivityEntity(TypeMap typeMap) : base(AddType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public AddActivityEntity() : base(AddType) {}
 }

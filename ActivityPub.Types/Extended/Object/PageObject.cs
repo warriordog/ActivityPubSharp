@@ -20,14 +20,14 @@ public class PageObject : DocumentObject
 /// <inheritdoc cref="PageObject"/>
 [ASTypeKey(PageType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class PageObjectEntity : ASBase
+public sealed class PageObjectEntity : ASBase<PageObject>
 {
     public const string PageType = "Page";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public PageObjectEntity(TypeMap typeMap) : base(PageType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public PageObjectEntity() : base(PageType) {}
 }

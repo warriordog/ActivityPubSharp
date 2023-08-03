@@ -21,14 +21,14 @@ public class JoinActivity : ASTransitiveActivity
 /// <inheritdoc cref="JoinActivity"/>
 [ASTypeKey(JoinType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class JoinActivityEntity : ASBase
+public sealed class JoinActivityEntity : ASBase<JoinActivity>
 {
     public const string JoinType = "Join";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public JoinActivityEntity(TypeMap typeMap) : base(JoinType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public JoinActivityEntity() : base(JoinType) {}
 }

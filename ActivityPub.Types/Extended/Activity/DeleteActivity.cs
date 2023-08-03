@@ -21,14 +21,14 @@ public class DeleteActivity : ASTransitiveActivity
 /// <inheritdoc cref="DeleteActivity"/>
 [ASTypeKey(DeleteType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class DeleteActivityEntity : ASBase
+public sealed class DeleteActivityEntity : ASBase<DeleteActivity>
 {
     public const string DeleteType = "Delete";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public DeleteActivityEntity(TypeMap typeMap) : base(DeleteType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public DeleteActivityEntity() : base(DeleteType) {}
 }

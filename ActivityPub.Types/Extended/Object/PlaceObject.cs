@@ -87,14 +87,14 @@ public class PlaceObject : ASObject
 /// <inheritdoc cref="PlaceObject"/>
 [ASTypeKey(PlaceType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class PlaceObjectEntity : ASBase
+public sealed class PlaceObjectEntity : ASBase<PlaceObject>
 {
     public const string PlaceType = "Place";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public PlaceObjectEntity(TypeMap typeMap) : base(PlaceType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public PlaceObjectEntity() : base(PlaceType) {}
 

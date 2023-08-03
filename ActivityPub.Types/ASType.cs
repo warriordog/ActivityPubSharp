@@ -11,11 +11,14 @@ namespace ActivityPub.Types;
 
 /// <summary>
 /// Base type of all ActivityStreams / ActivityPub objects.
+/// Subtypes MUST NOT contain any properties!
+/// Instead, all data should be stored in a matching entity class which derives from <see cref="ASBase{T}"/>. 
 /// </summary>
 /// <remarks>
 /// This is a synthetic type created to help adapt ActivityStreams to the .NET object model.
 /// It does not exist in the ActivityStreams standard.
 /// </remarks>
+/// <seealso cref="ASBase{T}"/>
 public abstract class ASType
 {
     private ASTypeEntity Entity { get; }
@@ -53,7 +56,7 @@ public abstract class ASType
     /// Lists the JSON-LD contexts used by this object.
     /// Should be a full URL
     /// </summary>
-    public JsonLDContext JsonLdContext => TypeMap.LDContext;
+    public JsonLDContext JsonLdContext { get; set; } = JsonLDContext.ActivityStreams;
 
     /// <summary>
     /// Provides the globally unique identifier for an Object or Link.
@@ -134,7 +137,7 @@ public abstract class ASType
 }
 
 /// <inheritdoc cref="ASType"/>
-public sealed class ASTypeEntity : ASBase
+public sealed class ASTypeEntity : ASBase<ASType>
 {
     /// <summary>
     /// Shared JSON-LD context used by all ActivityStreams objects.
@@ -142,10 +145,10 @@ public sealed class ASTypeEntity : ASBase
     public static JsonLDContextObject ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
 
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ASTypeEntity(TypeMap typeMap) : base(null, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ASTypeEntity() : base(null) {}
 

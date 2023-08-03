@@ -78,13 +78,13 @@ public class ASCollectionPage<T> : ASCollection<T>
 [ASTypeKey(CollectionPageType)]
 [ASTypeKey(OrderedCollectionPageType)]
 [ImpliesOtherEntity(typeof(ASCollection<>))] // TODO wont work until we remove generics
-public sealed class ASCollectionPageEntity<T> : ASBase
+public sealed class ASCollectionPageEntity<T> : ASBase<ASCollection<T>>
     where T : ASObject
 {
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ASCollectionPageEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public ASCollectionPageEntity() : base(CollectionType) {}
 

@@ -21,14 +21,14 @@ public class RemoveActivity : ASTargetedActivity
 /// <inheritdoc cref="RemoveActivity"/>
 [ASTypeKey(RemoveType)]
 [ImpliesOtherEntity(typeof(ASTargetedActivityEntity))]
-public sealed class RemoveActivityEntity : ASBase
+public sealed class RemoveActivityEntity : ASBase<RemoveActivity>
 {
     public const string RemoveType = "Remove";
 
-    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public RemoveActivityEntity(TypeMap typeMap) : base(RemoveType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?)"/>
     [JsonConstructor]
     public RemoveActivityEntity() : base(RemoveType) {}
 }
