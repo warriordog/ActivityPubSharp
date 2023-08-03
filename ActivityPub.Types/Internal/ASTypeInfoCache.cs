@@ -41,7 +41,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
     private readonly HashSet<Type> _allASEntities = new();
     private readonly Dictionary<string, Type> _knownEntityMap = new();
     private readonly Dictionary<Type, HashSet<Type>> _impliedEntityMap = new();
-    private readonly HashSet<string> _knownLinkTypes = new(); // TODO we may need to manually add ASLink here
+    private readonly HashSet<string> _knownLinkTypes = new();
 
     public bool IsKnownASType(string asTypeName) => _knownEntityMap.ContainsKey(asTypeName.ToLower());
 

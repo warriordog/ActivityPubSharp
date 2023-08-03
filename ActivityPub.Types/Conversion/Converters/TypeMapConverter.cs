@@ -68,7 +68,6 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         return entity;
     }
 
-    // TODO kind of ugly, should refactor later
     private static IEnumerable<string> ReadTypes(JsonElement jsonElement, JsonSerializerOptions options)
     {
         switch (jsonElement.ValueKind)

@@ -4,7 +4,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -33,6 +32,7 @@ public abstract class ASType
     {
         TypeMap = typeMap;
         Entity = typeMap.AsEntity<ASTypeEntity>();
+        Entity.Types = TypeMap.ASTypes;
     }
 
     /// <summary>
@@ -50,13 +50,17 @@ public abstract class ASType
     /// Identifies the Object or Link types.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-type"/>
-    public IReadOnlySet<string> Types => TypeMap.ASTypes;
+    public IReadOnlySet<string> Types => Entity.Types;
 
     /// <summary>
     /// Lists the JSON-LD contexts used by this object.
     /// Should be a full URL
     /// </summary>
-    public JsonLDContext JsonLdContext { get; set; } = JsonLDContext.ActivityStreams;
+    public JsonLDContext JsonLdContext
+    {
+        get => Entity.JsonLdContext;
+        set => Entity.JsonLdContext = value;
+    }
 
     /// <summary>
     /// Provides the globally unique identifier for an Object or Link.
@@ -156,19 +160,12 @@ public sealed class ASTypeEntity : ASBase<ASType>
     /// <inheritdoc cref="ASType.UnknownJsonProperties"/>
     internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
 
-    // TODO wrong
     /// <inheritdoc cref="ASType.Types"/> 
-    public HashSet<string> Types { get; set; } = new();
+    public IReadOnlySet<string> Types { get; set; } = new HashSet<string>();
 
-    // TODO wrong + restore "hide when nested" logic
     /// <inheritdoc cref="ASType.JsonLdContext"/>
     [JsonPropertyName("@context")]
-    [JsonConverter(typeof(JsonLDContextConverter))]
-    public JsonLDContext JsonLdContexts { get; set; } = new(new HashSet<JsonLDContextObject>
-    {
-        // We always need the base context
-        ActivityStreamsContext
-    });
+    public JsonLDContext JsonLdContext { get; set; } = JsonLDContext.ActivityStreams;
 
     /// <inheritdoc cref="ASType.Id"/>
     [JsonPropertyName("id")]

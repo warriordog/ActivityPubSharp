@@ -10,8 +10,6 @@ using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
 
-// TODO custom conversion for Ordered
-
 /// <summary>
 /// A Collection is a subtype of Object that represents ordered or unordered sets of Object or Link instances.
 /// May be paged or unpaged, and ordered or unordered. 
@@ -170,6 +168,6 @@ public sealed class ASCollectionEntity : ASBase<ASCollection>
     public bool HasItems => Items?.Any() == true;
 
     /// <inheritdoc cref="ASCollection.IsOrdered"/>
-    [JsonIgnore] // TODO this should toggle Items between "items" and "orderedItems"
+    [JsonIgnore]
     public bool IsOrdered { get; set; }
 }

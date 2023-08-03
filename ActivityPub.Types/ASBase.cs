@@ -6,8 +6,6 @@ using InternalUtils;
 
 namespace ActivityPub.Types;
 
-// TODO placeholder! consider removing it.
-
 /// <summary>
 /// Base type for AS entity classes.
 /// Subtypes should derive from <see cref="ASBase{T}"/> instead.

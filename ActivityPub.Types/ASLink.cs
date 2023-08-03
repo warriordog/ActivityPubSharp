@@ -26,7 +26,6 @@ public class ASLink : ASType
     public ASLink() => Entity = new ASLinkEntity(TypeMap)
     {
         // Initialized by required property below
-        // TODO see if there's a better way to do this
         HRef = null!
     };
 
@@ -85,7 +84,6 @@ public class ASLink : ASType
         set => Entity.Rel = value;
     }
 
-    // TODO these might wont work right, needs testing. Sub objects *should* be a different graph.
     public static implicit operator string(ASLink link) => link.HRef;
     public static implicit operator ASLink(string str) => new() { HRef = new ASUri(str) };
 
@@ -151,26 +149,7 @@ public sealed class ASLinkEntity : ASBase<ASLink>, ICustomJsonDeserialized<ASLin
 
     public static bool TrySerializeIntoValue(ASLinkEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node)
     {
-        // If its only a link, then use the flattened form
-        if (obj.HasOnlyHRef)
-        {
-            var str = obj.HRef.Uri.ToString();
-            node = JsonValue.Create(str, meta.JsonNodeOptions)!;
-            return true;
-        }
-
         node = null;
         return false;
     }
-
-    /// <summary>
-    /// True if a link contains a value for <see cref="HRef"/> only and can therefore be reduced.
-    /// TODO currently broken and needs to be replaced
-    /// </summary>
-    /// <remarks>
-    /// Its fragile and must be updated whenever <see cref="ASLink"/> or <see cref="ASType"/> is updated.
-    /// </remarks> 
-    private bool HasOnlyHRef => false;
-    // HRefLang == null && Width == null && Height == null && Rel.Count == 0 && _typeEntity.Id == null &&
-    // _typeEntity.AttributedTo.Count == 0 && _typeEntity.Preview == null && _typeEntity.Name == null && _typeEntity.MediaType == null && _typeEntity.UnknownJsonProperties.Count == 0;
 }

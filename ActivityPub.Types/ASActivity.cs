@@ -28,7 +28,6 @@ public class ASActivity : ASObject
     /// Describes one or more entities that either performed or are expected to perform the activity.
     /// Any single activity can have multiple actors.
     /// The actor MAY be specified using an indirect Link.
-    /// TODO see if we can narrow the type to ASActor, after the changes
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-actor"/>
     public LinkableList<ASObject> Actor

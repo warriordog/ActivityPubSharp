@@ -8,8 +8,6 @@ using JetBrains.Annotations;
 
 namespace ActivityPub.Types;
 
-// TODO implicitly include this with any actor-compatible input JSON
-
 /// <summary>
 /// An object that implements the required properties of an ActivityPub Actor.
 /// </summary>
