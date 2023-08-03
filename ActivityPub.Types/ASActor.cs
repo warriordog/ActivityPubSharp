@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 using JetBrains.Annotations;
 
@@ -20,16 +21,17 @@ namespace ActivityPub.Types;
 public class ASActor : ASObject
 {
     private ASActorEntity Entity { get; }
- 
-    
+
+
     public ASActor() => Entity = new ASActorEntity(TypeMap)
     {
         Inbox = null!,
         Outbox = null!
     };
+
     public ASActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASActorEntity>();
-    
-    
+
+
     /// <summary>
     /// A reference to an ActivityStreams OrderedCollection comprised of all the messages received by the actor.
     /// The inbox stream contains all activities received by the actor.
@@ -57,7 +59,7 @@ public class ASActor : ASObject
     /// This is a list of everybody that the actor has followed, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#following"/>
-    public ASLink? Following 
+    public ASLink? Following
     {
         get => Entity.Following;
         set => Entity.Following = value;
@@ -68,7 +70,7 @@ public class ASActor : ASObject
     /// This is a list of everyone who has sent a Follow activity for the actor, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#followers"/>
-    public ASLink? Followers 
+    public ASLink? Followers
     {
         get => Entity.Followers;
         set => Entity.Followers = value;
@@ -79,7 +81,7 @@ public class ASActor : ASObject
     /// This is a list of every object from all of the actor's Like activities, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#liked"/>
-    public ASLink? Liked 
+    public ASLink? Liked
     {
         get => Entity.Liked;
         set => Entity.Liked = value;
@@ -122,20 +124,21 @@ public class ASActor : ASObject
 }
 
 /// <inheritdoc cref="ASActor"/>
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASActorEntity : ASBase
 {
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASActorEntity(TypeMap typeMap) : base(null, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ASActorEntity() : base(null) {}
- 
-    
+
+
     /// <inheritdoc cref="ASActor.Inbox"/>
     [JsonPropertyName("inbox")]
     public required ASLink Inbox { get; set; }
-    
+
     /// <inheritdoc cref="ASActor.Outbox"/>
     [JsonPropertyName("outbox")]
     public required ASLink Outbox { get; set; }

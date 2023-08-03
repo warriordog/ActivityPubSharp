@@ -23,5 +23,10 @@ public class JsonLDContext
     public JsonLDContext() : this(new()) {}
 
     public JsonLDContext(HashSet<JsonLDContextObject> contextObjects) => ContextObjects = contextObjects;
-    
+
+    public static JsonLDContext ActivityStreams { get; } = new(new HashSet<JsonLDContextObject>
+    {
+        // We always need the base context
+        new("https://www.w3.org/ns/activitystreams")
+    });
 }

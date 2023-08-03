@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Object;
 
@@ -66,7 +66,7 @@ public class PlaceObject : ASObject
     /// If units is not specified, the default is assumed to be "m" indicating "meters". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-radius"/>
-    public float? Radius 
+    public float? Radius
     {
         get => Entity.Radius;
         set => Entity.Radius = value;
@@ -77,7 +77,7 @@ public class PlaceObject : ASObject
     /// If not specified, the default is assumed to be "m" for "meters". 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-units"/>
-    public string? Units 
+    public string? Units
     {
         get => Entity.Units;
         set => Entity.Units = value;
@@ -86,13 +86,14 @@ public class PlaceObject : ASObject
 
 /// <inheritdoc cref="PlaceObject"/>
 [ASTypeKey(PlaceType)]
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class PlaceObjectEntity : ASBase
 {
     public const string PlaceType = "Place";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public PlaceObjectEntity(TypeMap typeMap) : base(PlaceType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public PlaceObjectEntity() : base(PlaceType) {}

@@ -25,6 +25,7 @@ public abstract class ASType
         TypeMap = new TypeMap();
         Entity = new ASTypeEntity(TypeMap);
     }
+
     protected ASType(TypeMap typeMap)
     {
         TypeMap = typeMap;
@@ -52,7 +53,7 @@ public abstract class ASType
     /// Lists the JSON-LD contexts used by this object.
     /// Should be a full URL
     /// </summary>
-    public JsonLDContext JsonLdContexts => TypeMap.LDContexts;
+    public JsonLDContext JsonLdContext => TypeMap.LDContext;
 
     /// <summary>
     /// Provides the globally unique identifier for an Object or Link.
@@ -117,8 +118,8 @@ public abstract class ASType
         get => Entity.MediaType;
         set => Entity.MediaType = value;
     }
-    
-    
+
+
     /// <inheritdoc cref="TypeMap.IsType{T}()"/>
     public bool Is<T>() where T : ASType
         => TypeMap.IsType<T>();
@@ -139,12 +140,11 @@ public sealed class ASTypeEntity : ASBase
     /// Shared JSON-LD context used by all ActivityStreams objects.
     /// </summary>
     public static JsonLDContextObject ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
-    
-    
+
 
     /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASTypeEntity(TypeMap typeMap) : base(null, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ASTypeEntity() : base(null) {}
@@ -156,9 +156,9 @@ public sealed class ASTypeEntity : ASBase
     // TODO wrong
     /// <inheritdoc cref="ASType.Types"/> 
     public HashSet<string> Types { get; set; } = new();
-    
+
     // TODO wrong
-    /// <inheritdoc cref="ASType.JsonLdContexts"/>
+    /// <inheritdoc cref="ASType.JsonLdContext"/>
     [JsonIgnoreWhenNested]
     [JsonPropertyName("@context")]
     [JsonConverter(typeof(JsonLDContextConverter))]
@@ -184,7 +184,7 @@ public sealed class ASTypeEntity : ASBase
     }
 
     private string? _id;
-    
+
     /// <inheritdoc cref="ASType.IsAnonymous"/>
     [JsonIgnore]
     [MemberNotNullWhen(false, nameof(Id))]

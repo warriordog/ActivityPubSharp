@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Extended.Activity;
@@ -16,7 +16,7 @@ namespace ActivityPub.Types.Extended.Activity;
 public class QuestionActivity : ASIntransitiveActivity
 {
     private QuestionActivityEntity Entity { get; }
-    
+
     public QuestionActivity() => Entity = new QuestionActivityEntity(TypeMap);
     public QuestionActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<QuestionActivityEntity>();
 
@@ -38,7 +38,7 @@ public class QuestionActivity : ASIntransitiveActivity
     /// To indicate that a Question can have only one answer, use oneOf. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyof"/>
-    public LinkableList<ASObject>? AnyOf 
+    public LinkableList<ASObject>? AnyOf
     {
         get => Entity.AnyOf;
         set => Entity.AnyOf = value;
@@ -73,16 +73,16 @@ public class QuestionActivity : ASIntransitiveActivity
     }
 }
 
-
 /// <inheritdoc cref="QuestionActivity"/>
 [ASTypeKey(QuestionType)]
+[ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
 public sealed class QuestionActivityEntity : ASBase
 {
     public const string QuestionType = "Question";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public QuestionActivityEntity(TypeMap typeMap) : base(QuestionType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public QuestionActivityEntity() : base(QuestionType) {}

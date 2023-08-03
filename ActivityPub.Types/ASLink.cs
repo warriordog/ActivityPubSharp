@@ -5,7 +5,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
+using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Json.Attributes;
 using ActivityPub.Types.Util;
 
@@ -98,6 +99,7 @@ public class ASLink : ASType
 
 /// <inheritdoc cref="ASLink"/>
 [ASTypeKey(LinkType)]
+[ImpliesOtherEntity(typeof(ASTypeEntity))]
 [CustomJsonDeserializer(nameof(TryDeserialize))]
 [CustomJsonValueSerializer(nameof(TrySerializeIntoValue))]
 public sealed class ASLinkEntity : ASBase
@@ -107,7 +109,7 @@ public sealed class ASLinkEntity : ASBase
 
     /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASLinkEntity(TypeMap typeMap) : base(LinkType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ASLinkEntity() : base(LinkType) {}
@@ -174,6 +176,6 @@ public sealed class ASLinkEntity : ASBase
     /// Its fragile and must be updated whenever <see cref="ASLink"/> or <see cref="ASType"/> is updated.
     /// </remarks> 
     private bool HasOnlyHRef => false;
-        // HRefLang == null && Width == null && Height == null && Rel.Count == 0 && _typeEntity.Id == null &&
-        // _typeEntity.AttributedTo.Count == 0 && _typeEntity.Preview == null && _typeEntity.Name == null && _typeEntity.MediaType == null && _typeEntity.UnknownJsonProperties.Count == 0;
+    // HRefLang == null && Width == null && Height == null && Rel.Count == 0 && _typeEntity.Id == null &&
+    // _typeEntity.AttributedTo.Count == 0 && _typeEntity.Preview == null && _typeEntity.Name == null && _typeEntity.MediaType == null && _typeEntity.UnknownJsonProperties.Count == 0;
 }

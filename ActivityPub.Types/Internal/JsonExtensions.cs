@@ -78,4 +78,12 @@ internal static class JsonExtensions
         JsonValueKind.Object => JsonObject.Create(element, options),
         _ => JsonValue.Create(element, options)
     };
+
+    /// <summary>
+    /// Converts a <see cref="JsonSerializerOptions"/> into a <see cref="JsonNodeOptions"/> with the equivalent settings.
+    /// </summary>
+    internal static JsonNodeOptions ToNodeOptions(this JsonSerializerOptions options) => new()
+    {
+        PropertyNameCaseInsensitive = options.PropertyNameCaseInsensitive
+    };
 }

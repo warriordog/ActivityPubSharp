@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Activity;
 
@@ -14,21 +14,21 @@ namespace ActivityPub.Types.Extended.Activity;
 public class ArriveActivity : ASIntransitiveActivity
 {
     private ArriveActivityEntity Entity { get; }
-    
+
     public ArriveActivity() => Entity = new ArriveActivityEntity(TypeMap);
     public ArriveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ArriveActivityEntity>();
 }
 
-
 /// <inheritdoc cref="ArriveActivity"/>
 [ASTypeKey(ArriveType)]
+[ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
 public sealed class ArriveActivityEntity : ASBase
 {
     public const string ArriveType = "Arrive";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ArriveActivityEntity(TypeMap typeMap) : base(ArriveType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ArriveActivityEntity() : base(ArriveType) {}

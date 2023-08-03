@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Actor;
 
@@ -12,21 +12,21 @@ namespace ActivityPub.Types.Extended.Actor;
 public class PersonActor : ASActor
 {
     private PersonActorEntity Entity { get; }
-    
+
     public PersonActor() => Entity = new PersonActorEntity(TypeMap);
     public PersonActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PersonActorEntity>();
 }
 
-
 /// <inheritdoc cref="PersonActor"/>
 [ASTypeKey(PersonType)]
+[ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class PersonActorEntity : ASBase
 {
     public const string PersonType = "Person";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public PersonActorEntity(TypeMap typeMap) : base(PersonType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public PersonActorEntity() : base(PersonType) {}

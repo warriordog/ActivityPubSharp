@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Object;
 
@@ -12,20 +12,21 @@ namespace ActivityPub.Types.Extended.Object;
 public class AudioObject : DocumentObject
 {
     private AudioObjectEntity Entity { get; }
-    
+
     public AudioObject() => Entity = new AudioObjectEntity(TypeMap);
     public AudioObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<AudioObjectEntity>();
 }
 
 /// <inheritdoc cref="AudioObject"/>
 [ASTypeKey(AudioType)]
+[ImpliesOtherEntity(typeof(DocumentObjectEntity))]
 public sealed class AudioObjectEntity : ASBase
 {
     public const string AudioType = "Audio";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public AudioObjectEntity(TypeMap typeMap) : base(AudioType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public AudioObjectEntity() : base(AudioType) {}

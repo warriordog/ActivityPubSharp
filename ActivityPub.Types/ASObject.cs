@@ -2,10 +2,10 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Collection;
 using ActivityPub.Types.Extended.Activity;
 using ActivityPub.Types.Extended.Object;
-using ActivityPub.Types.Json;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -77,7 +77,7 @@ public class ASObject : ASType
 
     /// <summary>
     /// Identifies the context within which the object exists or an activity was performed.
-    /// THIS IS *NOT* THE JSON-LD CONTEXT! For that, you need <see cref="ASType.JsonLdContexts"/>
+    /// THIS IS *NOT* THE JSON-LD CONTEXT! For that, you need <see cref="ASType.JsonLdContext"/>
     /// </summary>
     /// <remarks>
     /// The notion of "context" used is intentionally vague.
@@ -301,19 +301,20 @@ public class ASObject : ASType
 
 /// <inheritdoc cref="ASObject"/>
 [ASTypeKey(ObjectType)]
+[ImpliesOtherEntity(typeof(ASTypeEntity))]
 public sealed class ASObjectEntity : ASBase
 {
     public const string ObjectType = "Object";
 
-    
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASObjectEntity(TypeMap typeMap) : base(ObjectType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ASObjectEntity() : base(ObjectType) {}
 
-    
+
     /// <inheritdoc cref="ASObject.Attachment"/>
     [JsonPropertyName("attachment")]
     public LinkableList<ASObject> Attachment { get; set; } = new();
@@ -401,7 +402,7 @@ public sealed class ASObjectEntity : ASBase
     /// <inheritdoc cref="ASObject.Updated"/>
     [JsonPropertyName("updated")]
     public DateTime? Updated { get; set; }
-    
+
     /// <inheritdoc cref="ASObject.Source"/>
     [JsonPropertyName("source")]
     public ASObject? Source { get; set; }

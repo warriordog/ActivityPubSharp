@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Object;
 
@@ -12,20 +12,21 @@ namespace ActivityPub.Types.Extended.Object;
 public class EventObject : ASObject
 {
     private EventObjectEntity Entity { get; }
-    
+
     public EventObject() => Entity = new EventObjectEntity(TypeMap);
     public EventObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<EventObjectEntity>();
 }
 
 /// <inheritdoc cref="EventObject"/>
 [ASTypeKey(EventType)]
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class EventObjectEntity : ASBase
 {
     public const string EventType = "Event";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public EventObjectEntity(TypeMap typeMap) : base(EventType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public EventObjectEntity() : base(EventType) {}

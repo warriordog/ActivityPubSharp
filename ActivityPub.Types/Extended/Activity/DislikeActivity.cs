@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Activity;
 
@@ -12,21 +12,21 @@ namespace ActivityPub.Types.Extended.Activity;
 public class DislikeActivity : ASTransitiveActivity
 {
     private DislikeActivityEntity Entity { get; }
-    
+
     public DislikeActivity() => Entity = new DislikeActivityEntity(TypeMap);
     public DislikeActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<DislikeActivityEntity>();
 }
 
-
 /// <inheritdoc cref="DislikeActivity"/>
 [ASTypeKey(DislikeType)]
+[ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class DislikeActivityEntity : ASBase
 {
     public const string DislikeType = "Dislike";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public DislikeActivityEntity(TypeMap typeMap) : base(DislikeType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public DislikeActivityEntity() : base(DislikeType) {}

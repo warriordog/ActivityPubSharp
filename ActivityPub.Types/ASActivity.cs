@@ -3,7 +3,8 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
+using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Json.Attributes;
 using ActivityPub.Types.Util;
 
@@ -73,15 +74,16 @@ public class ASActivity : ASObject
 
 /// <inheritdoc cref="ASActivity"/>
 [ASTypeKey(ActivityType)]
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
 [NarrowJsonType(nameof(NarrowType))]
 public sealed class ASActivityEntity : ASBase
 {
     public const string ActivityType = "Activity";
 
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASActivityEntity(TypeMap typeMap) : base(ActivityType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ASActivityEntity() : base(ActivityType) {}

@@ -3,7 +3,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 using static ActivityPub.Types.Collection.CollectionTypes;
 
@@ -23,16 +23,16 @@ public class ASCollectionPage<T> : ASCollection<T>
 {
     private ASCollectionPageEntity<T> Entity { get; }
 
-    
+
     public ASCollectionPage() => Entity = new ASCollectionPageEntity<T>(TypeMap);
     public ASCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionPageEntity<T>>();
 
-    
+
     /// <summary>
     /// In a paged Collection, indicates the next page of items. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-next"/>
-    public Linkable<ASCollectionPage<T>>? Next 
+    public Linkable<ASCollectionPage<T>>? Next
     {
         get => Entity.Next;
         set => Entity.Next = value;
@@ -57,7 +57,7 @@ public class ASCollectionPage<T> : ASCollection<T>
         get => Entity.PartOf;
         set => Entity.PartOf = value;
     }
-    
+
     /// <summary>
     /// A non-negative integer value identifying the relative position within the logical view of a strictly ordered collection.
     /// This is only valid on OrderedCollectionPage, but it exists on unordered CollectionPage due to technical limitations.
@@ -69,21 +69,21 @@ public class ASCollectionPage<T> : ASCollection<T>
         set => Entity.StartIndex = value;
     }
 
-    
+
     public static implicit operator ASCollectionPage<T>(List<T> collection) => new() { Items = new(collection) };
     public static implicit operator ASCollectionPage<T>(T value) => new() { Items = new() { value } };
 }
 
-
 /// <inheritdoc cref="ASCollectionPage{T}"/>
 [ASTypeKey(CollectionPageType)]
 [ASTypeKey(OrderedCollectionPageType)]
+[ImpliesOtherEntity(typeof(ASCollection<>))] // TODO wont work until we remove generics
 public sealed class ASCollectionPageEntity<T> : ASBase
     where T : ASObject
 {
     /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASCollectionPageEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ASCollectionPageEntity() : base(CollectionType) {}
@@ -99,7 +99,7 @@ public sealed class ASCollectionPageEntity<T> : ASBase
     /// <inheritdoc cref="ASCollectionPage{T}.PartOf"/>
     [JsonPropertyName("partOf")]
     public Linkable<ASCollection<T>>? PartOf { get; set; }
-    
+
     /// <inheritdoc cref="ASCollectionPage{T}.StartIndex"/>
     [JsonPropertyName("startIndex")]
     [Range(0, int.MaxValue)]

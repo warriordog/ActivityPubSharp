@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -18,9 +19,10 @@ public class ASTargetedActivity : ASTransitiveActivity
     {
         Target = null!
     };
+
     public ASTargetedActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASTargetedActivityEntity>();
 
-    
+
     /// <summary>
     /// Describes the indirect object, or target, of the activity.
     /// The precise meaning of the target is largely dependent on the type of action being described but will often be the object of the English preposition "to".
@@ -38,11 +40,12 @@ public class ASTargetedActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="ASTargetedActivity"/>
+[ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ASTargetedActivityEntity : ASBase
 {
     /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASTargetedActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ASTargetedActivityEntity() : base(null) {}

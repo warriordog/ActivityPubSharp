@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Object;
 
@@ -32,23 +32,23 @@ public class TombstoneObject : ASObject
     /// On a Tombstone object, the deleted property is a timestamp for when the object was deleted. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-deleted"/>
-    public DateTime? Deleted 
+    public DateTime? Deleted
     {
         get => Entity.Deleted;
         set => Entity.Deleted = value;
     }
 }
 
-
 /// <inheritdoc cref="TombstoneObject"/>
 [ASTypeKey(TombstoneType)]
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class TombstoneObjectEntity : ASBase
 {
     public const string TombstoneType = "Tombstone";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public TombstoneObjectEntity(TypeMap typeMap) : base(TombstoneType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public TombstoneObjectEntity() : base(TombstoneType) {}

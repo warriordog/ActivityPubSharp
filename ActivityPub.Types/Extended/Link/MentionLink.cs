@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Extended.Link;
@@ -13,12 +13,12 @@ namespace ActivityPub.Types.Extended.Link;
 public class MentionLink : ASLink
 {
     private MentionLinkEntity Entity { get; }
-    
-    
+
+
     public MentionLink() => Entity = new MentionLinkEntity(TypeMap);
     public MentionLink(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<MentionLinkEntity>();
-    
-    
+
+
     public static implicit operator string(MentionLink link) => link.HRef;
     public static implicit operator MentionLink(string str) => new() { HRef = new ASUri(str) };
 
@@ -33,13 +33,14 @@ public class MentionLink : ASLink
 /// A specialized Link that represents an @mention. 
 /// </summary>
 [ASTypeKey(MentionType)]
+[ImpliesOtherEntity(typeof(ASLinkEntity))]
 public sealed class MentionLinkEntity : ASBase
 {
     public const string MentionType = "Mention";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public MentionLinkEntity(TypeMap typeMap) : base(MentionType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public MentionLinkEntity() : base(MentionType) {}

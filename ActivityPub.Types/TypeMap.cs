@@ -2,10 +2,14 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
+using ActivityPub.Types.Conversion;
+using ActivityPub.Types.Json.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
 
+[JsonConverter(typeof(TypeMapConverter))]
 public class TypeMap
 {
     /// <summary>
@@ -15,16 +19,16 @@ public class TypeMap
     public IReadOnlySet<string> ASTypes => throw new NotImplementedException();
 
     /// <summary>
-    /// Live set of all unique .NET types represented by the object.
-    /// This may be a subset of ASTypes.
+    /// Live map of .NET types to loaded entities contained in this object.
+    /// This may be a subset or superset of ASTypes.
     /// </summary>
     /// <seealso cref="ASTypes"/>
-    public IReadOnlySet<Type> DotNetTypes => throw new NotImplementedException();
+    public IReadOnlyDictionary<Type, ASBase> AllEntities => throw new NotImplementedException();
 
     /// <summary>
     /// JSON-LD context in use for this object graph.
     /// </summary>
-    public JsonLDContext LDContexts => throw new NotImplementedException();
+    public JsonLDContext LDContext => throw new NotImplementedException();
 
     /// <summary>
     /// Checks if the object contains a particular type entity.
@@ -52,13 +56,13 @@ public class TypeMap
     /// <throws cref="ArgumentException">If the object is not of type T</throws>
     public T AsEntity<T>() where T : ASBase
         => throw new NotImplementedException();
-    
+
     /// <summary>
     /// Checks if the graph contains a particular type.
     /// </summary>
     public bool IsType<T>() where T : ASType
         => throw new NotImplementedException();
-    
+
     /// <summary>
     /// Checks if the graph contains a particular type.
     /// If so, then the instance of that type is extracted and returned.
@@ -91,4 +95,10 @@ public class TypeMap
     /// <throws cref="InvalidOperationException">If an object of this type already exists in the graph</throws>
     internal void Add<T>(T instance) where T : ASBase
         => throw new NotImplementedException();
+
+    /// <summary>
+    /// Reference to the single entity which contains the <see cref="NarrowJsonTypeAttribute"/>.
+    /// Will be null if none is present.
+    /// </summary>
+    internal ASBase? ValueSerializer => throw new NotImplementedException();
 }

@@ -4,7 +4,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 using static ActivityPub.Types.Collection.CollectionTypes;
 
@@ -25,8 +25,8 @@ public class ASCollection<T> : ASObject
     where T : ASObject
 {
     private ASCollectionEntity<T> Entity { get; }
-    
-    
+
+
     public ASCollection() => Entity = new ASCollectionEntity<T>(TypeMap);
     public ASCollection(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionEntity<T>>();
 
@@ -58,7 +58,7 @@ public class ASCollection<T> : ASObject
     /// In a paged Collection, indicates the furthest preceding page of items in the collection. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-first"/>
-    public Linkable<ASCollectionPage<T>>? First 
+    public Linkable<ASCollectionPage<T>>? First
     {
         get => Entity.First;
         set => Entity.First = value;
@@ -116,7 +116,7 @@ public class ASCollection<T> : ASObject
     /// </summary>
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Entity.HasItems;
-    
+
     public static implicit operator ASCollection<T>(List<T> collection) => new() { Items = new(collection) };
     public static implicit operator ASCollection<T>(T value) => new() { Items = new() { value } };
 }
@@ -124,12 +124,13 @@ public class ASCollection<T> : ASObject
 /// <inheritdoc cref="ASCollection{T}"/>
 [ASTypeKey(CollectionType)]
 [ASTypeKey(OrderedCollectionType)]
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASCollectionEntity<T> : ASBase
     where T : ASObject
 {
     /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASCollectionEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ASCollectionEntity() : base(CollectionType) {}
@@ -170,7 +171,7 @@ public sealed class ASCollectionEntity<T> : ASBase
     [JsonIgnore]
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Items?.Any() == true;
-    
+
     /// <inheritdoc cref="ASCollection{T}.IsOrdered"/>
     [JsonIgnore] // TODO this should toggle Items between "items" and "orderedItems"
     public bool IsOrdered { get; set; }

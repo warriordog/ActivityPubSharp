@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Object;
 
@@ -13,7 +13,7 @@ namespace ActivityPub.Types.Extended.Object;
 public class ProfileObject : ASObject
 {
     private ProfileObjectEntity Entity { get; }
-    
+
     public ProfileObject() => Entity = new ProfileObjectEntity(TypeMap);
     public ProfileObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ProfileObjectEntity>();
 
@@ -30,13 +30,14 @@ public class ProfileObject : ASObject
 
 /// <inheritdoc cref="ProfileObject"/>
 [ASTypeKey(ProfileType)]
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ProfileObjectEntity : ASBase
 {
     public const string ProfileType = "Profile";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ProfileObjectEntity(TypeMap typeMap) : base(ProfileType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public ProfileObjectEntity() : base(ProfileType) {}

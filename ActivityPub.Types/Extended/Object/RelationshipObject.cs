@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Extended.Object;
@@ -23,7 +23,7 @@ public class RelationshipObject : ASObject
     /// Describes the entity to which the subject is related. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
-    public LinkableList<ASObject> Object 
+    public LinkableList<ASObject> Object
     {
         get => Entity.Object;
         set => Entity.Object = value;
@@ -56,13 +56,14 @@ public class RelationshipObject : ASObject
 
 /// <inheritdoc cref="RelationshipObject"/>
 [ASTypeKey(RelationshipType)]
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class RelationshipObjectEntity : ASBase
 {
     public const string RelationshipType = "Relationship";
 
-        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public RelationshipObjectEntity(TypeMap typeMap) : base(RelationshipType, typeMap) {}
-    
+
     /// <inheritdoc cref="ASBase(string?)"/>
     [JsonConstructor]
     public RelationshipObjectEntity() : base(RelationshipType) {}

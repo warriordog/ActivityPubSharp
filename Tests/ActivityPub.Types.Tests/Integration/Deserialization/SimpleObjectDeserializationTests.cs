@@ -13,14 +13,13 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
     {
         JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
     }
-    
+
     public class EmptyObject : SimpleObjectDeserializationTests
     {
-        
         [Fact]
         public void ShouldIncludeContext()
         {
-            ObjectUnderTest.JsonLdContexts.ContextObjects.Should().Contain("https://www.w3.org/ns/activitystreams");
+            ObjectUnderTest.JsonLdContext.ContextObjects.Should().Contain("https://www.w3.org/ns/activitystreams");
         }
 
         [Fact]
@@ -28,7 +27,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         {
             ObjectUnderTest.Types.Should().Contain("Object");
         }
-        
+
         public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
@@ -64,7 +63,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             personUnderTest.Image.Should().NotBeNull();
             personUnderTest.Id.Should().Be("https://example.com/actor/id");
         }
-        
+
         public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
@@ -86,7 +85,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             ObjectUnderTest.Url.Should().HaveCount(1);
         }
 
-        public ObjectWithUrl(JsonLdSerializerFixture fixture) : base(fixture) { }
+        public ObjectWithUrl(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class FullObject : SimpleObjectDeserializationTests
@@ -95,7 +94,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         public void ShouldIncludeAllProperties()
         {
             JsonUnderTest =
-            """
+                """
                 {
                     "attachment":[{}],
                     "audience":[{}],
@@ -148,7 +147,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             ObjectUnderTest.Image.Should().NotBeNull();
             ObjectUnderTest.InReplyTo.Should().NotBeNull();
             ObjectUnderTest.Location.Should().NotBeNull();
-            
+
             ObjectUnderTest.Tag.Should().HaveCount(1);
             ObjectUnderTest.To.Should().HaveCount(1);
             ObjectUnderTest.Url.Should().NotBeNull();
@@ -166,16 +165,16 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             ObjectUnderTest.Preview.Should().NotBeNull();
             ObjectUnderTest.Name.Should().NotBeNull();
             ObjectUnderTest.MediaType.Should().NotBeNull();
-            
+
             ObjectUnderTest.Replies.Should().NotBeNull();
             ObjectUnderTest.Replies!.HasItems.Should().BeTrue();
             ObjectUnderTest.Replies!.TotalItems.Should().Be(1);
             ObjectUnderTest.Replies!.Items!.Count.Should().Be(1);
-            
+
             ObjectUnderTest.Likes?.HasLink.Should().BeTrue();
             ObjectUnderTest.Shares?.HasLink.Should().BeTrue();
         }
-        
+
         public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 }
