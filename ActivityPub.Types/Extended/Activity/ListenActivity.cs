@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor has listened to the object. 
 /// </summary>
-[ASTypeKey(ListenType)]
+[APType(ListenType)]
 public class ListenActivity : ASTransitiveActivity
 {
     public const string ListenType = "Listen";
