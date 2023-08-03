@@ -1,6 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using ActivityPub.Types.Collection;
 using ActivityPub.Types.Extended.Actor;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
@@ -101,7 +102,10 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Image = new ImageObject(),
                 InReplyTo = new ASObject(),
                 Location = new ASObject(),
-                Replies = new ASObject(),
+                Replies = new ASCollection()
+                {
+                    Items = new LinkableList<ASObject> { new ASObject() }
+                },
                 Tag = new() { new ASObject() },
                 To = new() { new ASObject() },
                 Url = new() { "https://example.com" },

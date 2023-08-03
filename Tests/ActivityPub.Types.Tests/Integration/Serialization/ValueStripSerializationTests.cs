@@ -57,7 +57,7 @@ public class ValueStripSerializationTests : SerializationTests
     [Fact]
     public void NullCollectionsShould_BeStrippedFromOutput()
     {
-        ObjectUnderTest = new ASCollection<ASObject>
+        ObjectUnderTest = new ASCollection
         {
             Items = null
         };

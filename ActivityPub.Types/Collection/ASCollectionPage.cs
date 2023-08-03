@@ -18,21 +18,20 @@ namespace ActivityPub.Types.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage"/>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
 [ASTypeKey(CollectionPageType)]
-public class ASCollectionPage<T> : ASCollection<T>
-    where T : ASObject
+public class ASCollectionPage : ASCollection
 {
-    private ASCollectionPageEntity<T> Entity { get; }
+    private ASCollectionPageEntity Entity { get; }
 
 
-    public ASCollectionPage() => Entity = new ASCollectionPageEntity<T>(TypeMap);
-    public ASCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionPageEntity<T>>();
+    public ASCollectionPage() => Entity = new ASCollectionPageEntity(TypeMap);
+    public ASCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionPageEntity>();
 
 
     /// <summary>
     /// In a paged Collection, indicates the next page of items. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-next"/>
-    public Linkable<ASCollectionPage<T>>? Next
+    public Linkable<ASCollectionPage>? Next
     {
         get => Entity.Next;
         set => Entity.Next = value;
@@ -42,7 +41,7 @@ public class ASCollectionPage<T> : ASCollection<T>
     /// In a paged Collection, indicates the previous page of items. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-prev"/>
-    public Linkable<ASCollectionPage<T>>? Prev
+    public Linkable<ASCollectionPage>? Prev
     {
         get => Entity.Prev;
         set => Entity.Prev = value;
@@ -52,7 +51,7 @@ public class ASCollectionPage<T> : ASCollection<T>
     /// Identifies the Collection to which a CollectionPage objects items belong. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-partOf"/>
-    public Linkable<ASCollection<T>>? PartOf
+    public Linkable<ASCollection>? PartOf
     {
         get => Entity.PartOf;
         set => Entity.PartOf = value;
@@ -69,17 +68,14 @@ public class ASCollectionPage<T> : ASCollection<T>
         set => Entity.StartIndex = value;
     }
 
-
-    public static implicit operator ASCollectionPage<T>(List<T> collection) => new() { Items = new(collection) };
-    public static implicit operator ASCollectionPage<T>(T value) => new() { Items = new() { value } };
+    public static implicit operator ASCollectionPage(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
 }
 
-/// <inheritdoc cref="ASCollectionPage{T}"/>
+/// <inheritdoc cref="ASCollectionPage"/>
 [ASTypeKey(CollectionPageType)]
 [ASTypeKey(OrderedCollectionPageType)]
-[ImpliesOtherEntity(typeof(ASCollection<>))] // TODO wont work until we remove generics
-public sealed class ASCollectionPageEntity<T> : ASBase<ASCollection<T>>
-    where T : ASObject
+[ImpliesOtherEntity(typeof(ASCollection))]
+public sealed class ASCollectionPageEntity : ASBase<ASCollection>
 {
     /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
     public ASCollectionPageEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
@@ -88,19 +84,19 @@ public sealed class ASCollectionPageEntity<T> : ASBase<ASCollection<T>>
     [JsonConstructor]
     public ASCollectionPageEntity() : base(CollectionType) {}
 
-    /// <inheritdoc cref="ASCollectionPage{T}.Next"/>
+    /// <inheritdoc cref="ASCollectionPage.Next"/>
     [JsonPropertyName("next")]
-    public Linkable<ASCollectionPage<T>>? Next { get; set; }
+    public Linkable<ASCollectionPage>? Next { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage{T}.Prev"/>
+    /// <inheritdoc cref="ASCollectionPage.Prev"/>
     [JsonPropertyName("prev")]
-    public Linkable<ASCollectionPage<T>>? Prev { get; set; }
+    public Linkable<ASCollectionPage>? Prev { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage{T}.PartOf"/>
+    /// <inheritdoc cref="ASCollectionPage.PartOf"/>
     [JsonPropertyName("partOf")]
-    public Linkable<ASCollection<T>>? PartOf { get; set; }
+    public Linkable<ASCollection>? PartOf { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage{T}.StartIndex"/>
+    /// <inheritdoc cref="ASCollectionPage.StartIndex"/>
     [JsonPropertyName("startIndex")]
     [Range(0, int.MaxValue)]
     public int? StartIndex { get; set; }

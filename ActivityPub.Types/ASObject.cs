@@ -4,7 +4,6 @@
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Collection;
-using ActivityPub.Types.Extended.Activity;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Util;
 
@@ -84,7 +83,7 @@ public class ASObject : ASType
     /// The intended function is to serve as a means of grouping objects and activities that share a common originating context or purpose.
     /// An example could be all activities relating to a common project or event.
     /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-context"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/LikeActivity#dfn-context"/>
     public Linkable<ASObject>? Context
     {
         get => Entity.Context;
@@ -147,7 +146,7 @@ public class ASObject : ASType
     /// Identifies a Collection containing objects considered to be responses to this object. 
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-replies"/>
-    public ASCollection<ASObject>? Replies
+    public ASCollection? Replies
     {
         get => Entity.Replies;
         set => Entity.Replies = value;
@@ -282,7 +281,7 @@ public class ASObject : ASType
     /// Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="ASActor.Liked"/> collection.
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitypub/#likes"/>
-    public Linkable<ASCollection<LikeActivity>>? Likes
+    public Linkable<ASCollection>? Likes
     {
         get => Entity.Likes;
         set => Entity.Likes = value;
@@ -292,7 +291,7 @@ public class ASObject : ASType
     /// This is a list of all Announce activities with this object as the object property, added as a side effect.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitypub/#shares"/>
-    public Linkable<ASCollection<AnnounceActivity>>? Shares
+    public Linkable<ASCollection>? Shares
     {
         get => Entity.Shares;
         set => Entity.Shares = value;
@@ -361,7 +360,7 @@ public sealed class ASObjectEntity : ASBase<ASObject>
 
     /// <inheritdoc cref="ASObject.Replies"/>
     [JsonPropertyName("replies")]
-    public ASCollection<ASObject>? Replies { get; set; }
+    public ASCollection? Replies { get; set; }
 
     /// <inheritdoc cref="ASObject.Tag"/>
     [JsonPropertyName("tag")]
@@ -409,9 +408,9 @@ public sealed class ASObjectEntity : ASBase<ASObject>
 
     /// <inheritdoc cref="ASObject.Likes"/>
     [JsonPropertyName("likes")]
-    public Linkable<ASCollection<LikeActivity>>? Likes { get; set; }
+    public Linkable<ASCollection>? Likes { get; set; }
 
     /// <inheritdoc cref="ASObject.Shares"/>
     [JsonPropertyName("shares")]
-    public Linkable<ASCollection<AnnounceActivity>>? Shares { get; set; }
+    public Linkable<ASCollection>? Shares { get; set; }
 }
