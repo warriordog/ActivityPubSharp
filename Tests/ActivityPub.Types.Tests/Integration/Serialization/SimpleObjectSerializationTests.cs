@@ -104,7 +104,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Replies = new ASObject(),
                 Tag = new() { new ASObject() },
                 To = new() { new ASObject() },
-                Url = "https://example.com",
+                Url = new() { "https://example.com" },
                 Content = new NaturalLanguageString("content"),
                 Duration = "PT5S",
                 StartTime = DateTime.Now,
