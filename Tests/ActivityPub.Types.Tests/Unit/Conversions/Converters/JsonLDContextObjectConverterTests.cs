@@ -4,7 +4,7 @@
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Tests.Unit.Json;
+namespace ActivityPub.Types.Tests.Unit.Conversions.Converters;
 
 public abstract class JsonLDContextObjectConverterTests : JsonConverterTests<JsonLDContextObject, JsonLDContextObjectConverter>
 {

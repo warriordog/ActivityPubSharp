@@ -4,7 +4,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace ActivityPub.Types.Tests.Unit.Json;
+namespace ActivityPub.Types.Tests.Unit.Conversions.Converters;
 
 public abstract class JsonConverterTests<T, TConverter>
 where TConverter : JsonConverter<T>
