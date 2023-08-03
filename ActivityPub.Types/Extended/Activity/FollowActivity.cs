@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Following is defined in the sense typically used within Social systems in which the actor is interested in any activity performed by or on the object.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(FollowType)]
+[APType(FollowType)]
 public class FollowActivity : ASTransitiveActivity
 {
     public const string FollowType = "Follow";
