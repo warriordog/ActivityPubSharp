@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor has deleted the object.
 /// If specified, the origin indicates the context from which the object was deleted. 
 /// </summary>
-[ASTypeKey(DeleteType)]
+[APType(DeleteType)]
 public class DeleteActivity : ASTransitiveActivity
 {
     public const string DeleteType = "Delete";
