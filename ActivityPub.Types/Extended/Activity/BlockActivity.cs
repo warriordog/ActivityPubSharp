@@ -12,7 +12,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// The typical use is to support social systems that allow one user to block activities or content of other users.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(BlockType)]
+[APType(BlockType)]
 public class BlockActivity : IgnoreActivity
 {
     public const string BlockType = "BlockActivity";
