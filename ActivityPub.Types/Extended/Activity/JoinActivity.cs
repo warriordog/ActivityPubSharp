@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor has joined the object.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(JoinType)]
+[APType(JoinType)]
 public class JoinActivity : ASTransitiveActivity
 {
     public const string JoinType = "Join";
