@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor likes, recommends or endorses the object.
 /// The target and origin typically have no defined meaning.
 /// </summary>
-[ASTypeKey(LikeType)]
+[APType(LikeType)]
 public class LikeActivity : ASTransitiveActivity
 {
     public const string LikeType = "Like";
