@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor dislikes the object. 
 /// </summary>
-[ASTypeKey(DislikeType)]
+[APType(DislikeType)]
 public class DislikeActivity : ASTransitiveActivity
 {
     public const string DislikeType = "Dislike";
