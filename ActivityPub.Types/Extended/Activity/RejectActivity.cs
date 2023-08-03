@@ -24,11 +24,15 @@ public class RejectActivity : ASTransitiveActivity
 public sealed class RejectActivityEntity : ASBase<RejectActivity>
 {
     public const string RejectType = "Reject";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public RejectActivityEntity(TypeMap typeMap) : base(RejectType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public RejectActivityEntity(TypeMap typeMap) : base(typeMap, RejectType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public RejectActivityEntity() : base(RejectType) {}
+    public RejectActivityEntity() : base(RejectType, ReplacedTypes) {}
 }

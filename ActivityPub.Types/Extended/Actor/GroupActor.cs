@@ -23,11 +23,15 @@ public class GroupActor : ASActor
 public sealed class GroupActorEntity : ASBase<GroupActor>
 {
     public const string GroupType = "Group";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public GroupActorEntity(TypeMap typeMap) : base(GroupType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public GroupActorEntity(TypeMap typeMap) : base(typeMap, GroupType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public GroupActorEntity() : base(GroupType) {}
+    public GroupActorEntity() : base(GroupType, ReplacedTypes) {}
 }

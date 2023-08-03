@@ -19,12 +19,27 @@ public abstract class ASBase
     /// </summary>
     public string? ASTypeName { get; }
 
+    /// <summary>
+    /// If set, represents a set of AS Type names that should be excluded / removed when this entity is added to a graph.
+    /// For example, MentionLink extends Link so the latter should be removed when both are present.
+    /// This does not remove the actual entities - only the type names.
+    /// </summary>
+    public IReadOnlySet<string>? ReplacesASTypes { get; }
 
-    protected ASBase(string? asTypeName, Type nonEntityType, bool isValueSerialized)
+    protected ASBase(Type nonEntityType, bool isValueSerialized)
     {
-        ASTypeName = asTypeName;
         NonEntityType = nonEntityType;
         IsValueSerialized = isValueSerialized;
+        ASTypeName = null;
+        ReplacesASTypes = null;
+    }
+
+    protected ASBase(Type nonEntityType, bool isValueSerialized, string asTypeName, IReadOnlySet<string>? replacesASTypes)
+    {
+        NonEntityType = nonEntityType;
+        IsValueSerialized = isValueSerialized;
+        ASTypeName = asTypeName;
+        ReplacesASTypes = replacesASTypes;
     }
 
 
@@ -57,19 +72,31 @@ public abstract class ASBase<TType> : ASBase
     private static readonly bool ImplementsValueSerialized = typeof(TType).IsAssignableToGenericType(typeof(IJsonValueSerialized<>));
 
     /// <summary>
-    /// Creates an entity and attaches it to a specified type graph.
+    /// Creates an anonymous entity and attaches it to a specified type graph.
     /// </summary>
     /// <throws cref="InvalidOperationException">If an entity of this type already exists in the graph</throws>
-    protected ASBase(string? asTypeName, TypeMap typeMap) : this(asTypeName)
+    protected ASBase(TypeMap typeMap) : this()
         => typeMap.Add(this);
 
     /// <summary>
-    /// Creates a free-floating entity, not attached to any graph.
-    /// Unless you're writing JSON logic or unit tests, you probably want the other constructor.
+    /// Creates a named entity and attaches it to a specified type graph.
     /// </summary>
-    protected ASBase(string? asTypeName)
-        : base(asTypeName, typeof(TType), ImplementsValueSerialized) {}
+    /// <throws cref="InvalidOperationException">If an entity of this type already exists in the graph</throws>
+    protected ASBase(TypeMap typeMap, string asTypeName, IReadOnlySet<string>? replacesASTypes = null) : this(asTypeName, replacesASTypes)
+        => typeMap.Add(this);
+    
+    /// <summary>
+    /// Creates a free-floating anonymous entity, not attached to any graph.
+    /// </summary>
+    protected ASBase()
+        : base(typeof(TType), ImplementsValueSerialized) {}
+    
+    /// <summary>
+    /// Creates a free-floating named entity, not attached to any graph.
+    /// </summary>
+    protected ASBase(string asTypeName, IReadOnlySet<string>? replacesASTypes = null)
+        : base(typeof(TType), ImplementsValueSerialized, asTypeName, replacesASTypes) {}
 
     private static readonly Func<TypeMap, TType> TypeConstructor = TypeUtils.CreateDynamicConstructor<TypeMap, TType>();
-    internal sealed override ASType CreateTypeInstanceBase(TypeMap typeMap) => TypeConstructor(typeMap);
+    internal override sealed ASType CreateTypeInstanceBase(TypeMap typeMap) => TypeConstructor(typeMap);
 }

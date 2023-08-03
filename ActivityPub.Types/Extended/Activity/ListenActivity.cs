@@ -23,11 +23,15 @@ public class ListenActivity : ASTransitiveActivity
 public sealed class ListenActivityEntity : ASBase<ListenActivity>
 {
     public const string ListenType = "Listen";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ListenActivityEntity(TypeMap typeMap) : base(ListenType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ListenActivityEntity(TypeMap typeMap) : base(typeMap, ListenType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ListenActivityEntity() : base(ListenType) {}
+    public ListenActivityEntity() : base(ListenType, ReplacedTypes) {}
 }

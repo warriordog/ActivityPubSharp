@@ -25,11 +25,15 @@ public class TravelActivity : ASIntransitiveActivity
 public sealed class TravelActivityEntity : ASBase<TravelActivity>
 {
     public const string TravelType = "Travel";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASIntransitiveActivityEntity.IntransitiveActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public TravelActivityEntity(TypeMap typeMap) : base(TravelType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public TravelActivityEntity(TypeMap typeMap) : base(typeMap, TravelType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public TravelActivityEntity() : base(TravelType) {}
+    public TravelActivityEntity() : base(TravelType, ReplacedTypes) {}
 }

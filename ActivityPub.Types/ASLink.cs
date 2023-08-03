@@ -102,10 +102,10 @@ public sealed class ASLinkEntity : ASBase<ASLink>, ICustomJsonDeserialized<ASLin
     public const string LinkType = "Link";
 
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ASLinkEntity(TypeMap typeMap) : base(LinkType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ASLinkEntity(TypeMap typeMap) : base(typeMap, LinkType) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
     public ASLinkEntity() : base(LinkType) {}
 

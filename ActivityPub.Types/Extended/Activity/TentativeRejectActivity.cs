@@ -23,11 +23,15 @@ public class TentativeRejectActivity : RejectActivity
 public sealed class TentativeRejectActivityEntity : ASBase<TentativeRejectActivity>
 {
     public const string TentativeRejectType = "TentativeReject";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        RejectActivityEntity.RejectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public TentativeRejectActivityEntity(TypeMap typeMap) : base(TentativeRejectType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public TentativeRejectActivityEntity(TypeMap typeMap) : base(typeMap, TentativeRejectType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public TentativeRejectActivityEntity() : base(TentativeRejectType) {}
+    public TentativeRejectActivityEntity() : base(TentativeRejectType, ReplacedTypes) {}
 }

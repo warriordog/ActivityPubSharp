@@ -23,11 +23,15 @@ public class ArticleObject : ASObject
 public sealed class ArticleObjectEntity : ASBase<ArticleObject>
 {
     public const string ArticleType = "Article";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ArticleObjectEntity(TypeMap typeMap) : base(ArticleType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ArticleObjectEntity(TypeMap typeMap) : base(typeMap, ArticleType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ArticleObjectEntity() : base(ArticleType) {}
+    public ArticleObjectEntity() : base(ArticleType, ReplacedTypes) {}
 }

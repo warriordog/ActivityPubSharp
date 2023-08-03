@@ -45,12 +45,12 @@ public class ASTransitiveActivity : ASActivity
 [ImpliesOtherEntity(typeof(ASActivityEntity))]
 public sealed class ASTransitiveActivityEntity : ASBase<ASTransitiveActivity>, ISubTypeDeserialized
 {
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ASTransitiveActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap)"/>
+    public ASTransitiveActivityEntity(TypeMap typeMap) : base(typeMap) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}()"/>
     [JsonConstructor]
-    public ASTransitiveActivityEntity() : base(null) {}
+    public ASTransitiveActivityEntity() {}
 
 
     /// <inheritdoc cref="ASTransitiveActivity.Object"/>

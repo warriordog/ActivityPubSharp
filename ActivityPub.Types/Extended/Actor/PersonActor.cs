@@ -23,11 +23,15 @@ public class PersonActor : ASActor
 public sealed class PersonActorEntity : ASBase<PersonActor>
 {
     public const string PersonType = "Person";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public PersonActorEntity(TypeMap typeMap) : base(PersonType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public PersonActorEntity(TypeMap typeMap) : base(typeMap, PersonType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public PersonActorEntity() : base(PersonType) {}
+    public PersonActorEntity() : base(PersonType, ReplacedTypes) {}
 }

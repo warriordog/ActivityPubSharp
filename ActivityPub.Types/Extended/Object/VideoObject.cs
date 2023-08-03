@@ -23,11 +23,15 @@ public class VideoObject : DocumentObject
 public sealed class VideoObjectEntity : ASBase<VideoObject>
 {
     public const string VideoType = "Video";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        DocumentObjectEntity.DocumentType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public VideoObjectEntity(TypeMap typeMap) : base(VideoType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public VideoObjectEntity(TypeMap typeMap) : base(typeMap, VideoType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public VideoObjectEntity() : base(VideoType) {}
+    public VideoObjectEntity() : base(VideoType, ReplacedTypes) {}
 }

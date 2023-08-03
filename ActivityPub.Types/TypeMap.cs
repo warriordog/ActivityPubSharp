@@ -39,6 +39,9 @@ public class TypeMap
 
     // Cache of non-entity classes
     private readonly Dictionary<Type, ASType> _typeCache = new();
+    
+    // All AS types that are replaced by at least one entity in the type graph
+    private readonly HashSet<string> _replacedASTypes = new();
 
     /// <summary>
     /// Checks if the object contains a particular type entity.
@@ -177,8 +180,19 @@ public class TypeMap
         _allEntities[type] = instance;
         _typeEntityMap[instance.NonEntityType] = instance;
 
-        // Map the AS type(s)
+        // Map the AS type
         if (instance.ASTypeName != null)
+        {
+            // Update the replaced list
+            if (instance.ReplacesASTypes != null)
+                foreach (var replacedType in instance.ReplacesASTypes)
+                    _replacedASTypes.Add(replacedType);
+            
+            // Add it to the type list and synchronize
             _asTypes.Add(instance.ASTypeName);
+            _asTypes.RemoveWhere(asType
+                => _replacedASTypes.Contains(asType)
+            );
+        }
     }
 }

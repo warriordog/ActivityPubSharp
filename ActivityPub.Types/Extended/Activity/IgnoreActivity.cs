@@ -23,11 +23,15 @@ public class IgnoreActivity : ASTransitiveActivity
 public sealed class IgnoreActivityEntity : ASBase<IgnoreActivity>
 {
     public const string IgnoreType = "Ignore";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public IgnoreActivityEntity(TypeMap typeMap) : base(IgnoreType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public IgnoreActivityEntity(TypeMap typeMap) : base(typeMap, IgnoreType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public IgnoreActivityEntity() : base(IgnoreType) {}
+    public IgnoreActivityEntity() : base(IgnoreType, ReplacedTypes) {}
 }

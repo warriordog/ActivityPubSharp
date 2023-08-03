@@ -123,12 +123,17 @@ public class ASCollection : ASObject
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASCollectionEntity : ASBase<ASCollection>
 {
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ASCollectionEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
+    
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ASCollectionEntity(TypeMap typeMap) : base(typeMap, CollectionType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ASCollectionEntity() : base(CollectionType) {}
+    public ASCollectionEntity() : base(CollectionType, ReplacedTypes) {}
 
     /// <inheritdoc cref="ASCollection.Current"/>
     [JsonPropertyName("current")]

@@ -153,10 +153,10 @@ public sealed class FakeObjectWithSpecialNullabilityEntity : ASBase<FakeObjectWi
     public const string TypeName = "FakeObjectWithSpecialNullability";
 
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public FakeObjectWithSpecialNullabilityEntity(TypeMap typeMap) : base(TypeName, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public FakeObjectWithSpecialNullabilityEntity(TypeMap typeMap) : base(typeMap, TypeName) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
     public FakeObjectWithSpecialNullabilityEntity() : base(TypeName) {}
 

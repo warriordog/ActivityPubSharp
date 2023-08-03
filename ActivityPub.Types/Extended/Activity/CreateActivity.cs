@@ -23,11 +23,15 @@ public class CreateActivity : ASTransitiveActivity
 public sealed class CreateActivityEntity : ASBase<CreateActivity>
 {
     public const string CreateType = "Create";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public CreateActivityEntity(TypeMap typeMap) : base(CreateType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public CreateActivityEntity(TypeMap typeMap) : base(typeMap, CreateType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public CreateActivityEntity() : base(CreateType) {}
+    public CreateActivityEntity() : base(CreateType, ReplacedTypes) {}
 }

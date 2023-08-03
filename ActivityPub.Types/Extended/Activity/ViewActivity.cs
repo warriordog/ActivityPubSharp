@@ -23,11 +23,15 @@ public class ViewActivity : ASTransitiveActivity
 public sealed class ViewActivityEntity : ASBase<ViewActivity>
 {
     public const string ViewType = "View";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ViewActivityEntity(TypeMap typeMap) : base(ViewType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ViewActivityEntity(TypeMap typeMap) : base(typeMap, ViewType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ViewActivityEntity() : base(ViewType) {}
+    public ViewActivityEntity() : base(ViewType, ReplacedTypes) {}
 }

@@ -23,11 +23,15 @@ public class ServiceActor : ASActor
 public sealed class ServiceActorEntity : ASBase<ServiceActor>
 {
     public const string ServiceType = "Service";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ServiceActorEntity(TypeMap typeMap) : base(ServiceType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ServiceActorEntity(TypeMap typeMap) : base(typeMap, ServiceType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ServiceActorEntity() : base(ServiceType) {}
+    public ServiceActorEntity() : base(ServiceType, ReplacedTypes) {}
 }

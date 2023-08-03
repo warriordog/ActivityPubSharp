@@ -23,11 +23,15 @@ public class DislikeActivity : ASTransitiveActivity
 public sealed class DislikeActivityEntity : ASBase<DislikeActivity>
 {
     public const string DislikeType = "Dislike";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public DislikeActivityEntity(TypeMap typeMap) : base(DislikeType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public DislikeActivityEntity(TypeMap typeMap) : base(typeMap, DislikeType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public DislikeActivityEntity() : base(DislikeType) {}
+    public DislikeActivityEntity() : base(DislikeType, ReplacedTypes) {}
 }

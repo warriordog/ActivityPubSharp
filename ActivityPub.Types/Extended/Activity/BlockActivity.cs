@@ -26,11 +26,15 @@ public class BlockActivity : IgnoreActivity
 public sealed class BlockActivityEntity : ASBase<BlockActivity>
 {
     public const string BlockType = "Block";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        IgnoreActivityEntity.IgnoreType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public BlockActivityEntity(TypeMap typeMap) : base(BlockType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public BlockActivityEntity(TypeMap typeMap) : base(typeMap, BlockType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public BlockActivityEntity() : base(BlockType) {}
+    public BlockActivityEntity() : base(BlockType, ReplacedTypes) {}
 }

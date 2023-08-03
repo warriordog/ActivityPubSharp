@@ -23,11 +23,15 @@ public class OrganizationActor : ASActor
 public sealed class OrganizationActorEntity : ASBase<OrganizationActor>
 {
     public const string OrganizationType = "Organization";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public OrganizationActorEntity(TypeMap typeMap) : base(OrganizationType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public OrganizationActorEntity(TypeMap typeMap) : base(typeMap, OrganizationType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public OrganizationActorEntity() : base(OrganizationType) {}
+    public OrganizationActorEntity() : base(OrganizationType, ReplacedTypes) {}
 }

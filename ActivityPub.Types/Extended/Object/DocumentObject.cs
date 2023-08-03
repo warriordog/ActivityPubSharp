@@ -23,11 +23,15 @@ public class DocumentObject : ASObject
 public sealed class DocumentObjectEntity : ASBase<DocumentObject>
 {
     public const string DocumentType = "Document";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public DocumentObjectEntity(TypeMap typeMap) : base(DocumentType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public DocumentObjectEntity(TypeMap typeMap) : base(typeMap, DocumentType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public DocumentObjectEntity() : base(DocumentType) {}
+    public DocumentObjectEntity() : base(DocumentType, ReplacedTypes) {}
 }

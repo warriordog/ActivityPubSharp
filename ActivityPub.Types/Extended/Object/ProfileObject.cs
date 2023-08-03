@@ -34,13 +34,17 @@ public class ProfileObject : ASObject
 public sealed class ProfileObjectEntity : ASBase<ProfileObject>
 {
     public const string ProfileType = "Profile";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ProfileObjectEntity(TypeMap typeMap) : base(ProfileType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ProfileObjectEntity(TypeMap typeMap) : base(typeMap, ProfileType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ProfileObjectEntity() : base(ProfileType) {}
+    public ProfileObjectEntity() : base(ProfileType, ReplacedTypes) {}
 
     /// <inheritdoc cref="ProfileObject.Describes"/>
     [JsonPropertyName("describes")]

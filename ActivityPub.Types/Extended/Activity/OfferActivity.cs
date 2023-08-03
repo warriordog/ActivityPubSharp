@@ -24,11 +24,15 @@ public class OfferActivity : ASTransitiveActivity
 public sealed class OfferActivityEntity : ASBase<OfferActivity>
 {
     public const string OfferType = "Offer";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public OfferActivityEntity(TypeMap typeMap) : base(OfferType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public OfferActivityEntity(TypeMap typeMap) : base(typeMap, OfferType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public OfferActivityEntity() : base(OfferType) {}
+    public OfferActivityEntity() : base(OfferType, ReplacedTypes) {}
 }

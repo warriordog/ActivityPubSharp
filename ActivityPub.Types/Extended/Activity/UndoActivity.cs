@@ -25,11 +25,15 @@ public class UndoActivity : ASTransitiveActivity
 public sealed class UndoActivityEntity : ASBase<UndoActivity>
 {
     public const string UndoType = "Undo";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public UndoActivityEntity(TypeMap typeMap) : base(UndoType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public UndoActivityEntity(TypeMap typeMap) : base(typeMap, UndoType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public UndoActivityEntity() : base(UndoType) {}
+    public UndoActivityEntity() : base(UndoType, ReplacedTypes) {}
 }

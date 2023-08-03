@@ -23,11 +23,15 @@ public class AudioObject : DocumentObject
 public sealed class AudioObjectEntity : ASBase<AudioObject>
 {
     public const string AudioType = "Audio";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        DocumentObjectEntity.DocumentType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public AudioObjectEntity(TypeMap typeMap) : base(AudioType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public AudioObjectEntity(TypeMap typeMap) : base(typeMap, AudioType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public AudioObjectEntity() : base(AudioType) {}
+    public AudioObjectEntity() : base(AudioType, ReplacedTypes) {}
 }

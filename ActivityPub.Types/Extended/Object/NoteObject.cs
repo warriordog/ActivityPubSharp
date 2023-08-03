@@ -23,11 +23,15 @@ public class NoteObject : ASObject
 public sealed class NoteObjectEntity : ASBase<NoteObject>
 {
     public const string NoteType = "Note";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public NoteObjectEntity(TypeMap typeMap) : base(NoteType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public NoteObjectEntity(TypeMap typeMap) : base(typeMap, NoteType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public NoteObjectEntity() : base(NoteType) {}
+    public NoteObjectEntity() : base(NoteType, ReplacedTypes) {}
 }

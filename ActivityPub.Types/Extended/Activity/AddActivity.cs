@@ -25,11 +25,15 @@ public class AddActivity : ASTargetedActivity
 public sealed class AddActivityEntity : ASBase<AddActivity>
 {
     public const string AddType = "Add";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public AddActivityEntity(TypeMap typeMap) : base(AddType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public AddActivityEntity(TypeMap typeMap) : base(typeMap, AddType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public AddActivityEntity() : base(AddType) {}
+    public AddActivityEntity() : base(AddType, ReplacedTypes) {}
 }

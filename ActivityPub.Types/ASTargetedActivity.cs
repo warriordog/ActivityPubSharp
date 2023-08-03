@@ -43,12 +43,12 @@ public class ASTargetedActivity : ASTransitiveActivity
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ASTargetedActivityEntity : ASBase<ASTargetedActivity>
 {
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ASTargetedActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap)"/>
+    public ASTargetedActivityEntity(TypeMap typeMap) : base(typeMap) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}()"/>
     [JsonConstructor]
-    public ASTargetedActivityEntity() : base(null) {}
+    public ASTargetedActivityEntity() {}
 
     /// <inheritdoc cref="ASTargetedActivity.Target"/>
     [JsonPropertyName("target")]

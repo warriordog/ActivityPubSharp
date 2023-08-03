@@ -37,11 +37,15 @@ public class MentionLink : ASLink
 public sealed class MentionLinkEntity : ASBase<MentionLink>
 {
     public const string MentionType = "Mention";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASLinkEntity.LinkType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public MentionLinkEntity(TypeMap typeMap) : base(MentionType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public MentionLinkEntity(TypeMap typeMap) : base(typeMap, MentionType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public MentionLinkEntity() : base(MentionType) {}
+    public MentionLinkEntity() : base(MentionType, ReplacedTypes) {}
 }

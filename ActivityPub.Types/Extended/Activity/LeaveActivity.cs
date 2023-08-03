@@ -24,11 +24,15 @@ public class LeaveActivity : ASTransitiveActivity
 public sealed class LeaveActivityEntity : ASBase<LeaveActivity>
 {
     public const string LeaveType = "Leave";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public LeaveActivityEntity(TypeMap typeMap) : base(LeaveType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public LeaveActivityEntity(TypeMap typeMap) : base(typeMap, LeaveType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public LeaveActivityEntity() : base(LeaveType) {}
+    public LeaveActivityEntity() : base(LeaveType, ReplacedTypes) {}
 }

@@ -23,11 +23,15 @@ public class ImageObject : DocumentObject
 public sealed class ImageObjectEntity : ASBase<ImageObject>
 {
     public const string ImageType = "Image";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        DocumentObjectEntity.DocumentType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ImageObjectEntity(TypeMap typeMap) : base(ImageType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ImageObjectEntity(TypeMap typeMap) : base(typeMap, ImageType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ImageObjectEntity() : base(ImageType) {}
+    public ImageObjectEntity() : base(ImageType, ReplacedTypes) {}
 }

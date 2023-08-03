@@ -78,10 +78,10 @@ public abstract class ASTypeTests
     {
         public const string StubType = "Stub";
 
-        /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-        public StubASTypeEntity(TypeMap typeMap) : base(StubType, typeMap) {}
+        /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+        public StubASTypeEntity(TypeMap typeMap) : base(typeMap, StubType) {}
 
-        /// <inheritdoc cref="ASBase{T}(string?)"/>
+        /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
         [JsonConstructor]
         public StubASTypeEntity() : base(StubType) {}
     }

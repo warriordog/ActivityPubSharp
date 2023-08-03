@@ -24,11 +24,15 @@ public class DeleteActivity : ASTransitiveActivity
 public sealed class DeleteActivityEntity : ASBase<DeleteActivity>
 {
     public const string DeleteType = "Delete";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public DeleteActivityEntity(TypeMap typeMap) : base(DeleteType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public DeleteActivityEntity(TypeMap typeMap) : base(typeMap, DeleteType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public DeleteActivityEntity() : base(DeleteType) {}
+    public DeleteActivityEntity() : base(DeleteType, ReplacedTypes) {}
 }

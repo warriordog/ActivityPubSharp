@@ -23,11 +23,15 @@ public class ApplicationActor : ASActor
 public sealed class ApplicationActorEntity : ASBase<ApplicationActor>
 {
     public const string ApplicationType = "Application";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ApplicationActorEntity(TypeMap typeMap) : base(ApplicationType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ApplicationActorEntity(TypeMap typeMap) : base(typeMap, ApplicationType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ApplicationActorEntity() : base(ApplicationType) {}
+    public ApplicationActorEntity() : base(ApplicationType, ReplacedTypes) {}
 }

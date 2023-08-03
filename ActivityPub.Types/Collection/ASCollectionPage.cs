@@ -77,12 +77,17 @@ public class ASCollectionPage : ASCollection
 [ImpliesOtherEntity(typeof(ASCollection))]
 public sealed class ASCollectionPageEntity : ASBase<ASCollection>
 {
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ASCollectionPageEntity(TypeMap typeMap) : base(CollectionType, typeMap) {}
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        CollectionType
+    };
+    
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ASCollectionPageEntity(TypeMap typeMap) : base(typeMap, CollectionPageType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ASCollectionPageEntity() : base(CollectionType) {}
+    public ASCollectionPageEntity() : base(CollectionPageType, ReplacedTypes) {}
 
     /// <inheritdoc cref="ASCollectionPage.Next"/>
     [JsonPropertyName("next")]

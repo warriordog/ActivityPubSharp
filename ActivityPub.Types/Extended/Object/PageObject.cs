@@ -23,11 +23,15 @@ public class PageObject : DocumentObject
 public sealed class PageObjectEntity : ASBase<PageObject>
 {
     public const string PageType = "Page";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        DocumentObjectEntity.DocumentType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public PageObjectEntity(TypeMap typeMap) : base(PageType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public PageObjectEntity(TypeMap typeMap) : base(typeMap, PageType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public PageObjectEntity() : base(PageType) {}
+    public PageObjectEntity() : base(PageType, ReplacedTypes) {}
 }

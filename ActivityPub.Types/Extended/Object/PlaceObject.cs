@@ -90,13 +90,17 @@ public class PlaceObject : ASObject
 public sealed class PlaceObjectEntity : ASBase<PlaceObject>
 {
     public const string PlaceType = "Place";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public PlaceObjectEntity(TypeMap typeMap) : base(PlaceType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public PlaceObjectEntity(TypeMap typeMap) : base(typeMap, PlaceType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public PlaceObjectEntity() : base(PlaceType) {}
+    public PlaceObjectEntity() : base(PlaceType, ReplacedTypes) {}
 
     /// <inheritdoc cref="PlaceObject.Accuracy"/>
     [JsonPropertyName("accuracy")]

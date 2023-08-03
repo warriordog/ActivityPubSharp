@@ -24,11 +24,15 @@ public class RemoveActivity : ASTargetedActivity
 public sealed class RemoveActivityEntity : ASBase<RemoveActivity>
 {
     public const string RemoveType = "Remove";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public RemoveActivityEntity(TypeMap typeMap) : base(RemoveType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public RemoveActivityEntity(TypeMap typeMap) : base(typeMap, RemoveType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public RemoveActivityEntity() : base(RemoveType) {}
+    public RemoveActivityEntity() : base(RemoveType, ReplacedTypes) {}
 }

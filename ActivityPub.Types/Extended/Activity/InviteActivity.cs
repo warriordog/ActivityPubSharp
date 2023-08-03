@@ -23,11 +23,15 @@ public class InviteActivity : OfferActivity
 public sealed class InviteActivityEntity : ASBase<InviteActivity>
 {
     public const string InviteType = "Invite";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        OfferActivityEntity.OfferType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public InviteActivityEntity(TypeMap typeMap) : base(InviteType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public InviteActivityEntity(TypeMap typeMap) : base(typeMap, InviteType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public InviteActivityEntity() : base(InviteType) {}
+    public InviteActivityEntity() : base(InviteType, ReplacedTypes) {}
 }

@@ -24,11 +24,15 @@ public class MoveActivity : ASTransitiveActivity
 public sealed class MoveActivityEntity : ASBase<MoveActivity>
 {
     public const string MoveType = "Move";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public MoveActivityEntity(TypeMap typeMap) : base(MoveType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public MoveActivityEntity(TypeMap typeMap) : base(typeMap, MoveType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public MoveActivityEntity() : base(MoveType) {}
+    public MoveActivityEntity() : base(MoveType, ReplacedTypes) {}
 }

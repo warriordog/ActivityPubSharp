@@ -23,11 +23,15 @@ public class EventObject : ASObject
 public sealed class EventObjectEntity : ASBase<EventObject>
 {
     public const string EventType = "Event";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public EventObjectEntity(TypeMap typeMap) : base(EventType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public EventObjectEntity(TypeMap typeMap) : base(typeMap, EventType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public EventObjectEntity() : base(EventType) {}
+    public EventObjectEntity() : base(EventType, ReplacedTypes) {}
 }

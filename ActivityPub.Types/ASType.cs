@@ -143,18 +143,12 @@ public abstract class ASType
 /// <inheritdoc cref="ASType"/>
 public sealed class ASTypeEntity : ASBase<ASType>
 {
-    /// <summary>
-    /// Shared JSON-LD context used by all ActivityStreams objects.
-    /// </summary>
-    public static JsonLDContextObject ActivityStreamsContext { get; } = new("https://www.w3.org/ns/activitystreams");
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap)"/>
+    public ASTypeEntity(TypeMap typeMap) : base(typeMap) {}
 
-
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ASTypeEntity(TypeMap typeMap) : base(null, typeMap) {}
-
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}()"/>
     [JsonConstructor]
-    public ASTypeEntity() : base(null) {}
+    public ASTypeEntity() {}
 
 
     /// <inheritdoc cref="ASType.UnknownJsonProperties"/>

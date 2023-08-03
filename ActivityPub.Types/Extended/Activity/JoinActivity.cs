@@ -24,11 +24,15 @@ public class JoinActivity : ASTransitiveActivity
 public sealed class JoinActivityEntity : ASBase<JoinActivity>
 {
     public const string JoinType = "Join";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public JoinActivityEntity(TypeMap typeMap) : base(JoinType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public JoinActivityEntity(TypeMap typeMap) : base(typeMap, JoinType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public JoinActivityEntity() : base(JoinType) {}
+    public JoinActivityEntity() : base(JoinType, ReplacedTypes) {}
 }

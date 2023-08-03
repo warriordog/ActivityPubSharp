@@ -24,11 +24,15 @@ public class AnnounceActivity : ASTransitiveActivity
 public sealed class AnnounceActivityEntity : ASBase<AnnounceActivity>
 {
     public const string AnnounceType = "Announce";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public AnnounceActivityEntity(TypeMap typeMap) : base(AnnounceType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public AnnounceActivityEntity(TypeMap typeMap) : base(typeMap, AnnounceType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public AnnounceActivityEntity() : base(AnnounceType) {}
+    public AnnounceActivityEntity() : base(AnnounceType, ReplacedTypes) {}
 }

@@ -24,11 +24,15 @@ public class FlagActivity : ASTransitiveActivity
 public sealed class FlagActivityEntity : ASBase<FlagActivity>
 {
     public const string FlagType = "Flag";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public FlagActivityEntity(TypeMap typeMap) : base(FlagType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public FlagActivityEntity(TypeMap typeMap) : base(typeMap, FlagType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public FlagActivityEntity() : base(FlagType) {}
+    public FlagActivityEntity() : base(FlagType, ReplacedTypes) {}
 }

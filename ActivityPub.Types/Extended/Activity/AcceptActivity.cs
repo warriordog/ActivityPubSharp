@@ -24,11 +24,15 @@ public class AcceptActivity : ASTransitiveActivity
 public sealed class AcceptActivityEntity : ASBase<AcceptActivity>
 {
     public const string AcceptType = "Accept";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public AcceptActivityEntity(TypeMap typeMap) : base(AcceptType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public AcceptActivityEntity(TypeMap typeMap) : base(typeMap, AcceptType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public AcceptActivityEntity() : base(AcceptType) {}
+    public AcceptActivityEntity() : base(AcceptType, ReplacedTypes) {}
 }

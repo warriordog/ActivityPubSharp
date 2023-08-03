@@ -77,13 +77,18 @@ public sealed class ASActivityEntity : ASBase<ASActivity>, ISubTypeDeserialized
 {
     public const string ActivityType = "Activity";
 
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASObjectEntity.ObjectType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ASActivityEntity(TypeMap typeMap) : base(ActivityType, typeMap) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public ASActivityEntity(TypeMap typeMap) : base(typeMap, ActivityType, ReplacedTypes) {}
+
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public ASActivityEntity() : base(ActivityType) {}
+    public ASActivityEntity() : base(ActivityType, ReplacedTypes) {}
 
 
     /// <inheritdoc cref="ASActivity.Actor"/>

@@ -306,10 +306,10 @@ public sealed class ASObjectEntity : ASBase<ASObject>
     public const string ObjectType = "Object";
 
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public ASObjectEntity(TypeMap typeMap) : base(ObjectType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap, string, IReadOnlySet{string}?)"/>
+    public ASObjectEntity(TypeMap typeMap) : base(typeMap, ObjectType) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
     public ASObjectEntity() : base(ObjectType) {}
 

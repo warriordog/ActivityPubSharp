@@ -25,11 +25,15 @@ public class UpdateActivity : ASTransitiveActivity
 public sealed class UpdateActivityEntity : ASBase<UpdateActivity>
 {
     public const string UpdateType = "Update";
+    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    {
+        ASActivityEntity.ActivityType
+    };
 
-    /// <inheritdoc cref="ASBase{T}(string?, TypeMap)"/>
-    public UpdateActivityEntity(TypeMap typeMap) : base(UpdateType, typeMap) {}
+    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
+    public UpdateActivityEntity(TypeMap typeMap) : base(typeMap, UpdateType, ReplacedTypes) {}
 
-    /// <inheritdoc cref="ASBase{T}(string?)"/>
+    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
     [JsonConstructor]
-    public UpdateActivityEntity() : base(UpdateType) {}
+    public UpdateActivityEntity() : base(UpdateType, ReplacedTypes) {}
 }
