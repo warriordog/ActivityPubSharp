@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 
 namespace ActivityPub.Types.Util;
 
@@ -16,9 +16,9 @@ public record LinkRel
     // Characters that cannot appear within a link relation.
     // Values are: "space" ( ), "tab" (\t), "line feed" (\n), "carriage return" (\r), and "comma" (,)
     private static readonly char[] IllegalChars = { '\u0020', '\u0009', '\u000A', '\u000C', '\u000D', '\u002C' };
-    
+
     public string Value { get; }
-    
+
     public LinkRel(string value)
     {
         var badCharIdx = value.IndexOfAny(IllegalChars);
@@ -27,7 +27,7 @@ public record LinkRel
 
         Value = value;
     }
-    
+
     public static implicit operator string(LinkRel linkRel) => linkRel.Value;
     public static implicit operator LinkRel(string str) => new(str);
 }

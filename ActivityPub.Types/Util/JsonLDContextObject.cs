@@ -3,7 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 
 namespace ActivityPub.Types.Util;
 
@@ -80,6 +80,7 @@ public class JsonLDContextObject : IEquatable<JsonLDContextObject>
         if (ReferenceEquals(this, other)) return true;
         return ExternalLink == other.ExternalLink && Equals(Terms, other.Terms);
     }
+
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
@@ -87,6 +88,7 @@ public class JsonLDContextObject : IEquatable<JsonLDContextObject>
         if (obj.GetType() != GetType()) return false;
         return Equals((JsonLDContextObject)obj);
     }
+
     public override int GetHashCode() => HashCode.Combine(ExternalLink, Terms);
 
     public static implicit operator JsonLDContextObject(string str) => new(str);

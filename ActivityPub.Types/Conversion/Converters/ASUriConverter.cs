@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Json;
+namespace ActivityPub.Types.Conversion.Converters;
 
 public class ASUriConverter : JsonConverter<ASUri>
 {

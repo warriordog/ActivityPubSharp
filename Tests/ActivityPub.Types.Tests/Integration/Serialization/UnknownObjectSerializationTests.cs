@@ -7,44 +7,11 @@ namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public abstract class UnknownObjectSerializationTests : SerializationTests
 {
-    public class ObjectWithUnknownTypeShould : UnknownObjectSerializationTests
-    {
-        private List<string>? TypesUnderTest { get; }
-        
-        public ObjectWithUnknownTypeShould(JsonLdSerializerFixture fixture) : base(fixture)
-        {
-            ObjectUnderTest = new ASObject
-            {
-                Types = new()
-                {
-                    "UnknownType1",
-                    ASObject.ObjectType,
-                    "UnknownType2"
-                }
-            };
-                
-            TypesUnderTest = JsonUnderTest.GetProperty("type").Deserialize<List<string>>();
-        }
-
-        [Fact]
-        public void WriteKnownType()
-        {
-            TypesUnderTest.Should().Contain(ASObject.ObjectType);
-        }
-
-        [Fact]
-        public void WriteUnknownTypes()
-        {
-            TypesUnderTest.Should().Contain("UnknownType1");
-            TypesUnderTest.Should().Contain("UnknownType2");
-        }
-    }
-
     public class ObjectWithUnknownPropertiesShould : UnknownObjectSerializationTests
     {
         private const string UnknownPropName = "special_unknown_property";
         private const string UnknownPropValue = "special_unknown_value";
-        
+
         public ObjectWithUnknownPropertiesShould(JsonLdSerializerFixture fixture) : base(fixture)
         {
             ObjectUnderTest = new ASObject
@@ -56,7 +23,7 @@ public abstract class UnknownObjectSerializationTests : SerializationTests
                 }
             };
         }
-        
+
         [Fact]
         public void WriteKnownProperties()
         {

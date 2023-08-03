@@ -1,7 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Json;
@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Tests.Unit.Json;
 public abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConverter>
 {
     protected override ASUriConverter ConverterUnderTest { get; set; } = new();
-    
+
     public class ReadShould : ASUriConverterTests
     {
         [Fact]
@@ -39,9 +39,9 @@ public abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConve
             const string Input = "https://example.com/some.uri";
             const string ExpectedOutput = $"\"{Input}\"";
             var asUri = new ASUri(Input);
-            
+
             var json = Write(asUri);
-            
+
             json.Should().Be(ExpectedOutput);
         }
     }

@@ -4,7 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Conversion;
-using ActivityPub.Types.Json.Attributes;
+using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -15,7 +15,7 @@ public class TypeMap
     /// <summary>
     /// Live set of all unique ActivityStreams types represented by this object.
     /// </summary>
-    /// <seealso cref="DotNetTypes"/>
+    /// <seealso cref="AllEntities"/>
     public IReadOnlySet<string> ASTypes => throw new NotImplementedException();
 
     /// <summary>
@@ -97,7 +97,7 @@ public class TypeMap
         => throw new NotImplementedException();
 
     /// <summary>
-    /// Reference to the single entity which contains the <see cref="NarrowJsonTypeAttribute"/>.
+    /// Reference to the single entity which implements <see cref="IJsonValueSerialized{TThis}"/>
     /// Will be null if none is present.
     /// </summary>
     internal ASBase? ValueSerializer => throw new NotImplementedException();

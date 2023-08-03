@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using ActivityPub.Client;
 using ActivityPub.Types;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Util;
 using InternalUtils;
 using Microsoft.Extensions.Hosting;
@@ -158,7 +158,7 @@ public class ConsoleService : BackgroundService
                 await Console.Out.WriteLineAsync("Can't select from null.");
                 return;
             }
-            
+
             await PushSelector(current, parameter, stoppingToken);
             await HandlePrint(null, stoppingToken);
         }
@@ -199,7 +199,7 @@ public class ConsoleService : BackgroundService
                 await Console.Out.WriteLineAsync("Can't select from null.");
                 return;
             }
-            
+
             toPrint = await SelectObject(current, parameter, stoppingToken);
         }
 
@@ -231,11 +231,11 @@ public class ConsoleService : BackgroundService
 
             var prop = FindProperty(asObj, parameter);
             var value = await SelectObject(asObj, prop, stoppingToken);
-            
+
             // Verify and set
             if (value != null && !value.GetType().IsAssignableTo(prop.PropertyType))
                 throw new ApplicationException($"Selected property is not compatible: {value.GetType()} is not assignable to {prop.PropertyType}");
-            
+
             prop.SetValue(asObj, value);
         }
         else if (current is ASLink asLink)
@@ -256,7 +256,7 @@ public class ConsoleService : BackgroundService
         var property = FindProperty(obj, propertyName);
         return await SelectObject(obj, property, stoppingToken);
     }
-    
+
     private async Task<object?> SelectObject(object obj, PropertyInfo property, CancellationToken stoppingToken)
     {
         // Get and populate property value
@@ -268,17 +268,17 @@ public class ConsoleService : BackgroundService
     {
         if (value == null)
             return null;
-        
+
         // If its ASLink, then call Get<ASType>
         if (value is ASLink link)
             return await _apClient.Get<ASType>(link, cancellationToken: stoppingToken);
-        
+
         var valueType = value.GetType();
-        
+
         // If its Linkable<T>, then extract T and call ResolveValueOfLinkable(object) which pivots to ResolveValueOfLinkableOf<T>)(Linkable<T>)
         if (valueType.TryGetGenericArgumentsFor(typeof(Linkable<>), out var linkableSlots))
             return await ResolveValueOfLinkable(value, linkableSlots[0], stoppingToken);
-        
+
         // If its LinkableList<T>, then extract T and call ResolveValueOfLinkableList(object) which pivots to ResolveValueOfLinkableListOf<T>(LinkableList<T>)
         if (valueType.TryGetGenericArgumentsFor(typeof(Linkable<>), out var linkableListSlots))
             return await ResolveValueOfLinkableList(value, linkableListSlots[0], stoppingToken);
@@ -293,9 +293,9 @@ public class ConsoleService : BackgroundService
                          .GetMethod(nameof(ResolveValueOfLinkableOf), BindingFlags.NonPublic | BindingFlags.Instance)
                          ?.MakeGenericMethod(valueType)
                      ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableOf<{valueType}>(Linkable<{valueType}>, CancellationToken)");
-        return await (Task<object?>)method.Invoke(this, new[] {value, stoppingToken})!;
+        return await (Task<object?>)method.Invoke(this, new[] { value, stoppingToken })!;
     }
-    
+
     private async Task<object?> ResolveValueOfLinkableOf<T>(Linkable<T> value, CancellationToken stoppingToken)
         where T : ASObject
     {
@@ -309,8 +309,9 @@ public class ConsoleService : BackgroundService
                          .GetMethod(nameof(ResolveValueOfLinkableListOf), BindingFlags.NonPublic | BindingFlags.Instance)
                          ?.MakeGenericMethod(valueType)
                      ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableListOf<{valueType}>(LinkableList<{valueType}>, CancellationToken)");
-        return await (Task<object?>)method.Invoke(this, new[] {value, stoppingToken})!;
+        return await (Task<object?>)method.Invoke(this, new[] { value, stoppingToken })!;
     }
+
     private async Task<object?> ResolveValueOfLinkableListOf<T>(LinkableList<T> value, CancellationToken stoppingToken)
         where T : ASObject
     {
@@ -322,14 +323,14 @@ public class ConsoleService : BackgroundService
     {
         // Try to find a property with a matching name (case-insensitive)
         var properties = obj.GetType().GetProperties();
-        var property = Array.Find(properties,p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
+        var property = Array.Find(properties, p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
         if (property != null)
             return property;
-        
+
         // Try to find a property with a JsonPropertyName attribute that matches the parameter
-        property = Array.Find(properties, p => 
-                        p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)?? false
-                    );
+        property = Array.Find(properties, p =>
+            p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase) ?? false
+        );
         if (property != null)
             return property;
 

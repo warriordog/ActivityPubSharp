@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Conversion;
-using ActivityPub.Types.Json.Attributes;
+using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -43,9 +43,8 @@ public class ASTransitiveActivity : ASActivity
 }
 
 /// <inheritdoc cref="ASTransitiveActivity"/>
-[NarrowJsonType(nameof(NarrowType))]
 [ImpliesOtherEntity(typeof(ASActivityEntity))]
-public sealed class ASTransitiveActivityEntity : ASBase
+public sealed class ASTransitiveActivityEntity : ASBase, ISubTypeDeserialized
 {
     /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
     public ASTransitiveActivityEntity(TypeMap typeMap) : base(null, typeMap) {}
@@ -59,8 +58,7 @@ public sealed class ASTransitiveActivityEntity : ASBase
     [JsonPropertyName("object")]
     public required LinkableList<ASObject> Object { get; set; } = new();
 
-    /// <inheritdoc cref="NarrowTypeDelegate"/>
-    public static Type NarrowType(JsonElement element, DeserializationMetadata meta)
+    public static Type PickSubTypeForDeserialization(JsonElement element, DeserializationMetadata meta)
     {
         // If it has the "target" property, then its Targeted.
         var isTransient = element.TryGetProperty("object", out _);

@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Conversion;
-using ActivityPub.Types.Json.Attributes;
+using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -100,9 +100,7 @@ public class ASLink : ASType
 /// <inheritdoc cref="ASLink"/>
 [ASTypeKey(LinkType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
-[CustomJsonDeserializer(nameof(TryDeserialize))]
-[CustomJsonValueSerializer(nameof(TrySerializeIntoValue))]
-public sealed class ASLinkEntity : ASBase
+public sealed class ASLinkEntity : ASBase, ICustomJsonDeserialized<ASLinkEntity>, IJsonValueSerialized<ASLinkEntity>
 {
     public const string LinkType = "Link";
 
@@ -135,8 +133,7 @@ public sealed class ASLinkEntity : ASBase
     [JsonPropertyName("rel")]
     public HashSet<LinkRel> Rel { get; set; } = new();
 
-    /// <inheritdoc cref="TryDeserializeDelegate{ASLinkEntity}"/>
-    public static bool TryDeserialize(JsonElement element, DeserializationMetadata meta, out ASLinkEntity? obj)
+    public static bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASLinkEntity? obj)
     {
         // We either parse from string, or allow parser to use default logic
         if (element.ValueKind == JsonValueKind.String)
@@ -153,7 +150,6 @@ public sealed class ASLinkEntity : ASBase
         return false;
     }
 
-    /// <inheritdoc cref="TrySerializeIntoValueDelegate{ASLinkEntity}"/>
     public static bool TrySerializeIntoValue(ASLinkEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node)
     {
         // If its only a link, then use the flattened form

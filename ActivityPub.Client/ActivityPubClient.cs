@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using ActivityPub.Common.Util;
 using ActivityPub.Types;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Client;
@@ -92,7 +92,8 @@ public class ActivityPubClient : IActivityPubClient
     }
 
 
-#region Dispose
+    #region Dispose
+
     public void Dispose()
     {
         // Dispose of unmanaged resources.
@@ -116,5 +117,6 @@ public class ActivityPubClient : IActivityPubClient
     }
 
     private bool _disposed;
-#endregion
+
+    #endregion
 }

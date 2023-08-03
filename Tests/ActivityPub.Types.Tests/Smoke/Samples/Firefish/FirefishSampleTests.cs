@@ -15,34 +15,34 @@ public class FirefishSampleTests : SampleTests
     public FirefishSampleTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
-    public void CreateShouldConvert() => TestSample(typeof(CreateActivity), CreateActivity.CreateType);
+    public void CreateShouldConvert() => TestSample(typeof(CreateActivity), CreateActivityEntity.CreateType);
 
     [Fact]
     public void HashtagShouldConvert() => TestSample(typeof(ASObject), "Hashtag");
-    
+
     [Fact]
-    public void ImageShouldConvert() => TestSample(typeof(ImageObject), ImageObject.ImageType);
-    
+    public void ImageShouldConvert() => TestSample(typeof(ImageObject), ImageObjectEntity.ImageType);
+
     [Fact]
     public void KeyShouldConvert() => TestSample(typeof(ASObject), "Key");
-    
-    [Fact]
-    public void MentionShouldConvert() => TestSample(typeof(MentionLink), MentionLink.MentionType);
 
     [Fact]
-    public void NoteShouldConvert() => TestSample(typeof(NoteObject), NoteObject.NoteType);
+    public void MentionShouldConvert() => TestSample(typeof(MentionLink), MentionLinkEntity.MentionType);
 
     [Fact]
-    public void ObjectShouldConvert() => TestSample(typeof(ASObject), ASObject.ObjectType);
+    public void NoteShouldConvert() => TestSample(typeof(NoteObject), NoteObjectEntity.NoteType);
 
     [Fact]
-    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASOrderedCollection<ASObject>), CollectionTypes.OrderedCollectionType);
+    public void ObjectShouldConvert() => TestSample(typeof(ASObject), ASObjectEntity.ObjectType);
 
     [Fact]
-    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASOrderedCollectionPage<ASObject>), CollectionTypes.OrderedCollectionPageType);
-    
+    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASCollection<ASObject>), CollectionTypes.OrderedCollectionType);
+
     [Fact]
-    public void PersonActorShouldConvert() => TestSample(typeof(PersonActor), PersonActor.PersonType);
+    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage<ASObject>), CollectionTypes.OrderedCollectionPageType);
+
+    [Fact]
+    public void PersonActorShouldConvert() => TestSample(typeof(PersonActor), PersonActorEntity.PersonType);
 
     [Fact]
     public void PropertyValueShouldConvert() => TestSample(typeof(ASObject), "PropertyValue");

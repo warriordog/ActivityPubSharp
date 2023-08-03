@@ -3,9 +3,10 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Internal.TypeInfo;
+using ActivityPub.Types.Conversion.Converters;
+using ActivityPub.Types.Internal;
 
-namespace ActivityPub.Types.Json;
+namespace ActivityPub.Types.Conversion;
 
 /// <summary>
 /// Provides support for (de)serializing JSON-LD to/from .NET objects.
@@ -35,7 +36,7 @@ public class JsonLdSerializer : IJsonLdSerializer
 {
     public JsonSerializerOptions SerializerOptions { get; }
 
-    public JsonLdSerializer(IASTypeInfoCache asTypeInfoCache, IJsonTypeInfoCache jsonTypeInfoCache)
+    public JsonLdSerializer(IASTypeInfoCache asTypeInfoCache)
     {
         SerializerOptions = new JsonSerializerOptions(JsonSerializerOptions.Default)
         {
@@ -43,7 +44,8 @@ public class JsonLdSerializer : IJsonLdSerializer
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        SerializerOptions.Converters.Add(new ASTypeConverter(asTypeInfoCache, jsonTypeInfoCache));
+        SerializerOptions.Converters.Add(new TypeMapConverter(asTypeInfoCache));
+        SerializerOptions.Converters.Add(new ASTypeConverter());
         SerializerOptions.Converters.Add(new LinkableConverter(asTypeInfoCache));
         SerializerOptions.Converters.Add(new ListableConverter());
     }

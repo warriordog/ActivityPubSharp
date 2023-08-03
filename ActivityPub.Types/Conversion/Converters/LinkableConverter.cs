@@ -5,10 +5,9 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Internal;
-using ActivityPub.Types.Internal.TypeInfo;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Json;
+namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
 /// Converts types that can be either <see cref="ASLink"/> or some other type.
@@ -38,11 +37,11 @@ public class LinkableConverter : JsonConverterFactory
 }
 
 internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
-where T : ASObject
+    where T : ASObject
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
-    
+
     public override Linkable<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return null;

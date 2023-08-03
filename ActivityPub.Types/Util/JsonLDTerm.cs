@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 
 namespace ActivityPub.Types.Util;
 
@@ -27,6 +27,7 @@ public class JsonLDTerm : IEquatable<JsonLDTerm>
         if (ReferenceEquals(this, other)) return true;
         return Id == other.Id;
     }
+
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
@@ -34,6 +35,7 @@ public class JsonLDTerm : IEquatable<JsonLDTerm>
         if (obj.GetType() != GetType()) return false;
         return Equals((JsonLDTerm)obj);
     }
+
     public override int GetHashCode() => Id.GetHashCode();
 }
 
@@ -56,6 +58,7 @@ public class JsonLDExpandedTerm : JsonLDTerm, IEquatable<JsonLDExpandedTerm>
         if (ReferenceEquals(this, other)) return true;
         return base.Equals(other) && Type == other.Type;
     }
+
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
@@ -63,5 +66,6 @@ public class JsonLDExpandedTerm : JsonLDTerm, IEquatable<JsonLDExpandedTerm>
         if (obj.GetType() != GetType()) return false;
         return Equals((JsonLDExpandedTerm)obj);
     }
+
     public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), Type);
 }

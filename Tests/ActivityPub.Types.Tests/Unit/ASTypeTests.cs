@@ -1,6 +1,9 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using ActivityPub.Types.Attributes;
+using Newtonsoft.Json;
+
 namespace ActivityPub.Types.Tests.Unit;
 
 public abstract class ASTypeTests
@@ -21,7 +24,7 @@ public abstract class ASTypeTests
         [Fact]
         public void ContainTypeName_ByDefault()
         {
-            ObjectUnderTest.Types.Should().Contain(StubASType.StubType);
+            ObjectUnderTest.Types.Should().Contain(StubASTypeEntity.StubType);
         }
     }
 
@@ -64,7 +67,22 @@ public abstract class ASTypeTests
 
     private class StubASType : ASType
     {
+        private StubASTypeEntity Entity { get; }
+
+        public StubASType() => Entity = new StubASTypeEntity(TypeMap);
+        public StubASType(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<StubASTypeEntity>();
+    }
+
+    [ImpliesOtherEntity(typeof(ASTypeEntity))]
+    private sealed class StubASTypeEntity : ASBase
+    {
         public const string StubType = "Stub";
-        public StubASType() : base(StubType) {}
+
+        /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+        public StubASTypeEntity(TypeMap typeMap) : base(StubType, typeMap) {}
+
+        /// <inheritdoc cref="ASBase(string?)"/>
+        [JsonConstructor]
+        public StubASTypeEntity() : base(StubType) {}
     }
 }

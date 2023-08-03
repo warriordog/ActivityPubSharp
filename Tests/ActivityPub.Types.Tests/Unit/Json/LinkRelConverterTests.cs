@@ -1,7 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Json;
@@ -31,20 +31,13 @@ public class LinkRelConverterTests : JsonConverterTests<LinkRel, LinkRelConverte
         [Fact]
         public void ThrowOnWrongType()
         {
-            
-            Assert.Throws<JsonException>(() =>
-            {
-                Read("[]"u8);
-            });
+            Assert.Throws<JsonException>(() => { Read("[]"u8); });
         }
 
         [Fact]
         public void ThrowOnInvalidString()
         {
-            Assert.ThrowsAny<Exception>(() =>
-            {
-                Read("\"has space oops\""u8);
-            });
+            Assert.ThrowsAny<Exception>(() => { Read("\"has space oops\""u8); });
         }
     }
 

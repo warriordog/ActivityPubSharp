@@ -7,7 +7,6 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
-using ActivityPub.Types.Internal.TypeInfo;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Conversion;

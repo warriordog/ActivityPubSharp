@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Json;
+namespace ActivityPub.Types.Conversion.Converters;
 
 public class LinkRelConverter : JsonConverter<LinkRel>
 {

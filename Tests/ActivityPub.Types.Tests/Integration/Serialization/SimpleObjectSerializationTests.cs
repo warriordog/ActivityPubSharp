@@ -18,7 +18,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             ObjectUnderTest = new ASObject();
             JsonUnderTest.Should().BeJsonObject();
         }
-        
+
         [Fact]
         public void ShouldIncludeContext()
         {
@@ -30,21 +30,21 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         public void ShouldIncludeType()
         {
             ObjectUnderTest = new ASObject();
-            JsonUnderTest.Should().HaveASType(ASObject.ObjectType);
+            JsonUnderTest.Should().HaveASType(ASObjectEntity.ObjectType);
         }
 
         [Fact]
         public void ShouldIncludeOnlyTypeAndContext()
         {
             ObjectUnderTest = new ASObject();
-            
+
             var props = JsonUnderTest.EnumerateObject().ToList();
 
             props.Should().HaveCount(2);
             props.Should().Contain(p => p.Name == "type");
             props.Should().Contain(p => p.Name == "@context");
         }
-        
+
         public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
@@ -54,7 +54,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         public void ShouldSerializeToCorrectType()
         {
             ObjectUnderTest = new ImageObject();
-            JsonUnderTest.Should().HaveASType(ImageObject.ImageType);
+            JsonUnderTest.Should().HaveASType(ImageObjectEntity.ImageType);
         }
 
         [Fact]
@@ -74,11 +74,11 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             };
 
             JsonUnderTest.Should().HaveStringProperty("inbox", "https://example.com/actor/inbox");
-            JsonUnderTest.Should().HaveStringProperty("outbox",  "https://example.com/actor/outbox");
+            JsonUnderTest.Should().HaveStringProperty("outbox", "https://example.com/actor/outbox");
             JsonUnderTest.GetProperty("image").Should().HaveASType("Image");
             JsonUnderTest.Should().HaveStringProperty("id", "https://example.com/actor/id");
         }
-        
+
         public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
@@ -123,7 +123,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Name = new NaturalLanguageString("name"),
                 MediaType = "text/html"
             };
-            
+
             // From ASObject
             JsonUnderTest.Should().HaveProperty("attachment");
             JsonUnderTest.Should().HaveProperty("audience");
@@ -158,7 +158,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             JsonUnderTest.Should().HaveProperty("name");
             JsonUnderTest.Should().HaveProperty("mediaType");
         }
-        
+
         public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 

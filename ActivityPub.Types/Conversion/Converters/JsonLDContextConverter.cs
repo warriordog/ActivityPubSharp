@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Json;
+namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
 /// Custom converter for the JSON-LD "@context" property.
@@ -32,7 +32,7 @@ public class JsonLDContextConverter : JsonConverter<JsonLDContext>
                 return new JsonLDContext(new HashSet<JsonLDContextObject>
                 {
                     context
-                } );
+                });
             }
 
             case JsonTokenType.StartArray:

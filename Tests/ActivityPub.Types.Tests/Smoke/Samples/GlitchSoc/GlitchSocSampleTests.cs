@@ -13,11 +13,11 @@ namespace ActivityPub.Types.Tests.Smoke.Samples.GlitchSoc;
 public class GlitchSocSampleTests : SampleTests
 {
     public GlitchSocSampleTests(JsonLdSerializerFixture fixture) : base(fixture) {}
-    
+
     [Fact]
-    public void AnnounceShouldConvert() => TestSample(typeof(AnnounceActivity), AnnounceActivity.AnnounceType);
-    
-    
+    public void AnnounceShouldConvert() => TestSample(typeof(AnnounceActivity), AnnounceActivityEntity.AnnounceType);
+
+
     [Fact]
     public void CollectionShouldConvert() => TestSample(typeof(ASCollection<ASObject>), CollectionTypes.CollectionType);
 
@@ -25,11 +25,11 @@ public class GlitchSocSampleTests : SampleTests
     public void CollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage<ASObject>), CollectionTypes.CollectionPageType);
 
     [Fact]
-    public void CreateShouldConvert() => TestSample(typeof(CreateActivity), CreateActivity.CreateType);
+    public void CreateShouldConvert() => TestSample(typeof(CreateActivity), CreateActivityEntity.CreateType);
 
     [Fact]
-    public void DocumentShouldConvert() => TestSample(typeof(DocumentObject), DocumentObject.DocumentType);
-    
+    public void DocumentShouldConvert() => TestSample(typeof(DocumentObject), DocumentObjectEntity.DocumentType);
+
     [Fact]
     public void EmojiShouldConvert() => TestSample(typeof(ASObject), "Emoji");
 
@@ -37,25 +37,25 @@ public class GlitchSocSampleTests : SampleTests
     public void HashtagShouldConvert() => TestSample(typeof(ASObject), "Hashtag");
 
     [Fact]
-    public void ImageShouldConvert() => TestSample(typeof(ImageObject), ImageObject.ImageType);
+    public void ImageShouldConvert() => TestSample(typeof(ImageObject), ImageObjectEntity.ImageType);
 
     [Fact]
-    public void KeyShouldConvert() => TestSample(typeof(ASObject), ASObject.ObjectType, "Key");
+    public void KeyShouldConvert() => TestSample(typeof(ASObject), ASObjectEntity.ObjectType, "Key");
 
     [Fact]
-    public void MentionShouldConvert() => TestSample(typeof(MentionLink), MentionLink.MentionType);
+    public void MentionShouldConvert() => TestSample(typeof(MentionLink), MentionLinkEntity.MentionType);
 
     [Fact]
-    public void NoteShouldConvert() => TestSample(typeof(NoteObject), NoteObject.NoteType);
+    public void NoteShouldConvert() => TestSample(typeof(NoteObject), NoteObjectEntity.NoteType);
 
     [Fact]
-    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASOrderedCollection<ASObject>), CollectionTypes.OrderedCollectionType);
+    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASCollection<ASObject>), CollectionTypes.OrderedCollectionType);
 
     [Fact]
-    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASOrderedCollectionPage<ASObject>), CollectionTypes.OrderedCollectionPageType);
-    
+    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage<ASObject>), CollectionTypes.OrderedCollectionPageType);
+
     [Fact]
-    public void PersonActorShouldConvert() => TestSample(typeof(PersonActor), PersonActor.PersonType);
+    public void PersonActorShouldConvert() => TestSample(typeof(PersonActor), PersonActorEntity.PersonType);
 
     [Fact]
     public void PropertyValueShouldConvert() => TestSample(typeof(ASObject), "PropertyValue");

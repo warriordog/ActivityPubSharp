@@ -1,7 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Json;
@@ -12,7 +12,6 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
 
     public class ReadShould : JsonLDContextConverterTests
     {
-
         [Fact]
         public void PassThroughNull()
         {
@@ -25,9 +24,9 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         public void ParseStringAsContext()
         {
             var json = "\"https://example.com/context.jsonld\""u8;
-            
+
             var result = Read(json);
-            
+
             result.Should().NotBeNull();
             result?.ContextObjects.Should().HaveCount(1);
             result?.ContextObjects.First().IsExternal.Should().BeTrue();
@@ -38,9 +37,9 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         public void ParseObjectAsContext()
         {
             var json = "{\"name\":\"https://example.com/context.jsonld\"}"u8;
-            
+
             var result = Read(json);
-            
+
             result.Should().NotBeNull();
             result?.ContextObjects.Should().HaveCount(1);
             result?.ContextObjects.First().IsEmbedded.Should().BeTrue();
@@ -50,9 +49,9 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         public void DeserializeArrayOfStrings()
         {
             var json = "[\"https://example.com/first.jsonld\",\"https://example.com/second.jsonld\"]"u8;
-            
+
             var result = Read(json);
-            
+
             result.Should().NotBeNull();
             result?.ContextObjects.Should().HaveCount(2);
         }
@@ -61,9 +60,9 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         public void DeserializeArrayOfObjects()
         {
             var json = "[{\"name\":\"https://example.com/name_first\"},{\"name\":\"https://example.com/name_second\"}]"u8;
-            
+
             var result = Read(json);
-            
+
             result.Should().NotBeNull();
             result?.ContextObjects.Should().HaveCount(2);
         }
@@ -72,13 +71,13 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         public void DeserializeArrayOfStringsAndObjects()
         {
             var json = "[\"https://example.com/first.jsonld\",{\"name\":\"https://example.com/name_second\"}]"u8;
-            
+
             var result = Read(json);
-            
+
             result.Should().NotBeNull();
             result?.ContextObjects.Should().HaveCount(2);
         }
-        
+
         [Fact]
         public void ThrowJsonException_WhenInputIsUnsupported()
         {
@@ -99,7 +98,7 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
             {
                 new JsonLDContextObject("https://example.com/context.jsonld")
             });
-            
+
             var json = Write(input);
 
             json.Should().Be("\"https://example.com/context.jsonld\"");
@@ -113,7 +112,7 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
                 new JsonLDContextObject("https://example.com/first.jsonld"),
                 new JsonLDContextObject("https://example.com/second.jsonld")
             });
-            
+
             var json = Write(input);
 
             json.Should().Be("[\"https://example.com/first.jsonld\",\"https://example.com/second.jsonld\"]");

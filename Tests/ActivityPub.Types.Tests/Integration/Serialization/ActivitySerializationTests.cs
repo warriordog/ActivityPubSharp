@@ -20,7 +20,7 @@ public class ActivitySerializationTests : SerializationTests
         ObjectUnderTest = new ASActivity();
         JsonUnderTest.Should().NotHaveProperty("target");
     }
-    
+
     [Fact]
     public void TransitiveActivitiesShould_IncludeObject()
     {
@@ -30,7 +30,7 @@ public class ActivitySerializationTests : SerializationTests
         };
         JsonUnderTest.Should().HaveProperty("object");
     }
-    
+
     [Fact]
     public void TransitiveActivitiesShould_NotIncludeTarget()
     {
@@ -40,11 +40,11 @@ public class ActivitySerializationTests : SerializationTests
         };
         JsonUnderTest.Should().NotHaveProperty("target");
     }
-    
+
     [Fact]
     public void TargetedActivitiesShould_IncludeObjectAndTarget()
     {
-        ObjectUnderTest = new ASTransitiveActivity
+        ObjectUnderTest = new ASTargetedActivity()
         {
             Object = new ASObject(),
             Target = new ASObject()
@@ -52,6 +52,6 @@ public class ActivitySerializationTests : SerializationTests
         JsonUnderTest.Should().HaveProperty("object");
         JsonUnderTest.Should().HaveProperty("target");
     }
-    
+
     public ActivitySerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

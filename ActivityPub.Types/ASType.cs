@@ -4,7 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -157,9 +157,8 @@ public sealed class ASTypeEntity : ASBase
     /// <inheritdoc cref="ASType.Types"/> 
     public HashSet<string> Types { get; set; } = new();
 
-    // TODO wrong
+    // TODO wrong + restore "hide when nested" logic
     /// <inheritdoc cref="ASType.JsonLdContext"/>
-    [JsonIgnoreWhenNested]
     [JsonPropertyName("@context")]
     [JsonConverter(typeof(JsonLDContextConverter))]
     public JsonLDContext JsonLdContexts { get; set; } = new(new HashSet<JsonLDContextObject>

@@ -2,9 +2,9 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Collection;
 using ActivityPub.Types.Extended.Object;
-using ActivityPub.Types.Json;
 using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
@@ -28,14 +28,14 @@ public class ValueStripSerializationTests : SerializationTests
         ObjectUnderTest = new FakeObjectWithSpecialNullability();
         JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NeverIgnoreObject));
     }
-    
+
     [Fact]
     public void DefaultValuesShould_BeStrippedFromOutput_WhenIgnoreConditionIsWritingDefault()
     {
         ObjectUnderTest = new FakeObjectWithSpecialNullability();
         JsonUnderTest.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.IgnoreWhenDefaultInt));
     }
-    
+
     [Fact]
     public void DefaultValuesShould_BePreserved_WhenIgnoreConditionIsNever()
     {
@@ -50,7 +50,7 @@ public class ValueStripSerializationTests : SerializationTests
         {
             Attachment = new()
         };
-            
+
         JsonUnderTest.Should().NotHaveProperty("attachment");
     }
 
@@ -61,10 +61,10 @@ public class ValueStripSerializationTests : SerializationTests
         {
             Items = null
         };
-            
+
         JsonUnderTest.Should().NotHaveProperty("items");
     }
-    
+
     [Fact]
     public void NullCollectionsShould_BePreserved_WhenIgnoreConditionIsNever()
     {
@@ -79,9 +79,9 @@ public class ValueStripSerializationTests : SerializationTests
         {
             Source = new FakeObjectWithSpecialNullability()
         };
-        JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable) );
+        JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable));
         JsonUnderTest.Should().HaveProperty("source", source =>
-            source.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable) )
+            source.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable))
         );
     }
 
@@ -103,7 +103,7 @@ public class ValueStripSerializationTests : SerializationTests
         {
             StartTime = DateTime.Now
         };
-        
+
         JsonUnderTest.Should().HaveProperty("startTime");
     }
 
@@ -114,33 +114,64 @@ public class ValueStripSerializationTests : SerializationTests
         {
             Attachment = new()
             {
-                new ASObject()                
+                new ASObject()
             }
         };
-            
+
         JsonUnderTest.Should().HaveProperty("attachment");
     }
-    
+
     public ValueStripSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }
 
 public class FakeObjectWithSpecialNullability : ASObject
 {
-    public const string TypeName = "FakeObjectWithSpecialNullability";
-    public FakeObjectWithSpecialNullability() : base(TypeName) {}
-    
+    private FakeObjectWithSpecialNullabilityEntity Entity { get; }
+
+    public FakeObjectWithSpecialNullability() => Entity = new FakeObjectWithSpecialNullabilityEntity(TypeMap);
+    public FakeObjectWithSpecialNullability(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<FakeObjectWithSpecialNullabilityEntity>();
+
+
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public ASObject? NeverIgnoreObject { get; set; }
-    
+
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public int NeverIgnoreInt { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<string> NeverIgnoreList { get; set; } = new();
-    
-    [JsonIgnoreWhenNested]
+
     public bool NonNestable { get; set; }
-    
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public int IgnoreWhenDefaultInt { get; set; }
+}
+
+[ImpliesOtherEntity(typeof(ASObjectEntity))]
+public sealed class FakeObjectWithSpecialNullabilityEntity : ASBase
+{
+    public const string TypeName = "FakeObjectWithSpecialNullability";
+
+
+    /// <inheritdoc cref="ASBase(string?, TypeMap)"/>
+    public FakeObjectWithSpecialNullabilityEntity(TypeMap typeMap) : base(TypeName, typeMap) {}
+
+    /// <inheritdoc cref="ASBase(string?)"/>
+    [JsonConstructor]
+    public FakeObjectWithSpecialNullabilityEntity() : base(TypeName) {}
+
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public ASObject? NeverIgnoreObject { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public int NeverIgnoreInt { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public List<string> NeverIgnoreList { get; set; } = new();
+
+    public bool NonNestable { get; set; }
+
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public int IgnoreWhenDefaultInt { get; set; }
 }

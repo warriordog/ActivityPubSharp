@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using InternalUtils;
 
-namespace ActivityPub.Types.Json;
+namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
 /// Converts types that can be a list of elements, or a single elements.

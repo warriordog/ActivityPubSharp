@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 
 namespace ActivityPub.Types.Util;
 
@@ -35,6 +35,7 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
         return false;
     }
+
     public bool Equals(ASUri? other) => AreEqual(this, other);
     public bool Equals(Uri? other) => AreEqual(this, other);
     public bool Equals(string? other) => AreEqual(this, other);
@@ -58,6 +59,7 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
         return left.Uri.Equals(right.Uri);
     }
+
     public static bool AreEqual(ASUri? left, Uri? right)
     {
         if (ReferenceEquals(null, right))
@@ -67,6 +69,7 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
         return left.Uri.Equals(right);
     }
+
     public static bool AreEqual(ASUri? left, string? right)
     {
         if (ReferenceEquals(null, right))

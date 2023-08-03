@@ -1,7 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Json;
@@ -24,9 +24,9 @@ public abstract class JsonLDContextObjectConverterTests : JsonConverterTests<Jso
         public void ParseStringAsLink()
         {
             var json = "\"https://example.com/context.jsonld\""u8;
-            
+
             var result = Read(json);
-            
+
             result.Should().NotBeNull();
             result?.IsExternal.Should().BeTrue();
             result?.ExternalLink?.Should().Be("https://example.com/context.jsonld");
@@ -37,9 +37,9 @@ public abstract class JsonLDContextObjectConverterTests : JsonConverterTests<Jso
         public void ParseObjectAsTerms()
         {
             var json = "{\"name\":\"https://example.com/name\"}"u8;
-            
+
             var result = Read(json);
-            
+
             result.Should().NotBeNull();
             result?.IsEmbedded.Should().BeTrue();
             result?.Terms.Should().NotBeNull();
@@ -65,9 +65,9 @@ public abstract class JsonLDContextObjectConverterTests : JsonConverterTests<Jso
         public void WriteLinkAsString()
         {
             var input = new JsonLDContextObject("https://example.com/context.jsonld");
-            
+
             var json = Write(input);
-            
+
             json.Should().Be("\"https://example.com/context.jsonld\"");
         }
 

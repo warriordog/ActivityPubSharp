@@ -3,17 +3,14 @@
 
 using System.Reflection;
 using ActivityPub.Types.Attributes;
-using InternalUtils;
 
-namespace ActivityPub.Types.Internal.TypeInfo;
+namespace ActivityPub.Types.Internal;
 
 /// <summary>
 /// Extracts and stores metadata for ActivityStreams types within the application.
 /// </summary>
 public interface IASTypeInfoCache
 {
-    internal JsonTypeInfo GetJsonTypeInfo<TDeclaredType>(string name) where TDeclaredType : ASType;
-
     internal bool IsKnownASType(string asTypeName);
 
     internal bool IsASLinkType(string type);
@@ -41,29 +38,12 @@ public interface IASTypeInfoCache
 
 public class ASTypeInfoCache : IASTypeInfoCache
 {
-    private readonly HashSet<Type> _allASTypes = new();
-    private readonly Dictionary<string, ASTypeInfo> _knownTypeMap = new();
+    private readonly HashSet<Type> _allASEntities = new();
     private readonly Dictionary<string, Type> _knownEntityMap = new();
     private readonly Dictionary<Type, HashSet<Type>> _impliedEntityMap = new();
     private readonly HashSet<string> _knownLinkTypes = new(); // TODO we may need to manually add ASLink here
 
-    private readonly IJsonTypeInfoCache _jsonTypeInfoCache;
-
-    public ASTypeInfoCache(IJsonTypeInfoCache jsonTypeInfoCache)
-    {
-        _jsonTypeInfoCache = jsonTypeInfoCache;
-    }
-
-    public JsonTypeInfo GetJsonTypeInfo<TDeclaredType>(string name) where TDeclaredType : ASType
-    {
-        // Narrow the type to its final, concrete form
-        var realType = ReifyType<TDeclaredType>(name);
-
-        // Get info
-        return _jsonTypeInfoCache.GetForType(realType);
-    }
-
-    public bool IsKnownASType(string asTypeName) => _knownTypeMap.ContainsKey(asTypeName.ToLower());
+    public bool IsKnownASType(string asTypeName) => _knownEntityMap.ContainsKey(asTypeName.ToLower());
 
     public bool IsASLinkType(string type)
     {
@@ -98,20 +78,6 @@ public class ASTypeInfoCache : IASTypeInfoCache
         return types;
     }
 
-    private Type ReifyType<TDeclaredType>(string name) where TDeclaredType : ASType
-    {
-        if (!_knownTypeMap.TryGetValue(name.ToLower(), out var entry))
-        {
-            // Bail out to defaults if unknown.
-            // This will blow up if TDeclaredType is abstract, open generic, or otherwise not constructable.
-            return typeof(TDeclaredType);
-        }
-
-        // Delegate reification to the actual instance.
-        // Inheritance FTW!
-        return entry.ReifyType<TDeclaredType>();
-    }
-
     public void RegisterAllAssemblies()
     {
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -129,7 +95,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
                 continue;
 
             // Skip if we've already registered it
-            if (_allASTypes.Contains(type))
+            if (_allASEntities.Contains(type))
                 continue;
 
             // Pre-check this here for performance.
@@ -144,12 +110,10 @@ public class ASTypeInfoCache : IASTypeInfoCache
                 var typeName = typeAttr.Type.ToLower();
 
                 // Check for dupes
-                if (_knownTypeMap.TryGetValue(typeName, out var originalType))
+                if (_knownEntityMap.TryGetValue(typeName, out var originalType))
                     throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
 
-                // Create and cache appropriate entry for the type
-                var entry = CreateASTypeInfo(type);
-                _knownTypeMap[typeName] = entry;
+                // Register mapping
                 _knownEntityMap[typeName] = type;
 
                 // If it derives from ASLink, then record it as an additional link type
@@ -170,16 +134,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
             }
 
             // Record it as an AS type, even if we didn't register
-            _allASTypes.Add(type);
+            _allASEntities.Add(type);
         }
-    }
-
-    private static ASTypeInfo CreateASTypeInfo(Type type)
-    {
-        // Open generics require a special type
-        if (type.IsOpenGeneric())
-            return new OpenASTypeInfo(type);
-
-        return new ClosedASTypeInfo(type);
     }
 }
