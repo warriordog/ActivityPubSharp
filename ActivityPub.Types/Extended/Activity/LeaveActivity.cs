@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor has left the object.
 /// The target and origin typically have no meaning.
 /// </summary>
-[ASTypeKey(LeaveType)]
+[APType(LeaveType)]
 public class LeaveActivity : ASTransitiveActivity
 {
     public const string LeaveType = "Leave";
