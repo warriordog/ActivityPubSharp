@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor is ignoring the object. The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(IgnoreType)]
+[APType(IgnoreType)]
 public class IgnoreActivity : ASTransitiveActivity
 {
     public const string IgnoreType = "Ignore";
