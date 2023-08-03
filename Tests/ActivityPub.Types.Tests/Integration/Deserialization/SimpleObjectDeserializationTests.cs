@@ -19,7 +19,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         [Fact]
         public void ShouldIncludeContext()
         {
-            ObjectUnderTest.JsonLdContext.ContextObjects.Should().Contain("https://www.w3.org/ns/activitystreams");
+            ObjectUnderTest.JsonLdContext.Should().Contain("https://www.w3.org/ns/activitystreams");
         }
 
         [Fact]

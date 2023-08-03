@@ -19,6 +19,11 @@ namespace ActivityPub.Types.Util;
 public class JsonLDContextObject : IEquatable<JsonLDContextObject>
 {
     /// <summary>
+    /// Immutable, shared reference to the ActivityStreams context.
+    /// </summary>
+    public static JsonLDContextObject ActivityStreams { get; } = new("https://www.w3.org/ns/activitystreams");
+    
+    /// <summary>
     /// If true, then this context is located externally and we only have a link.
     /// </summary>
     [MemberNotNullWhen(true, nameof(ExternalLink))]

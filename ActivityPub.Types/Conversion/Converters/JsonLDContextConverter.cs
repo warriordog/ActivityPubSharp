@@ -29,22 +29,21 @@ public class JsonLDContextConverter : JsonConverter<JsonLDContext>
             case JsonTokenType.StartObject:
             {
                 var context = ReadContext(ref reader, options);
-                return new JsonLDContext(new HashSet<JsonLDContextObject>
+                return new JsonLDContext()
                 {
                     context
-                });
+                };
             }
 
             case JsonTokenType.StartArray:
             {
-                var set = new HashSet<JsonLDContextObject>();
+                var context = new JsonLDContext();
                 while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                 {
-                    var context = ReadContext(ref reader, options);
-                    set.Add(context);
+                    var contextObj = ReadContext(ref reader, options);
+                    context.Add(contextObj);
                 }
-
-                return new JsonLDContext(set);
+                return context;
             }
 
             default:
@@ -63,15 +62,15 @@ public class JsonLDContextConverter : JsonConverter<JsonLDContext>
 
     public override void Write(Utf8JsonWriter writer, JsonLDContext value, JsonSerializerOptions options)
     {
-        if (value.ContextObjects.Count == 1)
+        if (value.Count == 1)
         {
-            var context = value.ContextObjects.First();
+            var context = value.First();
             JsonSerializer.Serialize(writer, context, options);
         }
         else
         {
             writer.WriteStartArray();
-            foreach (var context in value.ContextObjects)
+            foreach (var context in value)
             {
                 JsonSerializer.Serialize(writer, context, options);
             }

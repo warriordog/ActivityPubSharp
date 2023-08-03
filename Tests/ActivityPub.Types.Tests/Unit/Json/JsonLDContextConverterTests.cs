@@ -28,9 +28,9 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
             var result = Read(json);
 
             result.Should().NotBeNull();
-            result?.ContextObjects.Should().HaveCount(1);
-            result?.ContextObjects.First().IsExternal.Should().BeTrue();
-            result?.ContextObjects.First().ExternalLink?.Should().Be("https://example.com/context.jsonld");
+            result?.Should().HaveCount(1);
+            result?.First().IsExternal.Should().BeTrue();
+            result?.First().ExternalLink?.Should().Be("https://example.com/context.jsonld");
         }
 
         [Fact]
@@ -41,8 +41,8 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
             var result = Read(json);
 
             result.Should().NotBeNull();
-            result?.ContextObjects.Should().HaveCount(1);
-            result?.ContextObjects.First().IsEmbedded.Should().BeTrue();
+            result?.Should().HaveCount(1);
+            result?.First().IsEmbedded.Should().BeTrue();
         }
 
         [Fact]
@@ -53,7 +53,7 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
             var result = Read(json);
 
             result.Should().NotBeNull();
-            result?.ContextObjects.Should().HaveCount(2);
+            result?.Should().HaveCount(2);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
             var result = Read(json);
 
             result.Should().NotBeNull();
-            result?.ContextObjects.Should().HaveCount(2);
+            result?.Should().HaveCount(2);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
             var result = Read(json);
 
             result.Should().NotBeNull();
-            result?.ContextObjects.Should().HaveCount(2);
+            result?.Should().HaveCount(2);
         }
 
         [Fact]

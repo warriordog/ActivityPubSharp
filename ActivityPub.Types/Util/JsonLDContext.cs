@@ -15,18 +15,24 @@ namespace ActivityPub.Types.Util;
 /// <seealso href="https://www.w3.org/TR/json-ld11/#context-definitions"/>
 /// <seealso href="https://www.w3.org/TR/json-ld11/#the-context"/>
 [JsonConverter(typeof(JsonLDContextConverter))]
-public class JsonLDContext
+public class JsonLDContext : HashSet<JsonLDContextObject>
 {
-    public HashSet<JsonLDContextObject> ContextObjects { get; }
-
-    [JsonConstructor]
-    public JsonLDContext() : this(new()) {}
-
-    public JsonLDContext(HashSet<JsonLDContextObject> contextObjects) => ContextObjects = contextObjects;
-
-    public static JsonLDContext ActivityStreams { get; } = new(new HashSet<JsonLDContextObject>
+    /// <summary>
+    /// Constructs a new context, pre-initialized with the ActivityStreams context.
+    /// </summary>
+    public static JsonLDContext ActivityStreams => new()
     {
-        // We always need the base context
-        new("https://www.w3.org/ns/activitystreams")
-    });
+        JsonLDContextObject.ActivityStreams
+    };
+
+    /// <summary>
+    /// Constructs an empty JsonLDContext.
+    /// </summary>
+    public JsonLDContext() {}
+    
+    /// <summary>
+    /// Constructs a JsonLDContext from a collection of context objects
+    /// </summary>
+    /// <param name="objects">Objects to form the whole context</param>
+    public JsonLDContext(IEnumerable<JsonLDContextObject> objects) : base(objects) {}
 }
