@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor has created the object.
 /// </summary>
-[ASTypeKey(CreateType)]
+[APType(CreateType)]
 public class CreateActivity : ASTransitiveActivity
 {
     public const string CreateType = "Create";
