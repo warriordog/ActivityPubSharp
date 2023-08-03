@@ -279,7 +279,7 @@ public class ASObject : ASType
     /// This is a list of all Like activities with this object as the object property, added as a side effect.
     /// </summary>
     /// <remarks>
-    /// Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="IActor.Liked"/> collection.
+    /// Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="ASActor.Liked"/> collection.
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitypub/#likes"/>
     public Linkable<ASCollection<LikeActivity>>? Likes
