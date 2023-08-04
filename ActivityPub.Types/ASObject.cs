@@ -3,7 +3,6 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
-using ActivityPub.Types.Collection;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Util;
 

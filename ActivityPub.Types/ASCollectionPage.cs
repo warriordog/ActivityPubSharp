@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Collection;
+namespace ActivityPub.Types;
 
 /// <summary>
 ///     Used to represent distinct subsets of items from a Collection.

@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Collection;
+namespace ActivityPub.Types;
 
 /// <summary>
 ///     A Collection is a subtype of Object that represents ordered or unordered sets of Object or Link instances.
