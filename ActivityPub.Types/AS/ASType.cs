@@ -30,7 +30,6 @@ public abstract class ASType
     {
         TypeMap = typeMap;
         Entity = typeMap.AsEntity<ASTypeEntity>();
-        Entity.Types = TypeMap.ASTypes;
     }
 
     private ASTypeEntity Entity { get; }
@@ -45,12 +44,6 @@ public abstract class ASType
     ///     Contains all JSON properties that did not map to any known .NET property.
     /// </summary>
     internal Dictionary<string, JsonElement> UnknownJsonProperties => Entity.UnknownJsonProperties;
-
-    /// <summary>
-    ///     Identifies the Object or Link types.
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-type" />
-    public IReadOnlySet<string> Types => Entity.Types;
 
     /// <summary>
     ///     Lists the JSON-LD contexts used by this object.
@@ -150,9 +143,6 @@ public sealed class ASTypeEntity : ASEntity<ASType>
 
     /// <inheritdoc cref="ASType.UnknownJsonProperties" />
     internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
-
-    /// <inheritdoc cref="ASType.Types" />
-    public IReadOnlySet<string> Types { get; set; } = new HashSet<string>();
 
     /// <inheritdoc cref="ASType.JsonLdContext" />
     [JsonPropertyName("@context")]

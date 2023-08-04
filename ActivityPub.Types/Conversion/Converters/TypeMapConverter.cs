@@ -116,34 +116,58 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     public override void Write(Utf8JsonWriter writer, TypeMap typeMap, JsonSerializerOptions options)
     {
-        // 1. Construct meta
+        // Construct meta
         var meta = new SerializationMetadata
         {
             JsonSerializerOptions = options,
             JsonNodeOptions = options.ToNodeOptions()
         };
 
-        // 2. Attempt TrySerializeIntoValue
+        // Attempt TrySerializeIntoValue
         if (TryWriteAsValue(writer, typeMap, meta))
             return;
 
-        // 3. Create node to hold the output
+        // Create node to hold the output
         var outputNode = new JsonObject(meta.JsonNodeOptions);
 
-        // 4. Write all entities into the node
+        // Write the TypeMap's own properties into the node
+        WriteTypeMap(typeMap, outputNode, options);
+
+        // Write all entities into the node
         foreach (var (entityType, entity) in typeMap.AllEntities)
         {
-            // 4.1. Attempt TrySerialize
+            // Attempt TrySerialize
             var adapters = GetAdaptersFor(entityType);
             if (adapters.TrySerializeAdapter?.TrySerialize(entity, meta, outputNode) == true)
                 continue;
 
-            // 4.2. Serialize with default logic
-            JsonSerializer.Serialize(writer, entity, entityType, options);
+            // Serialize with default logic
+            WriteEntity(entity, entityType, outputNode, meta);
         }
 
-        // 5. Write the node
-        outputNode.WriteTo(writer, meta.JsonSerializerOptions);
+        // Write the node
+        outputNode.WriteTo(writer, options);
+    }
+
+    private static void WriteEntity(ASEntity entity, Type entityType, JsonObject outputNode, SerializationMetadata meta)
+    {
+        // Convert to an intermediate object
+        var element = JsonSerializer.SerializeToElement(entity, entityType, meta.JsonSerializerOptions);
+        if (element.ValueKind != JsonValueKind.Object)
+            throw new JsonException($"Failed to write {entityType} to object - serialization produced unsupported JSON type {element.ValueKind}");
+
+        // Copy all properties
+        foreach (var property in element.EnumerateObject())
+        {
+            var valueNode = property.Value.ToNode(meta.JsonNodeOptions);
+            outputNode[property.Name] = valueNode;
+        }
+    }
+
+    private static void WriteTypeMap(TypeMap typeMap, JsonObject outputNode, JsonSerializerOptions options)
+    {
+        // "type" - AS / AP types. Can be string or array.
+        outputNode["type"] = JsonSerializer.SerializeToNode(typeMap.ASTypes, options);
     }
 
     private bool TryWriteAsValue(Utf8JsonWriter writer, TypeMap typeMap, SerializationMetadata meta)

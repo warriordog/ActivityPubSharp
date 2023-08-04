@@ -25,7 +25,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         [Fact]
         public void ShouldIncludeType()
         {
-            ObjectUnderTest.Types.Should().Contain("Object");
+            ObjectUnderTest.TypeMap.ASTypes.Should().Contain("Object");
         }
     }
 

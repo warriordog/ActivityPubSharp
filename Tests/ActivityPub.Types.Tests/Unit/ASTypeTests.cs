@@ -24,7 +24,7 @@ public abstract class ASTypeTests
         [Fact]
         public void ContainTypeName_ByDefault()
         {
-            ObjectUnderTest.Types.Should().Contain(StubASTypeEntity.StubType);
+            ObjectUnderTest.TypeMap.ASTypes.Should().Contain(StubASTypeEntity.StubType);
         }
     }
 

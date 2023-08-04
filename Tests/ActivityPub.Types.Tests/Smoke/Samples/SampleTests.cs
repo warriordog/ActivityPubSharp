@@ -27,7 +27,7 @@ public abstract class SampleTests : IClassFixture<JsonLdSerializerFixture>
         var valueObject = _jsonLdSerializer.Deserialize<ASType>(testInput);
         valueObject.Should().NotBeNull();
         valueObject.Should().BeOfType(expectedType);
-        valueObject?.Types.Should().Contain(sampleType);
+        valueObject?.TypeMap.ASTypes.Should().Contain(sampleType);
 
         // Test serialize
         var valueJson = _jsonLdSerializer.SerializeToElement(valueObject);
