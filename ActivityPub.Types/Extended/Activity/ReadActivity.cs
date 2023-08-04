@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor has read the object. 
 /// </summary>
-[ASTypeKey(ReadType)]
+[APType(ReadType)]
 public class ReadActivity : ASTransitiveActivity
 {
     public const string ReadType = "Read";
