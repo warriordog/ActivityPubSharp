@@ -13,7 +13,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// That is, the Question object is an Activity, but the direct object is the question itself and therefore it would not contain an object property.
 /// Either of the anyOf and oneOf properties MAY be used to express possible answers, but a Question object MUST NOT have both properties. 
 /// </summary>
-[ASTypeKey(QuestionType)]
+[APType(QuestionType)]
 public class QuestionActivity : ASIntransitiveActivity
 {
     public const string QuestionType = "Question";
