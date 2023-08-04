@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor is rejecting the object.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(RejectType)]
+[APType(RejectType)]
 public class RejectActivity : ASTransitiveActivity
 {
     public const string RejectType = "Reject";
