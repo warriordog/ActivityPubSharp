@@ -21,14 +21,17 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        // 1. Construct empty TypeMap
-        var typeMap = new TypeMap();
-
-        // 2. Read input into temporary object
+        // Read input into temporary object
         var jsonElement = JsonElement.ParseValue(ref reader);
 
-        // 3. Construct context for this conversion cycle
+        // Read JSON-LD context from the input JSON
         var context = ReadContext(jsonElement, options);
+
+        // Construct empty TypeMap.
+        // We will build this out progressively.
+        var typeMap = new TypeMap(context);
+
+        // Construct context for this conversion cycle
         var meta = new DeserializationMetadata
         {
             JsonSerializerOptions = options,
@@ -36,7 +39,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             TypeMap = typeMap
         };
 
-        // 4. Convert each type found in JSON
+        // Convert each type found in JSON
         var asTypes = ReadTypes(jsonElement, options);
         var types = _asTypeInfoCache.MapASTypes(asTypes);
         foreach (var entityType in types)
@@ -168,6 +171,9 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         // "type" - AS / AP types. Can be string or array.
         outputNode["type"] = JsonSerializer.SerializeToNode(typeMap.ASTypes, options);
+
+        // "@context" - JSON-LD context. Can be string, array, or object.
+        outputNode["@context"] = JsonSerializer.SerializeToNode(typeMap.LDContext, options);
     }
 
     private bool TryWriteAsValue(Utf8JsonWriter writer, TypeMap typeMap, SerializationMetadata meta)

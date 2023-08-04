@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Conversion.Overrides;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
 
@@ -26,6 +27,17 @@ public class TypeMap
     private readonly Dictionary<Type, ASEntity> _typeEntityMap = new();
 
     /// <summary>
+    /// Constructs a new, empty type graph initialized with the ActivityStreams context.
+    /// </summary>
+    public TypeMap() : this(JsonLDContext.ActivityStreams) {}
+
+    /// <summary>
+    /// Constructs a TypeMap with a pre-populated JSON-LD context.
+    /// </summary>
+    /// <param name="ldContext"></param>
+    internal TypeMap(JsonLDContext ldContext) => _ldContext = ldContext;
+
+    /// <summary>
     ///     Live set of all unique ActivityStreams types represented by this graph.
     /// </summary>
     /// <seealso cref="AllEntities" />
@@ -37,6 +49,9 @@ public class TypeMap
     /// </summary>
     /// <seealso cref="ASTypes" />
     public IReadOnlyDictionary<Type, ASEntity> AllEntities => _allEntities;
+
+    public IJsonLDContext LDContext => _ldContext;
+    private readonly JsonLDContext _ldContext;
 
     /// <summary>
     ///     Reference to the single entity which implements <see cref="IJsonValueSerialized{TThis}" />
@@ -159,6 +174,7 @@ public class TypeMap
 
     /// <summary>
     ///     Adds a new typed instance to the object.
+    ///     Metadata such as AS types and JSON-LD context is automatically updated.
     /// </summary>
     /// <remarks>
     ///     This method is internal, as it should only be called by <see cref="ASEntity" /> constructor.

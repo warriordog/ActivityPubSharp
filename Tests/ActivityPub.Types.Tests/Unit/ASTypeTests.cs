@@ -15,7 +15,7 @@ public abstract class ASTypeTests
         [Fact]
         public void ContainASContext_ByDefault()
         {
-            ObjectUnderTest.JsonLdContext.Should().Contain("https://www.w3.org/ns/activitystreams");
+            ObjectUnderTest.TypeMap.LDContext.Should().Contain("https://www.w3.org/ns/activitystreams");
         }
     }
 

@@ -48,5 +48,5 @@ public class DeserializationMetadata : ConversionMetadata
     ///     JSON-LD context in effect for this conversion.
     ///     Will always be present, even if not included in the JSON.
     /// </summary>
-    public required JsonLDContext LDContext { get; init; }
+    public required IJsonLDContext LDContext { get; init; }
 }

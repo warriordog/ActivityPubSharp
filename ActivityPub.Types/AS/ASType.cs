@@ -46,16 +46,6 @@ public abstract class ASType
     internal Dictionary<string, JsonElement> UnknownJsonProperties => Entity.UnknownJsonProperties;
 
     /// <summary>
-    ///     Lists the JSON-LD contexts used by this object.
-    ///     Should be a full URL
-    /// </summary>
-    public JsonLDContext JsonLdContext
-    {
-        get => Entity.JsonLdContext;
-        set => Entity.JsonLdContext = value;
-    }
-
-    /// <summary>
     ///     Provides the globally unique identifier for an Object or Link.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-id" />
@@ -143,10 +133,6 @@ public sealed class ASTypeEntity : ASEntity<ASType>
 
     /// <inheritdoc cref="ASType.UnknownJsonProperties" />
     internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
-
-    /// <inheritdoc cref="ASType.JsonLdContext" />
-    [JsonPropertyName("@context")]
-    public JsonLDContext JsonLdContext { get; set; } = JsonLDContext.ActivityStreams;
 
     /// <inheritdoc cref="ASType.Id" />
     [JsonPropertyName("id")]

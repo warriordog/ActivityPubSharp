@@ -14,8 +14,13 @@ namespace ActivityPub.Types.Util;
 /// <seealso href="https://www.w3.org/TR/json-ld11/#dfn-context" />
 /// <seealso href="https://www.w3.org/TR/json-ld11/#context-definitions" />
 /// <seealso href="https://www.w3.org/TR/json-ld11/#the-context" />
+public interface IJsonLDContext : IReadOnlySet<JsonLDContextObject> {}
+
+/// <summary>
+///     Mutable implementation of IJsonLDContext.
+/// </summary>
 [JsonConverter(typeof(JsonLDContextConverter))]
-public class JsonLDContext : HashSet<JsonLDContextObject>
+public class JsonLDContext : HashSet<JsonLDContextObject>, IJsonLDContext
 {
     /// <summary>
     ///     Constructs an empty JsonLDContext.
