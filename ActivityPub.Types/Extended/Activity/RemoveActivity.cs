@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Indicates that the actor is removing the object.
 /// If specified, the origin indicates the context from which the object is being removed. 
 /// </summary>
-[ASTypeKey(RemoveType)]
+[APType(RemoveType)]
 public class RemoveActivity : ASTargetedActivity
 {
     public const string RemoveType = "Remove";
