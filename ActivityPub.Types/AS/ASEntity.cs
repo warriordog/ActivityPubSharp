@@ -18,7 +18,7 @@ namespace ActivityPub.Types.AS;
 /// <seealso cref="ASEntity{TType}"/>
 public abstract class ASEntity
 {
-    protected ASEntity(Type nonEntityType, bool isValueSerialized)
+    internal ASEntity(Type nonEntityType, bool isValueSerialized)
     {
         NonEntityType = nonEntityType;
         IsValueSerialized = isValueSerialized;
