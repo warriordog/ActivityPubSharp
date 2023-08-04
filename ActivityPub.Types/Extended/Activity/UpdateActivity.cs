@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// Note, however, that this vocabulary does not define a mechanism for describing the actual set of modifications made to object.
 /// The target and origin typically have no defined meaning. 
 /// </summary>
-[ASTypeKey(UndoType)]
+[APType(UndoType)]
 public class UpdateActivity : ASTransitiveActivity
 {
     public const string UndoType = "Update";
