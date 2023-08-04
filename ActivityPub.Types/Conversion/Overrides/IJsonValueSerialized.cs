@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Nodes;
+using ActivityPub.Types.AS;
 
 namespace ActivityPub.Types.Conversion.Overrides;
 

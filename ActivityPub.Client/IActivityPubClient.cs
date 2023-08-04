@@ -3,7 +3,7 @@
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using ActivityPub.Types;
+using ActivityPub.Types.AS;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Client;

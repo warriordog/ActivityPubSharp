@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Conversion.Overrides;
 

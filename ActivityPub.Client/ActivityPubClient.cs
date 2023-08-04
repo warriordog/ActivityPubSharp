@@ -4,7 +4,7 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 using ActivityPub.Common.Util;
-using ActivityPub.Types;
+using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Util;
 

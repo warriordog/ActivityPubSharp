@@ -4,7 +4,7 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 using ActivityPub.Client;
-using ActivityPub.Types;
+using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Util;
 using InternalUtils;
