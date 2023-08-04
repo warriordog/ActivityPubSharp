@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// A specialization of Accept indicating that the acceptance is tentative.
 /// </summary>
-[ASTypeKey(TentativeAcceptType)]
+[APType(TentativeAcceptType)]
 public class TentativeAcceptActivity : AcceptActivity
 {
     public const string TentativeAcceptType = "TentativeAccept";
