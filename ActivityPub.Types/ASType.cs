@@ -25,7 +25,7 @@ public abstract class ASType
     protected ASType()
     {
         TypeMap = new TypeMap();
-        Entity = new ASTypeEntity(TypeMap);
+        Entity = new ASTypeEntity { TypeMap = TypeMap };
     }
 
     protected ASType(TypeMap typeMap)
@@ -143,14 +143,6 @@ public abstract class ASType
 /// <inheritdoc cref="ASType"/>
 public sealed class ASTypeEntity : ASBase<ASType>
 {
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap)"/>
-    public ASTypeEntity(TypeMap typeMap) : base(typeMap) {}
-
-    /// <inheritdoc cref="ASBase{T}()"/>
-    [JsonConstructor]
-    public ASTypeEntity() {}
-
-
     /// <inheritdoc cref="ASType.UnknownJsonProperties"/>
     internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
 

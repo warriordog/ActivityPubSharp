@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Activity;
@@ -14,7 +13,7 @@ public class LikeActivity : ASTransitiveActivity
 {
     private LikeActivityEntity Entity { get; }
 
-    public LikeActivity() => Entity = new LikeActivityEntity(TypeMap);
+    public LikeActivity() => Entity = new LikeActivityEntity { TypeMap = TypeMap };
     public LikeActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<LikeActivityEntity>();
 }
 
@@ -24,15 +23,10 @@ public class LikeActivity : ASTransitiveActivity
 public sealed class LikeActivityEntity : ASBase<LikeActivity>
 {
     public const string LikeType = "Like";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => LikeType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASActivityEntity.ActivityType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public LikeActivityEntity(TypeMap typeMap) : base(typeMap, LikeType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public LikeActivityEntity() : base(LikeType, ReplacedTypes) {}
 }

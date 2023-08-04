@@ -19,10 +19,10 @@ public class GlitchSocSampleTests : SampleTests
 
 
     [Fact]
-    public void CollectionShouldConvert() => TestSample(typeof(ASCollection), CollectionTypes.CollectionType);
+    public void CollectionShouldConvert() => TestSample(typeof(ASCollection), ASCollectionEntity.CollectionType);
 
     [Fact]
-    public void CollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage), CollectionTypes.CollectionPageType);
+    public void CollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage), ASCollectionPageEntity.CollectionPageType);
 
     [Fact]
     public void CreateShouldConvert() => TestSample(typeof(CreateActivity), CreateActivityEntity.CreateType);
@@ -49,10 +49,10 @@ public class GlitchSocSampleTests : SampleTests
     public void NoteShouldConvert() => TestSample(typeof(NoteObject), NoteObjectEntity.NoteType);
 
     [Fact]
-    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASCollection), CollectionTypes.OrderedCollectionType);
+    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASCollection), ASCollectionEntity.OrderedCollectionType);
 
     [Fact]
-    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage), CollectionTypes.OrderedCollectionPageType);
+    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage), ASCollectionPageEntity.OrderedCollectionPageType);
 
     [Fact]
     public void PersonActorShouldConvert() => TestSample(typeof(PersonActor), PersonActorEntity.PersonType);

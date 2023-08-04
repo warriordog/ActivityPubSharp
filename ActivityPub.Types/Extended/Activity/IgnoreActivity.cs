@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Activity;
@@ -13,7 +12,7 @@ public class IgnoreActivity : ASTransitiveActivity
 {
     private IgnoreActivityEntity Entity { get; }
 
-    public IgnoreActivity() => Entity = new IgnoreActivityEntity(TypeMap);
+    public IgnoreActivity() => Entity = new IgnoreActivityEntity { TypeMap = TypeMap };
     public IgnoreActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<IgnoreActivityEntity>();
 }
 
@@ -23,15 +22,10 @@ public class IgnoreActivity : ASTransitiveActivity
 public sealed class IgnoreActivityEntity : ASBase<IgnoreActivity>
 {
     public const string IgnoreType = "Ignore";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => IgnoreType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASActivityEntity.ActivityType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public IgnoreActivityEntity(TypeMap typeMap) : base(typeMap, IgnoreType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public IgnoreActivityEntity() : base(IgnoreType, ReplacedTypes) {}
 }

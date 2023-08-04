@@ -14,7 +14,7 @@ public class ProfileObject : ASObject
 {
     private ProfileObjectEntity Entity { get; }
 
-    public ProfileObject() => Entity = new ProfileObjectEntity(TypeMap);
+    public ProfileObject() => Entity = new ProfileObjectEntity { TypeMap = TypeMap };
     public ProfileObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ProfileObjectEntity>();
 
     /// <summary>
@@ -34,17 +34,12 @@ public class ProfileObject : ASObject
 public sealed class ProfileObjectEntity : ASBase<ProfileObject>
 {
     public const string ProfileType = "Profile";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => ProfileType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASObjectEntity.ObjectType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public ProfileObjectEntity(TypeMap typeMap) : base(typeMap, ProfileType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ProfileObjectEntity() : base(ProfileType, ReplacedTypes) {}
 
     /// <inheritdoc cref="ProfileObject.Describes"/>
     [JsonPropertyName("describes")]

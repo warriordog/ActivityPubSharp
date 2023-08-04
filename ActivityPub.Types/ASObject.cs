@@ -19,7 +19,7 @@ public class ASObject : ASType
     private ASObjectEntity Entity { get; }
 
 
-    public ASObject() => Entity = new ASObjectEntity(TypeMap);
+    public ASObject() => Entity = new ASObjectEntity { TypeMap = TypeMap };
     public ASObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASObjectEntity>();
 
 
@@ -304,14 +304,7 @@ public class ASObject : ASType
 public sealed class ASObjectEntity : ASBase<ASObject>
 {
     public const string ObjectType = "Object";
-
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap, string, IReadOnlySet{string}?)"/>
-    public ASObjectEntity(TypeMap typeMap) : base(typeMap, ObjectType) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ASObjectEntity() : base(ObjectType) {}
+    public override string ASTypeName => ObjectType;
 
 
     /// <inheritdoc cref="ASObject.Attachment"/>

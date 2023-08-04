@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
-using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
 
@@ -17,13 +16,13 @@ namespace ActivityPub.Types.Collection;
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage"/>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
-[ASTypeKey(CollectionPageType)]
+[ASTypeKey(ASCollectionPageEntity.CollectionPageType)]
 public class ASCollectionPage : ASCollection
 {
     private ASCollectionPageEntity Entity { get; }
 
 
-    public ASCollectionPage() => Entity = new ASCollectionPageEntity(TypeMap);
+    public ASCollectionPage() => Entity = new ASCollectionPageEntity { TypeMap = TypeMap };
     public ASCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionPageEntity>();
 
 
@@ -77,17 +76,14 @@ public class ASCollectionPage : ASCollection
 [ImpliesOtherEntity(typeof(ASCollection))]
 public sealed class ASCollectionPageEntity : ASBase<ASCollection>
 {
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
-    {
-        CollectionType
-    };
-    
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public ASCollectionPageEntity(TypeMap typeMap) : base(typeMap, CollectionPageType, ReplacedTypes) {}
+    public const string CollectionPageType = "CollectionPage";
+    public const string OrderedCollectionPageType = "OrderedCollectionPage";
+    public override string ASTypeName => CollectionPageType;
 
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ASCollectionPageEntity() : base(CollectionPageType, ReplacedTypes) {}
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    {
+        ASCollectionEntity.CollectionType
+    };
 
     /// <inheritdoc cref="ASCollectionPage.Next"/>
     [JsonPropertyName("next")]

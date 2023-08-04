@@ -17,31 +17,39 @@ public abstract class ASBase
     /// Will be null for synthetic types.
     /// For the full list of names in the object graph, use <see cref="TypeMap.ASTypes"/>.
     /// </summary>
-    public string? ASTypeName { get; }
+    /// <remarks>
+    /// Entity implementations should override this to opt-in to the functionality.
+    /// </remarks>
+    public virtual string? ASTypeName => null;
 
     /// <summary>
     /// If set, represents a set of AS Type names that should be excluded / removed when this entity is added to a graph.
+    /// Ignored if <see cref="ASTypeName"/> is null.
+    /// <para>
     /// For example, MentionLink extends Link so the latter should be removed when both are present.
     /// This does not remove the actual entities - only the type names.
+    /// </para>
     /// </summary>
-    public IReadOnlySet<string>? ReplacesASTypes { get; }
+    /// <remarks>
+    /// Entity implementations should override this to opt-in to the functionality.
+    /// </remarks>
+    public virtual IReadOnlySet<string>? ReplacesASTypes => null;
 
     protected ASBase(Type nonEntityType, bool isValueSerialized)
     {
         NonEntityType = nonEntityType;
         IsValueSerialized = isValueSerialized;
-        ASTypeName = null;
-        ReplacesASTypes = null;
     }
 
-    protected ASBase(Type nonEntityType, bool isValueSerialized, string asTypeName, IReadOnlySet<string>? replacesASTypes)
+    /// <summary>
+    /// Links this entity to the provided TypeMap.
+    /// Can only be called as an initializer.
+    /// </summary>
+    /// <throws cref="InvalidOperationException">If an entity of this type already exists in the graph</throws>
+    public TypeMap TypeMap
     {
-        NonEntityType = nonEntityType;
-        IsValueSerialized = isValueSerialized;
-        ASTypeName = asTypeName;
-        ReplacesASTypes = replacesASTypes;
+        init => value.Add(this);
     }
-
 
     /// <summary>
     /// Creates an instance of the non-entity type that can wrap this entity.
@@ -68,35 +76,14 @@ public abstract class ASBase
 public abstract class ASBase<TType> : ASBase
     where TType : ASType
 {
-    // Expensive check, but its static so constant cost (once for each entity type)
+    // Expensive reflection / code-gen operations are static to reduce overhead.
     private static readonly bool ImplementsValueSerialized = typeof(TType).IsAssignableToGenericType(typeof(IJsonValueSerialized<>));
-
-    /// <summary>
-    /// Creates an anonymous entity and attaches it to a specified type graph.
-    /// </summary>
-    /// <throws cref="InvalidOperationException">If an entity of this type already exists in the graph</throws>
-    protected ASBase(TypeMap typeMap) : this()
-        => typeMap.Add(this);
-
-    /// <summary>
-    /// Creates a named entity and attaches it to a specified type graph.
-    /// </summary>
-    /// <throws cref="InvalidOperationException">If an entity of this type already exists in the graph</throws>
-    protected ASBase(TypeMap typeMap, string asTypeName, IReadOnlySet<string>? replacesASTypes = null) : this(asTypeName, replacesASTypes)
-        => typeMap.Add(this);
-    
-    /// <summary>
-    /// Creates a free-floating anonymous entity, not attached to any graph.
-    /// </summary>
-    protected ASBase()
-        : base(typeof(TType), ImplementsValueSerialized) {}
-    
-    /// <summary>
-    /// Creates a free-floating named entity, not attached to any graph.
-    /// </summary>
-    protected ASBase(string asTypeName, IReadOnlySet<string>? replacesASTypes = null)
-        : base(typeof(TType), ImplementsValueSerialized, asTypeName, replacesASTypes) {}
-
     private static readonly Func<TypeMap, TType> TypeConstructor = TypeUtils.CreateDynamicConstructor<TypeMap, TType>();
-    internal override sealed ASType CreateTypeInstanceBase(TypeMap typeMap) => TypeConstructor(typeMap);
+
+    /// <summary>
+    /// Creates a new entity.
+    /// </summary>
+    protected ASBase() : base(typeof(TType), ImplementsValueSerialized) {}
+
+    internal sealed override ASType CreateTypeInstanceBase(TypeMap typeMap) => TypeConstructor(typeMap);
 }

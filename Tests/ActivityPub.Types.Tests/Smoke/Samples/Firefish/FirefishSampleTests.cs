@@ -36,10 +36,10 @@ public class FirefishSampleTests : SampleTests
     public void ObjectShouldConvert() => TestSample(typeof(ASObject), ASObjectEntity.ObjectType);
 
     [Fact]
-    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASCollection), CollectionTypes.OrderedCollectionType);
+    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASCollection), ASCollectionEntity.OrderedCollectionType);
 
     [Fact]
-    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage), CollectionTypes.OrderedCollectionPageType);
+    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage), ASCollectionPageEntity.OrderedCollectionPageType);
 
     [Fact]
     public void PersonActorShouldConvert() => TestSample(typeof(PersonActor), PersonActorEntity.PersonType);

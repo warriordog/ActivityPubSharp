@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Actor;
@@ -13,7 +12,7 @@ public class PersonActor : ASActor
 {
     private PersonActorEntity Entity { get; }
 
-    public PersonActor() => Entity = new PersonActorEntity(TypeMap);
+    public PersonActor() => Entity = new PersonActorEntity { TypeMap = TypeMap };
     public PersonActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PersonActorEntity>();
 }
 
@@ -23,15 +22,10 @@ public class PersonActor : ASActor
 public sealed class PersonActorEntity : ASBase<PersonActor>
 {
     public const string PersonType = "Person";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => PersonType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASObjectEntity.ObjectType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public PersonActorEntity(TypeMap typeMap) : base(typeMap, PersonType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public PersonActorEntity() : base(PersonType, ReplacedTypes) {}
 }

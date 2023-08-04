@@ -2,7 +2,6 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Types.Attributes;
-using Newtonsoft.Json;
 
 namespace ActivityPub.Types.Tests.Unit;
 
@@ -69,7 +68,7 @@ public abstract class ASTypeTests
     {
         private StubASTypeEntity Entity { get; }
 
-        public StubASType() => Entity = new StubASTypeEntity(TypeMap);
+        public StubASType() => Entity = new StubASTypeEntity { TypeMap = TypeMap };
         public StubASType(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<StubASTypeEntity>();
     }
 
@@ -77,12 +76,6 @@ public abstract class ASTypeTests
     private sealed class StubASTypeEntity : ASBase<StubASType>
     {
         public const string StubType = "Stub";
-
-        /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
-        public StubASTypeEntity(TypeMap typeMap) : base(typeMap, StubType) {}
-
-        /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
-        [JsonConstructor]
-        public StubASTypeEntity() : base(StubType) {}
+        public override string ASTypeName => StubType;
     }
 }

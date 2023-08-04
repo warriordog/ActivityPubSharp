@@ -20,7 +20,7 @@ public class ASActivity : ASObject
     private ASActivityEntity Entity { get; }
 
 
-    public ASActivity() => Entity = new ASActivityEntity(TypeMap);
+    public ASActivity() => Entity = new ASActivityEntity { TypeMap = TypeMap };
     public ASActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASActivityEntity>();
 
 
@@ -76,19 +76,12 @@ public class ASActivity : ASObject
 public sealed class ASActivityEntity : ASBase<ASActivity>, ISubTypeDeserialized
 {
     public const string ActivityType = "Activity";
+    public override string ASTypeName => ActivityType;
 
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASObjectEntity.ObjectType
     };
-
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public ASActivityEntity(TypeMap typeMap) : base(typeMap, ActivityType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ASActivityEntity() : base(ActivityType, ReplacedTypes) {}
 
 
     /// <inheritdoc cref="ASActivity.Actor"/>

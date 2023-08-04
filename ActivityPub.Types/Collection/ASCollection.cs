@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
-using static ActivityPub.Types.Collection.CollectionTypes;
 
 namespace ActivityPub.Types.Collection;
 
@@ -24,7 +23,7 @@ public class ASCollection : ASObject
     private ASCollectionEntity Entity { get; }
 
 
-    public ASCollection() => Entity = new ASCollectionEntity(TypeMap);
+    public ASCollection() => Entity = new ASCollectionEntity { TypeMap = TypeMap };
     public ASCollection(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionEntity>();
 
 
@@ -123,17 +122,14 @@ public class ASCollection : ASObject
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASCollectionEntity : ASBase<ASCollection>
 {
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public const string CollectionType = "Collection";
+    public const string OrderedCollectionType = "OrderedCollection";
+    public override string ASTypeName => CollectionType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASObjectEntity.ObjectType
     };
-    
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public ASCollectionEntity(TypeMap typeMap) : base(typeMap, CollectionType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ASCollectionEntity() : base(CollectionType, ReplacedTypes) {}
 
     /// <inheritdoc cref="ASCollection.Current"/>
     [JsonPropertyName("current")]

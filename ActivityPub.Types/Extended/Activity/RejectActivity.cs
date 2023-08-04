@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Activity;
@@ -14,7 +13,7 @@ public class RejectActivity : ASTransitiveActivity
 {
     private RejectActivityEntity Entity { get; }
 
-    public RejectActivity() => Entity = new RejectActivityEntity(TypeMap);
+    public RejectActivity() => Entity = new RejectActivityEntity { TypeMap = TypeMap };
     public RejectActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<RejectActivityEntity>();
 }
 
@@ -24,15 +23,10 @@ public class RejectActivity : ASTransitiveActivity
 public sealed class RejectActivityEntity : ASBase<RejectActivity>
 {
     public const string RejectType = "Reject";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => RejectType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASActivityEntity.ActivityType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public RejectActivityEntity(TypeMap typeMap) : base(typeMap, RejectType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public RejectActivityEntity() : base(RejectType, ReplacedTypes) {}
 }

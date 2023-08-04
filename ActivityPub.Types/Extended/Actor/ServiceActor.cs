@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Actor;
@@ -13,7 +12,7 @@ public class ServiceActor : ASActor
 {
     private ServiceActorEntity Entity { get; }
 
-    public ServiceActor() => Entity = new ServiceActorEntity(TypeMap);
+    public ServiceActor() => Entity = new ServiceActorEntity { TypeMap = TypeMap };
     public ServiceActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ServiceActorEntity>();
 }
 
@@ -23,15 +22,10 @@ public class ServiceActor : ASActor
 public sealed class ServiceActorEntity : ASBase<ServiceActor>
 {
     public const string ServiceType = "Service";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => ServiceType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASObjectEntity.ObjectType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public ServiceActorEntity(TypeMap typeMap) : base(typeMap, ServiceType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ServiceActorEntity() : base(ServiceType, ReplacedTypes) {}
 }

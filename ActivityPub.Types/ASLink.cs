@@ -23,9 +23,9 @@ public class ASLink : ASType
 {
     private ASLinkEntity Entity { get; }
 
-    public ASLink() => Entity = new ASLinkEntity(TypeMap)
+    public ASLink() => Entity = new ASLinkEntity
     {
-        // Initialized by required property below
+        TypeMap = TypeMap,
         HRef = null!
     };
 
@@ -100,15 +100,7 @@ public class ASLink : ASType
 public sealed class ASLinkEntity : ASBase<ASLink>, ICustomJsonDeserialized<ASLinkEntity>, IJsonValueSerialized<ASLinkEntity>
 {
     public const string LinkType = "Link";
-
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public ASLinkEntity(TypeMap typeMap) : base(typeMap, LinkType) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ASLinkEntity() : base(LinkType) {}
-
+    public override string ASTypeName => LinkType;
 
     /// <inheritdoc cref="ASLink.HRef"/>
     [JsonPropertyName("href")]
@@ -135,8 +127,9 @@ public sealed class ASLinkEntity : ASBase<ASLink>, ICustomJsonDeserialized<ASLin
         // We either parse from string, or allow parser to use default logic
         if (element.ValueKind == JsonValueKind.String)
         {
-            obj = new ASLinkEntity(meta.TypeMap)
+            obj = new ASLinkEntity
             {
+                TypeMap = meta.TypeMap,
                 HRef = element.GetString()!
             };
             return true;

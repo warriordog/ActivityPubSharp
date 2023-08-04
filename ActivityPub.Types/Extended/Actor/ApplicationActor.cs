@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Actor;
@@ -13,7 +12,7 @@ public class ApplicationActor : ASActor
 {
     private ApplicationActorEntity Entity { get; }
 
-    public ApplicationActor() => Entity = new ApplicationActorEntity(TypeMap);
+    public ApplicationActor() => Entity = new ApplicationActorEntity { TypeMap = TypeMap };
     public ApplicationActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ApplicationActorEntity>();
 }
 
@@ -23,15 +22,10 @@ public class ApplicationActor : ASActor
 public sealed class ApplicationActorEntity : ASBase<ApplicationActor>
 {
     public const string ApplicationType = "Application";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => ApplicationType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASObjectEntity.ObjectType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public ApplicationActorEntity(TypeMap typeMap) : base(typeMap, ApplicationType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ApplicationActorEntity() : base(ApplicationType, ReplacedTypes) {}
 }

@@ -15,8 +15,9 @@ public class ASTargetedActivity : ASTransitiveActivity
     private ASTargetedActivityEntity Entity { get; }
 
 
-    public ASTargetedActivity() => Entity = new ASTargetedActivityEntity(TypeMap)
+    public ASTargetedActivity() => Entity = new ASTargetedActivityEntity
     {
+        TypeMap = TypeMap,
         Target = null!
     };
 
@@ -43,13 +44,6 @@ public class ASTargetedActivity : ASTransitiveActivity
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ASTargetedActivityEntity : ASBase<ASTargetedActivity>
 {
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap)"/>
-    public ASTargetedActivityEntity(TypeMap typeMap) : base(typeMap) {}
-
-    /// <inheritdoc cref="ASBase{T}()"/>
-    [JsonConstructor]
-    public ASTargetedActivityEntity() {}
-
     /// <inheritdoc cref="ASTargetedActivity.Target"/>
     [JsonPropertyName("target")]
     public required LinkableList<ASObject> Target { get; set; }

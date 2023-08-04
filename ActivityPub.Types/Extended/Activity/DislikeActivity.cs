@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Activity;
@@ -13,7 +12,7 @@ public class DislikeActivity : ASTransitiveActivity
 {
     private DislikeActivityEntity Entity { get; }
 
-    public DislikeActivity() => Entity = new DislikeActivityEntity(TypeMap);
+    public DislikeActivity() => Entity = new DislikeActivityEntity { TypeMap = TypeMap };
     public DislikeActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<DislikeActivityEntity>();
 }
 
@@ -23,15 +22,10 @@ public class DislikeActivity : ASTransitiveActivity
 public sealed class DislikeActivityEntity : ASBase<DislikeActivity>
 {
     public const string DislikeType = "Dislike";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => DislikeType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASActivityEntity.ActivityType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public DislikeActivityEntity(TypeMap typeMap) : base(typeMap, DislikeType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public DislikeActivityEntity() : base(DislikeType, ReplacedTypes) {}
 }

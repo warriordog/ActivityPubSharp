@@ -21,8 +21,9 @@ public class ASActor : ASObject
     private ASActorEntity Entity { get; }
 
 
-    public ASActor() => Entity = new ASActorEntity(TypeMap)
+    public ASActor() => Entity = new ASActorEntity
     {
+        TypeMap = TypeMap,
         Inbox = null!,
         Outbox = null!
     };
@@ -125,14 +126,6 @@ public class ASActor : ASObject
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASActorEntity : ASBase<ASActor>
 {
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap)"/>
-    public ASActorEntity(TypeMap typeMap) : base(typeMap) {}
-
-    /// <inheritdoc cref="ASBase{T}()"/>
-    [JsonConstructor]
-    public ASActorEntity() {}
-
-
     /// <inheritdoc cref="ASActor.Inbox"/>
     [JsonPropertyName("inbox")]
     public required ASLink Inbox { get; set; }

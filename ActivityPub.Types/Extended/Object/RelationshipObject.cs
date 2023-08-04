@@ -16,7 +16,7 @@ public class RelationshipObject : ASObject
     private RelationshipObjectEntity Entity { get; }
 
 
-    public RelationshipObject() => Entity = new RelationshipObjectEntity(TypeMap);
+    public RelationshipObject() => Entity = new RelationshipObjectEntity { TypeMap = TypeMap };
     public RelationshipObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<RelationshipObjectEntity>();
 
     /// <summary>
@@ -60,17 +60,12 @@ public class RelationshipObject : ASObject
 public sealed class RelationshipObjectEntity : ASBase<RelationshipObject>
 {
     public const string RelationshipType = "Relationship";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => RelationshipType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASObjectEntity.ObjectType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public RelationshipObjectEntity(TypeMap typeMap) : base(typeMap, RelationshipType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public RelationshipObjectEntity() : base(RelationshipType, ReplacedTypes) {}
 
     /// <inheritdoc cref="RelationshipObject.Object"/>
     [JsonPropertyName("object")]

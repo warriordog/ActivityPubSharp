@@ -17,7 +17,7 @@ public class QuestionActivity : ASIntransitiveActivity
 {
     private QuestionActivityEntity Entity { get; }
 
-    public QuestionActivity() => Entity = new QuestionActivityEntity(TypeMap);
+    public QuestionActivity() => Entity = new QuestionActivityEntity { TypeMap = TypeMap };
     public QuestionActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<QuestionActivityEntity>();
 
     /// <summary>
@@ -79,17 +79,12 @@ public class QuestionActivity : ASIntransitiveActivity
 public sealed class QuestionActivityEntity : ASBase<QuestionActivity>
 {
     public const string QuestionType = "Question";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => QuestionType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASIntransitiveActivityEntity.IntransitiveActivityType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public QuestionActivityEntity(TypeMap typeMap) : base(typeMap, QuestionType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public QuestionActivityEntity() : base(QuestionType, ReplacedTypes) {}
 
     /// <inheritdoc cref="QuestionActivity.OneOf"/>
     [JsonPropertyName("oneOf")]

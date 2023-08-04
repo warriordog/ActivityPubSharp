@@ -128,7 +128,7 @@ public class FakeObjectWithSpecialNullability : ASObject
 {
     private FakeObjectWithSpecialNullabilityEntity Entity { get; }
 
-    public FakeObjectWithSpecialNullability() => Entity = new FakeObjectWithSpecialNullabilityEntity(TypeMap);
+    public FakeObjectWithSpecialNullability() => Entity = new FakeObjectWithSpecialNullabilityEntity { TypeMap = TypeMap };
     public FakeObjectWithSpecialNullability(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<FakeObjectWithSpecialNullabilityEntity>();
 
 
@@ -150,15 +150,8 @@ public class FakeObjectWithSpecialNullability : ASObject
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class FakeObjectWithSpecialNullabilityEntity : ASBase<FakeObjectWithSpecialNullability>
 {
-    public const string TypeName = "FakeObjectWithSpecialNullability";
-
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string?,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public FakeObjectWithSpecialNullabilityEntity(TypeMap typeMap) : base(typeMap, TypeName) {}
-
-    /// <inheritdoc cref="ASBase{T}(string?, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public FakeObjectWithSpecialNullabilityEntity() : base(TypeName) {}
+    public const string FakeObjectWithSpecialNullabilityEntityName = "FakeObjectWithSpecialNullability";
+    public override string ASTypeName => FakeObjectWithSpecialNullabilityEntityName;
 
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Object;
@@ -13,7 +12,7 @@ public class ImageObject : DocumentObject
 {
     private ImageObjectEntity Entity { get; }
 
-    public ImageObject() => Entity = new ImageObjectEntity(TypeMap);
+    public ImageObject() => Entity = new ImageObjectEntity { TypeMap = TypeMap };
     public ImageObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ImageObjectEntity>();
 }
 
@@ -23,15 +22,10 @@ public class ImageObject : DocumentObject
 public sealed class ImageObjectEntity : ASBase<ImageObject>
 {
     public const string ImageType = "Image";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => ImageType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         DocumentObjectEntity.DocumentType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public ImageObjectEntity(TypeMap typeMap) : base(typeMap, ImageType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public ImageObjectEntity() : base(ImageType, ReplacedTypes) {}
 }

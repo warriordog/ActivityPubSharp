@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Extended.Activity;
@@ -15,7 +14,7 @@ public class TravelActivity : ASIntransitiveActivity
 {
     private TravelActivityEntity Entity { get; }
 
-    public TravelActivity() => Entity = new TravelActivityEntity(TypeMap);
+    public TravelActivity() => Entity = new TravelActivityEntity { TypeMap = TypeMap };
     public TravelActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TravelActivityEntity>();
 }
 
@@ -25,15 +24,10 @@ public class TravelActivity : ASIntransitiveActivity
 public sealed class TravelActivityEntity : ASBase<TravelActivity>
 {
     public const string TravelType = "Travel";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => TravelType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASIntransitiveActivityEntity.IntransitiveActivityType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public TravelActivityEntity(TypeMap typeMap) : base(typeMap, TravelType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public TravelActivityEntity() : base(TravelType, ReplacedTypes) {}
 }

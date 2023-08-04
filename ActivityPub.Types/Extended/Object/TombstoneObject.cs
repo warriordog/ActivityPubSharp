@@ -15,7 +15,7 @@ public class TombstoneObject : ASObject
     private TombstoneObjectEntity Entity { get; }
 
 
-    public TombstoneObject() => Entity = new TombstoneObjectEntity(TypeMap);
+    public TombstoneObject() => Entity = new TombstoneObjectEntity { TypeMap = TypeMap };
     public TombstoneObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TombstoneObjectEntity>();
 
     /// <summary>
@@ -45,17 +45,12 @@ public class TombstoneObject : ASObject
 public sealed class TombstoneObjectEntity : ASBase<TombstoneObject>
 {
     public const string TombstoneType = "Tombstone";
-    private static readonly IReadOnlySet<string> ReplacedTypes = new HashSet<string>()
+    public override string ASTypeName => TombstoneType;
+
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
     {
         ASObjectEntity.ObjectType
     };
-
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap,string,System.Collections.Generic.IReadOnlySet{string}?)"/>
-    public TombstoneObjectEntity(TypeMap typeMap) : base(typeMap, TombstoneType, ReplacedTypes) {}
-
-    /// <inheritdoc cref="ASBase{T}(string, IReadOnlySet{string}?)"/>
-    [JsonConstructor]
-    public TombstoneObjectEntity() : base(TombstoneType, ReplacedTypes) {}
 
     /// <inheritdoc cref="TombstoneObject.FormerType"/>
     [JsonPropertyName("formerType")]

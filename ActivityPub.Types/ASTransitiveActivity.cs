@@ -20,8 +20,9 @@ public class ASTransitiveActivity : ASActivity
     private ASTransitiveActivityEntity Entity { get; }
 
 
-    public ASTransitiveActivity() => Entity = new ASTransitiveActivityEntity(TypeMap)
+    public ASTransitiveActivity() => Entity = new ASTransitiveActivityEntity
     {
+        TypeMap = TypeMap,
         Object = null!
     };
 
@@ -45,14 +46,6 @@ public class ASTransitiveActivity : ASActivity
 [ImpliesOtherEntity(typeof(ASActivityEntity))]
 public sealed class ASTransitiveActivityEntity : ASBase<ASTransitiveActivity>, ISubTypeDeserialized
 {
-    /// <inheritdoc cref="ASBase{TType}(ActivityPub.Types.TypeMap)"/>
-    public ASTransitiveActivityEntity(TypeMap typeMap) : base(typeMap) {}
-
-    /// <inheritdoc cref="ASBase{T}()"/>
-    [JsonConstructor]
-    public ASTransitiveActivityEntity() {}
-
-
     /// <inheritdoc cref="ASTransitiveActivity.Object"/>
     [JsonPropertyName("object")]
     public required LinkableList<ASObject> Object { get; set; } = new();
