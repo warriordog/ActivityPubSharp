@@ -7,11 +7,11 @@ using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.AS;
+namespace ActivityPub.Types.AS.Collection;
 
 /// <summary>
-///     A Collection is a subtype of Object that represents ordered or unordered sets of Object or Link instances.
-///     May be paged or unpaged, and ordered or unordered.
+///     A Collection is a subtype of Object that represents unordered sets of Object or Link instances.
+///     May be paged or unpaged.
 /// </summary>
 /// <remarks>
 ///     Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the Collection type.
@@ -23,20 +23,6 @@ public class ASCollection : ASObject
     public ASCollection() => Entity = new ASCollectionEntity { TypeMap = TypeMap };
     public ASCollection(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionEntity>();
     private ASCollectionEntity Entity { get; }
-
-
-    /// <summary>
-    ///     Indicates if this collection is ordered or unordered.
-    ///     If true, this will convert to an Ordered collection type.
-    /// </summary>
-    /// <remarks>
-    ///     This is a synthetic type that does not exist in the ActivityStreams specification.
-    /// </remarks>
-    public bool IsOrdered
-    {
-        get => Entity.IsOrdered;
-        set => Entity.IsOrdered = value;
-    }
 
     /// <summary>
     ///     In a paged Collection, indicates the page that contains the most recently updated member items.
@@ -103,25 +89,23 @@ public class ASCollection : ASObject
     /// <summary>
     ///     True if this is a paged collection, false otherwise.
     /// </summary>
-    public bool IsPaged => Entity.IsPaged;
+    public bool IsPaged => Current != null || First != null || Last != null;
 
     /// <summary>
     ///     True if this collection instance contains items, false otherwise.
     /// </summary>
     [MemberNotNullWhen(true, nameof(Items))]
-    public bool HasItems => Entity.HasItems;
+    public bool HasItems => Items?.Any() == true;
 
     public static implicit operator ASCollection(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
 }
 
 /// <inheritdoc cref="ASCollection" />
 [ASTypeKey(CollectionType)]
-[ASTypeKey(OrderedCollectionType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASCollectionEntity : ASEntity<ASCollection>
 {
     public const string CollectionType = "Collection";
-    public const string OrderedCollectionType = "OrderedCollection";
 
     private int? _totalItems;
     public override string ASTypeName => CollectionType;
@@ -156,17 +140,4 @@ public sealed class ASCollectionEntity : ASEntity<ASCollection>
     /// <inheritdoc cref="ASCollection.Items" />
     [JsonPropertyName("items")]
     public LinkableList<ASObject>? Items { get; set; }
-
-    /// <inheritdoc cref="ASCollection.IsPaged" />
-    [JsonIgnore]
-    public bool IsPaged => Current != null || First != null || Last != null;
-
-    /// <inheritdoc cref="ASCollection.HasItems" />
-    [JsonIgnore]
-    [MemberNotNullWhen(true, nameof(Items))]
-    public bool HasItems => Items?.Any() == true;
-
-    /// <inheritdoc cref="ASCollection.IsOrdered" />
-    [JsonIgnore]
-    public bool IsOrdered { get; set; }
 }

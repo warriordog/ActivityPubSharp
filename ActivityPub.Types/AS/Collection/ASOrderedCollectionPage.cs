@@ -6,29 +6,27 @@ using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.AS;
+namespace ActivityPub.Types.AS.Collection;
 
 /// <summary>
-///     Used to represent distinct subsets of items from a Collection.
+///     Used to represent distinct subsets of items from an Ordered Collection.
 /// </summary>
 /// <remarks>
 ///     Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the CollectionPage type.
 /// </remarks>
-/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage" />
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage" />
-[ASTypeKey(ASCollectionPageEntity.CollectionPageType)]
-public class ASCollectionPage : ASCollection
+public class ASOrderedCollectionPage : ASOrderedCollection
 {
-    public ASCollectionPage() => Entity = new ASCollectionPageEntity { TypeMap = TypeMap };
-    public ASCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionPageEntity>();
-    private ASCollectionPageEntity Entity { get; }
+    public ASOrderedCollectionPage() => Entity = new ASOrderedCollectionPageEntity { TypeMap = TypeMap };
+    public ASOrderedCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASOrderedCollectionPageEntity>();
+    private ASOrderedCollectionPageEntity Entity { get; }
 
 
     /// <summary>
     ///     In a paged Collection, indicates the next page of items.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-next" />
-    public Linkable<ASCollectionPage>? Next
+    public Linkable<ASOrderedCollectionPage>? Next
     {
         get => Entity.Next;
         set => Entity.Next = value;
@@ -38,7 +36,7 @@ public class ASCollectionPage : ASCollection
     ///     In a paged Collection, indicates the previous page of items.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-prev" />
-    public Linkable<ASCollectionPage>? Prev
+    public Linkable<ASOrderedCollectionPage>? Prev
     {
         get => Entity.Prev;
         set => Entity.Prev = value;
@@ -48,7 +46,7 @@ public class ASCollectionPage : ASCollection
     ///     Identifies the Collection to which a CollectionPage objects items belong.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-partOf" />
-    public Linkable<ASCollection>? PartOf
+    public Linkable<ASOrderedCollection>? PartOf
     {
         get => Entity.PartOf;
         set => Entity.PartOf = value;
@@ -65,37 +63,35 @@ public class ASCollectionPage : ASCollection
         set => Entity.StartIndex = value;
     }
 
-    public static implicit operator ASCollectionPage(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
+    public static implicit operator ASOrderedCollectionPage(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
 }
 
-/// <inheritdoc cref="ASCollectionPage" />
-[ASTypeKey(CollectionPageType)]
+/// <inheritdoc cref="ASOrderedCollectionPage" />
 [ASTypeKey(OrderedCollectionPageType)]
-[ImpliesOtherEntity(typeof(ASCollection))]
-public sealed class ASCollectionPageEntity : ASEntity<ASCollection>
+[ImpliesOtherEntity(typeof(ASOrderedCollection))]
+public sealed class ASOrderedCollectionPageEntity : ASEntity<ASOrderedCollectionPage>
 {
-    public const string CollectionPageType = "CollectionPage";
     public const string OrderedCollectionPageType = "OrderedCollectionPage";
-    public override string ASTypeName => CollectionPageType;
+    public override string ASTypeName => OrderedCollectionPageType;
 
     public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
-        ASCollectionEntity.CollectionType
+        ASOrderedCollectionEntity.OrderedCollectionType
     };
 
-    /// <inheritdoc cref="ASCollectionPage.Next" />
+    /// <inheritdoc cref="ASOrderedCollectionPage.Next" />
     [JsonPropertyName("next")]
-    public Linkable<ASCollectionPage>? Next { get; set; }
+    public Linkable<ASOrderedCollectionPage>? Next { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage.Prev" />
+    /// <inheritdoc cref="ASOrderedCollectionPage.Prev" />
     [JsonPropertyName("prev")]
-    public Linkable<ASCollectionPage>? Prev { get; set; }
+    public Linkable<ASOrderedCollectionPage>? Prev { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage.PartOf" />
+    /// <inheritdoc cref="ASOrderedCollectionPage.PartOf" />
     [JsonPropertyName("partOf")]
-    public Linkable<ASCollection>? PartOf { get; set; }
+    public Linkable<ASOrderedCollection>? PartOf { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage.StartIndex" />
+    /// <inheritdoc cref="ASOrderedCollectionPage.StartIndex" />
     [JsonPropertyName("startIndex")]
     [Range(0, int.MaxValue)]
     public int? StartIndex { get; set; }

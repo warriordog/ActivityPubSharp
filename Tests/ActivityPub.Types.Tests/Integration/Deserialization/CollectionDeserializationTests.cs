@@ -1,4 +1,5 @@
 ﻿using ActivityPub.Types.AS;
+using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.Tests.Util.Fixtures;
 
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.

@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Types.AS;
+using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Activity;
 using ActivityPub.Types.AS.Extended.Actor;
 using ActivityPub.Types.AS.Extended.Link;
@@ -36,10 +37,10 @@ public class FirefishSampleTests : SampleTests
     public void ObjectShouldConvert() => TestSample(typeof(ASObject), ASObjectEntity.ObjectType);
 
     [Fact]
-    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASCollection), ASCollectionEntity.OrderedCollectionType);
+    public void OrderedCollectionShouldConvert() => TestSample(typeof(ASOrderedCollection), ASOrderedCollectionEntity.OrderedCollectionType);
 
     [Fact]
-    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASCollectionPage), ASCollectionPageEntity.OrderedCollectionPageType);
+    public void OrderedCollectionPageShouldConvert() => TestSample(typeof(ASOrderedCollectionPage), ASOrderedCollectionPageEntity.OrderedCollectionPageType);
 
     [Fact]
     public void PersonActorShouldConvert() => TestSample(typeof(PersonActor), PersonActorEntity.PersonType);

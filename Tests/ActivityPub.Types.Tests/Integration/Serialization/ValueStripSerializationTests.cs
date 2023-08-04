@@ -3,6 +3,7 @@
 
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
+using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Tests.Util.Fixtures;
