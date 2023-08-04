@@ -31,11 +31,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Internal", "Internal", "{13
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternalUtils", "Internal\InternalUtils\InternalUtils.csproj", "{70BB9650-70E6-402D-961B-CAFA0F246FA3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{3DAD3C87-2551-48A9-A484-289C5C3F6B22}"
-	ProjectSection(SolutionItems) = preProject
-		Docs\Type Graph 2 Example.drawio.png = Docs\Type Graph 2 Example.drawio.png
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
