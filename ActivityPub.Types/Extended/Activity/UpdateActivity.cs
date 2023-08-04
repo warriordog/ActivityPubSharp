@@ -6,19 +6,18 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor has updated the object.
-/// Note, however, that this vocabulary does not define a mechanism for describing the actual set of modifications made to object.
-/// The target and origin typically have no defined meaning. 
+///     Indicates that the actor has updated the object.
+///     Note, however, that this vocabulary does not define a mechanism for describing the actual set of modifications made to object.
+///     The target and origin typically have no defined meaning.
 /// </summary>
 public class UpdateActivity : ASTransitiveActivity
 {
-    private UpdateActivityEntity Entity { get; }
-
     public UpdateActivity() => Entity = new UpdateActivityEntity { TypeMap = TypeMap };
     public UpdateActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<UpdateActivityEntity>();
+    private UpdateActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="UpdateActivity"/>
+/// <inheritdoc cref="UpdateActivity" />
 [ASTypeKey(UpdateType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class UpdateActivityEntity : ASBase<UpdateActivity>
@@ -26,7 +25,7 @@ public sealed class UpdateActivityEntity : ASBase<UpdateActivity>
     public const string UpdateType = "Update";
     public override string ASTypeName => UpdateType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

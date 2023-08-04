@@ -20,12 +20,14 @@ public static class TypesModule
 {
     public static void TryAddTypesModule(this IServiceCollection services)
     {
-        services.TryAddSingleton<IASTypeInfoCache>(_ =>
-        {
-            var cache = new ASTypeInfoCache();
-            cache.RegisterAllAssemblies();
-            return cache;
-        });
+        services.TryAddSingleton<IASTypeInfoCache>(
+            _ =>
+            {
+                var cache = new ASTypeInfoCache();
+                cache.RegisterAllAssemblies();
+                return cache;
+            }
+        );
         services.TryAddSingleton<IJsonLdSerializer, JsonLdSerializer>();
     }
 }

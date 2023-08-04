@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor has listened to the object. 
+///     Indicates that the actor has listened to the object.
 /// </summary>
 public class ListenActivity : ASTransitiveActivity
 {
-    private ListenActivityEntity Entity { get; }
-
     public ListenActivity() => Entity = new ListenActivityEntity { TypeMap = TypeMap };
     public ListenActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ListenActivityEntity>();
+    private ListenActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="ListenActivity"/>
+/// <inheritdoc cref="ListenActivity" />
 [ASTypeKey(ListenType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ListenActivityEntity : ASBase<ListenActivity>
@@ -24,7 +23,7 @@ public sealed class ListenActivityEntity : ASBase<ListenActivity>
     public const string ListenType = "Listen";
     public override string ASTypeName => ListenType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

@@ -8,10 +8,10 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-/// JSON converter for <see cref="JsonLDTerm"/>.
+///     JSON converter for <see cref="JsonLDTerm" />.
 /// </summary>
-/// <seealso cref="JsonLDContextObjectConverter"/>
-/// <seealso cref="JsonLDContextConverter"/>
+/// <seealso cref="JsonLDContextObjectConverter" />
+/// <seealso cref="JsonLDContextConverter" />
 public class JsonLDTermConverter : JsonConverter<JsonLDTerm>
 {
     public override JsonLDTerm? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

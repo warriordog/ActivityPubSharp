@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Actor;
 
 /// <summary>
-/// Represents a formal or informal collective of Actors. 
+///     Represents a formal or informal collective of Actors.
 /// </summary>
 public class GroupActor : ASActor
 {
-    private GroupActorEntity Entity { get; }
-
     public GroupActor() => Entity = new GroupActorEntity { TypeMap = TypeMap };
     public GroupActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<GroupActorEntity>();
+    private GroupActorEntity Entity { get; }
 }
 
-/// <inheritdoc cref="GroupActor"/>
+/// <inheritdoc cref="GroupActor" />
 [ASTypeKey(GroupType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class GroupActorEntity : ASBase<GroupActor>
@@ -24,7 +23,7 @@ public sealed class GroupActorEntity : ASBase<GroupActor>
     public const string GroupType = "Group";
     public override string ASTypeName => GroupType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };

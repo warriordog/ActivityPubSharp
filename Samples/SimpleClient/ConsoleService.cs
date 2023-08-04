@@ -14,9 +14,8 @@ namespace SimpleClient;
 
 public class ConsoleService : BackgroundService
 {
-    private readonly Stack<object?> _focus = new();
-
     private readonly IActivityPubClient _apClient;
+    private readonly Stack<object?> _focus = new();
     private readonly IHostApplicationLifetime _hostLifetime;
     private readonly IJsonLdSerializer _jsonLdSerializer;
 
@@ -190,7 +189,7 @@ public class ConsoleService : BackgroundService
             return;
         }
 
-        object? toPrint = current;
+        var toPrint = current;
 
         if (parameter != null)
         {
@@ -328,8 +327,10 @@ public class ConsoleService : BackgroundService
             return property;
 
         // Try to find a property with a JsonPropertyName attribute that matches the parameter
-        property = Array.Find(properties, p =>
-            p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase) ?? false
+        property = Array.Find(
+            properties,
+            p =>
+                p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase) ?? false
         );
         if (property != null)
             return property;

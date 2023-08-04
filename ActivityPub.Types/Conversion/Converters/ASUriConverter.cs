@@ -14,7 +14,7 @@ public class ASUriConverter : JsonConverter<ASUri>
     {
         // Read the URI in string format
         if (!reader.TryGetString(out var uriString))
-            throw new JsonException($"Failed to convert ASUri - could not read a string from JSON input.");
+            throw new JsonException("Failed to convert ASUri - could not read a string from JSON input.");
 
         // Create it - mmm yes very simple yes
         return new ASUri(uriString);

@@ -6,18 +6,17 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor is "flagging" the object.
-/// Flagging is defined in the sense common to many social platforms as reporting content as being inappropriate for any number of reasons. 
+///     Indicates that the actor is "flagging" the object.
+///     Flagging is defined in the sense common to many social platforms as reporting content as being inappropriate for any number of reasons.
 /// </summary>
 public class FlagActivity : ASTransitiveActivity
 {
-    private FlagActivityEntity Entity { get; }
-
     public FlagActivity() => Entity = new FlagActivityEntity { TypeMap = TypeMap };
     public FlagActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<FlagActivityEntity>();
+    private FlagActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="FlagActivity"/>
+/// <inheritdoc cref="FlagActivity" />
 [ASTypeKey(FlagType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class FlagActivityEntity : ASBase<FlagActivity>
@@ -25,7 +24,7 @@ public sealed class FlagActivityEntity : ASBase<FlagActivity>
     public const string FlagType = "Flag";
     public override string ASTypeName => FlagType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

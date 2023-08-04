@@ -8,8 +8,12 @@ namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
 public abstract class CollectionDeserializationTests : DeserializationTests<ASObject>
 {
+    private CollectionDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     public class ItemsShould : CollectionDeserializationTests
     {
+        public ItemsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void PopulateInCollection()
         {
@@ -53,12 +57,12 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             ObjectUnderTest.As<ASCollectionPage>().Items.Should().NotBeNull();
             ObjectUnderTest.As<ASCollectionPage>().Items.Should().HaveCount(1);
         }
-
-        public ItemsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class LinkElementTests : CollectionDeserializationTests
     {
+        public LinkElementTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void PopulateLinkElements()
         {
@@ -91,9 +95,5 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             obj.Items?[1].HasLink.Should().BeTrue();
             obj.Items?[2].HasLink.Should().BeTrue();
         }
-
-        public LinkElementTests(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
-
-    private CollectionDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

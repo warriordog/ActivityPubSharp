@@ -8,24 +8,23 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Represents a question being asked.
-/// Question objects are an extension of IntransitiveActivity.
-/// That is, the Question object is an Activity, but the direct object is the question itself and therefore it would not contain an object property.
-/// Either of the anyOf and oneOf properties MAY be used to express possible answers, but a Question object MUST NOT have both properties. 
+///     Represents a question being asked.
+///     Question objects are an extension of IntransitiveActivity.
+///     That is, the Question object is an Activity, but the direct object is the question itself and therefore it would not contain an object property.
+///     Either of the anyOf and oneOf properties MAY be used to express possible answers, but a Question object MUST NOT have both properties.
 /// </summary>
 public class QuestionActivity : ASIntransitiveActivity
 {
-    private QuestionActivityEntity Entity { get; }
-
     public QuestionActivity() => Entity = new QuestionActivityEntity { TypeMap = TypeMap };
     public QuestionActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<QuestionActivityEntity>();
+    private QuestionActivityEntity Entity { get; }
 
     /// <summary>
-    /// Identifies an exclusive option for a Question.
-    /// Use of oneOf implies that the Question can have only a single answer.
-    /// To indicate that a Question can have multiple answers, use anyOf. 
+    ///     Identifies an exclusive option for a Question.
+    ///     Use of oneOf implies that the Question can have only a single answer.
+    ///     To indicate that a Question can have multiple answers, use anyOf.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-oneOf"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-oneOf" />
     public LinkableList<ASObject>? OneOf
     {
         get => Entity.OneOf;
@@ -33,11 +32,11 @@ public class QuestionActivity : ASIntransitiveActivity
     }
 
     /// <summary>
-    /// Identifies an inclusive option for a Question.
-    /// Use of anyOf implies that the Question can have multiple answers.
-    /// To indicate that a Question can have only one answer, use oneOf. 
+    ///     Identifies an inclusive option for a Question.
+    ///     Use of anyOf implies that the Question can have multiple answers.
+    ///     To indicate that a Question can have only one answer, use oneOf.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyof"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyof" />
     public LinkableList<ASObject>? AnyOf
     {
         get => Entity.AnyOf;
@@ -45,14 +44,14 @@ public class QuestionActivity : ASIntransitiveActivity
     }
 
     /// <summary>
-    /// Contains the time at which a question was closed.
+    ///     Contains the time at which a question was closed.
     /// </summary>
     /// <remarks>
-    /// * Won't always be set - can be null even if <see cref="Closed"/> is true.
-    /// * We don't support the Object or Link forms, because what would that even mean??
-    /// * May possibly be in the future? Spec does not specify. 
+    ///     * Won't always be set - can be null even if <see cref="Closed" /> is true.
+    ///     * We don't support the Object or Link forms, because what would that even mean??
+    ///     * May possibly be in the future? Spec does not specify.
     /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed" />
     public DateTime? ClosedAt
     {
         get => Entity.ClosedAt;
@@ -60,12 +59,12 @@ public class QuestionActivity : ASIntransitiveActivity
     }
 
     /// <summary>
-    /// Indicates that a question has been closed, and answers are no longer accepted. 
+    ///     Indicates that a question has been closed, and answers are no longer accepted.
     /// </summary>
     /// <remarks>
-    /// We don't support the Object or Link forms, because what would that even mean??
+    ///     We don't support the Object or Link forms, because what would that even mean??
     /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed" />
     public bool? Closed
     {
         get => Entity.Closed;
@@ -73,28 +72,31 @@ public class QuestionActivity : ASIntransitiveActivity
     }
 }
 
-/// <inheritdoc cref="QuestionActivity"/>
+/// <inheritdoc cref="QuestionActivity" />
 [ASTypeKey(QuestionType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
 public sealed class QuestionActivityEntity : ASBase<QuestionActivity>
 {
     public const string QuestionType = "Question";
+
+    private bool? _closed;
+    private DateTime? _closedAt;
     public override string ASTypeName => QuestionType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASIntransitiveActivityEntity.IntransitiveActivityType
     };
 
-    /// <inheritdoc cref="QuestionActivity.OneOf"/>
+    /// <inheritdoc cref="QuestionActivity.OneOf" />
     [JsonPropertyName("oneOf")]
     public LinkableList<ASObject>? OneOf { get; set; }
 
-    /// <inheritdoc cref="QuestionActivity.AnyOf"/>
+    /// <inheritdoc cref="QuestionActivity.AnyOf" />
     [JsonPropertyName("anyOf")]
     public LinkableList<ASObject>? AnyOf { get; set; }
 
-    /// <inheritdoc cref="QuestionActivity.ClosedAt"/>
+    /// <inheritdoc cref="QuestionActivity.ClosedAt" />
     [JsonPropertyName("closed")]
     public DateTime? ClosedAt
     {
@@ -103,13 +105,11 @@ public sealed class QuestionActivityEntity : ASBase<QuestionActivity>
         {
             _closedAt = value;
             if (_closedAt == null)
-            {
                 _closed = null;
-            }
         }
     }
 
-    /// <inheritdoc cref="QuestionActivity.Closed"/>
+    /// <inheritdoc cref="QuestionActivity.Closed" />
     [JsonPropertyName("closed")]
     public bool? Closed
     {
@@ -118,12 +118,7 @@ public sealed class QuestionActivityEntity : ASBase<QuestionActivity>
         {
             _closed = value;
             if (value != true)
-            {
                 _closedAt = null;
-            }
         }
     }
-
-    private bool? _closed;
-    private DateTime? _closedAt;
 }

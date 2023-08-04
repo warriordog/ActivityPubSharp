@@ -6,18 +6,17 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor has left the object.
-/// The target and origin typically have no meaning.
+///     Indicates that the actor has left the object.
+///     The target and origin typically have no meaning.
 /// </summary>
 public class LeaveActivity : ASTransitiveActivity
 {
-    private LeaveActivityEntity Entity { get; }
-
     public LeaveActivity() => Entity = new LeaveActivityEntity { TypeMap = TypeMap };
     public LeaveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<LeaveActivityEntity>();
+    private LeaveActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="LeaveActivity"/>
+/// <inheritdoc cref="LeaveActivity" />
 [ASTypeKey(LeaveType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class LeaveActivityEntity : ASBase<LeaveActivity>
@@ -25,7 +24,7 @@ public sealed class LeaveActivityEntity : ASBase<LeaveActivity>
     public const string LeaveType = "Leave";
     public override string ASTypeName => LeaveType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

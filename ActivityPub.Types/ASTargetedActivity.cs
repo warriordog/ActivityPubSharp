@@ -8,13 +8,10 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types;
 
 /// <summary>
-/// Synthetic base for activities which require a target.
+///     Synthetic base for activities which require a target.
 /// </summary>
 public class ASTargetedActivity : ASTransitiveActivity
 {
-    private ASTargetedActivityEntity Entity { get; }
-
-
     public ASTargetedActivity() => Entity = new ASTargetedActivityEntity
     {
         TypeMap = TypeMap,
@@ -22,16 +19,17 @@ public class ASTargetedActivity : ASTransitiveActivity
     };
 
     public ASTargetedActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASTargetedActivityEntity>();
+    private ASTargetedActivityEntity Entity { get; }
 
 
     /// <summary>
-    /// Describes the indirect object, or target, of the activity.
-    /// The precise meaning of the target is largely dependent on the type of action being described but will often be the object of the English preposition "to".
-    /// For instance, in the activity "John added a movie to his wishlist", the target of the activity is John's wishlist.
-    /// An activity can have more than one target. 
+    ///     Describes the indirect object, or target, of the activity.
+    ///     The precise meaning of the target is largely dependent on the type of action being described but will often be the object of the English preposition "to".
+    ///     For instance, in the activity "John added a movie to his wishlist", the target of the activity is John's wishlist.
+    ///     An activity can have more than one target.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target"/>
-    /// <seealso href="https://www.w3.org/TR/activitypub/#client-addressing"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target" />
+    /// <seealso href="https://www.w3.org/TR/activitypub/#client-addressing" />
     [JsonPropertyName("target")]
     public required LinkableList<ASObject> Target
     {
@@ -40,11 +38,11 @@ public class ASTargetedActivity : ASTransitiveActivity
     }
 }
 
-/// <inheritdoc cref="ASTargetedActivity"/>
+/// <inheritdoc cref="ASTargetedActivity" />
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ASTargetedActivityEntity : ASBase<ASTargetedActivity>
 {
-    /// <inheritdoc cref="ASTargetedActivity.Target"/>
+    /// <inheritdoc cref="ASTargetedActivity.Target" />
     [JsonPropertyName("target")]
     public required LinkableList<ASObject> Target { get; set; }
 }

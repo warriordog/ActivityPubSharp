@@ -7,8 +7,11 @@ namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public abstract class LinkSerializationTests : SerializationTests
 {
+    protected LinkSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     public class ASLinkShould : LinkSerializationTests
     {
+        public ASLinkShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void SerializeToString_WhenOnlyHRefIsSet()
@@ -51,9 +54,5 @@ public abstract class LinkSerializationTests : SerializationTests
             JsonUnderTest.ValueKind.Should().Be(JsonValueKind.Object);
             JsonUnderTest.Should().HaveProperty(UnknownProp);
         }
-        
-        public ASLinkShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
-
-    protected LinkSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

@@ -7,21 +7,19 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Object;
 
 /// <summary>
-/// Represents a logical or physical location.
+///     Represents a logical or physical location.
 /// </summary>
 public class PlaceObject : ASObject
 {
-    private PlaceObjectEntity Entity { get; }
-
-
     public PlaceObject() => Entity = new PlaceObjectEntity { TypeMap = TypeMap };
     public PlaceObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PlaceObjectEntity>();
+    private PlaceObjectEntity Entity { get; }
 
     /// <summary>
-    /// Indicates the accuracy of position coordinates on a Place objects.
-    /// Expressed in properties of percentage. e.g. "94.0" means "94.0% accurate". 
+    ///     Indicates the accuracy of position coordinates on a Place objects.
+    ///     Expressed in properties of percentage. e.g. "94.0" means "94.0% accurate".
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-accuracy"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-accuracy" />
     public float? Accuracy
     {
         get => Entity.Accuracy;
@@ -29,11 +27,11 @@ public class PlaceObject : ASObject
     }
 
     /// <summary>
-    /// Indicates the altitude of a place.
-    /// The measurement units is indicated using the units property.
-    /// If units is not specified, the default is assumed to be "m" indicating meters. 
+    ///     Indicates the altitude of a place.
+    ///     The measurement units is indicated using the units property.
+    ///     If units is not specified, the default is assumed to be "m" indicating meters.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-altitude"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-altitude" />
     public float? Altitude
     {
         get => Entity.Altitude;
@@ -41,9 +39,9 @@ public class PlaceObject : ASObject
     }
 
     /// <summary>
-    /// The latitude of a place.
+    ///     The latitude of a place.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-latitude"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-latitude" />
     public float? Latitude
     {
         get => Entity.Latitude;
@@ -51,9 +49,9 @@ public class PlaceObject : ASObject
     }
 
     /// <summary>
-    /// The longitude of a place.
+    ///     The longitude of a place.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-longitude"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-longitude" />
     public float? Longitude
     {
         get => Entity.Longitude;
@@ -61,11 +59,11 @@ public class PlaceObject : ASObject
     }
 
     /// <summary>
-    /// The radius from the given latitude and longitude for a Place.
-    /// The units is expressed by the units property.
-    /// If units is not specified, the default is assumed to be "m" indicating "meters". 
+    ///     The radius from the given latitude and longitude for a Place.
+    ///     The units is expressed by the units property.
+    ///     If units is not specified, the default is assumed to be "m" indicating "meters".
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-radius"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-radius" />
     public float? Radius
     {
         get => Entity.Radius;
@@ -73,10 +71,10 @@ public class PlaceObject : ASObject
     }
 
     /// <summary>
-    /// Specifies the measurement units for the radius and altitude properties on a Place object.
-    /// If not specified, the default is assumed to be "m" for "meters". 
+    ///     Specifies the measurement units for the radius and altitude properties on a Place object.
+    ///     If not specified, the default is assumed to be "m" for "meters".
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-units"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-units" />
     public string? Units
     {
         get => Entity.Units;
@@ -84,7 +82,7 @@ public class PlaceObject : ASObject
     }
 }
 
-/// <inheritdoc cref="PlaceObject"/>
+/// <inheritdoc cref="PlaceObject" />
 [ASTypeKey(PlaceType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class PlaceObjectEntity : ASBase<PlaceObject>
@@ -92,32 +90,32 @@ public sealed class PlaceObjectEntity : ASBase<PlaceObject>
     public const string PlaceType = "Place";
     public override string ASTypeName => PlaceType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };
 
-    /// <inheritdoc cref="PlaceObject.Accuracy"/>
+    /// <inheritdoc cref="PlaceObject.Accuracy" />
     [JsonPropertyName("accuracy")]
     public float? Accuracy { get; set; }
 
-    /// <inheritdoc cref="PlaceObject.Altitude"/>
+    /// <inheritdoc cref="PlaceObject.Altitude" />
     [JsonPropertyName("altitude")]
     public float? Altitude { get; set; }
 
-    /// <inheritdoc cref="PlaceObject.Latitude"/>
+    /// <inheritdoc cref="PlaceObject.Latitude" />
     [JsonPropertyName("latitude")]
     public float? Latitude { get; set; }
 
-    /// <inheritdoc cref="PlaceObject.Longitude"/>
+    /// <inheritdoc cref="PlaceObject.Longitude" />
     [JsonPropertyName("longitude")]
     public float? Longitude { get; set; }
 
-    /// <inheritdoc cref="PlaceObject.Radius"/>
+    /// <inheritdoc cref="PlaceObject.Radius" />
     [JsonPropertyName("radius")]
     public float? Radius { get; set; }
 
-    /// <inheritdoc cref="PlaceObject.Units"/>
+    /// <inheritdoc cref="PlaceObject.Units" />
     [JsonPropertyName("units")]
     public string? Units { get; set; }
 }

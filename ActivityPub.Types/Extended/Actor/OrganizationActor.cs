@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Actor;
 
 /// <summary>
-/// Represents an organization. 
+///     Represents an organization.
 /// </summary>
 public class OrganizationActor : ASActor
 {
-    private OrganizationActorEntity Entity { get; }
-
     public OrganizationActor() => Entity = new OrganizationActorEntity { TypeMap = TypeMap };
     public OrganizationActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<OrganizationActorEntity>();
+    private OrganizationActorEntity Entity { get; }
 }
 
-/// <inheritdoc cref="OrganizationActor"/>
+/// <inheritdoc cref="OrganizationActor" />
 [ASTypeKey(OrganizationType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class OrganizationActorEntity : ASBase<OrganizationActor>
@@ -24,7 +23,7 @@ public sealed class OrganizationActorEntity : ASBase<OrganizationActor>
     public const string OrganizationType = "Organization";
     public override string ASTypeName => OrganizationType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };

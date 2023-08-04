@@ -7,16 +7,16 @@ using System.Text.Json.Nodes;
 namespace ActivityPub.Types.Conversion.Overrides;
 
 /// <summary>
-/// Indicates that this type is serialized into a JSON value instead of an object.
-/// Within a single type graph, there can only be one type with this interface.
+///     Indicates that this type is serialized into a JSON value instead of an object.
+///     Within a single type graph, there can only be one type with this interface.
 /// </summary>
 /// <typeparam name="TThis">Type of object to convert</typeparam>
 public interface IJsonValueSerialized<in TThis>
     where TThis : ASBase
 {
     /// <summary>
-    /// Serialize the type into a JSON value.
-    /// This will supersede all conversion for the ENTIRE object graph, so use it carefully!
+    ///     Serialize the type into a JSON value.
+    ///     This will supersede all conversion for the ENTIRE object graph, so use it carefully!
     /// </summary>
     /// <param name="obj">Object to convert</param>
     /// <param name="meta">Context for the conversion</param>

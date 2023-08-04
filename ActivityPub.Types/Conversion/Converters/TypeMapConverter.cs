@@ -13,8 +13,8 @@ namespace ActivityPub.Types.Conversion.Converters;
 
 public class TypeMapConverter : JsonConverter<TypeMap>
 {
-    private readonly Dictionary<Type, ASBaseAdapters> _entityAdapters = new();
     private readonly IASTypeInfoCache _asTypeInfoCache;
+    private readonly Dictionary<Type, ASBaseAdapters> _entityAdapters = new();
 
     public TypeMapConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
 
@@ -82,9 +82,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
                                 ?? throw new JsonException("Can't convert TypeMap - \"type\" is null");
 
                     foreach (var type in types)
-                    {
                         yield return type;
-                    }
                 }
 
                 // Otherwise just use Object
@@ -238,10 +236,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private class TrySerializeAdapter<T> : TrySerializeAdapter
         where T : ASBase, ICustomJsonSerialized<T>
     {
-        public override bool TrySerialize(ASBase obj, SerializationMetadata meta, JsonObject node)
-        {
-            return T.TrySerialize((T)obj, meta, node);
-        }
+        public override bool TrySerialize(ASBase obj, SerializationMetadata meta, JsonObject node) => T.TrySerialize((T)obj, meta, node);
     }
 
     private abstract class TrySerializeIntoValueAdapter
@@ -258,10 +253,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private class TrySerializeIntoValueAdapter<T> : TrySerializeIntoValueAdapter
         where T : ASBase, IJsonValueSerialized<T>
     {
-        public override bool TrySerializeIntoValue(ASBase obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node)
-        {
-            return T.TrySerializeIntoValue((T)obj, meta, out node);
-        }
+        public override bool TrySerializeIntoValue(ASBase obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node) => T.TrySerializeIntoValue((T)obj, meta, out node);
     }
 
     private abstract class PickSubTypeForDeserializationAdapter
@@ -278,9 +270,6 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private class PickSubTypeForDeserializationAdapter<T> : PickSubTypeForDeserializationAdapter
         where T : ISubTypeDeserialized
     {
-        public override Type PickSubTypeForDeserialization(JsonElement element, DeserializationMetadata meta)
-        {
-            return T.PickSubTypeForDeserialization(element, meta);
-        }
+        public override Type PickSubTypeForDeserialization(JsonElement element, DeserializationMetadata meta) => T.PickSubTypeForDeserialization(element, meta);
     }
 }

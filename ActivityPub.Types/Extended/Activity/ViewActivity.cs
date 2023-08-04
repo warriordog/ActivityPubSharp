@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor has viewed the object. 
+///     Indicates that the actor has viewed the object.
 /// </summary>
 public class ViewActivity : ASTransitiveActivity
 {
-    private ViewActivityEntity Entity { get; }
-
     public ViewActivity() => Entity = new ViewActivityEntity { TypeMap = TypeMap };
     public ViewActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ViewActivityEntity>();
+    private ViewActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="ViewActivity"/>
+/// <inheritdoc cref="ViewActivity" />
 [ASTypeKey(ViewType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ViewActivityEntity : ASBase<ViewActivity>
@@ -24,7 +23,7 @@ public sealed class ViewActivityEntity : ASBase<ViewActivity>
     public const string ViewType = "View";
     public override string ASTypeName => ViewType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

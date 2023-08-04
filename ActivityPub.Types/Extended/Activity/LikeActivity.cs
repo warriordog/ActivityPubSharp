@@ -6,18 +6,17 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor likes, recommends or endorses the object.
-/// The target and origin typically have no defined meaning.
+///     Indicates that the actor likes, recommends or endorses the object.
+///     The target and origin typically have no defined meaning.
 /// </summary>
 public class LikeActivity : ASTransitiveActivity
 {
-    private LikeActivityEntity Entity { get; }
-
     public LikeActivity() => Entity = new LikeActivityEntity { TypeMap = TypeMap };
     public LikeActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<LikeActivityEntity>();
+    private LikeActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="LikeActivity"/>
+/// <inheritdoc cref="LikeActivity" />
 [ASTypeKey(LikeType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class LikeActivityEntity : ASBase<LikeActivity>
@@ -25,7 +24,7 @@ public sealed class LikeActivityEntity : ASBase<LikeActivity>
     public const string LikeType = "Like";
     public override string ASTypeName => LikeType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

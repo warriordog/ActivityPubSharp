@@ -10,16 +10,13 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types;
 
 /// <summary>
-/// Base type for all activities that are not intransitive
+///     Base type for all activities that are not intransitive
 /// </summary>
 /// <remarks>
-/// This is a synthetic type, and not part of the ActivityStreams standard.
+///     This is a synthetic type, and not part of the ActivityStreams standard.
 /// </remarks>
 public class ASTransitiveActivity : ASActivity
 {
-    private ASTransitiveActivityEntity Entity { get; }
-
-
     public ASTransitiveActivity() => Entity = new ASTransitiveActivityEntity
     {
         TypeMap = TypeMap,
@@ -27,13 +24,14 @@ public class ASTransitiveActivity : ASActivity
     };
 
     public ASTransitiveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASTransitiveActivityEntity>();
+    private ASTransitiveActivityEntity Entity { get; }
 
 
     /// <summary>
-    /// Describes the direct object of the activity.
-    /// For instance, in the activity "John added a movie to his wishlist", the object of the activity is the movie added. 
+    ///     Describes the direct object of the activity.
+    ///     For instance, in the activity "John added a movie to his wishlist", the object of the activity is the movie added.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
     [JsonPropertyName("object")]
     public required LinkableList<ASObject> Object
     {
@@ -42,11 +40,11 @@ public class ASTransitiveActivity : ASActivity
     }
 }
 
-/// <inheritdoc cref="ASTransitiveActivity"/>
+/// <inheritdoc cref="ASTransitiveActivity" />
 [ImpliesOtherEntity(typeof(ASActivityEntity))]
 public sealed class ASTransitiveActivityEntity : ASBase<ASTransitiveActivity>, ISubTypeDeserialized
 {
-    /// <inheritdoc cref="ASTransitiveActivity.Object"/>
+    /// <inheritdoc cref="ASTransitiveActivity.Object" />
     [JsonPropertyName("object")]
     public required LinkableList<ASObject> Object { get; set; } = new();
 

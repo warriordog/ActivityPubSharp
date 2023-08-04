@@ -9,13 +9,12 @@ namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
 public abstract class SimpleObjectDeserializationTests : DeserializationTests<ASObject>
 {
-    private SimpleObjectDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture)
-    {
-        JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
-    }
+    private SimpleObjectDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) => JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
 
     public class EmptyObject : SimpleObjectDeserializationTests
     {
+        public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void ShouldIncludeContext()
         {
@@ -27,12 +26,12 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         {
             ObjectUnderTest.Types.Should().Contain("Object");
         }
-
-        public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class Subclass : SimpleObjectDeserializationTests
     {
+        public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void ShouldDeserializeToCorrectType()
         {
@@ -63,12 +62,12 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             personUnderTest.Image.Should().NotBeNull();
             personUnderTest.Id.Should().Be("https://example.com/actor/id");
         }
-
-        public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class ObjectWithUrl : SimpleObjectDeserializationTests
     {
+        public ObjectWithUrl(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void ShouldDeserializeUrlList()
         {
@@ -84,12 +83,12 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             ObjectUnderTest.Url.Should().NotBeNull();
             ObjectUnderTest.Url.Should().HaveCount(1);
         }
-
-        public ObjectWithUrl(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class FullObject : SimpleObjectDeserializationTests
     {
+        public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void ShouldIncludeAllProperties()
         {
@@ -174,7 +173,5 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             ObjectUnderTest.Likes?.HasLink.Should().BeTrue();
             ObjectUnderTest.Shares?.HasLink.Should().BeTrue();
         }
-
-        public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 }

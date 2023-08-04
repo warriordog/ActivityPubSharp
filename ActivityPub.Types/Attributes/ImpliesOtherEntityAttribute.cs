@@ -4,15 +4,15 @@
 namespace ActivityPub.Types.Attributes;
 
 /// <summary>
-/// When placed on an entity deriving from <see cref="ASBase"/>, indicates that any object containing this type will implicitly include another type.
-/// This is only used during JSON conversion, so the public inheritance chain SHOULD follow the same structure.
-/// Multiple attributes may be specified.
+///     When placed on an entity deriving from <see cref="ASBase" />, indicates that any object containing this type will implicitly include another type.
+///     This is only used during JSON conversion, so the public inheritance chain SHOULD follow the same structure.
+///     Multiple attributes may be specified.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 public sealed class ImpliesOtherEntityAttribute : Attribute
 {
     /// <summary>
-    /// Type of the other entity.
+    ///     Type of the other entity.
     /// </summary>
     public readonly Type Type;
 

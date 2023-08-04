@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Object;
 
 /// <summary>
-/// Represents a short written work typically less than a single paragraph in length. 
+///     Represents a short written work typically less than a single paragraph in length.
 /// </summary>
 public class NoteObject : ASObject
 {
-    private NoteObjectEntity Entity { get; }
-
     public NoteObject() => Entity = new NoteObjectEntity { TypeMap = TypeMap };
     public NoteObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<NoteObjectEntity>();
+    private NoteObjectEntity Entity { get; }
 }
 
-/// <inheritdoc cref="NoteObject"/>
+/// <inheritdoc cref="NoteObject" />
 [ASTypeKey(NoteType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class NoteObjectEntity : ASBase<NoteObject>
@@ -24,7 +23,7 @@ public sealed class NoteObjectEntity : ASBase<NoteObject>
     public const string NoteType = "Note";
     public override string ASTypeName => NoteType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };

@@ -6,18 +6,17 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor has moved object from origin to target.
-/// If the origin or target are not specified, either can be determined by context. 
+///     Indicates that the actor has moved object from origin to target.
+///     If the origin or target are not specified, either can be determined by context.
 /// </summary>
 public class MoveActivity : ASTransitiveActivity
 {
-    private MoveActivityEntity Entity { get; }
-
     public MoveActivity() => Entity = new MoveActivityEntity { TypeMap = TypeMap };
     public MoveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<MoveActivityEntity>();
+    private MoveActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="MoveActivity"/>
+/// <inheritdoc cref="MoveActivity" />
 [ASTypeKey(MoveType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class MoveActivityEntity : ASBase<MoveActivity>
@@ -25,7 +24,7 @@ public sealed class MoveActivityEntity : ASBase<MoveActivity>
     public const string MoveType = "Move";
     public override string ASTypeName => MoveType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

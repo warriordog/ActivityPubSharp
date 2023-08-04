@@ -8,14 +8,14 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-/// Custom converter for the JSON-LD "@context" property.
+///     Custom converter for the JSON-LD "@context" property.
 /// </summary>
 /// <remarks>
-/// We need THREE FUCKING CONVERTERS for a minimum-viable implementation!
+///     We need THREE FUCKING CONVERTERS for a minimum-viable implementation!
 /// </remarks>
-/// <seealso cref="JsonLDTermConverter"/>
-/// <seealso cref="JsonLDContextObjectConverter"/>
-/// <seealso href="https://www.w3.org/TR/json-ld11/#the-context"/>
+/// <seealso cref="JsonLDTermConverter" />
+/// <seealso cref="JsonLDContextObjectConverter" />
+/// <seealso href="https://www.w3.org/TR/json-ld11/#the-context" />
 public class JsonLDContextConverter : JsonConverter<JsonLDContext>
 {
     public override JsonLDContext? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -29,7 +29,7 @@ public class JsonLDContextConverter : JsonConverter<JsonLDContext>
             case JsonTokenType.StartObject:
             {
                 var context = ReadContext(ref reader, options);
-                return new JsonLDContext()
+                return new JsonLDContext
                 {
                     context
                 };
@@ -43,6 +43,7 @@ public class JsonLDContextConverter : JsonConverter<JsonLDContext>
                     var contextObj = ReadContext(ref reader, options);
                     context.Add(contextObj);
                 }
+
                 return context;
             }
 
@@ -55,7 +56,7 @@ public class JsonLDContextConverter : JsonConverter<JsonLDContext>
     {
         var context = JsonSerializer.Deserialize<JsonLDContextObject>(ref reader, options);
         if (context == null)
-            throw new JsonException($"Failed to parse @context field - a context was null or invalid");
+            throw new JsonException("Failed to parse @context field - a context was null or invalid");
 
         return context;
     }
@@ -71,9 +72,7 @@ public class JsonLDContextConverter : JsonConverter<JsonLDContext>
         {
             writer.WriteStartArray();
             foreach (var context in value)
-            {
                 JsonSerializer.Serialize(writer, context, options);
-            }
 
             writer.WriteEndArray();
         }

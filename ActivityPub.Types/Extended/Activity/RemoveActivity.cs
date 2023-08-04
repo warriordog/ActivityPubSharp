@@ -6,18 +6,17 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor is removing the object.
-/// If specified, the origin indicates the context from which the object is being removed. 
+///     Indicates that the actor is removing the object.
+///     If specified, the origin indicates the context from which the object is being removed.
 /// </summary>
 public class RemoveActivity : ASTargetedActivity
 {
-    private RemoveActivityEntity Entity { get; }
-
     public RemoveActivity() => Entity = new RemoveActivityEntity { TypeMap = TypeMap };
     public RemoveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<RemoveActivityEntity>();
+    private RemoveActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="RemoveActivity"/>
+/// <inheritdoc cref="RemoveActivity" />
 [ASTypeKey(RemoveType)]
 [ImpliesOtherEntity(typeof(ASTargetedActivityEntity))]
 public sealed class RemoveActivityEntity : ASBase<RemoveActivity>
@@ -25,7 +24,7 @@ public sealed class RemoveActivityEntity : ASBase<RemoveActivity>
     public const string RemoveType = "Remove";
     public override string ASTypeName => RemoveType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

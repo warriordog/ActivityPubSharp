@@ -15,11 +15,13 @@ public abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConve
         [Fact]
         public void ThrowJsonException_WhenInputIsNotString()
         {
-            Assert.Throws<JsonException>(() =>
-            {
-                var json = "{}"u8;
-                Read(json);
-            });
+            Assert.Throws<JsonException>(
+                () =>
+                {
+                    var json = "{}"u8;
+                    Read(json);
+                }
+            );
         }
 
         [Fact]

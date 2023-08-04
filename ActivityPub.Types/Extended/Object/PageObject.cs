@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Object;
 
 /// <summary>
-/// Represents a Web Page. 
+///     Represents a Web Page.
 /// </summary>
 public class PageObject : DocumentObject
 {
-    private PageObjectEntity Entity { get; }
-
     public PageObject() => Entity = new PageObjectEntity { TypeMap = TypeMap };
     public PageObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PageObjectEntity>();
+    private PageObjectEntity Entity { get; }
 }
 
-/// <inheritdoc cref="PageObject"/>
+/// <inheritdoc cref="PageObject" />
 [ASTypeKey(PageType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
 public sealed class PageObjectEntity : ASBase<PageObject>
@@ -24,7 +23,7 @@ public sealed class PageObjectEntity : ASBase<PageObject>
     public const string PageType = "Page";
     public override string ASTypeName => PageType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         DocumentObjectEntity.DocumentType
     };

@@ -10,26 +10,24 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types;
 
 /// <summary>
-/// An Activity is a subtype of Object that describes some form of action that may happen, is currently happening, or has already happened.
-/// The Activity type itself serves as an abstract base type for all types of activities.
-/// It is important to note that the Activity type itself does not carry any specific semantics about the kind of action being taken. 
+///     An Activity is a subtype of Object that describes some form of action that may happen, is currently happening, or has already happened.
+///     The Activity type itself serves as an abstract base type for all types of activities.
+///     It is important to note that the Activity type itself does not carry any specific semantics about the kind of action being taken.
 /// </summary>
-/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity"/>
+/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity" />
 public class ASActivity : ASObject
 {
+    public ASActivity() => Entity = new ASActivityEntity { TypeMap = TypeMap };
+    public ASActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASActivityEntity>();
     private ASActivityEntity Entity { get; }
 
 
-    public ASActivity() => Entity = new ASActivityEntity { TypeMap = TypeMap };
-    public ASActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASActivityEntity>();
-
-
     /// <summary>
-    /// Describes one or more entities that either performed or are expected to perform the activity.
-    /// Any single activity can have multiple actors.
-    /// The actor MAY be specified using an indirect Link.
+    ///     Describes one or more entities that either performed or are expected to perform the activity.
+    ///     Any single activity can have multiple actors.
+    ///     The actor MAY be specified using an indirect Link.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-actor"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-actor" />
     public LinkableList<ASObject> Actor
     {
         get => Entity.Actor;
@@ -37,9 +35,9 @@ public class ASActivity : ASObject
     }
 
     /// <summary>
-    /// Identifies one or more objects used (or to be used) in the completion of an Activity. 
+    ///     Identifies one or more objects used (or to be used) in the completion of an Activity.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-instrument"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-instrument" />
     public Linkable<ASObject>? Instrument
     {
         get => Entity.Instrument;
@@ -47,11 +45,11 @@ public class ASActivity : ASObject
     }
 
     /// <summary>
-    /// Describes an indirect object of the activity from which the activity is directed.
-    /// The precise meaning of the origin is the object of the English preposition "from".
-    /// For instance, in the activity "John moved an item to List B from List A", the origin of the activity is "List A". 
+    ///     Describes an indirect object of the activity from which the activity is directed.
+    ///     The precise meaning of the origin is the object of the English preposition "from".
+    ///     For instance, in the activity "John moved an item to List B from List A", the origin of the activity is "List A".
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-origin"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-origin" />
     public Linkable<ASObject>? Origin
     {
         get => Entity.Origin;
@@ -59,10 +57,10 @@ public class ASActivity : ASObject
     }
 
     /// <summary>
-    /// Describes the result of the activity.
-    /// For instance, if a particular action results in the creation of a new resource, the result property can be used to describe that new resource. 
+    ///     Describes the result of the activity.
+    ///     For instance, if a particular action results in the creation of a new resource, the result property can be used to describe that new resource.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-result"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-result" />
     public Linkable<ASObject>? Result
     {
         get => Entity.Result;
@@ -70,7 +68,7 @@ public class ASActivity : ASObject
     }
 }
 
-/// <inheritdoc cref="ASActivity"/>
+/// <inheritdoc cref="ASActivity" />
 [ASTypeKey(ActivityType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASActivityEntity : ASBase<ASActivity>, ISubTypeDeserialized
@@ -78,25 +76,25 @@ public sealed class ASActivityEntity : ASBase<ASActivity>, ISubTypeDeserialized
     public const string ActivityType = "Activity";
     public override string ASTypeName => ActivityType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };
 
 
-    /// <inheritdoc cref="ASActivity.Actor"/>
+    /// <inheritdoc cref="ASActivity.Actor" />
     [JsonPropertyName("actor")]
     public LinkableList<ASObject> Actor { get; set; } = new();
 
-    /// <inheritdoc cref="ASActivity.Instrument"/>
+    /// <inheritdoc cref="ASActivity.Instrument" />
     [JsonPropertyName("instrument")]
     public Linkable<ASObject>? Instrument { get; set; }
 
-    /// <inheritdoc cref="ASActivity.Origin"/>
+    /// <inheritdoc cref="ASActivity.Origin" />
     [JsonPropertyName("origin")]
     public Linkable<ASObject>? Origin { get; set; }
 
-    /// <inheritdoc cref="ASActivity.Result"/>
+    /// <inheritdoc cref="ASActivity.Result" />
     [JsonPropertyName("result")]
     public Linkable<ASObject>? Result { get; set; }
 

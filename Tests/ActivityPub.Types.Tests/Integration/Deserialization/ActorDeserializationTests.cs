@@ -8,8 +8,12 @@ namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
 public abstract class ActorDeserializationTests : DeserializationTests<PersonActor>
 {
+    private ActorDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     public class EndpointsShould : ActorDeserializationTests
     {
+        public EndpointsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void ConvertEndpoints()
         {
@@ -42,7 +46,7 @@ public abstract class ActorDeserializationTests : DeserializationTests<PersonAct
             ObjectUnderTest.Endpoints!.SignClientKey?.HRef.Uri.ToString().Should().Be("https://example.com/signClientKey");
             ObjectUnderTest.Endpoints!.SharedInbox?.HRef.Uri.ToString().Should().Be("https://example.com/sharedInbox");
         }
-        
+
         [Fact]
         public void IgnoreTypeInEndpoints()
         {
@@ -61,9 +65,5 @@ public abstract class ActorDeserializationTests : DeserializationTests<PersonAct
 
             ObjectUnderTest.Endpoints.Should().NotBeNull();
         }
-        
-        public EndpointsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
-
-    private ActorDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

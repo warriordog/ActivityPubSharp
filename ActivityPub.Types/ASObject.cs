@@ -10,24 +10,22 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types;
 
 /// <summary>
-/// Describes an object of any kind.
-/// The Object type serves as the base type for most of the other kinds of objects defined in the Activity Vocabulary, including other Core types such as Activity, IntransitiveActivity, Collection and OrderedCollection. 
+///     Describes an object of any kind.
+///     The Object type serves as the base type for most of the other kinds of objects defined in the Activity Vocabulary, including other Core types such as Activity, IntransitiveActivity, Collection and OrderedCollection.
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
 public class ASObject : ASType
 {
+    public ASObject() => Entity = new ASObjectEntity { TypeMap = TypeMap };
+    public ASObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASObjectEntity>();
     private ASObjectEntity Entity { get; }
 
 
-    public ASObject() => Entity = new ASObjectEntity { TypeMap = TypeMap };
-    public ASObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASObjectEntity>();
-
-
     /// <summary>
-    /// Identifies a resource attached or related to an object that potentially requires special handling.
-    /// The intent is to provide a model that is at least semantically similar to attachments in email. 
+    ///     Identifies a resource attached or related to an object that potentially requires special handling.
+    ///     The intent is to provide a model that is at least semantically similar to attachments in email.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-attachment" />
     public LinkableList<ASObject> Attachment
     {
         get => Entity.Attachment;
@@ -35,9 +33,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies one or more entities that represent the total population of entities for which the object can considered to be relevant.
+    ///     Identifies one or more entities that represent the total population of entities for which the object can considered to be relevant.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-audience"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-audience" />
     public LinkableList<ASObject> Audience
     {
         get => Entity.Audience;
@@ -45,9 +43,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies one or more Objects that are part of the private secondary audience of this Object. 
+    ///     Identifies one or more Objects that are part of the private secondary audience of this Object.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-bcc"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-bcc" />
     public LinkableList<ASObject> BCC
     {
         get => Entity.BCC;
@@ -55,9 +53,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies an Object that is part of the private primary audience of this Object.  
+    ///     Identifies an Object that is part of the private primary audience of this Object.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-bto"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-bto" />
     public LinkableList<ASObject> BTo
     {
         get => Entity.BTo;
@@ -65,9 +63,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies an Object that is part of the public secondary audience of this Object.   
+    ///     Identifies an Object that is part of the public secondary audience of this Object.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-cc"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-cc" />
     public LinkableList<ASObject> CC
     {
         get => Entity.CC;
@@ -75,15 +73,15 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies the context within which the object exists or an activity was performed.
-    /// THIS IS *NOT* THE JSON-LD CONTEXT! For that, you need <see cref="ASType.JsonLdContext"/>
+    ///     Identifies the context within which the object exists or an activity was performed.
+    ///     THIS IS *NOT* THE JSON-LD CONTEXT! For that, you need <see cref="ASType.JsonLdContext" />
     /// </summary>
     /// <remarks>
-    /// The notion of "context" used is intentionally vague.
-    /// The intended function is to serve as a means of grouping objects and activities that share a common originating context or purpose.
-    /// An example could be all activities relating to a common project or event.
+    ///     The notion of "context" used is intentionally vague.
+    ///     The intended function is to serve as a means of grouping objects and activities that share a common originating context or purpose.
+    ///     An example could be all activities relating to a common project or event.
     /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/LikeActivity#dfn-context"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/LikeActivity#dfn-context" />
     public Linkable<ASObject>? Context
     {
         get => Entity.Context;
@@ -91,9 +89,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies the entity (e.g. an application) that generated the object. 
+    ///     Identifies the entity (e.g. an application) that generated the object.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-generator"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-generator" />
     public Linkable<ASObject>? Generator
     {
         get => Entity.Generator;
@@ -101,10 +99,10 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Indicates an entity that describes an icon for this object.
-    /// The image should have an aspect ratio of one (horizontal) to one (vertical) and should be suitable for presentation at a small size. 
+    ///     Indicates an entity that describes an icon for this object.
+    ///     The image should have an aspect ratio of one (horizontal) to one (vertical) and should be suitable for presentation at a small size.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-icon"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-icon" />
     public Linkable<ImageObject>? Icon
     {
         get => Entity.Icon;
@@ -112,10 +110,10 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Indicates an entity that describes an image for this object.
-    /// Unlike the icon property, there are no aspect ratio or display size limitations assumed. 
+    ///     Indicates an entity that describes an image for this object.
+    ///     Unlike the icon property, there are no aspect ratio or display size limitations assumed.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-image"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-image" />
     public Linkable<ImageObject>? Image
     {
         get => Entity.Image;
@@ -123,9 +121,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Indicates one or more entities for which this object is considered a response. 
+    ///     Indicates one or more entities for which this object is considered a response.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-inReplyTo"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-inReplyTo" />
     public Linkable<ASObject>? InReplyTo
     {
         get => Entity.InReplyTo;
@@ -133,9 +131,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Indicates one or more physical or logical locations associated with the object. 
+    ///     Indicates one or more physical or logical locations associated with the object.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-location"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-location" />
     public Linkable<ASObject>? Location
     {
         get => Entity.Location;
@@ -143,9 +141,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies a Collection containing objects considered to be responses to this object. 
+    ///     Identifies a Collection containing objects considered to be responses to this object.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-replies"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-replies" />
     public ASCollection? Replies
     {
         get => Entity.Replies;
@@ -153,11 +151,11 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// One or more "tags" that have been associated with an objects.
-    /// A tag can be any kind of Object.
-    /// The key difference between attachment and tag is that the former implies association by inclusion, while the latter implies associated by reference. 
+    ///     One or more "tags" that have been associated with an objects.
+    ///     A tag can be any kind of Object.
+    ///     The key difference between attachment and tag is that the former implies association by inclusion, while the latter implies associated by reference.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-tag"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-tag" />
     public LinkableList<ASObject> Tag
     {
         get => Entity.Tag;
@@ -165,9 +163,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies an entity considered to be part of the public primary audience of an Object 
+    ///     Identifies an entity considered to be part of the public primary audience of an Object
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-to"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-to" />
     public LinkableList<ASObject> To
     {
         get => Entity.To;
@@ -175,9 +173,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// Identifies one or more links to representations of the object 
+    ///     Identifies one or more links to representations of the object
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-url" />
     public List<ASLink> Url
     {
         get => Entity.Url;
@@ -185,11 +183,11 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// The content or textual representation of the Object encoded as a JSON string.
-    /// By default, the value of content is HTML.
-    /// The <see cref="ASType.MediaType"/> property can be used in the object to indicate a different content type.
+    ///     The content or textual representation of the Object encoded as a JSON string.
+    ///     By default, the value of content is HTML.
+    ///     The <see cref="ASType.MediaType" /> property can be used in the object to indicate a different content type.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-content"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-content" />
     public NaturalLanguageString? Content
     {
         get => Entity.Content;
@@ -197,11 +195,11 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// When the object describes a time-bound resource, such as an audio or video, a meeting, etc, the duration property indicates the object's approximate duration.
-    /// The value MUST be expressed as an xsd:duration as defined by [xmlschema11-2], section 3.3.6 (e.g. a period of 5 seconds is represented as "PT5S").
+    ///     When the object describes a time-bound resource, such as an audio or video, a meeting, etc, the duration property indicates the object's approximate duration.
+    ///     The value MUST be expressed as an xsd:duration as defined by [xmlschema11-2], section 3.3.6 (e.g. a period of 5 seconds is represented as "PT5S").
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration"/>
-    /// <seealso href="https://www.w3.org/TR/xmlschema11-2/#duration"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration" />
+    /// <seealso href="https://www.w3.org/TR/xmlschema11-2/#duration" />
     public string? Duration
     {
         get => Entity.Duration;
@@ -209,10 +207,10 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// The date and time describing the actual or expected starting time of the object.
-    /// When used with an Activity object, for instance, the startTime property specifies the moment the activity began or is scheduled to begin. 
+    ///     The date and time describing the actual or expected starting time of the object.
+    ///     When used with an Activity object, for instance, the startTime property specifies the moment the activity began or is scheduled to begin.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startTime"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startTime" />
     public DateTime? StartTime
     {
         get => Entity.StartTime;
@@ -220,10 +218,10 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// The date and time describing the actual or expected ending time of the object.
-    /// When used with an Activity object, for instance, the endTime property specifies the moment the activity concluded or is expected to conclude. 
+    ///     The date and time describing the actual or expected ending time of the object.
+    ///     When used with an Activity object, for instance, the endTime property specifies the moment the activity concluded or is expected to conclude.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-endTime"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-endTime" />
     public DateTime? EndTime
     {
         get => Entity.EndTime;
@@ -231,9 +229,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// The date and time at which the object was published.
+    ///     The date and time at which the object was published.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-published"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-published" />
     public DateTime? Published
     {
         get => Entity.Published;
@@ -241,9 +239,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// A natural language summarization of the object encoded as HTML.
+    ///     A natural language summarization of the object encoded as HTML.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-summary"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-summary" />
     public NaturalLanguageString? Summary
     {
         get => Entity.Summary;
@@ -251,9 +249,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// The date and time at which the object was updated.
+    ///     The date and time at which the object was updated.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-updated"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-updated" />
     public DateTime? Updated
     {
         get => Entity.Updated;
@@ -261,13 +259,13 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// The source property is intended to convey some sort of source from which the content markup was derived, as a form of provenance, or to support future editing by clients.
-    /// In general, clients do the conversion from source to content, not the other way around. 
+    ///     The source property is intended to convey some sort of source from which the content markup was derived, as a form of provenance, or to support future editing by clients.
+    ///     In general, clients do the conversion from source to content, not the other way around.
     /// </summary>
     /// <remarks>
-    /// This property is defined by ActivityPub, not ActivityStreams. 
+    ///     This property is defined by ActivityPub, not ActivityStreams.
     /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitypub/#source-property"/>
+    /// <seealso href="https://www.w3.org/TR/activitypub/#source-property" />
     public ASObject? Source
     {
         get => Entity.Source;
@@ -275,12 +273,12 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// This is a list of all Like activities with this object as the object property, added as a side effect.
+    ///     This is a list of all Like activities with this object as the object property, added as a side effect.
     /// </summary>
     /// <remarks>
-    /// Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="ASActor.Liked"/> collection.
+    ///     Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="ASActor.Liked" /> collection.
     /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitypub/#likes"/>
+    /// <seealso href="https://www.w3.org/TR/activitypub/#likes" />
     public Linkable<ASCollection>? Likes
     {
         get => Entity.Likes;
@@ -288,9 +286,9 @@ public class ASObject : ASType
     }
 
     /// <summary>
-    /// This is a list of all Announce activities with this object as the object property, added as a side effect.
+    ///     This is a list of all Announce activities with this object as the object property, added as a side effect.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitypub/#shares"/>
+    /// <seealso href="https://www.w3.org/TR/activitypub/#shares" />
     public Linkable<ASCollection>? Shares
     {
         get => Entity.Shares;
@@ -298,7 +296,7 @@ public class ASObject : ASType
     }
 }
 
-/// <inheritdoc cref="ASObject"/>
+/// <inheritdoc cref="ASObject" />
 [ASTypeKey(ObjectType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
 public sealed class ASObjectEntity : ASBase<ASObject>
@@ -307,103 +305,103 @@ public sealed class ASObjectEntity : ASBase<ASObject>
     public override string ASTypeName => ObjectType;
 
 
-    /// <inheritdoc cref="ASObject.Attachment"/>
+    /// <inheritdoc cref="ASObject.Attachment" />
     [JsonPropertyName("attachment")]
     public LinkableList<ASObject> Attachment { get; set; } = new();
 
-    /// <inheritdoc cref="ASObject.Audience"/>
+    /// <inheritdoc cref="ASObject.Audience" />
     [JsonPropertyName("audience")]
     public LinkableList<ASObject> Audience { get; set; } = new();
 
-    /// <inheritdoc cref="ASObject.BCC"/>
+    /// <inheritdoc cref="ASObject.BCC" />
     [JsonPropertyName("bcc")]
     public LinkableList<ASObject> BCC { get; set; } = new();
 
-    /// <inheritdoc cref="ASObject.BTo"/>
+    /// <inheritdoc cref="ASObject.BTo" />
     [JsonPropertyName("bto")] // this property is not in camelcase for some reason
     public LinkableList<ASObject> BTo { get; set; } = new();
 
-    /// <inheritdoc cref="ASObject.CC"/>
+    /// <inheritdoc cref="ASObject.CC" />
     [JsonPropertyName("cc")]
     public LinkableList<ASObject> CC { get; set; } = new();
 
-    /// <inheritdoc cref="ASObject.Context"/>
+    /// <inheritdoc cref="ASObject.Context" />
     [JsonPropertyName("context")]
     public Linkable<ASObject>? Context { get; set; }
 
-    /// <inheritdoc cref="ASObject.Generator"/>
+    /// <inheritdoc cref="ASObject.Generator" />
     [JsonPropertyName("generator")]
     public Linkable<ASObject>? Generator { get; set; }
 
-    /// <inheritdoc cref="ASObject.Icon"/>
+    /// <inheritdoc cref="ASObject.Icon" />
     [JsonPropertyName("icon")]
     public Linkable<ImageObject>? Icon { get; set; }
 
-    /// <inheritdoc cref="ASObject.Image"/>
+    /// <inheritdoc cref="ASObject.Image" />
     [JsonPropertyName("image")]
     public Linkable<ImageObject>? Image { get; set; }
 
-    /// <inheritdoc cref="ASObject.InReplyTo"/>
+    /// <inheritdoc cref="ASObject.InReplyTo" />
     [JsonPropertyName("inReplyTo")]
     public Linkable<ASObject>? InReplyTo { get; set; }
 
-    /// <inheritdoc cref="ASObject.Location"/>
+    /// <inheritdoc cref="ASObject.Location" />
     [JsonPropertyName("location")]
     public Linkable<ASObject>? Location { get; set; }
 
-    /// <inheritdoc cref="ASObject.Replies"/>
+    /// <inheritdoc cref="ASObject.Replies" />
     [JsonPropertyName("replies")]
     public ASCollection? Replies { get; set; }
 
-    /// <inheritdoc cref="ASObject.Tag"/>
+    /// <inheritdoc cref="ASObject.Tag" />
     [JsonPropertyName("tag")]
     public LinkableList<ASObject> Tag { get; set; } = new();
 
-    /// <inheritdoc cref="ASObject.To"/>
+    /// <inheritdoc cref="ASObject.To" />
     [JsonPropertyName("to")]
     public LinkableList<ASObject> To { get; set; } = new();
 
-    /// <inheritdoc cref="ASObject.Url"/>
+    /// <inheritdoc cref="ASObject.Url" />
     [JsonPropertyName("url")]
     public List<ASLink> Url { get; set; } = new();
 
-    /// <inheritdoc cref="ASObject.Content"/>
+    /// <inheritdoc cref="ASObject.Content" />
     [JsonPropertyName("content")]
     public NaturalLanguageString? Content { get; set; }
 
-    /// <inheritdoc cref="ASObject.Duration"/>
+    /// <inheritdoc cref="ASObject.Duration" />
     [JsonPropertyName("duration")]
     public string? Duration { get; set; }
 
-    /// <inheritdoc cref="ASObject.StartTime"/>
+    /// <inheritdoc cref="ASObject.StartTime" />
     [JsonPropertyName("startTime")]
     public DateTime? StartTime { get; set; }
 
-    /// <inheritdoc cref="ASObject.EndTime"/>
+    /// <inheritdoc cref="ASObject.EndTime" />
     [JsonPropertyName("endTime")]
     public DateTime? EndTime { get; set; }
 
-    /// <inheritdoc cref="ASObject.Published"/>
+    /// <inheritdoc cref="ASObject.Published" />
     [JsonPropertyName("published")]
     public DateTime? Published { get; set; }
 
-    /// <inheritdoc cref="ASObject.Summary"/>
+    /// <inheritdoc cref="ASObject.Summary" />
     [JsonPropertyName("summary")]
     public NaturalLanguageString? Summary { get; set; }
 
-    /// <inheritdoc cref="ASObject.Updated"/>
+    /// <inheritdoc cref="ASObject.Updated" />
     [JsonPropertyName("updated")]
     public DateTime? Updated { get; set; }
 
-    /// <inheritdoc cref="ASObject.Source"/>
+    /// <inheritdoc cref="ASObject.Source" />
     [JsonPropertyName("source")]
     public ASObject? Source { get; set; }
 
-    /// <inheritdoc cref="ASObject.Likes"/>
+    /// <inheritdoc cref="ASObject.Likes" />
     [JsonPropertyName("likes")]
     public Linkable<ASCollection>? Likes { get; set; }
 
-    /// <inheritdoc cref="ASObject.Shares"/>
+    /// <inheritdoc cref="ASObject.Shares" />
     [JsonPropertyName("shares")]
     public Linkable<ASCollection>? Shares { get; set; }
 }

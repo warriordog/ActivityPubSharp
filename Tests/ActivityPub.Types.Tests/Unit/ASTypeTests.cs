@@ -7,7 +7,7 @@ namespace ActivityPub.Types.Tests.Unit;
 
 public abstract class ASTypeTests
 {
-    private ASType ObjectUnderTest { get; set; } = new StubASType();
+    private ASType ObjectUnderTest { get; } = new StubASType();
 
     public class JsonLdContextsShould : ASTypeTests
     {
@@ -66,10 +66,9 @@ public abstract class ASTypeTests
 
     private class StubASType : ASType
     {
-        private StubASTypeEntity Entity { get; }
-
         public StubASType() => Entity = new StubASTypeEntity { TypeMap = TypeMap };
         public StubASType(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<StubASTypeEntity>();
+        private StubASTypeEntity Entity { get; }
     }
 
     [ImpliesOtherEntity(typeof(ASTypeEntity))]

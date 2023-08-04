@@ -6,18 +6,17 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor is calling the target's attention the object.
-/// The origin typically has no defined meaning. 
+///     Indicates that the actor is calling the target's attention the object.
+///     The origin typically has no defined meaning.
 /// </summary>
 public class AnnounceActivity : ASTransitiveActivity
 {
-    private AnnounceActivityEntity Entity { get; }
-
     public AnnounceActivity() => Entity = new AnnounceActivityEntity { TypeMap = TypeMap };
     public AnnounceActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<AnnounceActivityEntity>();
+    private AnnounceActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="AnnounceActivity"/>
+/// <inheritdoc cref="AnnounceActivity" />
 [ASTypeKey(AnnounceType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class AnnounceActivityEntity : ASBase<AnnounceActivity>
@@ -25,7 +24,7 @@ public sealed class AnnounceActivityEntity : ASBase<AnnounceActivity>
     public const string AnnounceType = "Announce";
     public override string ASTypeName => AnnounceType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

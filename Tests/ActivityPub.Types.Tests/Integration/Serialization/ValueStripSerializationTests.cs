@@ -6,11 +6,14 @@ using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Collection;
 using ActivityPub.Types.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public class ValueStripSerializationTests : SerializationTests
 {
+    public ValueStripSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     [Fact]
     public void NullObjectsShould_BeStrippedFromOutput()
     {
@@ -48,7 +51,7 @@ public class ValueStripSerializationTests : SerializationTests
     {
         ObjectUnderTest = new ASObject
         {
-            Attachment = new()
+            Attachment = new LinkableList<ASObject>()
         };
 
         JsonUnderTest.Should().NotHaveProperty("attachment");
@@ -80,9 +83,12 @@ public class ValueStripSerializationTests : SerializationTests
             Source = new FakeObjectWithSpecialNullability()
         };
         JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable));
-        JsonUnderTest.Should().HaveProperty("source", source =>
-            source.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable))
-        );
+        JsonUnderTest.Should()
+            .HaveProperty(
+                "source",
+                source =>
+                    source.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable))
+            );
     }
 
     [Fact]
@@ -112,7 +118,7 @@ public class ValueStripSerializationTests : SerializationTests
     {
         ObjectUnderTest = new ASObject
         {
-            Attachment = new()
+            Attachment = new LinkableList<ASObject>
             {
                 new ASObject()
             }
@@ -120,16 +126,13 @@ public class ValueStripSerializationTests : SerializationTests
 
         JsonUnderTest.Should().HaveProperty("attachment");
     }
-
-    public ValueStripSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }
 
 public class FakeObjectWithSpecialNullability : ASObject
 {
-    private FakeObjectWithSpecialNullabilityEntity Entity { get; }
-
     public FakeObjectWithSpecialNullability() => Entity = new FakeObjectWithSpecialNullabilityEntity { TypeMap = TypeMap };
     public FakeObjectWithSpecialNullability(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<FakeObjectWithSpecialNullabilityEntity>();
+    private FakeObjectWithSpecialNullabilityEntity Entity { get; }
 
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

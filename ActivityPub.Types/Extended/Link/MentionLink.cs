@@ -7,15 +7,13 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Extended.Link;
 
 /// <summary>
-/// A specialized Link that represents an @mention. 
+///     A specialized Link that represents an @mention.
 /// </summary>
 public class MentionLink : ASLink
 {
-    private MentionLinkEntity Entity { get; }
-
-
     public MentionLink() => Entity = new MentionLinkEntity { TypeMap = TypeMap };
     public MentionLink(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<MentionLinkEntity>();
+    private MentionLinkEntity Entity { get; }
 
 
     public static implicit operator string(MentionLink link) => link.HRef;
@@ -29,7 +27,7 @@ public class MentionLink : ASLink
 }
 
 /// <summary>
-/// A specialized Link that represents an @mention. 
+///     A specialized Link that represents an @mention.
 /// </summary>
 [ASTypeKey(MentionType)]
 [ImpliesOtherEntity(typeof(ASLinkEntity))]
@@ -38,7 +36,7 @@ public sealed class MentionLinkEntity : ASBase<MentionLink>
     public const string MentionType = "Mention";
     public override string ASTypeName => MentionType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASLinkEntity.LinkType
     };

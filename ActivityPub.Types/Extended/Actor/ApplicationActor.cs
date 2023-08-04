@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Actor;
 
 /// <summary>
-/// Describes a software application. 
+///     Describes a software application.
 /// </summary>
 public class ApplicationActor : ASActor
 {
-    private ApplicationActorEntity Entity { get; }
-
     public ApplicationActor() => Entity = new ApplicationActorEntity { TypeMap = TypeMap };
     public ApplicationActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ApplicationActorEntity>();
+    private ApplicationActorEntity Entity { get; }
 }
 
-/// <inheritdoc cref="ApplicationActor"/>
+/// <inheritdoc cref="ApplicationActor" />
 [ASTypeKey(ApplicationType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class ApplicationActorEntity : ASBase<ApplicationActor>
@@ -24,7 +23,7 @@ public sealed class ApplicationActorEntity : ASBase<ApplicationActor>
     public const string ApplicationType = "Application";
     public override string ASTypeName => ApplicationType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };

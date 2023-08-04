@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Actor;
 
 /// <summary>
-/// Represents a service of any kind.
+///     Represents a service of any kind.
 /// </summary>
 public class ServiceActor : ASActor
 {
-    private ServiceActorEntity Entity { get; }
-
     public ServiceActor() => Entity = new ServiceActorEntity { TypeMap = TypeMap };
     public ServiceActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ServiceActorEntity>();
+    private ServiceActorEntity Entity { get; }
 }
 
-/// <inheritdoc cref="ServiceActor"/>
+/// <inheritdoc cref="ServiceActor" />
 [ASTypeKey(ServiceType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class ServiceActorEntity : ASBase<ServiceActor>
@@ -24,7 +23,7 @@ public sealed class ServiceActorEntity : ASBase<ServiceActor>
     public const string ServiceType = "Service";
     public override string ASTypeName => ServiceType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };

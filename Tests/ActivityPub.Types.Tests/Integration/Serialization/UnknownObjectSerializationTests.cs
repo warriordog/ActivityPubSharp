@@ -7,13 +7,14 @@ namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public abstract class UnknownObjectSerializationTests : SerializationTests
 {
+    private UnknownObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     public class ObjectWithUnknownPropertiesShould : UnknownObjectSerializationTests
     {
         private const string UnknownPropName = "special_unknown_property";
         private const string UnknownPropValue = "special_unknown_value";
 
-        public ObjectWithUnknownPropertiesShould(JsonLdSerializerFixture fixture) : base(fixture)
-        {
+        public ObjectWithUnknownPropertiesShould(JsonLdSerializerFixture fixture) : base(fixture) =>
             ObjectUnderTest = new ASObject
             {
                 Duration = "PTS5",
@@ -22,7 +23,6 @@ public abstract class UnknownObjectSerializationTests : SerializationTests
                     [UnknownPropName] = JsonSerializer.SerializeToElement(UnknownPropValue)
                 }
             };
-        }
 
         [Fact]
         public void WriteKnownProperties()
@@ -36,6 +36,4 @@ public abstract class UnknownObjectSerializationTests : SerializationTests
             JsonUnderTest.Should().HaveStringProperty(UnknownPropName, UnknownPropValue);
         }
     }
-
-    private UnknownObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

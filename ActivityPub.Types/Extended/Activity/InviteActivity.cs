@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// A specialization of Offer in which the actor is extending an invitation for the object to the target. 
+///     A specialization of Offer in which the actor is extending an invitation for the object to the target.
 /// </summary>
 public class InviteActivity : OfferActivity
 {
-    private InviteActivityEntity Entity { get; }
-
     public InviteActivity() => Entity = new InviteActivityEntity { TypeMap = TypeMap };
     public InviteActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<InviteActivityEntity>();
+    private InviteActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="InviteActivity"/>
+/// <inheritdoc cref="InviteActivity" />
 [ASTypeKey(InviteType)]
 [ImpliesOtherEntity(typeof(OfferActivityEntity))]
 public sealed class InviteActivityEntity : ASBase<InviteActivity>
@@ -24,7 +23,7 @@ public sealed class InviteActivityEntity : ASBase<InviteActivity>
     public const string InviteType = "Invite";
     public override string ASTypeName => InviteType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         OfferActivityEntity.OfferType
     };

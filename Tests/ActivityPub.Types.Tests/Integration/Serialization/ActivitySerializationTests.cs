@@ -7,6 +7,8 @@ namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public class ActivitySerializationTests : SerializationTests
 {
+    public ActivitySerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     [Fact]
     public void BasicActivitiesShould_NotIncludeObject()
     {
@@ -44,7 +46,7 @@ public class ActivitySerializationTests : SerializationTests
     [Fact]
     public void TargetedActivitiesShould_IncludeObjectAndTarget()
     {
-        ObjectUnderTest = new ASTargetedActivity()
+        ObjectUnderTest = new ASTargetedActivity
         {
             Object = new ASObject(),
             Target = new ASObject()
@@ -52,6 +54,4 @@ public class ActivitySerializationTests : SerializationTests
         JsonUnderTest.Should().HaveProperty("object");
         JsonUnderTest.Should().HaveProperty("target");
     }
-
-    public ActivitySerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

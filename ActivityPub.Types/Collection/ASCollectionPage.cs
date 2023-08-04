@@ -9,27 +9,25 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Collection;
 
 /// <summary>
-/// Used to represent distinct subsets of items from a Collection. 
+///     Used to represent distinct subsets of items from a Collection.
 /// </summary>
 /// <remarks>
-/// Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the CollectionPage type.
+///     Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the CollectionPage type.
 /// </remarks>
-/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage"/>
-/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage"/>
+/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage" />
+/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage" />
 [ASTypeKey(ASCollectionPageEntity.CollectionPageType)]
 public class ASCollectionPage : ASCollection
 {
+    public ASCollectionPage() => Entity = new ASCollectionPageEntity { TypeMap = TypeMap };
+    public ASCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionPageEntity>();
     private ASCollectionPageEntity Entity { get; }
 
 
-    public ASCollectionPage() => Entity = new ASCollectionPageEntity { TypeMap = TypeMap };
-    public ASCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionPageEntity>();
-
-
     /// <summary>
-    /// In a paged Collection, indicates the next page of items. 
+    ///     In a paged Collection, indicates the next page of items.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-next"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-next" />
     public Linkable<ASCollectionPage>? Next
     {
         get => Entity.Next;
@@ -37,9 +35,9 @@ public class ASCollectionPage : ASCollection
     }
 
     /// <summary>
-    /// In a paged Collection, indicates the previous page of items. 
+    ///     In a paged Collection, indicates the previous page of items.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-prev"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-prev" />
     public Linkable<ASCollectionPage>? Prev
     {
         get => Entity.Prev;
@@ -47,9 +45,9 @@ public class ASCollectionPage : ASCollection
     }
 
     /// <summary>
-    /// Identifies the Collection to which a CollectionPage objects items belong. 
+    ///     Identifies the Collection to which a CollectionPage objects items belong.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-partOf"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-partOf" />
     public Linkable<ASCollection>? PartOf
     {
         get => Entity.PartOf;
@@ -57,10 +55,10 @@ public class ASCollectionPage : ASCollection
     }
 
     /// <summary>
-    /// A non-negative integer value identifying the relative position within the logical view of a strictly ordered collection.
-    /// This is only valid on OrderedCollectionPage, but it exists on unordered CollectionPage due to technical limitations.
+    ///     A non-negative integer value identifying the relative position within the logical view of a strictly ordered collection.
+    ///     This is only valid on OrderedCollectionPage, but it exists on unordered CollectionPage due to technical limitations.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startIndex"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-startIndex" />
     public int? StartIndex
     {
         get => Entity.StartIndex;
@@ -70,7 +68,7 @@ public class ASCollectionPage : ASCollection
     public static implicit operator ASCollectionPage(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
 }
 
-/// <inheritdoc cref="ASCollectionPage"/>
+/// <inheritdoc cref="ASCollectionPage" />
 [ASTypeKey(CollectionPageType)]
 [ASTypeKey(OrderedCollectionPageType)]
 [ImpliesOtherEntity(typeof(ASCollection))]
@@ -80,24 +78,24 @@ public sealed class ASCollectionPageEntity : ASBase<ASCollection>
     public const string OrderedCollectionPageType = "OrderedCollectionPage";
     public override string ASTypeName => CollectionPageType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASCollectionEntity.CollectionType
     };
 
-    /// <inheritdoc cref="ASCollectionPage.Next"/>
+    /// <inheritdoc cref="ASCollectionPage.Next" />
     [JsonPropertyName("next")]
     public Linkable<ASCollectionPage>? Next { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage.Prev"/>
+    /// <inheritdoc cref="ASCollectionPage.Prev" />
     [JsonPropertyName("prev")]
     public Linkable<ASCollectionPage>? Prev { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage.PartOf"/>
+    /// <inheritdoc cref="ASCollectionPage.PartOf" />
     [JsonPropertyName("partOf")]
     public Linkable<ASCollection>? PartOf { get; set; }
 
-    /// <inheritdoc cref="ASCollectionPage.StartIndex"/>
+    /// <inheritdoc cref="ASCollectionPage.StartIndex" />
     [JsonPropertyName("startIndex")]
     [Range(0, int.MaxValue)]
     public int? StartIndex { get; set; }

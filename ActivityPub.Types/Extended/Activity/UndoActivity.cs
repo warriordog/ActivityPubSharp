@@ -6,19 +6,18 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor is undoing the object.
-/// In most cases, the object will be an Activity describing some previously performed action (for instance, a person may have previously "liked" an article but, for whatever reason, might choose to undo that like at some later point in time).
-/// The target and origin typically have no defined meaning. 
+///     Indicates that the actor is undoing the object.
+///     In most cases, the object will be an Activity describing some previously performed action (for instance, a person may have previously "liked" an article but, for whatever reason, might choose to undo that like at some later point in time).
+///     The target and origin typically have no defined meaning.
 /// </summary>
 public class UndoActivity : ASTransitiveActivity
 {
-    private UndoActivityEntity Entity { get; }
-
     public UndoActivity() => Entity = new UndoActivityEntity { TypeMap = TypeMap };
     public UndoActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<UndoActivityEntity>();
+    private UndoActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="UndoActivity"/>
+/// <inheritdoc cref="UndoActivity" />
 [ASTypeKey(UndoType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class UndoActivityEntity : ASBase<UndoActivity>
@@ -26,7 +25,7 @@ public sealed class UndoActivityEntity : ASBase<UndoActivity>
     public const string UndoType = "Undo";
     public override string ASTypeName => UndoType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

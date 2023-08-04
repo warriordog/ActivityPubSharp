@@ -13,7 +13,7 @@ public static class CommonModule
     public static void TryAddCommonModule(this IServiceCollection services)
     {
         services.TryAddTypesModule();
-        
+
         services.TryAddSingleton<ActivityPubOptions>();
     }
 }

@@ -51,11 +51,13 @@ public abstract class JsonLDContextObjectConverterTests : JsonConverterTests<Jso
         [Fact]
         public void ThrowJsonException_WhenInputIsUnsupported()
         {
-            Assert.Throws<JsonException>(() =>
-            {
-                var json = "[]"u8;
-                Read(json);
-            });
+            Assert.Throws<JsonException>(
+                () =>
+                {
+                    var json = "[]"u8;
+                    Read(json);
+                }
+            );
         }
     }
 
@@ -74,16 +76,18 @@ public abstract class JsonLDContextObjectConverterTests : JsonConverterTests<Jso
         [Fact]
         public void WriteTermsAsObject()
         {
-            var input = new JsonLDContextObject(new Dictionary<string, JsonLDTerm>
-            {
+            var input = new JsonLDContextObject(
+                new Dictionary<string, JsonLDTerm>
                 {
-                    "name",
-                    new JsonLDTerm
                     {
-                        Id = "https://example.com/name"
+                        "name",
+                        new JsonLDTerm
+                        {
+                            Id = "https://example.com/name"
+                        }
                     }
                 }
-            });
+            );
 
             var json = Write(input);
 

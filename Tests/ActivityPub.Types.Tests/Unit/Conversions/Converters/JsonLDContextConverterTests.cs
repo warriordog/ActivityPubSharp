@@ -81,11 +81,13 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         [Fact]
         public void ThrowJsonException_WhenInputIsUnsupported()
         {
-            Assert.Throws<JsonException>(() =>
-            {
-                var json = "0"u8;
-                Read(json);
-            });
+            Assert.Throws<JsonException>(
+                () =>
+                {
+                    var json = "0"u8;
+                    Read(json);
+                }
+            );
         }
     }
 
@@ -94,10 +96,12 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         [Fact]
         public void WriteSingleDirectly()
         {
-            var input = new JsonLDContext(new HashSet<JsonLDContextObject>()
-            {
-                new JsonLDContextObject("https://example.com/context.jsonld")
-            });
+            var input = new JsonLDContext(
+                new HashSet<JsonLDContextObject>
+                {
+                    new("https://example.com/context.jsonld")
+                }
+            );
 
             var json = Write(input);
 
@@ -107,11 +111,13 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         [Fact]
         public void WriteMultiAsArray()
         {
-            var input = new JsonLDContext(new HashSet<JsonLDContextObject>
-            {
-                new JsonLDContextObject("https://example.com/first.jsonld"),
-                new JsonLDContextObject("https://example.com/second.jsonld")
-            });
+            var input = new JsonLDContext(
+                new HashSet<JsonLDContextObject>
+                {
+                    new("https://example.com/first.jsonld"),
+                    new("https://example.com/second.jsonld")
+                }
+            );
 
             var json = Write(input);
 

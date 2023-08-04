@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor dislikes the object. 
+///     Indicates that the actor dislikes the object.
 /// </summary>
 public class DislikeActivity : ASTransitiveActivity
 {
-    private DislikeActivityEntity Entity { get; }
-
     public DislikeActivity() => Entity = new DislikeActivityEntity { TypeMap = TypeMap };
     public DislikeActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<DislikeActivityEntity>();
+    private DislikeActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="DislikeActivity"/>
+/// <inheritdoc cref="DislikeActivity" />
 [ASTypeKey(DislikeType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class DislikeActivityEntity : ASBase<DislikeActivity>
@@ -24,7 +23,7 @@ public sealed class DislikeActivityEntity : ASBase<DislikeActivity>
     public const string DislikeType = "Dislike";
     public override string ASTypeName => DislikeType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

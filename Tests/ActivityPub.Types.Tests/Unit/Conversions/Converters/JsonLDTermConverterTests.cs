@@ -47,11 +47,13 @@ public abstract class JsonLDTermConverterTests : JsonConverterTests<JsonLDTerm, 
         [Fact]
         public void ThrowJsonException_WhenInputIsUnsupported()
         {
-            Assert.Throws<JsonException>(() =>
-            {
-                var json = "[]"u8;
-                Read(json);
-            });
+            Assert.Throws<JsonException>(
+                () =>
+                {
+                    var json = "[]"u8;
+                    Read(json);
+                }
+            );
         }
     }
 
@@ -60,7 +62,7 @@ public abstract class JsonLDTermConverterTests : JsonConverterTests<JsonLDTerm, 
         [Fact]
         public void WriteId()
         {
-            var input = new JsonLDTerm()
+            var input = new JsonLDTerm
             {
                 Id = "https://example.com/context.jsonld"
             };

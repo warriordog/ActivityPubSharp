@@ -8,12 +8,15 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-/// Converts language-tagged strings
+///     Converts language-tagged strings
 /// </summary>
 public class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageString>
 {
-    public override NaturalLanguageString? Read(ref Utf8JsonReader reader, Type typeToConvert,
-        JsonSerializerOptions options)
+    public override NaturalLanguageString? Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
     {
         switch (reader.TokenType)
         {
@@ -40,12 +43,8 @@ public class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageStrin
     public override void Write(Utf8JsonWriter writer, NaturalLanguageString value, JsonSerializerOptions options)
     {
         if (value.SingleString != null)
-        {
             writer.WriteStringValue(value.SingleString);
-        }
         else
-        {
             JsonSerializer.Serialize(writer, value.LanguageMap, options);
-        }
     }
 }

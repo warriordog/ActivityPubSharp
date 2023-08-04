@@ -12,17 +12,15 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types;
 
 /// <summary>
-/// A Link is an indirect, qualified reference to a resource identified by a URL.
-/// The fundamental model for links is established by <a href="https://tools.ietf.org/html/rfc5988">RFC5988</a>.
-/// Many of the properties defined by the Activity Vocabulary allow values that are either instances of Object or 
-/// When a Link is used, it establishes a qualified relation connecting the subject (the containing object) to the resource identified by the href.
-/// Properties of the Link are properties of the reference as opposed to properties of the resource. 
+///     A Link is an indirect, qualified reference to a resource identified by a URL.
+///     The fundamental model for links is established by <a href="https://tools.ietf.org/html/rfc5988">RFC5988</a>.
+///     Many of the properties defined by the Activity Vocabulary allow values that are either instances of Object or
+///     When a Link is used, it establishes a qualified relation connecting the subject (the containing object) to the resource identified by the href.
+///     Properties of the Link are properties of the reference as opposed to properties of the resource.
 /// </summary>
-/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link"/>
+/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link" />
 public class ASLink : ASType
 {
-    private ASLinkEntity Entity { get; }
-
     public ASLink() => Entity = new ASLinkEntity
     {
         TypeMap = TypeMap,
@@ -30,11 +28,12 @@ public class ASLink : ASType
     };
 
     public ASLink(TypeMap typeMap) : base(typeMap) => Entity = typeMap.AsEntity<ASLinkEntity>();
+    private ASLinkEntity Entity { get; }
 
     /// <summary>
-    /// The target resource pointed to by a  
+    ///     The target resource pointed to by a
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-href"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-href" />
     public required ASUri HRef
     {
         get => Entity.HRef;
@@ -42,10 +41,10 @@ public class ASLink : ASType
     }
 
     /// <summary>
-    /// Hints as to the language used by the target resource.
-    /// Value MUST be a [BCP47] Language-Tag. 
+    ///     Hints as to the language used by the target resource.
+    ///     Value MUST be a [BCP47] Language-Tag.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-hreflang"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-hreflang" />
     public string? HRefLang
     {
         get => Entity.HRefLang;
@@ -53,9 +52,9 @@ public class ASLink : ASType
     }
 
     /// <summary>
-    /// On a Link, specifies a hint as to the rendering width in device-independent pixels of the linked resource. 
+    ///     On a Link, specifies a hint as to the rendering width in device-independent pixels of the linked resource.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-width"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-width" />
     public int? Width
     {
         get => Entity.Width;
@@ -63,9 +62,9 @@ public class ASLink : ASType
     }
 
     /// <summary>
-    /// On a Link, specifies a hint as to the rendering height in device-independent pixels of the linked resource. 
+    ///     On a Link, specifies a hint as to the rendering height in device-independent pixels of the linked resource.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-height"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-height" />
     public int? Height
     {
         get => Entity.Height;
@@ -73,11 +72,11 @@ public class ASLink : ASType
     }
 
     /// <summary>
-    /// A link relation associated with a 
-    /// The value MUST conform to both the [HTML5] and [RFC5988] "link relation" definitions.
-    /// In the [HTML5], any string not containing the "space" U+0020, "tab" (U+0009), "LF" (U+000A), "FF" (U+000C), "CR" (U+000D) or "," (U+002C) characters can be used as a valid link relation.
+    ///     A link relation associated with a
+    ///     The value MUST conform to both the [HTML5] and [RFC5988] "link relation" definitions.
+    ///     In the [HTML5], any string not containing the "space" U+0020, "tab" (U+0009), "LF" (U+000A), "FF" (U+000C), "CR" (U+000D) or "," (U+002C) characters can be used as a valid link relation.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-rel"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-rel" />
     public HashSet<LinkRel> Rel
     {
         get => Entity.Rel;
@@ -94,7 +93,7 @@ public class ASLink : ASType
     public static implicit operator ASLink(ASUri asUri) => new() { HRef = asUri };
 }
 
-/// <inheritdoc cref="ASLink"/>
+/// <inheritdoc cref="ASLink" />
 [ASTypeKey(LinkType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
 public sealed class ASLinkEntity : ASBase<ASLink>, ICustomJsonDeserialized<ASLinkEntity>, IJsonValueSerialized<ASLinkEntity>
@@ -102,23 +101,23 @@ public sealed class ASLinkEntity : ASBase<ASLink>, ICustomJsonDeserialized<ASLin
     public const string LinkType = "Link";
     public override string ASTypeName => LinkType;
 
-    /// <inheritdoc cref="ASLink.HRef"/>
+    /// <inheritdoc cref="ASLink.HRef" />
     [JsonPropertyName("href")]
     public required ASUri HRef { get; set; }
 
-    /// <inheritdoc cref="ASLink.HRefLang"/>
+    /// <inheritdoc cref="ASLink.HRefLang" />
     [JsonPropertyName("hreflang")]
     public string? HRefLang { get; set; }
 
-    /// <inheritdoc cref="ASLink.Width"/>
+    /// <inheritdoc cref="ASLink.Width" />
     [JsonPropertyName("width")]
     public int? Width { get; set; }
 
-    /// <inheritdoc cref="ASLink.Height"/>
+    /// <inheritdoc cref="ASLink.Height" />
     [JsonPropertyName("height")]
     public int? Height { get; set; }
 
-    /// <inheritdoc cref="ASLink.Rel"/>
+    /// <inheritdoc cref="ASLink.Rel" />
     [JsonPropertyName("rel")]
     public HashSet<LinkRel> Rel { get; set; } = new();
 

@@ -12,9 +12,9 @@ namespace ActivityPub.Types.Internal;
 internal static class JsonExtensions
 {
     /// <summary>
-    /// Attempts to read a string from the provided JSON reader.
-    /// Returns false + null if the reader is not positioned at a string or reading fails.
-    /// Does NOT advance the reader!
+    ///     Attempts to read a string from the provided JSON reader.
+    ///     Returns false + null if the reader is not positioned at a string or reading fails.
+    ///     Does NOT advance the reader!
     /// </summary>
     /// <param name="reader">Reader, not copied because we don't move it</param>
     /// <param name="type">String that was read</param>
@@ -32,8 +32,8 @@ internal static class JsonExtensions
     }
 
     /// <summary>
-    /// Attempts to read the element as a string.
-    /// Returns true on success.
+    ///     Attempts to read the element as a string.
+    ///     Returns true on success.
     /// </summary>
     /// <param name="element">Element to convert</param>
     /// <param name="str">String that was read</param>
@@ -51,8 +51,8 @@ internal static class JsonExtensions
     }
 
     /// <summary>
-    /// Attempts to read the provided <see cref="JsonElement"/> as an ActivityStreams object and return its type.
-    /// Returns false if the element does not contain an object or the object does not contain a valid type.
+    ///     Attempts to read the provided <see cref="JsonElement" /> as an ActivityStreams object and return its type.
+    ///     Returns false if the element does not contain an object or the object does not contain a valid type.
     /// </summary>
     /// <param name="element">object to read</param>
     /// <param name="type">Set to the AS type on success, or null on failure</param>
@@ -67,7 +67,7 @@ internal static class JsonExtensions
     }
 
     /// <summary>
-    /// Converts a JsonElement to the appropriate JsonNode subtype.
+    ///     Converts a JsonElement to the appropriate JsonNode subtype.
     /// </summary>
     /// <param name="element">Element to convert</param>
     /// <param name="options">Optional options to pass to JsonNode</param>
@@ -80,7 +80,7 @@ internal static class JsonExtensions
     };
 
     /// <summary>
-    /// Converts a <see cref="JsonSerializerOptions"/> into a <see cref="JsonNodeOptions"/> with the equivalent settings.
+    ///     Converts a <see cref="JsonSerializerOptions" /> into a <see cref="JsonNodeOptions" /> with the equivalent settings.
     /// </summary>
     internal static JsonNodeOptions ToNodeOptions(this JsonSerializerOptions options) => new()
     {

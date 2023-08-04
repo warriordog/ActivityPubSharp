@@ -7,26 +7,26 @@ namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
 public class ActivityDeserializationTests : DeserializationTests<ASActivity>
 {
+    public ActivityDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     [Fact]
     public void BasicActivitiesShould_DeserializeToASActivity()
     {
         JsonUnderTest = """{"type":"Activity"}""";
         ObjectUnderTest.Should().BeOfType<ASActivity>();
     }
-    
+
     [Fact]
     public void TransitiveActivitiesShould_DeserializeToASTransitiveActivity()
     {
         JsonUnderTest = """{"type":"Activity","object":{}}""";
         ObjectUnderTest.Should().BeOfType<ASTransitiveActivity>();
     }
-    
+
     [Fact]
     public void TargetedActivitiesShould_DeserializeToASTargetedActivity()
     {
         JsonUnderTest = """{"type":"Activity","object":{},"target":{}}""";
         ObjectUnderTest.Should().BeOfType<ASTargetedActivity>();
     }
-    
-    public ActivityDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

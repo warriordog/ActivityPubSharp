@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Object;
 
 /// <summary>
-/// Represents any kind of event.
+///     Represents any kind of event.
 /// </summary>
 public class EventObject : ASObject
 {
-    private EventObjectEntity Entity { get; }
-
     public EventObject() => Entity = new EventObjectEntity { TypeMap = TypeMap };
     public EventObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<EventObjectEntity>();
+    private EventObjectEntity Entity { get; }
 }
 
-/// <inheritdoc cref="EventObject"/>
+/// <inheritdoc cref="EventObject" />
 [ASTypeKey(EventType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class EventObjectEntity : ASBase<EventObject>
@@ -24,7 +23,7 @@ public sealed class EventObjectEntity : ASBase<EventObject>
     public const string EventType = "Event";
     public override string ASTypeName => EventType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };

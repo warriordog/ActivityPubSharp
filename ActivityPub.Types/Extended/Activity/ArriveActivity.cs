@@ -6,19 +6,18 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// An IntransitiveActivity that indicates that the actor has arrived at the location.
-/// The origin can be used to identify the context from which the actor originated.
-/// The target typically has no defined meaning. 
+///     An IntransitiveActivity that indicates that the actor has arrived at the location.
+///     The origin can be used to identify the context from which the actor originated.
+///     The target typically has no defined meaning.
 /// </summary>
 public class ArriveActivity : ASIntransitiveActivity
 {
-    private ArriveActivityEntity Entity { get; }
-
     public ArriveActivity() => Entity = new ArriveActivityEntity { TypeMap = TypeMap };
     public ArriveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ArriveActivityEntity>();
+    private ArriveActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="ArriveActivity"/>
+/// <inheritdoc cref="ArriveActivity" />
 [ASTypeKey(ArriveType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
 public sealed class ArriveActivityEntity : ASBase<ArriveActivity>
@@ -26,7 +25,7 @@ public sealed class ArriveActivityEntity : ASBase<ArriveActivity>
     public const string ArriveType = "Arrive";
     public override string ASTypeName => ArriveType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASIntransitiveActivityEntity.IntransitiveActivityType
     };

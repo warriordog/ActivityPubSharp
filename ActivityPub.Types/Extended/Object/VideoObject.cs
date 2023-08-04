@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Object;
 
 /// <summary>
-/// Represents a video document of any kind. 
+///     Represents a video document of any kind.
 /// </summary>
 public class VideoObject : DocumentObject
 {
-    private VideoObjectEntity Entity { get; }
-
     public VideoObject() => Entity = new VideoObjectEntity { TypeMap = TypeMap };
     public VideoObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<VideoObjectEntity>();
+    private VideoObjectEntity Entity { get; }
 }
 
-/// <inheritdoc cref="VideoObject"/>
+/// <inheritdoc cref="VideoObject" />
 [ASTypeKey(VideoType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
 public sealed class VideoObjectEntity : ASBase<VideoObject>
@@ -24,7 +23,7 @@ public sealed class VideoObjectEntity : ASBase<VideoObject>
     public const string VideoType = "Video";
     public override string ASTypeName => VideoType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         DocumentObjectEntity.DocumentType
     };

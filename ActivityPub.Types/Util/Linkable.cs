@@ -6,24 +6,12 @@ using System.Diagnostics.CodeAnalysis;
 namespace ActivityPub.Types.Util;
 
 /// <summary>
-/// Synthetic wrapper for elements that can be included directly or referenced by a Link.
+///     Synthetic wrapper for elements that can be included directly or referenced by a Link.
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
 public class Linkable<T>
-where T : ASObject
+    where T : ASObject
 {
-    [MemberNotNullWhen(true, nameof(Link))]
-    [MemberNotNullWhen(false, nameof(Value))]
-    public bool HasLink { get; }
-
-    public ASLink? Link { get; }
-
-    [MemberNotNullWhen(true, nameof(Value))]
-    [MemberNotNullWhen(false, nameof(Link))]
-    public bool HasValue { get; }
-
-    public T? Value { get; }
-
     public Linkable(ASLink link)
     {
         Link = link;
@@ -41,6 +29,18 @@ where T : ASObject
         HasValue = linkable.HasValue;
         Value = linkable.Value;
     }
+
+    [MemberNotNullWhen(true, nameof(Link))]
+    [MemberNotNullWhen(false, nameof(Value))]
+    public bool HasLink { get; }
+
+    public ASLink? Link { get; }
+
+    [MemberNotNullWhen(true, nameof(Value))]
+    [MemberNotNullWhen(false, nameof(Link))]
+    public bool HasValue { get; }
+
+    public T? Value { get; }
 
     public bool TryGetLink([NotNullWhen(true)] out ASLink? link)
     {
@@ -70,9 +70,12 @@ where T : ASObject
 
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != GetType()) return false;
+        if (ReferenceEquals(null, obj))
+            return false;
+        if (ReferenceEquals(this, obj))
+            return true;
+        if (obj.GetType() != GetType())
+            return false;
         return Equals((Linkable<T>)obj);
     }
 

@@ -6,15 +6,15 @@ using JetBrains.Annotations;
 namespace ActivityPub.Types.Attributes;
 
 /// <summary>
-/// Registers the class as an entity that handles a specific ActivityStreams type.
-/// The type name must be unique.
+///     Registers the class as an entity that handles a specific ActivityStreams type.
+///     The type name must be unique.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 [MeansImplicitUse]
 public sealed class ASTypeKeyAttribute : Attribute
 {
     /// <summary>
-    /// ActivityStreams type name
+    ///     ActivityStreams type name
     /// </summary>
     public readonly string Type;
 

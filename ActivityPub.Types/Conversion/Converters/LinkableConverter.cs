@@ -10,7 +10,7 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-/// Converts types that can be either <see cref="ASLink"/> or some other type.
+///     Converts types that can be either <see cref="ASLink" /> or some other type.
 /// </summary>
 public class LinkableConverter : JsonConverterFactory
 {
@@ -29,9 +29,9 @@ public class LinkableConverter : JsonConverterFactory
         return (JsonConverter)Activator.CreateInstance(
             converterType,
             BindingFlags.Instance | BindingFlags.Public,
-            binder: null,
-            args: new object[] { _asTypeInfoCache },
-            culture: null
+            null,
+            new object[] { _asTypeInfoCache },
+            null
         )!;
     }
 }
@@ -44,7 +44,8 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
 
     public override Linkable<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (reader.TokenType == JsonTokenType.Null) return null;
+        if (reader.TokenType == JsonTokenType.Null)
+            return null;
 
         // Parse into abstract form
         var jsonElement = JsonElement.ParseValue(ref reader);
@@ -71,17 +72,11 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
         // It should be OK to use basic JsonSerializer here, because the important stuff is all in the options instance.
 
         if (linkable.TryGetLink(out var link))
-        {
             JsonSerializer.Serialize(writer, link, options);
-        }
         else if (linkable.TryGetValue(out var value))
-        {
             JsonSerializer.Serialize(writer, value, options);
-        }
         else
-        {
             throw new ArgumentException($"{typeof(Linkable<T>)} is invalid - it has neither a link nor a value");
-        }
     }
 
     private bool IsASLink(JsonElement element) => element.TryGetASType(out var type) && _asTypeInfoCache.IsASLinkType(type);

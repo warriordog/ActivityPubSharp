@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor is ignoring the object. The target and origin typically have no defined meaning. 
+///     Indicates that the actor is ignoring the object. The target and origin typically have no defined meaning.
 /// </summary>
 public class IgnoreActivity : ASTransitiveActivity
 {
-    private IgnoreActivityEntity Entity { get; }
-
     public IgnoreActivity() => Entity = new IgnoreActivityEntity { TypeMap = TypeMap };
     public IgnoreActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<IgnoreActivityEntity>();
+    private IgnoreActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="IgnoreActivity"/>
+/// <inheritdoc cref="IgnoreActivity" />
 [ASTypeKey(IgnoreType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class IgnoreActivityEntity : ASBase<IgnoreActivity>
@@ -24,7 +23,7 @@ public sealed class IgnoreActivityEntity : ASBase<IgnoreActivity>
     public const string IgnoreType = "Ignore";
     public override string ASTypeName => IgnoreType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

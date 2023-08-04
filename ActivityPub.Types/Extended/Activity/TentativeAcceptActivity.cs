@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// A specialization of TentativeAccept indicating that the tentativeAcceptance is tentative.
+///     A specialization of TentativeAccept indicating that the tentativeAcceptance is tentative.
 /// </summary>
 public class TentativeAcceptActivity : AcceptActivity
 {
-    private TentativeAcceptActivityEntity Entity { get; }
-
     public TentativeAcceptActivity() => Entity = new TentativeAcceptActivityEntity { TypeMap = TypeMap };
     public TentativeAcceptActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TentativeAcceptActivityEntity>();
+    private TentativeAcceptActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="TentativeAcceptActivity"/>
+/// <inheritdoc cref="TentativeAcceptActivity" />
 [ASTypeKey(TentativeAcceptType)]
 [ImpliesOtherEntity(typeof(AcceptActivityEntity))]
 public sealed class TentativeAcceptActivityEntity : ASBase<TentativeAcceptActivity>
@@ -24,7 +23,7 @@ public sealed class TentativeAcceptActivityEntity : ASBase<TentativeAcceptActivi
     public const string TentativeAcceptType = "TentativeAccept";
     public override string ASTypeName => TentativeAcceptType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         AcceptActivityEntity.AcceptType
     };

@@ -6,7 +6,7 @@ using FluentAssertions.Primitives;
 namespace ActivityPub.Types.Tests.Util.Assertions;
 
 /// <summary>
-/// Special assertions for <see cref="JsonElement"/>
+///     Special assertions for <see cref="JsonElement" />
 /// </summary>
 public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAssertions>
 {
@@ -15,20 +15,22 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
     public void HaveProperty(string name)
     {
         BeJsonObject();
-        
+
         if (!Subject.TryGetProperty(name, out _))
             Assert.Fail($"Expected object to contain property {name}, but it does not");
     }
+
     public void HaveProperty(string name, Action<JsonElement> inspector)
     {
         HaveProperty(name);
         var prop = Subject.GetProperty(name);
         inspector(prop);
     }
+
     public void NotHaveProperty(string name)
     {
         BeJsonObject();
-        
+
         if (Subject.TryGetProperty(name, out _))
             Assert.Fail($"Expected object to not contain property {name}, but it does");
     }
@@ -40,16 +42,18 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
     }
 
     public void BeJsonString() => Subject.ValueKind.Should().Be(JsonValueKind.String);
+
     public void BeJsonString(string value)
     {
         BeJsonString();
         Subject.GetString().Should().Be(value);
     }
+
     public void BeJsonObject() => Subject.ValueKind.Should().Be(JsonValueKind.Object);
 
     /// <summary>
-    /// Asserts that the subject represents an object containing the provided AS type.
-    /// String and array forms are supported.
+    ///     Asserts that the subject represents an object containing the provided AS type.
+    ///     String and array forms are supported.
     /// </summary>
     /// <param name="asType"></param>
     public void HaveASType(string asType)

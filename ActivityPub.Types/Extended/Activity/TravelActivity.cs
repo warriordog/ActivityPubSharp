@@ -6,19 +6,18 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// Indicates that the actor is traveling to target from origin.
-/// Travel is an IntransitiveObject whose actor specifies the direct object.
-/// If the target or origin are not specified, either can be determined by context.
+///     Indicates that the actor is traveling to target from origin.
+///     Travel is an IntransitiveObject whose actor specifies the direct object.
+///     If the target or origin are not specified, either can be determined by context.
 /// </summary>
 public class TravelActivity : ASIntransitiveActivity
 {
-    private TravelActivityEntity Entity { get; }
-
     public TravelActivity() => Entity = new TravelActivityEntity { TypeMap = TypeMap };
     public TravelActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TravelActivityEntity>();
+    private TravelActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="TravelActivity"/>
+/// <inheritdoc cref="TravelActivity" />
 [ASTypeKey(TravelType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
 public sealed class TravelActivityEntity : ASBase<TravelActivity>
@@ -26,7 +25,7 @@ public sealed class TravelActivityEntity : ASBase<TravelActivity>
     public const string TravelType = "Travel";
     public override string ASTypeName => TravelType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASIntransitiveActivityEntity.IntransitiveActivityType
     };

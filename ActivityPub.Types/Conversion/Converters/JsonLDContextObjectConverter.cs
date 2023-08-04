@@ -8,10 +8,10 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-/// Custom converter for <see cref="JsonLDContextObject"/>
+///     Custom converter for <see cref="JsonLDContextObject" />
 /// </summary>
-/// <seealso cref="JsonLDTermConverter"/>
-/// <seealso cref="JsonLDContextConverter"/>
+/// <seealso cref="JsonLDTermConverter" />
+/// <seealso cref="JsonLDContextConverter" />
 public class JsonLDContextObjectConverter : JsonConverter<JsonLDContextObject>
 {
     public override JsonLDContextObject? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -44,12 +44,8 @@ public class JsonLDContextObjectConverter : JsonConverter<JsonLDContextObject>
     public override void Write(Utf8JsonWriter writer, JsonLDContextObject value, JsonSerializerOptions options)
     {
         if (value.IsExternal)
-        {
             writer.WriteStringValue(value.ExternalLink);
-        }
         else
-        {
             JsonSerializer.Serialize(writer, value.Terms, options);
-        }
     }
 }

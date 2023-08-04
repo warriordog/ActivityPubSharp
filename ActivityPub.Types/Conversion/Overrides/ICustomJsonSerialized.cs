@@ -6,14 +6,14 @@ using System.Text.Json.Nodes;
 namespace ActivityPub.Types.Conversion.Overrides;
 
 /// <summary>
-/// Indicates that this type uses custom JSON serialization logic
+///     Indicates that this type uses custom JSON serialization logic
 /// </summary>
 /// <typeparam name="TThis">Type of object to convert</typeparam>
 public interface ICustomJsonSerialized<in TThis>
     where TThis : ASBase
 {
     /// <summary>
-    /// Serialize the type into JSON.
+    ///     Serialize the type into JSON.
     /// </summary>
     /// <param name="obj">Object to convert</param>
     /// <param name="meta">Context for the conversion</param>

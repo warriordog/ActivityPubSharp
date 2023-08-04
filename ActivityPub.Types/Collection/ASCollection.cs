@@ -10,29 +10,27 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Collection;
 
 /// <summary>
-/// A Collection is a subtype of Object that represents ordered or unordered sets of Object or Link instances.
-/// May be paged or unpaged, and ordered or unordered. 
+///     A Collection is a subtype of Object that represents ordered or unordered sets of Object or Link instances.
+///     May be paged or unpaged, and ordered or unordered.
 /// </summary>
 /// <remarks>
-/// Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the Collection type.
+///     Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the Collection type.
 /// </remarks>
-/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection"/>
-/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection"/>
+/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection" />
+/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection" />
 public class ASCollection : ASObject
 {
+    public ASCollection() => Entity = new ASCollectionEntity { TypeMap = TypeMap };
+    public ASCollection(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionEntity>();
     private ASCollectionEntity Entity { get; }
 
 
-    public ASCollection() => Entity = new ASCollectionEntity { TypeMap = TypeMap };
-    public ASCollection(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionEntity>();
-
-
     /// <summary>
-    /// Indicates if this collection is ordered or unordered.
-    /// If true, this will convert to an Ordered collection type.
+    ///     Indicates if this collection is ordered or unordered.
+    ///     If true, this will convert to an Ordered collection type.
     /// </summary>
     /// <remarks>
-    /// This is a synthetic type that does not exist in the ActivityStreams specification.
+    ///     This is a synthetic type that does not exist in the ActivityStreams specification.
     /// </remarks>
     public bool IsOrdered
     {
@@ -41,9 +39,9 @@ public class ASCollection : ASObject
     }
 
     /// <summary>
-    ///  In a paged Collection, indicates the page that contains the most recently updated member items. 
+    ///     In a paged Collection, indicates the page that contains the most recently updated member items.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-current"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-current" />
     public Linkable<ASCollectionPage>? Current
     {
         get => Entity.Current;
@@ -51,9 +49,9 @@ public class ASCollection : ASObject
     }
 
     /// <summary>
-    /// In a paged Collection, indicates the furthest preceding page of items in the collection. 
+    ///     In a paged Collection, indicates the furthest preceding page of items in the collection.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-first"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-first" />
     public Linkable<ASCollectionPage>? First
     {
         get => Entity.First;
@@ -61,9 +59,9 @@ public class ASCollection : ASObject
     }
 
     /// <summary>
-    /// In a paged Collection, indicates the furthest proceeding page of the collection.
+    ///     In a paged Collection, indicates the furthest proceeding page of the collection.
     /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-last"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-last" />
     public Linkable<ASCollectionPage>? Last
     {
         get => Entity.Last;
@@ -71,14 +69,14 @@ public class ASCollection : ASObject
     }
 
     /// <summary>
-    /// A non-negative integer specifying the total number of objects contained by the logical view of the collection.
-    /// This number might not reflect the actual number of items serialized within the Collection object instance. 
+    ///     A non-negative integer specifying the total number of objects contained by the logical view of the collection.
+    ///     This number might not reflect the actual number of items serialized within the Collection object instance.
     /// </summary>
     /// <remarks>
-    /// If not explicitly set, then this will default to the number of elements in <see cref="Items"/>.
-    /// Setting this to any value will disable this logic.
-    /// If neither is set, returns zero.
-    /// This cannot be set to less than zero.
+    ///     If not explicitly set, then this will default to the number of elements in <see cref="Items" />.
+    ///     Setting this to any value will disable this logic.
+    ///     If neither is set, returns zero.
+    ///     This cannot be set to less than zero.
     /// </remarks>
     public int TotalItems
     {
@@ -87,15 +85,15 @@ public class ASCollection : ASObject
     }
 
     /// <summary>
-    /// Identifies the items contained in a collection.
-    /// The items might be ordered or unordered. 
+    ///     Identifies the items contained in a collection.
+    ///     The items might be ordered or unordered.
     /// </summary>
     /// <remarks>
-    /// In ordered collection types, this will map to "orderedItems".
-    /// Otherwise, it maps to "items".
-    /// In a paged collection, this MAY be null
+    ///     In ordered collection types, this will map to "orderedItems".
+    ///     Otherwise, it maps to "items".
+    ///     In a paged collection, this MAY be null
     /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-items"/>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-items" />
     public LinkableList<ASObject>? Items
     {
         get => Entity.Items;
@@ -103,20 +101,20 @@ public class ASCollection : ASObject
     }
 
     /// <summary>
-    /// True if this is a paged collection, false otherwise.
+    ///     True if this is a paged collection, false otherwise.
     /// </summary>
     public bool IsPaged => Entity.IsPaged;
 
     /// <summary>
-    /// True if this collection instance contains items, false otherwise.
+    ///     True if this collection instance contains items, false otherwise.
     /// </summary>
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Entity.HasItems;
 
-    public static implicit operator ASCollection(List<ASObject> collection) => new() { Items = new(collection) };
+    public static implicit operator ASCollection(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
 }
 
-/// <inheritdoc cref="ASCollection"/>
+/// <inheritdoc cref="ASCollection" />
 [ASTypeKey(CollectionType)]
 [ASTypeKey(OrderedCollectionType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
@@ -124,26 +122,28 @@ public sealed class ASCollectionEntity : ASBase<ASCollection>
 {
     public const string CollectionType = "Collection";
     public const string OrderedCollectionType = "OrderedCollection";
+
+    private int? _totalItems;
     public override string ASTypeName => CollectionType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASObjectEntity.ObjectType
     };
 
-    /// <inheritdoc cref="ASCollection.Current"/>
+    /// <inheritdoc cref="ASCollection.Current" />
     [JsonPropertyName("current")]
     public Linkable<ASCollectionPage>? Current { get; set; }
 
-    /// <inheritdoc cref="ASCollection.First"/>
+    /// <inheritdoc cref="ASCollection.First" />
     [JsonPropertyName("first")]
     public Linkable<ASCollectionPage>? First { get; set; }
 
-    /// <inheritdoc cref="ASCollection.Last"/>
+    /// <inheritdoc cref="ASCollection.Last" />
     [JsonPropertyName("last")]
     public Linkable<ASCollectionPage>? Last { get; set; }
 
-    /// <inheritdoc cref="ASCollection.TotalItems"/>
+    /// <inheritdoc cref="ASCollection.TotalItems" />
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [Range(0, int.MaxValue)]
     [JsonPropertyName("totalItems")]
@@ -153,22 +153,20 @@ public sealed class ASCollectionEntity : ASBase<ASCollection>
         set => _totalItems = Math.Max(value, 0);
     }
 
-    private int? _totalItems;
-
-    /// <inheritdoc cref="ASCollection.Items"/>
+    /// <inheritdoc cref="ASCollection.Items" />
     [JsonPropertyName("items")]
     public LinkableList<ASObject>? Items { get; set; }
 
-    /// <inheritdoc cref="ASCollection.IsPaged"/>
+    /// <inheritdoc cref="ASCollection.IsPaged" />
     [JsonIgnore]
     public bool IsPaged => Current != null || First != null || Last != null;
 
-    /// <inheritdoc cref="ASCollection.HasItems"/>
+    /// <inheritdoc cref="ASCollection.HasItems" />
     [JsonIgnore]
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Items?.Any() == true;
 
-    /// <inheritdoc cref="ASCollection.IsOrdered"/>
+    /// <inheritdoc cref="ASCollection.IsOrdered" />
     [JsonIgnore]
     public bool IsOrdered { get; set; }
 }

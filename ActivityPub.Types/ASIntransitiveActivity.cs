@@ -6,19 +6,18 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types;
 
 /// <summary>
-/// Instances of IntransitiveActivity are a subtype of Activity representing intransitive actions.
-/// The object property is therefore inappropriate for these activities. 
+///     Instances of IntransitiveActivity are a subtype of Activity representing intransitive actions.
+///     The object property is therefore inappropriate for these activities.
 /// </summary>
-/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-intransitiveactivity"/>
+/// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-intransitiveactivity" />
 public class ASIntransitiveActivity : ASActivity
 {
-    private ASIntransitiveActivityEntity Entity { get; }
-
     public ASIntransitiveActivity() => Entity = new ASIntransitiveActivityEntity { TypeMap = TypeMap };
     public ASIntransitiveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASIntransitiveActivityEntity>();
+    private ASIntransitiveActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="ASIntransitiveActivity"/>
+/// <inheritdoc cref="ASIntransitiveActivity" />
 [ASTypeKey(IntransitiveActivityType)]
 [ImpliesOtherEntity(typeof(ASActivityEntity))]
 public sealed class ASIntransitiveActivityEntity : ASBase<ASIntransitiveActivity>
@@ -26,7 +25,7 @@ public sealed class ASIntransitiveActivityEntity : ASBase<ASIntransitiveActivity
     public const string IntransitiveActivityType = "IntransitiveActivity";
     public override string ASTypeName => IntransitiveActivityType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         ASActivityEntity.ActivityType
     };

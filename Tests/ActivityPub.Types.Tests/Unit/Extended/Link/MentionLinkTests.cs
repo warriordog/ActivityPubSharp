@@ -9,8 +9,8 @@ namespace ActivityPub.Types.Tests.Unit.Extended.Link;
 public abstract class MentionLinkTests
 {
     private const string TestUriString = "https://example.com/some.uri";
-    private Uri TestUri { get; set; } = new(TestUriString);
-    private ASUri TestASUri { get; set; } = new(TestUriString);
+    private Uri TestUri { get; } = new(TestUriString);
+    private ASUri TestASUri { get; } = new(TestUriString);
 
     public class OperatorTests : MentionLinkTests
     {

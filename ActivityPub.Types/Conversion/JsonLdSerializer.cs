@@ -9,33 +9,31 @@ using ActivityPub.Types.Internal;
 namespace ActivityPub.Types.Conversion;
 
 /// <summary>
-/// Provides support for (de)serializing JSON-LD to/from .NET objects.
+///     Provides support for (de)serializing JSON-LD to/from .NET objects.
 /// </summary>
 public interface IJsonLdSerializer
 {
     /// <summary>
-    /// Options in use by this instance.
-    /// Will become read-only after first use.
+    ///     Options in use by this instance.
+    ///     Will become read-only after first use.
     /// </summary>
     JsonSerializerOptions SerializerOptions { get; }
 
-    /// <inheritdoc cref="JsonSerializer.Deserialize{T}(string, JsonSerializerOptions)"/>
+    /// <inheritdoc cref="JsonSerializer.Deserialize{T}(string, JsonSerializerOptions)" />
     public T? Deserialize<T>(string json);
 
-    /// <inheritdoc cref="JsonSerializer.Deserialize(string, Type, JsonSerializerOptions)"/>
+    /// <inheritdoc cref="JsonSerializer.Deserialize(string, Type, JsonSerializerOptions)" />
     public object? Deserialize(string json, Type type);
 
-    /// <inheritdoc cref="JsonSerializer.Serialize{T}(T, JsonSerializerOptions)"/>
+    /// <inheritdoc cref="JsonSerializer.Serialize{T}(T, JsonSerializerOptions)" />
     public string Serialize<T>(T? value);
 
-    /// <inheritdoc cref="JsonSerializer.SerializeToElement{T}(T, JsonSerializerOptions)"/>
+    /// <inheritdoc cref="JsonSerializer.SerializeToElement{T}(T, JsonSerializerOptions)" />
     public JsonElement SerializeToElement<T>(T? value);
 }
 
 public class JsonLdSerializer : IJsonLdSerializer
 {
-    public JsonSerializerOptions SerializerOptions { get; }
-
     public JsonLdSerializer(IASTypeInfoCache asTypeInfoCache)
     {
         SerializerOptions = new JsonSerializerOptions(JsonSerializerOptions.Default)
@@ -49,6 +47,8 @@ public class JsonLdSerializer : IJsonLdSerializer
         SerializerOptions.Converters.Add(new LinkableConverter(asTypeInfoCache));
         SerializerOptions.Converters.Add(new ListableConverter());
     }
+
+    public JsonSerializerOptions SerializerOptions { get; }
 
     public T? Deserialize<T>(string json) => JsonSerializer.Deserialize<T>(json, SerializerOptions);
     public object? Deserialize(string json, Type type) => JsonSerializer.Deserialize(json, type, SerializerOptions);

@@ -11,12 +11,12 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Client;
 
 /// <summary>
-/// Default implementation of <see cref="IActivityPubClient"/>.
+///     Default implementation of <see cref="IActivityPubClient" />.
 /// </summary>
 public class ActivityPubClient : IActivityPubClient
 {
-    private readonly HttpClient _httpClient = new();
     private readonly ActivityPubOptions _apOptions;
+    private readonly HttpClient _httpClient = new();
     private readonly IJsonLdSerializer _jsonLdSerializer;
 
     public ActivityPubClient(ActivityPubOptions apOptions, IJsonLdSerializer jsonLdSerializer)
@@ -39,34 +39,10 @@ public class ActivityPubClient : IActivityPubClient
         where T : ASType
         => (T)await Get(uri, typeof(T), maxRecursion, cancellationToken);
 
-    private async Task<ASType> Get(Uri uri, Type targetType, int? maxRecursion, CancellationToken cancellationToken = default)
-    {
-        var resp = await _httpClient.GetAsync(uri, cancellationToken);
-        if (!resp.IsSuccessStatusCode)
-            throw new ApplicationException($"Request failed: got status {resp.StatusCode}");
-
-        var mediaType = resp.Content.Headers.ContentType?.MediaType;
-        if (mediaType == null || !_apOptions.ResponseContentTypes.Contains(mediaType))
-            throw new ApplicationException($"Request failed: unsupported content type {mediaType}");
-
-        var json = await resp.Content.ReadAsStringAsync(cancellationToken);
-        var jsonObj = _jsonLdSerializer.Deserialize(json, targetType);
-        if (jsonObj is not ASType obj)
-            throw new JsonException($"Failed to deserialize object - parser returned unsupported object {jsonObj?.GetType()}");
-
-        // If its a link, then recursively follow it.
-        maxRecursion ??= DefaultGetRecursion;
-        if (maxRecursion > 0 && obj is ASLink link)
-        {
-            obj = await Get(link.HRef.Uri, targetType, maxRecursion - 1, cancellationToken);
-        }
-
-        return obj;
-    }
-
     public int DefaultResolveRecursion { get; set; } = 1;
 
-    public async Task<T> Resolve<T>(Linkable<T> linkable, int? maxRecursion = null, CancellationToken cancellationToken = default) where T : ASObject
+    public async Task<T> Resolve<T>(Linkable<T> linkable, int? maxRecursion = null, CancellationToken cancellationToken = default)
+        where T : ASObject
     {
         // short-circuit the easy case
         if (linkable.HasValue)
@@ -91,6 +67,29 @@ public class ActivityPubClient : IActivityPubClient
         return list;
     }
 
+    private async Task<ASType> Get(Uri uri, Type targetType, int? maxRecursion, CancellationToken cancellationToken = default)
+    {
+        var resp = await _httpClient.GetAsync(uri, cancellationToken);
+        if (!resp.IsSuccessStatusCode)
+            throw new ApplicationException($"Request failed: got status {resp.StatusCode}");
+
+        var mediaType = resp.Content.Headers.ContentType?.MediaType;
+        if (mediaType == null || !_apOptions.ResponseContentTypes.Contains(mediaType))
+            throw new ApplicationException($"Request failed: unsupported content type {mediaType}");
+
+        var json = await resp.Content.ReadAsStringAsync(cancellationToken);
+        var jsonObj = _jsonLdSerializer.Deserialize(json, targetType);
+        if (jsonObj is not ASType obj)
+            throw new JsonException($"Failed to deserialize object - parser returned unsupported object {jsonObj?.GetType()}");
+
+        // If its a link, then recursively follow it.
+        maxRecursion ??= DefaultGetRecursion;
+        if (maxRecursion > 0 && obj is ASLink link)
+            obj = await Get(link.HRef.Uri, targetType, maxRecursion - 1, cancellationToken);
+
+        return obj;
+    }
+
 
     #region Dispose
 
@@ -109,9 +108,7 @@ public class ActivityPubClient : IActivityPubClient
             return;
 
         if (disposing)
-        {
             _httpClient.Dispose();
-        }
 
         _disposed = true;
     }

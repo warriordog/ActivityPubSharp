@@ -7,7 +7,7 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Internal;
 
 /// <summary>
-/// Extracts and stores metadata for ActivityStreams types within the application.
+///     Extracts and stores metadata for ActivityStreams types within the application.
 /// </summary>
 public interface IASTypeInfoCache
 {
@@ -16,22 +16,22 @@ public interface IASTypeInfoCache
     internal bool IsASLinkType(string type);
 
     /// <summary>
-    /// Finds the .NET type(s) that implement a set of AS types.
-    /// Implied types are automatically included.
-    /// Unknown types are ignored.
+    ///     Finds the .NET type(s) that implement a set of AS types.
+    ///     Implied types are automatically included.
+    ///     Unknown types are ignored.
     /// </summary>
     /// <param name="asTypes">Types to map. Case-sensitive.</param>
     /// <returns>Set of all located types</returns>
     internal IEnumerable<Type> MapASTypes(IEnumerable<string> asTypes);
 
     /// <summary>
-    /// Find and load all ActivityStreams types in a particular assembly.
+    ///     Find and load all ActivityStreams types in a particular assembly.
     /// </summary>
     /// <param name="assembly">Assembly to load</param>
     void RegisterAssembly(Assembly assembly);
 
     /// <summary>
-    /// Find and load all ActivityStreams types in all loaded assemblies.
+    ///     Find and load all ActivityStreams types in all loaded assemblies.
     /// </summary>
     void RegisterAllAssemblies();
 }
@@ -39,8 +39,8 @@ public interface IASTypeInfoCache
 public class ASTypeInfoCache : IASTypeInfoCache
 {
     private readonly HashSet<Type> _allASEntities = new();
-    private readonly Dictionary<string, Type> _knownEntityMap = new();
     private readonly Dictionary<Type, HashSet<Type>> _impliedEntityMap = new();
+    private readonly Dictionary<string, Type> _knownEntityMap = new();
     private readonly HashSet<string> _knownLinkTypes = new();
 
     public bool IsKnownASType(string asTypeName) => _knownEntityMap.ContainsKey(asTypeName.ToLower());
@@ -81,9 +81,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
     public void RegisterAllAssemblies()
     {
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-        {
             RegisterAssembly(assembly);
-        }
     }
 
     public void RegisterAssembly(Assembly assembly)
@@ -118,9 +116,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
                 // If it derives from ASLink, then record it as an additional link type
                 if (isASLink)
-                {
                     _knownLinkTypes.Add(typeName);
-                }
             }
 
             // Register all implied types
@@ -129,9 +125,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
                 .Select(attr => attr.Type)
                 .ToHashSet();
             if (impliesAttributes.Any())
-            {
                 _impliedEntityMap[type] = impliesAttributes;
-            }
 
             // Record it as an AS type, even if we didn't register
             _allASEntities.Add(type);

@@ -6,17 +6,16 @@ using ActivityPub.Types.Attributes;
 namespace ActivityPub.Types.Extended.Activity;
 
 /// <summary>
-/// A specialization of Reject in which the rejection is considered tentative.
+///     A specialization of Reject in which the rejection is considered tentative.
 /// </summary>
 public class TentativeRejectActivity : RejectActivity
 {
-    private TentativeRejectActivityEntity Entity { get; }
-
     public TentativeRejectActivity() => Entity = new TentativeRejectActivityEntity { TypeMap = TypeMap };
     public TentativeRejectActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TentativeRejectActivityEntity>();
+    private TentativeRejectActivityEntity Entity { get; }
 }
 
-/// <inheritdoc cref="TentativeRejectActivity"/>
+/// <inheritdoc cref="TentativeRejectActivity" />
 [ASTypeKey(TentativeRejectType)]
 [ImpliesOtherEntity(typeof(RejectActivityEntity))]
 public sealed class TentativeRejectActivityEntity : ASBase<TentativeRejectActivity>
@@ -24,7 +23,7 @@ public sealed class TentativeRejectActivityEntity : ASBase<TentativeRejectActivi
     public const string TentativeRejectType = "TentativeReject";
     public override string ASTypeName => TentativeRejectType;
 
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>()
+    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
     {
         RejectActivityEntity.RejectType
     };

@@ -8,8 +8,8 @@ using InternalUtils;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-/// Converts types that can be a list of elements, or a single elements.
-/// Essentially: T | T[]
+///     Converts types that can be a list of elements, or a single elements.
+///     Essentially: T | T[]
 /// </summary>
 public class ListableConverter : JsonConverterFactory
 {
@@ -86,9 +86,7 @@ internal class ListableConverter<TItem, TCollection> : JsonConverter<TCollection
         {
             writer.WriteStartArray();
             foreach (var item in collection)
-            {
                 JsonSerializer.Serialize(writer, item, options);
-            }
 
             writer.WriteEndArray();
         }

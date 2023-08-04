@@ -8,17 +8,14 @@ using JetBrains.Annotations;
 namespace ActivityPub.Types.Tests.Util.Fixtures;
 
 /// <summary>
-/// Provides a pre-initialized <see cref="IJsonLdSerializer"/> instance for use in tests.
-/// All loaded assemblies are registered.
-/// This should be used to avoid the processing load of populating the caches from scratch on every single test.
+///     Provides a pre-initialized <see cref="IJsonLdSerializer" /> instance for use in tests.
+///     All loaded assemblies are registered.
+///     This should be used to avoid the processing load of populating the caches from scratch on every single test.
 /// </summary>
-/// <seealso href="https://xunit.net/docs/shared-context#collection-fixture"/>
+/// <seealso href="https://xunit.net/docs/shared-context#collection-fixture" />
 [UsedImplicitly]
 public sealed class JsonLdSerializerFixture
 {
-    public IASTypeInfoCache ASTypeInfoCache { get; }
-    public IJsonLdSerializer JsonLdSerializer { get; }
-
     public JsonLdSerializerFixture()
     {
         ASTypeInfoCache = new ASTypeInfoCache();
@@ -26,4 +23,7 @@ public sealed class JsonLdSerializerFixture
 
         JsonLdSerializer = new JsonLdSerializer(ASTypeInfoCache);
     }
+
+    public IASTypeInfoCache ASTypeInfoCache { get; }
+    public IJsonLdSerializer JsonLdSerializer { get; }
 }

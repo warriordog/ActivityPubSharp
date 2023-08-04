@@ -7,24 +7,29 @@ using ActivityPub.Types.Conversion.Converters;
 namespace ActivityPub.Types.Util;
 
 /// <summary>
-/// Synthetic type to represent a URI or IRI as used in ActivityStreams.
-/// Currently, this only handles "true" non-compacted URIs.
+///     Synthetic type to represent a URI or IRI as used in ActivityStreams.
+///     Currently, this only handles "true" non-compacted URIs.
 /// </summary>
 [JsonConverter(typeof(ASUriConverter))]
 public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 {
+    public ASUri(Uri uri) => Uri = uri;
+    public ASUri(string uri) => Uri = new Uri(uri);
     public Uri Uri { get; }
 
-    public ASUri(Uri uri) => Uri = uri;
-    public ASUri(string uri) => Uri = new(uri);
+    public bool Equals(ASUri? other) => AreEqual(this, other);
+    public bool Equals(string? other) => AreEqual(this, other);
+    public bool Equals(Uri? other) => AreEqual(this, other);
 
     public override string ToString() => Uri.ToString();
     public override int GetHashCode() => Uri.GetHashCode();
 
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+            return false;
+        if (ReferenceEquals(this, obj))
+            return true;
 
         if (obj is ASUri asUri)
             return Equals(asUri);
@@ -35,10 +40,6 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
         return false;
     }
-
-    public bool Equals(ASUri? other) => AreEqual(this, other);
-    public bool Equals(Uri? other) => AreEqual(this, other);
-    public bool Equals(string? other) => AreEqual(this, other);
 
     public static bool operator ==(ASUri? left, ASUri? right) => AreEqual(left, right);
     public static bool operator !=(ASUri? left, ASUri? right) => !AreEqual(left, right);
@@ -51,7 +52,8 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
     public static bool AreEqual(ASUri? left, ASUri? right)
     {
-        if (ReferenceEquals(left, right)) return true;
+        if (ReferenceEquals(left, right))
+            return true;
         if (ReferenceEquals(null, right))
             return ReferenceEquals(null, left);
         if (ReferenceEquals(null, left))
