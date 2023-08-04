@@ -18,7 +18,7 @@ public class InviteActivity : OfferActivity
 /// <inheritdoc cref="InviteActivity" />
 [ASTypeKey(InviteType)]
 [ImpliesOtherEntity(typeof(OfferActivityEntity))]
-public sealed class InviteActivityEntity : ASBase<InviteActivity>
+public sealed class InviteActivityEntity : ASEntity<InviteActivity>
 {
     public const string InviteType = "Invite";
     public override string ASTypeName => InviteType;

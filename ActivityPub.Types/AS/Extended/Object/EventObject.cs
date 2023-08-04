@@ -18,7 +18,7 @@ public class EventObject : ASObject
 /// <inheritdoc cref="EventObject" />
 [ASTypeKey(EventType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class EventObjectEntity : ASBase<EventObject>
+public sealed class EventObjectEntity : ASEntity<EventObject>
 {
     public const string EventType = "Event";
     public override string ASTypeName => EventType;

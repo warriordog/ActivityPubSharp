@@ -55,7 +55,7 @@ public class RelationshipObject : ASObject
 /// <inheritdoc cref="RelationshipObject" />
 [ASTypeKey(RelationshipType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class RelationshipObjectEntity : ASBase<RelationshipObject>
+public sealed class RelationshipObjectEntity : ASEntity<RelationshipObject>
 {
     public const string RelationshipType = "Relationship";
     public override string ASTypeName => RelationshipType;

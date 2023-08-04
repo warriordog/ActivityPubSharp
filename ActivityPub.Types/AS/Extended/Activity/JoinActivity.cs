@@ -19,7 +19,7 @@ public class JoinActivity : ASTransitiveActivity
 /// <inheritdoc cref="JoinActivity" />
 [ASTypeKey(JoinType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class JoinActivityEntity : ASBase<JoinActivity>
+public sealed class JoinActivityEntity : ASEntity<JoinActivity>
 {
     public const string JoinType = "Join";
     public override string ASTypeName => JoinType;

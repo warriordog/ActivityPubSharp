@@ -12,7 +12,7 @@ namespace ActivityPub.Types;
 [JsonConverter(typeof(TypeMapConverter))]
 public class TypeMap
 {
-    private readonly Dictionary<Type, ASBase> _allEntities = new();
+    private readonly Dictionary<Type, ASEntity> _allEntities = new();
 
     private readonly HashSet<string> _asTypes = new();
 
@@ -23,7 +23,7 @@ public class TypeMap
     private readonly Dictionary<Type, ASType> _typeCache = new();
 
     // Map non-entities to entity that can construct it
-    private readonly Dictionary<Type, ASBase> _typeEntityMap = new();
+    private readonly Dictionary<Type, ASEntity> _typeEntityMap = new();
 
     /// <summary>
     ///     Live set of all unique ActivityStreams types represented by this graph.
@@ -36,19 +36,19 @@ public class TypeMap
     ///     This may be a subset or superset of ASTypes.
     /// </summary>
     /// <seealso cref="ASTypes" />
-    public IReadOnlyDictionary<Type, ASBase> AllEntities => _allEntities;
+    public IReadOnlyDictionary<Type, ASEntity> AllEntities => _allEntities;
 
     /// <summary>
     ///     Reference to the single entity which implements <see cref="IJsonValueSerialized{TThis}" />
     ///     Will be null if none is present.
     /// </summary>
-    internal ASBase? ValueSerializer { get; private set; }
+    internal ASEntity? ValueSerializer { get; private set; }
 
     /// <summary>
     ///     Checks if the object contains a particular type entity.
     /// </summary>
     public bool IsEntity<T>()
-        where T : ASBase
+        where T : ASEntity
         => _allEntities.ContainsKey(typeof(T));
 
     /// <summary>
@@ -58,7 +58,7 @@ public class TypeMap
     /// <seealso cref="IsEntity{T}()" />
     /// <seealso cref="AsEntity{T}" />
     public bool IsEntity<T>([NotNullWhen(true)] out T? instance)
-        where T : ASBase
+        where T : ASEntity
     {
         if (_allEntities.TryGetValue(typeof(T), out var instanceT))
         {
@@ -80,7 +80,7 @@ public class TypeMap
     /// <seealso cref="IsEntity{T}(out T?)" />
     /// <throws cref="InvalidCastException">If the object is not of type T</throws>
     public T AsEntity<T>()
-        where T : ASBase
+        where T : ASEntity
     {
         var type = typeof(T);
         if (!_allEntities.TryGetValue(type, out var instance))
@@ -161,12 +161,12 @@ public class TypeMap
     ///     Adds a new typed instance to the object.
     /// </summary>
     /// <remarks>
-    ///     This method is internal, as it should only be called by <see cref="ASBase" /> constructor.
+    ///     This method is internal, as it should only be called by <see cref="ASEntity" /> constructor.
     ///     User code should instead add a new type by passing an existing TypeMap into the constructor.
     ///     This is not a technical limitation, but rather an intentional choice to prevent the construction of invalid objects.
     /// </remarks>
     /// <throws cref="InvalidOperationException">If an object of this type already exists in the graph</throws>
-    internal void Add(ASBase instance)
+    internal void Add(ASEntity instance)
     {
         var type = instance.GetType();
 

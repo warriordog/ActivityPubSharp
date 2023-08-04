@@ -75,7 +75,7 @@ public class QuestionActivity : ASIntransitiveActivity
 /// <inheritdoc cref="QuestionActivity" />
 [ASTypeKey(QuestionType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
-public sealed class QuestionActivityEntity : ASBase<QuestionActivity>
+public sealed class QuestionActivityEntity : ASEntity<QuestionActivity>
 {
     public const string QuestionType = "Question";
 

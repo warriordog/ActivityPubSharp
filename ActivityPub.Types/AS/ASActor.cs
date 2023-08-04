@@ -122,7 +122,7 @@ public class ASActor : ASObject
 
 /// <inheritdoc cref="ASActor" />
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASActorEntity : ASBase<ASActor>
+public sealed class ASActorEntity : ASEntity<ASActor>
 {
     /// <inheritdoc cref="ASActor.Inbox" />
     [JsonPropertyName("inbox")]

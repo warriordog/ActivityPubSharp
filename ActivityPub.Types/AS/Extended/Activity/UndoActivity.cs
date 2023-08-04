@@ -20,7 +20,7 @@ public class UndoActivity : ASTransitiveActivity
 /// <inheritdoc cref="UndoActivity" />
 [ASTypeKey(UndoType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class UndoActivityEntity : ASBase<UndoActivity>
+public sealed class UndoActivityEntity : ASEntity<UndoActivity>
 {
     public const string UndoType = "Undo";
     public override string ASTypeName => UndoType;

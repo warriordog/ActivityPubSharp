@@ -18,7 +18,7 @@ public class OrganizationActor : ASActor
 /// <inheritdoc cref="OrganizationActor" />
 [ASTypeKey(OrganizationType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
-public sealed class OrganizationActorEntity : ASBase<OrganizationActor>
+public sealed class OrganizationActorEntity : ASEntity<OrganizationActor>
 {
     public const string OrganizationType = "Organization";
     public override string ASTypeName => OrganizationType;

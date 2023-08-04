@@ -20,7 +20,7 @@ public class UpdateActivity : ASTransitiveActivity
 /// <inheritdoc cref="UpdateActivity" />
 [ASTypeKey(UpdateType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class UpdateActivityEntity : ASBase<UpdateActivity>
+public sealed class UpdateActivityEntity : ASEntity<UpdateActivity>
 {
     public const string UpdateType = "Update";
     public override string ASTypeName => UpdateType;

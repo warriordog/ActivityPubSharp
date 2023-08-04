@@ -18,7 +18,7 @@ public class CreateActivity : ASTransitiveActivity
 /// <inheritdoc cref="CreateActivity" />
 [ASTypeKey(CreateType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class CreateActivityEntity : ASBase<CreateActivity>
+public sealed class CreateActivityEntity : ASEntity<CreateActivity>
 {
     public const string CreateType = "Create";
     public override string ASTypeName => CreateType;

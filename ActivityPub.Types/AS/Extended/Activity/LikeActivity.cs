@@ -19,7 +19,7 @@ public class LikeActivity : ASTransitiveActivity
 /// <inheritdoc cref="LikeActivity" />
 [ASTypeKey(LikeType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class LikeActivityEntity : ASBase<LikeActivity>
+public sealed class LikeActivityEntity : ASEntity<LikeActivity>
 {
     public const string LikeType = "Like";
     public override string ASTypeName => LikeType;

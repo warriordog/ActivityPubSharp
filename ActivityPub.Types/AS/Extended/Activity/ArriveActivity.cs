@@ -20,7 +20,7 @@ public class ArriveActivity : ASIntransitiveActivity
 /// <inheritdoc cref="ArriveActivity" />
 [ASTypeKey(ArriveType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
-public sealed class ArriveActivityEntity : ASBase<ArriveActivity>
+public sealed class ArriveActivityEntity : ASEntity<ArriveActivity>
 {
     public const string ArriveType = "Arrive";
     public override string ASTypeName => ArriveType;

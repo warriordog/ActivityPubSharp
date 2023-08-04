@@ -19,7 +19,7 @@ public class DeleteActivity : ASTransitiveActivity
 /// <inheritdoc cref="DeleteActivity" />
 [ASTypeKey(DeleteType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class DeleteActivityEntity : ASBase<DeleteActivity>
+public sealed class DeleteActivityEntity : ASEntity<DeleteActivity>
 {
     public const string DeleteType = "Delete";
     public override string ASTypeName => DeleteType;

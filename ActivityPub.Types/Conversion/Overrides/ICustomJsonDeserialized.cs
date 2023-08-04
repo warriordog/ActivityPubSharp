@@ -12,7 +12,7 @@ namespace ActivityPub.Types.Conversion.Overrides;
 /// </summary>
 /// <typeparam name="TThis">Type of object to convert</typeparam>
 public interface ICustomJsonDeserialized<TThis>
-    where TThis : ASBase
+    where TThis : ASEntity
 {
     /// <summary>
     ///     Deserialize the type from JSON.
@@ -21,6 +21,6 @@ public interface ICustomJsonDeserialized<TThis>
     /// <param name="meta">Context for the conversion</param>
     /// <param name="obj">Object constructed by the converter</param>
     /// <returns>Return true on success, or false to fall back on default logic.</returns>
-    /// <typeparam name="TThis">Type of object to convert. Must derive from <see cref="ASBase" />.</typeparam>
+    /// <typeparam name="TThis">Type of object to convert. Must derive from <see cref="ASEntity" />.</typeparam>
     public static abstract bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out TThis? obj);
 }

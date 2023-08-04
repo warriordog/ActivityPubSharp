@@ -18,7 +18,7 @@ public class PageObject : DocumentObject
 /// <inheritdoc cref="PageObject" />
 [ASTypeKey(PageType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class PageObjectEntity : ASBase<PageObject>
+public sealed class PageObjectEntity : ASEntity<PageObject>
 {
     public const string PageType = "Page";
     public override string ASTypeName => PageType;

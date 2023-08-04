@@ -18,7 +18,7 @@ public class ApplicationActor : ASActor
 /// <inheritdoc cref="ApplicationActor" />
 [ASTypeKey(ApplicationType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
-public sealed class ApplicationActorEntity : ASBase<ApplicationActor>
+public sealed class ApplicationActorEntity : ASEntity<ApplicationActor>
 {
     public const string ApplicationType = "Application";
     public override string ASTypeName => ApplicationType;

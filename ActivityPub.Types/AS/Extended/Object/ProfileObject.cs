@@ -30,7 +30,7 @@ public class ProfileObject : ASObject
 /// <inheritdoc cref="ProfileObject" />
 [ASTypeKey(ProfileType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ProfileObjectEntity : ASBase<ProfileObject>
+public sealed class ProfileObjectEntity : ASEntity<ProfileObject>
 {
     public const string ProfileType = "Profile";
     public override string ASTypeName => ProfileType;

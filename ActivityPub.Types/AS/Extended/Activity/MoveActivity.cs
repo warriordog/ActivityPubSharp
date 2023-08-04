@@ -19,7 +19,7 @@ public class MoveActivity : ASTransitiveActivity
 /// <inheritdoc cref="MoveActivity" />
 [ASTypeKey(MoveType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class MoveActivityEntity : ASBase<MoveActivity>
+public sealed class MoveActivityEntity : ASEntity<MoveActivity>
 {
     public const string MoveType = "Move";
     public override string ASTypeName => MoveType;

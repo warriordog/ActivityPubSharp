@@ -118,7 +118,7 @@ public class ASCollection : ASObject
 [ASTypeKey(CollectionType)]
 [ASTypeKey(OrderedCollectionType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASCollectionEntity : ASBase<ASCollection>
+public sealed class ASCollectionEntity : ASEntity<ASCollection>
 {
     public const string CollectionType = "Collection";
     public const string OrderedCollectionType = "OrderedCollection";

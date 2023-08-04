@@ -19,7 +19,7 @@ public class AnnounceActivity : ASTransitiveActivity
 /// <inheritdoc cref="AnnounceActivity" />
 [ASTypeKey(AnnounceType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class AnnounceActivityEntity : ASBase<AnnounceActivity>
+public sealed class AnnounceActivityEntity : ASEntity<AnnounceActivity>
 {
     public const string AnnounceType = "Announce";
     public override string ASTypeName => AnnounceType;

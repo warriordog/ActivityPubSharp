@@ -18,7 +18,7 @@ public class DocumentObject : ASObject
 /// <inheritdoc cref="DocumentObject" />
 [ASTypeKey(DocumentType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class DocumentObjectEntity : ASBase<DocumentObject>
+public sealed class DocumentObjectEntity : ASEntity<DocumentObject>
 {
     public const string DocumentType = "Document";
     public override string ASTypeName => DocumentType;

@@ -72,7 +72,7 @@ public class ASCollectionPage : ASCollection
 [ASTypeKey(CollectionPageType)]
 [ASTypeKey(OrderedCollectionPageType)]
 [ImpliesOtherEntity(typeof(ASCollection))]
-public sealed class ASCollectionPageEntity : ASBase<ASCollection>
+public sealed class ASCollectionPageEntity : ASEntity<ASCollection>
 {
     public const string CollectionPageType = "CollectionPage";
     public const string OrderedCollectionPageType = "OrderedCollectionPage";

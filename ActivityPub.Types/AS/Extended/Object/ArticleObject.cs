@@ -18,7 +18,7 @@ public class ArticleObject : ASObject
 /// <inheritdoc cref="ArticleObject" />
 [ASTypeKey(ArticleType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ArticleObjectEntity : ASBase<ArticleObject>
+public sealed class ArticleObjectEntity : ASEntity<ArticleObject>
 {
     public const string ArticleType = "Article";
     public override string ASTypeName => ArticleType;

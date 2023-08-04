@@ -20,7 +20,7 @@ public class AddActivity : ASTargetedActivity
 /// <inheritdoc cref="AddActivity" />
 [ASTypeKey(AddType)]
 [ImpliesOtherEntity(typeof(ASTargetedActivityEntity))]
-public sealed class AddActivityEntity : ASBase<AddActivity>
+public sealed class AddActivityEntity : ASEntity<AddActivity>
 {
     public const string AddType = "Add";
     public override string ASTypeName => AddType;

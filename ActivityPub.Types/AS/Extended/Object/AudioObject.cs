@@ -18,7 +18,7 @@ public class AudioObject : DocumentObject
 /// <inheritdoc cref="AudioObject" />
 [ASTypeKey(AudioType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class AudioObjectEntity : ASBase<AudioObject>
+public sealed class AudioObjectEntity : ASEntity<AudioObject>
 {
     public const string AudioType = "Audio";
     public override string ASTypeName => AudioType;

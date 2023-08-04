@@ -19,7 +19,7 @@ public class OfferActivity : ASTransitiveActivity
 /// <inheritdoc cref="OfferActivity" />
 [ASTypeKey(OfferType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class OfferActivityEntity : ASBase<OfferActivity>
+public sealed class OfferActivityEntity : ASEntity<OfferActivity>
 {
     public const string OfferType = "Offer";
     public override string ASTypeName => OfferType;

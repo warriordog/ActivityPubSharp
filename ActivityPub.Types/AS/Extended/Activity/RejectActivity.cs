@@ -19,7 +19,7 @@ public class RejectActivity : ASTransitiveActivity
 /// <inheritdoc cref="RejectActivity" />
 [ASTypeKey(RejectType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class RejectActivityEntity : ASBase<RejectActivity>
+public sealed class RejectActivityEntity : ASEntity<RejectActivity>
 {
     public const string RejectType = "Reject";
     public override string ASTypeName => RejectType;

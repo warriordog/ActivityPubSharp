@@ -18,7 +18,7 @@ public class VideoObject : DocumentObject
 /// <inheritdoc cref="VideoObject" />
 [ASTypeKey(VideoType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class VideoObjectEntity : ASBase<VideoObject>
+public sealed class VideoObjectEntity : ASEntity<VideoObject>
 {
     public const string VideoType = "Video";
     public override string ASTypeName => VideoType;

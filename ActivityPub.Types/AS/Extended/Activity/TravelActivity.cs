@@ -20,7 +20,7 @@ public class TravelActivity : ASIntransitiveActivity
 /// <inheritdoc cref="TravelActivity" />
 [ASTypeKey(TravelType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
-public sealed class TravelActivityEntity : ASBase<TravelActivity>
+public sealed class TravelActivityEntity : ASEntity<TravelActivity>
 {
     public const string TravelType = "Travel";
     public override string ASTypeName => TravelType;

@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Conversion.Overrides;
 /// </summary>
 /// <typeparam name="TThis">Type of object to convert</typeparam>
 public interface ICustomJsonSerialized<in TThis>
-    where TThis : ASBase
+    where TThis : ASEntity
 {
     /// <summary>
     ///     Serialize the type into JSON.

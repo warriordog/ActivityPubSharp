@@ -18,7 +18,7 @@ public class ViewActivity : ASTransitiveActivity
 /// <inheritdoc cref="ViewActivity" />
 [ASTypeKey(ViewType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class ViewActivityEntity : ASBase<ViewActivity>
+public sealed class ViewActivityEntity : ASEntity<ViewActivity>
 {
     public const string ViewType = "View";
     public override string ASTypeName => ViewType;

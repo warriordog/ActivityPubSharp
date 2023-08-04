@@ -6,7 +6,7 @@ using ActivityPub.Types.AS;
 namespace ActivityPub.Types.Attributes;
 
 /// <summary>
-///     When placed on an entity deriving from <see cref="ASBase" />, indicates that any object containing this type will implicitly include another type.
+///     When placed on an entity deriving from <see cref="ASEntity" />, indicates that any object containing this type will implicitly include another type.
 ///     This is only used during JSON conversion, so the public inheritance chain SHOULD follow the same structure.
 ///     Multiple attributes may be specified.
 /// </summary>
@@ -20,7 +20,7 @@ public sealed class ImpliesOtherEntityAttribute : Attribute
 
     public ImpliesOtherEntityAttribute(Type type)
     {
-        if (!type.IsAssignableTo(typeof(ASBase)))
+        if (!type.IsAssignableTo(typeof(ASEntity)))
             throw new ArgumentException("Implied type must derive from ASBase", nameof(type));
 
         Type = type;

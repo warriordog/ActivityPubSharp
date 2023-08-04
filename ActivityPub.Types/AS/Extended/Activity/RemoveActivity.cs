@@ -19,7 +19,7 @@ public class RemoveActivity : ASTargetedActivity
 /// <inheritdoc cref="RemoveActivity" />
 [ASTypeKey(RemoveType)]
 [ImpliesOtherEntity(typeof(ASTargetedActivityEntity))]
-public sealed class RemoveActivityEntity : ASBase<RemoveActivity>
+public sealed class RemoveActivityEntity : ASEntity<RemoveActivity>
 {
     public const string RemoveType = "Remove";
     public override string ASTypeName => RemoveType;

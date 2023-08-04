@@ -42,7 +42,7 @@ public class ASTransitiveActivity : ASActivity
 
 /// <inheritdoc cref="ASTransitiveActivity" />
 [ImpliesOtherEntity(typeof(ASActivityEntity))]
-public sealed class ASTransitiveActivityEntity : ASBase<ASTransitiveActivity>, ISubTypeDeserialized
+public sealed class ASTransitiveActivityEntity : ASEntity<ASTransitiveActivity>, ISubTypeDeserialized
 {
     /// <inheritdoc cref="ASTransitiveActivity.Object" />
     [JsonPropertyName("object")]

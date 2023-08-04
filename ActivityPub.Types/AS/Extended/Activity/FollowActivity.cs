@@ -20,7 +20,7 @@ public class FollowActivity : ASTransitiveActivity
 /// <inheritdoc cref="FollowActivity" />
 [ASTypeKey(FollowType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class FollowActivityEntity : ASBase<FollowActivity>
+public sealed class FollowActivityEntity : ASEntity<FollowActivity>
 {
     public const string FollowType = "Follow";
     public override string ASTypeName => FollowType;

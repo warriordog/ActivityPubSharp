@@ -96,7 +96,7 @@ public class ASLink : ASType
 /// <inheritdoc cref="ASLink" />
 [ASTypeKey(LinkType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
-public sealed class ASLinkEntity : ASBase<ASLink>, ICustomJsonDeserialized<ASLinkEntity>, IJsonValueSerialized<ASLinkEntity>
+public sealed class ASLinkEntity : ASEntity<ASLink>, ICustomJsonDeserialized<ASLinkEntity>, IJsonValueSerialized<ASLinkEntity>
 {
     public const string LinkType = "Link";
     public override string ASTypeName => LinkType;

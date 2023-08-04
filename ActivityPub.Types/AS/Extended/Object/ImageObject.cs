@@ -18,7 +18,7 @@ public class ImageObject : DocumentObject
 /// <inheritdoc cref="ImageObject" />
 [ASTypeKey(ImageType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class ImageObjectEntity : ASBase<ImageObject>
+public sealed class ImageObjectEntity : ASEntity<ImageObject>
 {
     public const string ImageType = "Image";
     public override string ASTypeName => ImageType;

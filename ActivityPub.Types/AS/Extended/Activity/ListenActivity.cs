@@ -18,7 +18,7 @@ public class ListenActivity : ASTransitiveActivity
 /// <inheritdoc cref="ListenActivity" />
 [ASTypeKey(ListenType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class ListenActivityEntity : ASBase<ListenActivity>
+public sealed class ListenActivityEntity : ASEntity<ListenActivity>
 {
     public const string ListenType = "Listen";
     public override string ASTypeName => ListenType;

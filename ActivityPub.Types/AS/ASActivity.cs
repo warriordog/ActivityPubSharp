@@ -71,7 +71,7 @@ public class ASActivity : ASObject
 /// <inheritdoc cref="ASActivity" />
 [ASTypeKey(ActivityType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASActivityEntity : ASBase<ASActivity>, ISubTypeDeserialized
+public sealed class ASActivityEntity : ASEntity<ASActivity>, ISubTypeDeserialized
 {
     public const string ActivityType = "Activity";
     public override string ASTypeName => ActivityType;

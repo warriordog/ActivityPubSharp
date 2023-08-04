@@ -18,7 +18,7 @@ public class ReadActivity : ASTransitiveActivity
 /// <inheritdoc cref="ReadActivity" />
 [ASTypeKey(ReadType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class ReadActivityEntity : ASBase<ReadActivity>
+public sealed class ReadActivityEntity : ASEntity<ReadActivity>
 {
     public const string ReadType = "Read";
     public override string ASTypeName => ReadType;

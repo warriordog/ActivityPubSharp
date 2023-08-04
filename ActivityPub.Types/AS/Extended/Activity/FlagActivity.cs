@@ -19,7 +19,7 @@ public class FlagActivity : ASTransitiveActivity
 /// <inheritdoc cref="FlagActivity" />
 [ASTypeKey(FlagType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class FlagActivityEntity : ASBase<FlagActivity>
+public sealed class FlagActivityEntity : ASEntity<FlagActivity>
 {
     public const string FlagType = "Flag";
     public override string ASTypeName => FlagType;

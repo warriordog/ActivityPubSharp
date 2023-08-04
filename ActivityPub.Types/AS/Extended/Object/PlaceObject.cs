@@ -85,7 +85,7 @@ public class PlaceObject : ASObject
 /// <inheritdoc cref="PlaceObject" />
 [ASTypeKey(PlaceType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class PlaceObjectEntity : ASBase<PlaceObject>
+public sealed class PlaceObjectEntity : ASEntity<PlaceObject>
 {
     public const string PlaceType = "Place";
     public override string ASTypeName => PlaceType;

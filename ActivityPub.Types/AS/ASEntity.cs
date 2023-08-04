@@ -8,11 +8,17 @@ namespace ActivityPub.Types.AS;
 
 /// <summary>
 ///     Base type for AS entity classes.
-///     Subtypes should derive from <see cref="ASBase{T}" /> instead.
+///     Entities are singletons that contain data for a certain type within an object graph.
 /// </summary>
-public abstract class ASBase
+/// <remarks>
+///     This is a synthetic type created to help adapt ActivityStreams to the .NET object model.
+///     It does not exist in the ActivityStreams standard.
+///     Subtypes should derive from <see cref="ASEntity{TType}" /> instead.
+/// </remarks>
+/// <seealso cref="ASEntity{TType}"/>
+public abstract class ASEntity
 {
-    protected ASBase(Type nonEntityType, bool isValueSerialized)
+    protected ASEntity(Type nonEntityType, bool isValueSerialized)
     {
         NonEntityType = nonEntityType;
         IsValueSerialized = isValueSerialized;
@@ -63,27 +69,19 @@ public abstract class ASBase
     internal abstract ASType CreateTypeInstanceBase(TypeMap typeMap);
 }
 
-/// <summary>
-///     Base type for AS entity classes.
-///     Each subtype should have a matching non-entity class that derives from <see cref="ASType" /> and contains a new(TypeMap) constructor.
-/// </summary>
-/// <remarks>
-///     This is a synthetic type created to help adapt ActivityStreams to the .NET object model.
-///     It does not exist in the ActivityStreams standard.
-/// </remarks>
-/// <typeparam name="TType">Type of the matching non-entity class</typeparam>
-/// <seealso cref="ASType" />
-public abstract class ASBase<TType> : ASBase
-    where TType : ASType
+/// <inheritdoc cref="ASEntity"/>
+/// <typeparam name="TThis">Type of the object that extends this type</typeparam>
+public abstract class ASEntity<TThis> : ASEntity
+    where TThis : ASType
 {
     // Expensive reflection / code-gen operations are static to reduce overhead.
-    private static readonly bool ImplementsValueSerialized = typeof(TType).IsAssignableToGenericType(typeof(IJsonValueSerialized<>));
-    private static readonly Func<TypeMap, TType> TypeConstructor = TypeUtils.CreateDynamicConstructor<TypeMap, TType>();
+    private static readonly bool ImplementsValueSerialized = typeof(TThis).IsAssignableToGenericType(typeof(IJsonValueSerialized<>));
+    private static readonly Func<TypeMap, TThis> TypeConstructor = TypeUtils.CreateDynamicConstructor<TypeMap, TThis>();
 
     /// <summary>
     ///     Creates a new entity.
     /// </summary>
-    protected ASBase() : base(typeof(TType), ImplementsValueSerialized) {}
+    protected ASEntity() : base(typeof(TThis), ImplementsValueSerialized) {}
 
     internal sealed override ASType CreateTypeInstanceBase(TypeMap typeMap) => TypeConstructor(typeMap);
 }

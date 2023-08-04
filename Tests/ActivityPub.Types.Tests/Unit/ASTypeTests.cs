@@ -73,7 +73,7 @@ public abstract class ASTypeTests
     }
 
     [ImpliesOtherEntity(typeof(ASTypeEntity))]
-    private sealed class StubASTypeEntity : ASBase<StubASType>
+    private sealed class StubASTypeEntity : ASEntity<StubASType>
     {
         public const string StubType = "Stub";
         public override string ASTypeName => StubType;

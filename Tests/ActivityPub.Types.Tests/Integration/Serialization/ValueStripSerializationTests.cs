@@ -151,7 +151,7 @@ public class FakeObjectWithSpecialNullability : ASObject
 }
 
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class FakeObjectWithSpecialNullabilityEntity : ASBase<FakeObjectWithSpecialNullability>
+public sealed class FakeObjectWithSpecialNullabilityEntity : ASEntity<FakeObjectWithSpecialNullability>
 {
     public const string FakeObjectWithSpecialNullabilityEntityName = "FakeObjectWithSpecialNullability";
     public override string ASTypeName => FakeObjectWithSpecialNullabilityEntityName;

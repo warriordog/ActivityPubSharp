@@ -31,7 +31,7 @@ public class MentionLink : ASLink
 /// </summary>
 [ASTypeKey(MentionType)]
 [ImpliesOtherEntity(typeof(ASLinkEntity))]
-public sealed class MentionLinkEntity : ASBase<MentionLink>
+public sealed class MentionLinkEntity : ASEntity<MentionLink>
 {
     public const string MentionType = "Mention";
     public override string ASTypeName => MentionType;

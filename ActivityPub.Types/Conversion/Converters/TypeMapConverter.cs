@@ -49,7 +49,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         return typeMap;
     }
 
-    private ASBase ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
+    private ASEntity ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
     {
         // Get adapters for type
         var adapters = GetAdaptersFor(entityType);
@@ -63,7 +63,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             entityType = adapters.PickSubTypeForDeserializationAdapter.PickSubTypeForDeserialization(jsonElement, meta);
 
         // Use default conversion
-        entity = (ASBase?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
+        entity = (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
                  ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
 
         return entity;
@@ -198,7 +198,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     private abstract class TryDeserializeAdapter
     {
-        public abstract bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASBase? obj);
+        public abstract bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASEntity? obj);
 
         public static TryDeserializeAdapter CreateFor(Type type)
         {
@@ -208,9 +208,9 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     }
 
     private class TryDeserializeAdapter<T> : TryDeserializeAdapter
-        where T : ASBase, ICustomJsonDeserialized<T>
+        where T : ASEntity, ICustomJsonDeserialized<T>
     {
-        public override bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASBase? obj)
+        public override bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASEntity? obj)
         {
             if (T.TryDeserialize(element, meta, out var objT))
             {
@@ -225,7 +225,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     private abstract class TrySerializeAdapter
     {
-        public abstract bool TrySerialize(ASBase obj, SerializationMetadata meta, JsonObject node);
+        public abstract bool TrySerialize(ASEntity obj, SerializationMetadata meta, JsonObject node);
 
         public static TrySerializeAdapter CreateFor(Type type)
         {
@@ -235,14 +235,14 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     }
 
     private class TrySerializeAdapter<T> : TrySerializeAdapter
-        where T : ASBase, ICustomJsonSerialized<T>
+        where T : ASEntity, ICustomJsonSerialized<T>
     {
-        public override bool TrySerialize(ASBase obj, SerializationMetadata meta, JsonObject node) => T.TrySerialize((T)obj, meta, node);
+        public override bool TrySerialize(ASEntity obj, SerializationMetadata meta, JsonObject node) => T.TrySerialize((T)obj, meta, node);
     }
 
     private abstract class TrySerializeIntoValueAdapter
     {
-        public abstract bool TrySerializeIntoValue(ASBase obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node);
+        public abstract bool TrySerializeIntoValue(ASEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node);
 
         public static TrySerializeIntoValueAdapter CreateFor(Type type)
         {
@@ -252,9 +252,9 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     }
 
     private class TrySerializeIntoValueAdapter<T> : TrySerializeIntoValueAdapter
-        where T : ASBase, IJsonValueSerialized<T>
+        where T : ASEntity, IJsonValueSerialized<T>
     {
-        public override bool TrySerializeIntoValue(ASBase obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node) => T.TrySerializeIntoValue((T)obj, meta, out node);
+        public override bool TrySerializeIntoValue(ASEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node) => T.TrySerializeIntoValue((T)obj, meta, out node);
     }
 
     private abstract class PickSubTypeForDeserializationAdapter

@@ -18,7 +18,7 @@ public class PersonActor : ASActor
 /// <inheritdoc cref="PersonActor" />
 [ASTypeKey(PersonType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
-public sealed class PersonActorEntity : ASBase<PersonActor>
+public sealed class PersonActorEntity : ASEntity<PersonActor>
 {
     public const string PersonType = "Person";
     public override string ASTypeName => PersonType;

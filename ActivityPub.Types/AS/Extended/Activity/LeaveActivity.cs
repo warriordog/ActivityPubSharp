@@ -19,7 +19,7 @@ public class LeaveActivity : ASTransitiveActivity
 /// <inheritdoc cref="LeaveActivity" />
 [ASTypeKey(LeaveType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class LeaveActivityEntity : ASBase<LeaveActivity>
+public sealed class LeaveActivityEntity : ASEntity<LeaveActivity>
 {
     public const string LeaveType = "Leave";
     public override string ASTypeName => LeaveType;

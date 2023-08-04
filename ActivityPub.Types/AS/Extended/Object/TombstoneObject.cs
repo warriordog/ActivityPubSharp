@@ -40,7 +40,7 @@ public class TombstoneObject : ASObject
 /// <inheritdoc cref="TombstoneObject" />
 [ASTypeKey(TombstoneType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class TombstoneObjectEntity : ASBase<TombstoneObject>
+public sealed class TombstoneObjectEntity : ASEntity<TombstoneObject>
 {
     public const string TombstoneType = "Tombstone";
     public override string ASTypeName => TombstoneType;

@@ -18,7 +18,7 @@ public class IgnoreActivity : ASTransitiveActivity
 /// <inheritdoc cref="IgnoreActivity" />
 [ASTypeKey(IgnoreType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class IgnoreActivityEntity : ASBase<IgnoreActivity>
+public sealed class IgnoreActivityEntity : ASEntity<IgnoreActivity>
 {
     public const string IgnoreType = "Ignore";
     public override string ASTypeName => IgnoreType;

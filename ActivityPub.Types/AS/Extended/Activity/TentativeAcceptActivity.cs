@@ -18,7 +18,7 @@ public class TentativeAcceptActivity : AcceptActivity
 /// <inheritdoc cref="TentativeAcceptActivity" />
 [ASTypeKey(TentativeAcceptType)]
 [ImpliesOtherEntity(typeof(AcceptActivityEntity))]
-public sealed class TentativeAcceptActivityEntity : ASBase<TentativeAcceptActivity>
+public sealed class TentativeAcceptActivityEntity : ASEntity<TentativeAcceptActivity>
 {
     public const string TentativeAcceptType = "TentativeAccept";
     public override string ASTypeName => TentativeAcceptType;

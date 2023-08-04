@@ -18,7 +18,7 @@ public class ServiceActor : ASActor
 /// <inheritdoc cref="ServiceActor" />
 [ASTypeKey(ServiceType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
-public sealed class ServiceActorEntity : ASBase<ServiceActor>
+public sealed class ServiceActorEntity : ASEntity<ServiceActor>
 {
     public const string ServiceType = "Service";
     public override string ASTypeName => ServiceType;

@@ -18,7 +18,7 @@ public class GroupActor : ASActor
 /// <inheritdoc cref="GroupActor" />
 [ASTypeKey(GroupType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
-public sealed class GroupActorEntity : ASBase<GroupActor>
+public sealed class GroupActorEntity : ASEntity<GroupActor>
 {
     public const string GroupType = "Group";
     public override string ASTypeName => GroupType;

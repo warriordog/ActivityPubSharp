@@ -18,7 +18,7 @@ public class DislikeActivity : ASTransitiveActivity
 /// <inheritdoc cref="DislikeActivity" />
 [ASTypeKey(DislikeType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class DislikeActivityEntity : ASBase<DislikeActivity>
+public sealed class DislikeActivityEntity : ASEntity<DislikeActivity>
 {
     public const string DislikeType = "Dislike";
     public override string ASTypeName => DislikeType;
