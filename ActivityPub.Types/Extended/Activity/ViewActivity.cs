@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Activity;
 /// <summary>
 /// Indicates that the actor has viewed the object. 
 /// </summary>
-[ASTypeKey(ViewType)]
+[APType(ViewType)]
 public class ViewActivity : ASTransitiveActivity
 {
     public const string ViewType = "View";
