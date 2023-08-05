@@ -15,24 +15,54 @@ public class ListableConverter : JsonConverterFactory
 {
     public override bool CanConvert(Type type) =>
         // We only convert concrete types deriving from ICollection<T>
-        type.IsAssignableToGenericType(typeof(ICollection<>))
+        type.IsAssignableToGenericType(typeof(IReadOnlyCollection<>))
 
         // This has to be registered globally, which causes it to pick up dictionaries.
         // The code below ends up with a null key and goes BOOM, which is less than idea.
         // Its kind of a hack, but we avoid the issue by ignoring all dictionaries.
-        && !type.IsAssignableToGenericType(typeof(IDictionary<,>));
+        && !type.IsAssignableToGenericType(typeof(IReadOnlyDictionary<,>));
 
     // Pivot the type into correct converter
     public override JsonConverter? CreateConverter(Type collectionType, JsonSerializerOptions options)
     {
-        var itemType = collectionType.GetGenericArgumentsFor(typeof(ICollection<>))[0];
-        var converterType = typeof(ListableConverter<,>).MakeGenericType(itemType, collectionType);
+        var itemType = collectionType.GetGenericArgumentsFor(typeof(IReadOnlyCollection<>))[0];
+
+        var writableType = typeof(ICollection<>).MakeGenericType(itemType);
+        var isWritable = collectionType.IsAssignableTo(writableType);
+        var converterBase = isWritable ? typeof(ListableConverter<,>) : typeof(ListableWriter<,>);
+
+        var converterType = converterBase.MakeGenericType(itemType, collectionType);
         return (JsonConverter?)Activator.CreateInstance(converterType);
     }
 }
 
-internal class ListableConverter<TItem, TCollection> : JsonConverter<TCollection>
-    where TCollection : class, ICollection<TItem>, new()
+internal class ListableWriter<TItem, TCollection> : JsonConverter<TCollection>
+    where TCollection : IReadOnlyCollection<TItem>
+{
+    public override TCollection? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        => throw new InvalidOperationException($"Cannot populate read-only collection of type {typeof(TCollection)}");
+
+    public override void Write(Utf8JsonWriter writer, TCollection collection, JsonSerializerOptions options)
+    {
+        // If value is a single-element collection, then unpack it
+        if (collection.Count == 1)
+        {
+            var item = collection.First();
+            JsonSerializer.Serialize(writer, item, options);
+        }
+        else
+        {
+            writer.WriteStartArray();
+            foreach (var item in collection)
+                JsonSerializer.Serialize(writer, item, options);
+
+            writer.WriteEndArray();
+        }
+    }
+}
+
+internal class ListableConverter<TItem, TCollection> : ListableWriter<TItem, TCollection>
+    where TCollection : class, ICollection<TItem>, IReadOnlyCollection<TItem>, new()
 {
     public override TCollection? Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
     {
@@ -71,24 +101,5 @@ internal class ListableConverter<TItem, TCollection> : JsonConverter<TCollection
             throw new JsonException($"Failed to deserialize {typeof(TItem)} for {typeof(TCollection)}");
 
         return item;
-    }
-
-
-    public override void Write(Utf8JsonWriter writer, TCollection collection, JsonSerializerOptions options)
-    {
-        // If value is a single-element collection, then unpack it
-        if (collection.Count == 1)
-        {
-            var item = collection.First();
-            JsonSerializer.Serialize(writer, item, options);
-        }
-        else
-        {
-            writer.WriteStartArray();
-            foreach (var item in collection)
-                JsonSerializer.Serialize(writer, item, options);
-
-            writer.WriteEndArray();
-        }
     }
 }
