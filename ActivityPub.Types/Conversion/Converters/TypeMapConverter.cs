@@ -1,7 +1,6 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -40,17 +39,49 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             TypeMap = typeMap
         };
 
-        // Convert each type found in JSON
-        var asTypes = ReadTypes(jsonElement, options);
+
+        // String input is a special case of Link
+        if (jsonElement.ValueKind == JsonValueKind.String)
+            ReadString(jsonElement, typeMap);
+
+        // Object input can be anything
+        else if (jsonElement.ValueKind == JsonValueKind.Object)
+            ReadObject(jsonElement, meta, typeMap);
+
+        // Other input is an error
+        else
+            throw new JsonException($"Can't convert TypeMap from {jsonElement.ValueKind}");
+
+        return typeMap;
+    }
+
+    private static void ReadString(JsonElement jsonElement, TypeMap typeMap)
+    {
+        // Read Link entity
+        var link = new ASLinkEntity
+        {
+            HRef = jsonElement.GetString()!
+        };
+        typeMap.Add(link);
+
+        // Create and attach empty Type entity
+        var type = new ASTypeEntity();
+        typeMap.Add(type);
+    }
+
+    private void ReadObject(JsonElement jsonElement, DeserializationMetadata meta, TypeMap typeMap)
+    {
+        // Enumerate and expand the full list of needed types
+        var asTypes = ReadTypes(jsonElement, meta.JsonSerializerOptions);
         var types = _asTypeInfoCache.MapASTypes(asTypes);
+
+        // Convert each type found in JSON
         foreach (var entityType in types)
         {
             // Read entity and attach to map
             var entity = ReadEntity(jsonElement, meta, entityType);
-            typeMap.Add(entity);
+            typeMap.TryAdd(entity); // TryAdd is needed 
         }
-
-        return typeMap;
     }
 
     private ASEntity ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
@@ -58,52 +89,30 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Get adapters for type
         var adapters = GetAdaptersFor(entityType);
 
-        // Attempt
-        if (adapters.TryDeserializeAdapter?.TryDeserialize(jsonElement, meta, out var entity) == true)
-            return entity;
-
         // Attempt to narrow the type
         if (adapters.PickSubTypeForDeserializationAdapter != null)
             entityType = adapters.PickSubTypeForDeserializationAdapter.PickSubTypeForDeserialization(jsonElement, meta);
 
         // Use default conversion
-        entity = (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
-                 ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
-
-        return entity;
+        return (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
+               ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
     }
 
     private static IEnumerable<string> ReadTypes(JsonElement jsonElement, JsonSerializerOptions options)
     {
-        switch (jsonElement.ValueKind)
-        {
-            // Object + subtypes
-            case JsonValueKind.Object:
-            {
-                // Try to read types
-                if (jsonElement.TryGetProperty("type", out var typeProp))
-                {
-                    var types = typeProp.Deserialize<HashSet<string>>(options)
-                                ?? throw new JsonException("Can't convert TypeMap - \"type\" is null");
+        HashSet<string> types;
 
-                    foreach (var type in types)
-                        yield return type;
-                }
+        // Try to read types
+        if (jsonElement.TryGetProperty("type", out var typeProp))
+            types = typeProp.Deserialize<HashSet<string>>(options)
+                    ?? throw new JsonException("Can't convert TypeMap - \"type\" is null");
+        else
+            types = new HashSet<string>();
 
-                // Otherwise just use Object
-                yield return ASObjectEntity.ObjectType;
-                break;
-            }
+        // Make sure we always have object
+        types.Add(ASObjectEntity.ObjectType);
 
-            // Link
-            case JsonValueKind.String:
-                yield return ASLinkEntity.LinkType;
-                break;
-
-            // Oops
-            default:
-                throw new JsonException($"Can't convert TypeMap - \"type\" is unsupported type {jsonElement.ValueKind}");
-        }
+        return types;
     }
 
     private static JsonLDContext ReadContext(JsonElement jsonElement, JsonSerializerOptions options)
@@ -213,46 +222,14 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     private static ASBaseAdapters CreateEntityAdaptersFor(Type type) => new()
     {
-        TryDeserializeAdapter = TryDeserializeAdapter.CreateFor(type),
         TrySerializeAdapter = TrySerializeAdapter.CreateFor(type),
         PickSubTypeForDeserializationAdapter = PickSubTypeForDeserializationAdapter.CreateFor(type)
     };
 
     private class ASBaseAdapters
     {
-        public TryDeserializeAdapter? TryDeserializeAdapter { get; init; }
         public TrySerializeAdapter? TrySerializeAdapter { get; init; }
         public PickSubTypeForDeserializationAdapter? PickSubTypeForDeserializationAdapter { get; init; }
-    }
-
-    private abstract class TryDeserializeAdapter
-    {
-        public abstract bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASEntity? obj);
-
-        public static TryDeserializeAdapter? CreateFor(Type type)
-        {
-            if (!type.IsAssignableToGenericType(typeof(ICustomJsonDeserialized<>)))
-                return null;
-
-            var genericType = typeof(TryDeserializeAdapter<>).MakeGenericType(type);
-            return (TryDeserializeAdapter)Activator.CreateInstance(genericType)!;
-        }
-    }
-
-    private class TryDeserializeAdapter<T> : TryDeserializeAdapter
-        where T : ASEntity, ICustomJsonDeserialized<T>
-    {
-        public override bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASEntity? obj)
-        {
-            if (T.TryDeserialize(element, meta, out var objT))
-            {
-                obj = objT;
-                return true;
-            }
-
-            obj = null;
-            return false;
-        }
     }
 
     private abstract class TrySerializeAdapter

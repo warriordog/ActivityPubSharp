@@ -37,7 +37,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         public void ShouldDeserializeToCorrectType()
         {
             JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Image"}""";
-            ObjectUnderTest.Should().BeOfType<ImageObject>();
+            ObjectUnderTest.Is<ImageObject>().Should().BeTrue();
         }
 
         [Fact]
@@ -56,8 +56,8 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             }
             """;
 
-            ObjectUnderTest.Should().BeOfType<PersonActor>();
-            var personUnderTest = (PersonActor)ObjectUnderTest;
+            ObjectUnderTest.Is<PersonActor>().Should().BeTrue();
+            var personUnderTest = ObjectUnderTest.As<PersonActor>();
             personUnderTest.Inbox.HRef.Should().Be("https://example.com/actor/inbox");
             personUnderTest.Outbox.HRef.Should().Be("https://example.com/actor/outbox");
             personUnderTest.Image.Should().NotBeNull();
@@ -135,7 +135,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
                 }
             """;
 
-            ObjectUnderTest.Should().BeOfType<ASObject>();
+            ObjectUnderTest.Is<ASObject>().Should().BeTrue();
             ObjectUnderTest.Attachment.Should().HaveCount(1);
             ObjectUnderTest.Audience.Should().HaveCount(1);
             ObjectUnderTest.BCC.Should().HaveCount(1);

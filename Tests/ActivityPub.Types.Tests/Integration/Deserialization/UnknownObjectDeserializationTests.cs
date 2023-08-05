@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Types.AS;
+using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
@@ -14,11 +15,11 @@ public abstract class UnknownObjectDeserializationTests : DeserializationTests<A
     {
         public ObjectWithKnownAndUnknownTypeShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
-        [Fact] // Note: this behavior is temporary and will change once we support extensions.
-        public void DeserializeToObjectOrDeclaredType()
+        [Fact]
+        public void DeserializeToKnownType()
         {
-            JsonUnderTest = """{"type":["MadeUpFakeType","Person"]}""";
-            ObjectUnderTest.Should().BeOfType<ASObject>();
+            JsonUnderTest = """{"type":["MadeUpFakeType","Note"]}""";
+            ObjectUnderTest.Is<NoteObject>().Should().BeTrue();
         }
     }
 
@@ -27,10 +28,10 @@ public abstract class UnknownObjectDeserializationTests : DeserializationTests<A
         public ObjectWithOnlyUnknownTypeShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact] // Note: this behavior is temporary and will change once we support extensions.
-        public void DeserializeToObjectOrDeclaredType()
+        public void DeserializeToObject()
         {
             JsonUnderTest = """{"type":"MadeUpFakeType"}""";
-            ObjectUnderTest.Should().BeOfType<ASObject>();
+            ObjectUnderTest.Is<ASObject>().Should().BeTrue();
         }
     }
 

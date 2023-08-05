@@ -153,7 +153,7 @@ public sealed class ASActorEntity : ASEntity<ASActor>
     public NaturalLanguageString? PreferredUsername { get; set; }
 
     /// <inheritdoc cref="ASActor.Endpoints" />
-    [JsonPropertyName("Endpoints")]
+    [JsonPropertyName("endpoints")]
     public ActorEndpoints? Endpoints { get; set; }
 }
 

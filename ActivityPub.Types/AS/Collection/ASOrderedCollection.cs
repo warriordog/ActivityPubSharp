@@ -139,6 +139,6 @@ public sealed class ASOrderedCollectionEntity : ASEntity<ASOrderedCollection>
     }
 
     /// <inheritdoc cref="ASOrderedCollection.Items" />
-    [JsonPropertyName("items")]
+    [JsonPropertyName("orderedItems")]
     public LinkableList<ASObject>? Items { get; set; }
 }

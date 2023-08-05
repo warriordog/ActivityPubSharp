@@ -20,7 +20,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         {
             JsonUnderTest = """{"type":"Collection","totalItems":1,"items":[{}]}""";
 
-            ObjectUnderTest.Should().BeOfType<ASCollection>();
+            ObjectUnderTest.Is<ASCollection>().Should().BeTrue();
             ObjectUnderTest.As<ASCollection>().HasItems.Should().BeTrue();
             ObjectUnderTest.As<ASCollection>().Items.Should().NotBeNull();
             ObjectUnderTest.As<ASCollection>().Items.Should().HaveCount(1);
@@ -31,10 +31,10 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         {
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":1,"orderedItems":[{}]}""";
 
-            ObjectUnderTest.Should().BeOfType<ASCollection>();
-            ObjectUnderTest.As<ASCollection>().HasItems.Should().BeTrue();
-            ObjectUnderTest.As<ASCollection>().Items.Should().NotBeNull();
-            ObjectUnderTest.As<ASCollection>().Items.Should().HaveCount(1);
+            ObjectUnderTest.Is<ASOrderedCollection>().Should().BeTrue();
+            ObjectUnderTest.As<ASOrderedCollection>().HasItems.Should().BeTrue();
+            ObjectUnderTest.As<ASOrderedCollection>().Items.Should().NotBeNull();
+            ObjectUnderTest.As<ASOrderedCollection>().Items.Should().HaveCount(1);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         {
             JsonUnderTest = """{"type":"CollectionPage","totalItems":1,"items":[{}]}""";
 
-            ObjectUnderTest.Should().BeOfType<ASCollectionPage>();
+            ObjectUnderTest.Is<ASCollectionPage>().Should().BeTrue();
             ObjectUnderTest.As<ASCollectionPage>().HasItems.Should().BeTrue();
             ObjectUnderTest.As<ASCollectionPage>().Items.Should().NotBeNull();
             ObjectUnderTest.As<ASCollectionPage>().Items.Should().HaveCount(1);
@@ -53,10 +53,10 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         {
             JsonUnderTest = """{"type":"OrderedCollectionPage","totalItems":1,"orderedItems":[{}]}""";
 
-            ObjectUnderTest.Should().BeOfType<ASCollectionPage>();
-            ObjectUnderTest.As<ASCollectionPage>().HasItems.Should().BeTrue();
-            ObjectUnderTest.As<ASCollectionPage>().Items.Should().NotBeNull();
-            ObjectUnderTest.As<ASCollectionPage>().Items.Should().HaveCount(1);
+            ObjectUnderTest.Is<ASOrderedCollectionPage>().Should().BeTrue();
+            ObjectUnderTest.As<ASOrderedCollectionPage>().HasItems.Should().BeTrue();
+            ObjectUnderTest.As<ASOrderedCollectionPage>().Items.Should().NotBeNull();
+            ObjectUnderTest.As<ASOrderedCollectionPage>().Items.Should().HaveCount(1);
         }
     }
 
@@ -68,7 +68,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         public void PopulateLinkElements()
         {
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":1,"orderedItems":[{"type":"Link","href":"https://example.com"}]}""";
-            var obj = ObjectUnderTest.As<ASCollection>();
+            var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(1);
             obj.Items?.First().HasLink.Should().BeTrue();
             obj.Items?.First().Link?.HRef.Should().Be("https://example.com");
@@ -79,7 +79,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         public void PopulateLinkElements_WhenInStringForm()
         {
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":1,"orderedItems":["https://example.com"]}""";
-            var obj = ObjectUnderTest.As<ASCollection>();
+            var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(1);
             obj.Items?.First().HasLink.Should().BeTrue();
             obj.Items?.First().Link?.HRef.Should().Be("https://example.com");
@@ -90,7 +90,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         public void PopulateMixedLists()
         {
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":2,"orderedItems":[{},{"type":"Link","href":"https://example.com/1"},"https://example.com/2"]}""";
-            var obj = ObjectUnderTest.As<ASCollection>();
+            var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(2);
             obj.Items?[0].HasValue.Should().BeTrue();
             obj.Items?[1].HasLink.Should().BeTrue();

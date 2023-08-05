@@ -170,6 +170,16 @@ public class TypeMap
     }
 
     /// <summary>
+    ///     Like <see cref="TryAdd"/>, but throws if a conflicting entity already exists in the map.
+    /// </summary>
+    /// <throws cref="InvalidOperationException">If an object of this type already exists in the graph</throws>
+    internal void Add(ASEntity instance)
+    {
+        if (!TryAdd(instance))
+            throw new InvalidOperationException($"Can't add {instance.GetType()} to graph - it already exists in the TypeMap");
+    }
+
+    /// <summary>
     ///     Adds a new typed instance to the object.
     ///     Metadata such as AS types and JSON-LD context is automatically updated.
     /// </summary>
@@ -178,13 +188,13 @@ public class TypeMap
     ///     User code should instead add a new type by passing an existing TypeMap into the constructor.
     ///     This is not a technical limitation, but rather an intentional choice to prevent the construction of invalid objects.
     /// </remarks>
-    /// <throws cref="InvalidOperationException">If an object of this type already exists in the graph</throws>
-    internal void Add(ASEntity instance)
+    /// <returns>true if the type was added, false if it was already in the type map</returns>
+    internal bool TryAdd(ASEntity instance)
     {
         var type = instance.GetType();
 
         if (_allEntities.ContainsKey(type))
-            throw new InvalidOperationException($"Can't add {type} to graph - it already exists in the TypeMap");
+            return false;
 
         // Map the instance
         _allEntities[type] = instance;
@@ -209,5 +219,7 @@ public class TypeMap
         // Record link entities
         if (instance is ILinkEntity linkEntity)
             _linkEntities.Add(linkEntity);
+
+        return true;
     }
 }

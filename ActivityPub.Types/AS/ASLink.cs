@@ -1,11 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
-using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS;
@@ -95,7 +92,7 @@ public class ASLink : ASType
 /// <inheritdoc cref="ASLink" />
 [ASTypeKey(LinkType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
-public sealed class ASLinkEntity : ASEntity<ASLink>, ILinkEntity, ICustomJsonDeserialized<ASLinkEntity>
+public sealed class ASLinkEntity : ASEntity<ASLink>, ILinkEntity
 {
     public const string LinkType = "Link";
     public override string ASTypeName => LinkType;
@@ -121,22 +118,4 @@ public sealed class ASLinkEntity : ASEntity<ASLink>, ILinkEntity, ICustomJsonDes
     public HashSet<LinkRel> Rel { get; set; } = new();
 
     public bool RequiresObjectForm => HRefLang != null || Width != null || Height != null || Rel.Count != 0;
-
-    public static bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASLinkEntity? obj)
-    {
-        // We either parse from string, or allow parser to use default logic
-        if (element.ValueKind == JsonValueKind.String)
-        {
-            obj = new ASLinkEntity
-            {
-                TypeMap = meta.TypeMap,
-                HRef = element.GetString()!
-            };
-            return true;
-        }
-
-
-        obj = null;
-        return false;
-    }
 }

@@ -23,7 +23,7 @@ public interface IASTypeInfoCache
     /// </summary>
     /// <param name="asTypes">Types to map. Case-sensitive.</param>
     /// <returns>Set of all located types</returns>
-    internal IEnumerable<Type> MapASTypes(IEnumerable<string> asTypes);
+    internal HashSet<Type> MapASTypes(IEnumerable<string> asTypes);
 
     /// <summary>
     ///     Find and load all ActivityStreams types in a particular assembly.
@@ -44,15 +44,11 @@ public class ASTypeInfoCache : IASTypeInfoCache
     private readonly Dictionary<string, Type> _knownEntityMap = new();
     private readonly HashSet<string> _knownLinkTypes = new();
 
-    public bool IsKnownASType(string asTypeName) => _knownEntityMap.ContainsKey(asTypeName.ToLower());
+    public bool IsKnownASType(string asTypeName) => _knownEntityMap.ContainsKey(asTypeName);
 
-    public bool IsASLinkType(string type)
-    {
-        var typeKey = type.ToLower();
-        return _knownLinkTypes.Contains(typeKey);
-    }
+    public bool IsASLinkType(string type) => _knownLinkTypes.Contains(type);
 
-    public IEnumerable<Type> MapASTypes(IEnumerable<string> asTypes)
+    public HashSet<Type> MapASTypes(IEnumerable<string> asTypes)
     {
         var types = new HashSet<Type>();
 
@@ -64,19 +60,28 @@ public class ASTypeInfoCache : IASTypeInfoCache
                 continue;
 
             // Add the type
-            types.Add(type);
-
-            // Map type to implied types
-            if (!_impliedEntityMap.TryGetValue(type, out var impliedTypes))
-                // Skip if there are none
-                continue;
-
-            // Add all the implied types
-            foreach (var impliedType in impliedTypes)
-                types.Add(impliedType);
+            AddType(types, type);
         }
 
         return types;
+    }
+
+    private void AddType(HashSet<Type> types, Type type)
+    {
+        // Check + add.
+        // If already present, then skip next steps.
+        // This is both a performance boost + minimizes impact of a circular dependency bug.
+        if (!types.Add(type))
+            return;
+
+        // Map type to implied types.
+        // Skip if there are none.
+        if (!_impliedEntityMap.TryGetValue(type, out var impliedTypes))
+            return;
+
+        // Add all the implied types
+        foreach (var impliedType in impliedTypes)
+            AddType(types, impliedType);
     }
 
     public void RegisterAllAssemblies()
@@ -105,8 +110,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
             var typeAttributes = type.GetCustomAttributes<ASTypeKeyAttribute>();
             foreach (var typeAttr in typeAttributes)
             {
-                // Have to lowercase this for accurate checking
-                var typeName = typeAttr.Type.ToLower();
+                var typeName = typeAttr.Type;
 
                 // Check for dupes
                 if (_knownEntityMap.TryGetValue(typeName, out var originalType))
