@@ -68,7 +68,7 @@ public class ASCollectionPage : ASCollection
 
 /// <inheritdoc cref="ASCollectionPage" />
 [ASTypeKey(CollectionPageType)]
-[ImpliesOtherEntity(typeof(ASCollection))]
+[ImpliesOtherEntity(typeof(ASCollectionEntity))]
 public sealed class ASCollectionPageEntity : ASEntity<ASCollectionPage>
 {
     public const string CollectionPageType = "CollectionPage";

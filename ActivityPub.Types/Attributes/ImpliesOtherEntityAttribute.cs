@@ -23,7 +23,7 @@ public sealed class ImpliesOtherEntityAttribute : Attribute
     public ImpliesOtherEntityAttribute(Type type)
     {
         if (!type.IsAssignableTo(typeof(ASEntity)))
-            throw new ArgumentException("Implied type must derive from ASBase", nameof(type));
+            throw new ArgumentException("Implied type must derive from ASEntity", nameof(type));
 
         Type = type;
     }
