@@ -123,12 +123,14 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Construct meta
         var meta = new SerializationMetadata
         {
+            TypeMap = typeMap,
             JsonSerializerOptions = options,
             JsonNodeOptions = options.ToNodeOptions()
         };
 
-        // Attempt TrySerializeIntoValue
-        if (TryWriteAsValue(writer, typeMap, meta))
+        // Links require special handling.
+        // If the *only* property is href, then they compact to a string
+        if (TryWriteAsLink(writer, typeMap))
             return;
 
         // Create node to hold the output
@@ -177,26 +179,24 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         outputNode["@context"] = JsonSerializer.SerializeToNode(typeMap.LDContext, options);
     }
 
-    private bool TryWriteAsValue(Utf8JsonWriter writer, TypeMap typeMap, SerializationMetadata meta)
+    private static bool TryWriteAsLink(Utf8JsonWriter writer, TypeMap typeMap)
     {
-        if (typeMap.ValueSerializer == null)
+        var linkEntities = typeMap.LinkEntities.ToList();
+
+        // If there are any non-link entities, then bail
+        if (typeMap.AllEntities.Count > linkEntities.Count)
             return false;
 
-        // 1. Get the adapters for the type
-        var serializer = typeMap.ValueSerializer;
-        var serializerType = serializer.GetType();
-        var adapters = GetAdaptersFor(serializerType);
-
-        // 2. Sanity check
-        if (adapters.TrySerializeIntoValueAdapter == null)
-            throw new JsonException($"Cannot serialize TypeMap: value serializer {serializerType} does not implement IJsonValueSerialized");
-
-        // 3. Convert it!
-        if (!adapters.TrySerializeIntoValueAdapter.TrySerializeIntoValue(serializer, meta, out var node))
+        // If there is any data in any link entities, then bail
+        if (linkEntities.Any(link => link.RequiresObjectForm))
             return false;
 
-        // 4. Write it
-        node.WriteTo(writer, meta.JsonSerializerOptions);
+        // If there is no ASLinkEntity, then bail
+        if (!typeMap.IsEntity<ASLinkEntity>(out var linkEntity))
+            return false;
+
+        // Finally - its safe to write string form
+        writer.WriteStringValue(linkEntity.HRef);
         return true;
     }
 
@@ -215,7 +215,6 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         TryDeserializeAdapter = TryDeserializeAdapter.CreateFor(type),
         TrySerializeAdapter = TrySerializeAdapter.CreateFor(type),
-        TrySerializeIntoValueAdapter = TrySerializeIntoValueAdapter.CreateFor(type),
         PickSubTypeForDeserializationAdapter = PickSubTypeForDeserializationAdapter.CreateFor(type)
     };
 
@@ -223,7 +222,6 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         public TryDeserializeAdapter? TryDeserializeAdapter { get; init; }
         public TrySerializeAdapter? TrySerializeAdapter { get; init; }
-        public TrySerializeIntoValueAdapter? TrySerializeIntoValueAdapter { get; init; }
         public PickSubTypeForDeserializationAdapter? PickSubTypeForDeserializationAdapter { get; init; }
     }
 
@@ -275,26 +273,6 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         where T : ASEntity, ICustomJsonSerialized<T>
     {
         public override bool TrySerialize(ASEntity obj, SerializationMetadata meta, JsonObject node) => T.TrySerialize((T)obj, meta, node);
-    }
-
-    private abstract class TrySerializeIntoValueAdapter
-    {
-        public abstract bool TrySerializeIntoValue(ASEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node);
-
-        public static TrySerializeIntoValueAdapter? CreateFor(Type type)
-        {
-            if (!type.IsAssignableToGenericType(typeof(IJsonValueSerialized<>)))
-                return null;
-
-            var genericType = typeof(TrySerializeIntoValueAdapter<>).MakeGenericType(type);
-            return (TrySerializeIntoValueAdapter)Activator.CreateInstance(genericType)!;
-        }
-    }
-
-    private class TrySerializeIntoValueAdapter<T> : TrySerializeIntoValueAdapter
-        where T : ASEntity, IJsonValueSerialized<T>
-    {
-        public override bool TrySerializeIntoValue(ASEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node) => T.TrySerializeIntoValue((T)obj, meta, out node);
     }
 
     private abstract class PickSubTypeForDeserializationAdapter

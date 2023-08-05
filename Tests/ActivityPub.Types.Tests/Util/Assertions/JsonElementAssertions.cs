@@ -38,7 +38,7 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
     public void HaveStringProperty(string name, string value)
     {
         HaveProperty(name);
-        Subject.GetProperty(name).GetString().Should().Be(value);
+        Subject.GetProperty(name).Should().BeJsonString(value);
     }
 
     public void BeJsonString() => Subject.ValueKind.Should().Be(JsonValueKind.String);

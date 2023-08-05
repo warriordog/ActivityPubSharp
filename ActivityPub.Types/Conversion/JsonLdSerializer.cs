@@ -3,6 +3,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Internal;
 
@@ -39,7 +40,9 @@ public class JsonLdSerializer : IJsonLdSerializer
         SerializerOptions = new JsonSerializerOptions(JsonSerializerOptions.Default)
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver()
+                .WithBugFixes()
         };
 
         SerializerOptions.Converters.Add(new TypeMapConverter(asTypeInfoCache));

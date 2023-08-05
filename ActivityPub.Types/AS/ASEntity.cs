@@ -2,7 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
-using ActivityPub.Types.Conversion.Overrides;
+using System.Text.Json.Serialization;
 using InternalUtils;
 
 namespace ActivityPub.Types.AS;
@@ -29,6 +29,7 @@ public abstract class ASEntity
     /// <remarks>
     ///     Entity implementations should override this to opt-in to the functionality.
     /// </remarks>
+    [JsonIgnore]
     public virtual string? ASTypeName => null;
 
     /// <summary>
@@ -42,6 +43,7 @@ public abstract class ASEntity
     /// <remarks>
     ///     Entity implementations should override this to opt-in to the functionality.
     /// </remarks>
+    [JsonIgnore]
     public virtual IReadOnlySet<string>? ReplacesASTypes => null;
 
     /// <summary>
@@ -49,6 +51,7 @@ public abstract class ASEntity
     ///     Can only be called as an initializer.
     /// </summary>
     /// <throws cref="InvalidOperationException">If an entity of this type already exists in the graph</throws>
+    [JsonIgnore]
     public TypeMap TypeMap
     {
         init => value.Add(this);
@@ -64,13 +67,6 @@ public abstract class ASEntity
     /// <param name="typeMap">TypeMap that contains this entity</param>
     /// <param name="instance">Instance that was constructed</param>
     internal abstract bool TryCreateTypeInstance(TypeMap typeMap, [NotNullWhen(true)] out ASType? instance);
-
-    /// <summary>
-    ///     Returns true if this entity implements IJsonValueSerialized{TThis}.
-    ///     Ugly and violates good OOP principles, but necessary for performance.
-    ///     Implementations should do this once per type and cache the result.
-    /// </summary>
-    internal abstract bool IsValueSerialized { get; }
 }
 
 /// <inheritdoc cref="ASEntity"/>
@@ -80,7 +76,6 @@ public abstract class ASEntity<TType> : ASEntity
 {
     // Expensive reflection / code-gen operations are static to reduce overhead.
     private static readonly Func<TypeMap, TType>? TypeConstructor = TypeUtils.TryCreateDynamicConstructor<TypeMap, TType>();
-    private static readonly bool IsTypeValueSerialized = typeof(TType).IsAssignableToGenericType(typeof(IJsonValueSerialized<>));
 
     /// <summary>
     ///     Creates a new entity.
@@ -98,6 +93,18 @@ public abstract class ASEntity<TType> : ASEntity
         instance = null;
         return false;
     }
+}
 
-    internal sealed override bool IsValueSerialized => IsTypeValueSerialized;
+/// <summary>
+/// Indicates that this entity is part of the "Link" AS type or an extension of it.
+/// Links MUST implement this interface, otherwise conversion may fail.
+/// </summary>
+public interface ILinkEntity
+{
+    /// <summary>
+    /// True if the link's current state can only be represented by the object form.
+    /// MUST return true if any properties are populated, other than HRef!
+    /// </summary>
+    [JsonIgnore]
+    public bool RequiresObjectForm { get; }
 }

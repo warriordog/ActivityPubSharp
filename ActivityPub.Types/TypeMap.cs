@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Converters;
-using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -25,6 +24,10 @@ public class TypeMap
 
     // Map non-entities to entity that can construct it
     private readonly Dictionary<Type, ASEntity> _typeEntityMap = new();
+
+    // Set of all ASLink entities in the map
+    private readonly HashSet<ILinkEntity> _linkEntities = new();
+    public IReadOnlySet<ILinkEntity> LinkEntities => _linkEntities;
 
     /// <summary>
     /// Constructs a new, empty type graph initialized with the ActivityStreams context.
@@ -52,12 +55,6 @@ public class TypeMap
 
     public IJsonLDContext LDContext => _ldContext;
     private readonly JsonLDContext _ldContext;
-
-    /// <summary>
-    ///     Reference to the single entity which implements <see cref="IJsonValueSerialized{TThis}" />
-    ///     Will be null if none is present.
-    /// </summary>
-    internal ASEntity? ValueSerializer { get; private set; }
 
     /// <summary>
     ///     Checks if the object contains a particular type entity.
@@ -189,16 +186,6 @@ public class TypeMap
         if (_allEntities.ContainsKey(type))
             throw new InvalidOperationException($"Can't add {type} to graph - it already exists in the TypeMap");
 
-        // Map value serializer.
-        // This is first since it has an additional check.
-        if (instance.IsValueSerialized)
-        {
-            if (ValueSerializer != null)
-                throw new InvalidOperationException($"Can't add {type} to graph - it conflicts with another entity that also implements IJsonValueSerialized");
-
-            ValueSerializer = instance;
-        }
-
         // Map the instance
         _allEntities[type] = instance;
         _typeEntityMap[instance.NonEntityType] = instance;
@@ -218,5 +205,9 @@ public class TypeMap
                     => _replacedASTypes.Contains(asType)
             );
         }
+
+        // Record link entities
+        if (instance is ILinkEntity linkEntity)
+            _linkEntities.Add(linkEntity);
     }
 }

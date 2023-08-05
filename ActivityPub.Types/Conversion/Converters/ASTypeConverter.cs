@@ -4,7 +4,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
-using InternalUtils;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
@@ -26,14 +25,19 @@ public class ASTypeConverter : JsonConverterFactory
 internal class ASTypeConverter<T> : JsonConverter<T>
     where T : ASType
 {
-    private static readonly Func<TypeMap, T> TypeConstructor = TypeUtils.CreateDynamicConstructor<TypeMap, T>();
-
-    public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
+        // Its possible for typeToConvert to be a subtype of T.
+        // In that case, we MUST re-enter with the correct type!
+        if (typeToConvert != typeof(T))
+            return (T?)JsonSerializer.Deserialize(ref reader, typeToConvert, options);
+
+        // Conversion is mostly just constructing a TypeMap with all the data
         var typeMap = JsonSerializer.Deserialize<TypeMap>(ref reader, options)
                       ?? throw new JsonException($"Can't convert {typeof(T)}: conversion to TypeMap returned null");
 
-        return TypeConstructor(typeMap);
+        // Then we just construct the target type. 
+        return typeMap.AsType<T>();
     }
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)

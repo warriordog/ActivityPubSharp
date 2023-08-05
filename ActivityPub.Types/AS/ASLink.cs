@@ -3,7 +3,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Conversion.Overrides;
@@ -96,7 +95,7 @@ public class ASLink : ASType
 /// <inheritdoc cref="ASLink" />
 [ASTypeKey(LinkType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
-public sealed class ASLinkEntity : ASEntity<ASLink>, ICustomJsonDeserialized<ASLinkEntity>, IJsonValueSerialized<ASLinkEntity>
+public sealed class ASLinkEntity : ASEntity<ASLink>, ILinkEntity, ICustomJsonDeserialized<ASLinkEntity>
 {
     public const string LinkType = "Link";
     public override string ASTypeName => LinkType;
@@ -121,6 +120,8 @@ public sealed class ASLinkEntity : ASEntity<ASLink>, ICustomJsonDeserialized<ASL
     [JsonPropertyName("rel")]
     public HashSet<LinkRel> Rel { get; set; } = new();
 
+    public bool RequiresObjectForm => HRefLang != null || Width != null || Height != null || Rel.Count != 0;
+
     public static bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASLinkEntity? obj)
     {
         // We either parse from string, or allow parser to use default logic
@@ -136,12 +137,6 @@ public sealed class ASLinkEntity : ASEntity<ASLink>, ICustomJsonDeserialized<ASL
 
 
         obj = null;
-        return false;
-    }
-
-    public static bool TrySerializeIntoValue(ASLinkEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node)
-    {
-        node = null;
         return false;
     }
 }

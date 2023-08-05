@@ -99,7 +99,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
             // Pre-check this here for performance.
             // Its possible for the loop to run multiple times.
-            var isASLink = type.IsAssignableTo(typeof(ASLinkEntity));
+            var isASLink = type.IsAssignableTo(typeof(ILinkEntity));
 
             // Process each TypeKey attribute on the type
             var typeAttributes = type.GetCustomAttributes<ASTypeKeyAttribute>();

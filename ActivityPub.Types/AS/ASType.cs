@@ -127,7 +127,7 @@ public abstract class ASType
 }
 
 /// <inheritdoc cref="ASType" />
-public sealed class ASTypeEntity : ASEntity<ASType>
+public sealed class ASTypeEntity : ASEntity<ASType>, ILinkEntity
 {
     private string? _id;
 
@@ -170,4 +170,6 @@ public sealed class ASTypeEntity : ASEntity<ASType>
     /// <inheritdoc cref="ASType.MediaType" />
     [JsonPropertyName("mediaType")]
     public string? MediaType { get; set; }
+
+    public bool RequiresObjectForm => Id != null || AttributedTo.Count != 0 || Preview != null || Name != null || MediaType != null || UnknownJsonProperties.Count != 0;
 }

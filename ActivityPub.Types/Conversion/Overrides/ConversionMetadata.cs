@@ -18,6 +18,11 @@ public class ConversionMetadata
     ///     MUST be passed on - do not assume default values!
     /// </summary>
     public required JsonSerializerOptions JsonSerializerOptions { get; init; }
+
+    /// <summary>
+    ///     TypeMap of the object being converted.
+    /// </summary>
+    public required TypeMap TypeMap { get; init; }
 }
 
 /// <summary>
@@ -39,11 +44,6 @@ public class SerializationMetadata : ConversionMetadata
 /// </summary>
 public class DeserializationMetadata : ConversionMetadata
 {
-    /// <summary>
-    ///     TypeMap of the object being converted.
-    /// </summary>
-    public required TypeMap TypeMap { get; init; }
-
     /// <summary>
     ///     JSON-LD context in effect for this conversion.
     ///     Will always be present, even if not included in the JSON.
