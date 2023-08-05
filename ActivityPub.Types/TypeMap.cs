@@ -142,9 +142,9 @@ public class TypeMap
         }
 
         // Can create it -> yes
-        if (_typeEntityMap.TryGetValue(type, out var entity))
+        if (_typeEntityMap.TryGetValue(type, out var entity) && entity.TryCreateTypeInstance(this, out var untypedInstance))
         {
-            instance = (T)entity.CreateTypeInstanceBase(this);
+            instance = (T)untypedInstance;
             _typeCache[type] = instance;
             return true;
         }

@@ -9,6 +9,7 @@ using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
+using InternalUtils;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
@@ -57,7 +58,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Get adapters for type
         var adapters = GetAdaptersFor(entityType);
 
-        // Attempt TrySerialize
+        // Attempt
         if (adapters.TryDeserializeAdapter?.TryDeserialize(jsonElement, meta, out var entity) == true)
             return entity;
 
@@ -139,11 +140,6 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Write all entities into the node
         foreach (var (entityType, entity) in typeMap.AllEntities)
         {
-            // Attempt TrySerialize
-            var adapters = GetAdaptersFor(entityType);
-            if (adapters.TrySerializeAdapter?.TrySerialize(entity, meta, outputNode) == true)
-                continue;
-
             // Serialize with default logic
             WriteEntity(entity, entityType, outputNode, meta);
         }
@@ -152,8 +148,13 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         outputNode.WriteTo(writer, options);
     }
 
-    private static void WriteEntity(ASEntity entity, Type entityType, JsonObject outputNode, SerializationMetadata meta)
+    private void WriteEntity(ASEntity entity, Type entityType, JsonObject outputNode, SerializationMetadata meta)
     {
+        // Attempt TrySerialize
+        var adapters = GetAdaptersFor(entityType);
+        if (adapters.TrySerializeAdapter?.TrySerialize(entity, meta, outputNode) == true)
+            return;
+
         // Convert to an intermediate object
         var element = JsonSerializer.SerializeToElement(entity, entityType, meta.JsonSerializerOptions);
         if (element.ValueKind != JsonValueKind.Object)
@@ -230,8 +231,11 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         public abstract bool TryDeserialize(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out ASEntity? obj);
 
-        public static TryDeserializeAdapter CreateFor(Type type)
+        public static TryDeserializeAdapter? CreateFor(Type type)
         {
+            if (!type.IsAssignableToGenericType(typeof(ICustomJsonDeserialized<>)))
+                return null;
+
             var genericType = typeof(TryDeserializeAdapter<>).MakeGenericType(type);
             return (TryDeserializeAdapter)Activator.CreateInstance(genericType)!;
         }
@@ -257,8 +261,11 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         public abstract bool TrySerialize(ASEntity obj, SerializationMetadata meta, JsonObject node);
 
-        public static TrySerializeAdapter CreateFor(Type type)
+        public static TrySerializeAdapter? CreateFor(Type type)
         {
+            if (!type.IsAssignableToGenericType(typeof(ICustomJsonSerialized<>)))
+                return null;
+
             var genericType = typeof(TrySerializeAdapter<>).MakeGenericType(type);
             return (TrySerializeAdapter)Activator.CreateInstance(genericType)!;
         }
@@ -274,8 +281,11 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         public abstract bool TrySerializeIntoValue(ASEntity obj, SerializationMetadata meta, [NotNullWhen(true)] out JsonValue? node);
 
-        public static TrySerializeIntoValueAdapter CreateFor(Type type)
+        public static TrySerializeIntoValueAdapter? CreateFor(Type type)
         {
+            if (!type.IsAssignableToGenericType(typeof(IJsonValueSerialized<>)))
+                return null;
+
             var genericType = typeof(TrySerializeIntoValueAdapter<>).MakeGenericType(type);
             return (TrySerializeIntoValueAdapter)Activator.CreateInstance(genericType)!;
         }
@@ -291,8 +301,11 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         public abstract Type PickSubTypeForDeserialization(JsonElement element, DeserializationMetadata meta);
 
-        public static PickSubTypeForDeserializationAdapter CreateFor(Type type)
+        public static PickSubTypeForDeserializationAdapter? CreateFor(Type type)
         {
+            if (!type.IsAssignableTo(typeof(ISubTypeDeserialized)))
+                return null;
+
             var genericType = typeof(PickSubTypeForDeserializationAdapter<>).MakeGenericType(type);
             return (PickSubTypeForDeserializationAdapter)Activator.CreateInstance(genericType)!;
         }

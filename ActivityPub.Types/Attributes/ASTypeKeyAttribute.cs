@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using ActivityPub.Types.AS;
 using JetBrains.Annotations;
 
 namespace ActivityPub.Types.Attributes;
@@ -10,6 +11,7 @@ namespace ActivityPub.Types.Attributes;
 ///     The type name must be unique.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
+[BaseTypeRequired(typeof(ASEntity))]
 [MeansImplicitUse]
 public sealed class ASTypeKeyAttribute : Attribute
 {
