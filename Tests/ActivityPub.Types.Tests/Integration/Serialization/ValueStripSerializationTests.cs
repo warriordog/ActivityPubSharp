@@ -70,10 +70,10 @@ public class ValueStripSerializationTests : SerializationTests
     }
 
     [Fact]
-    public void NullCollectionsShould_BePreserved_WhenIgnoreConditionIsNever()
+    public void NullCollectionsShould_BeStripped_WhenIgnoreConditionIsNever()
     {
         ObjectUnderTest = new FakeObjectWithSpecialNullability();
-        JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NeverIgnoreList));
+        JsonUnderTest.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.NeverIgnoreList));
     }
 
     [Fact]

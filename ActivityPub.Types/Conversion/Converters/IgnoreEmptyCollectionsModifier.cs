@@ -34,13 +34,13 @@ public static class IgnoreEmptyCollectionsModifier
                 BindCollection(prop);
 
             // Generic ICollection also counts
-            else if (prop.PropertyType.IsAssignableToGenericType(typeof(ICollection<>)))
-                BindGenericCollection(prop);
+            else if (prop.PropertyType.TryGetGenericArgumentsFor(typeof(ICollection<>), out var genericSlots))
+                BindGenericCollection(prop, genericSlots[0]);
 
             // Anything deriving from IReadOnlyCollection is in scope, since this is serialization only
-            else if (prop.PropertyType.IsAssignableToGenericType(typeof(IReadOnlyCollection<>)))
+            else if (prop.PropertyType.TryGetGenericArgumentsFor(typeof(IReadOnlyCollection<>), out var readOnlySlots))
                 // Add a callback to conditionally exclude the prop
-                BindReadOnlyCollection(prop);
+                BindReadOnlyCollection(prop, readOnlySlots[0]);
         }
     }
 
@@ -54,9 +54,8 @@ public static class IgnoreEmptyCollectionsModifier
         prop.ShouldSerialize = wrapper.ShouldSerialize;
     }
 
-    private static void BindGenericCollection(JsonPropertyInfo prop)
+    private static void BindGenericCollection(JsonPropertyInfo prop, Type itemType)
     {
-        var itemType = prop.PropertyType.GetGenericArgumentsFor(typeof(ICollection<>))[0];
         var method =
                 typeof(IgnoreEmptyCollectionsModifier)
                     .GetMethod(nameof(BindGenericCollectionOf), BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.NonPublic)
@@ -80,9 +79,8 @@ public static class IgnoreEmptyCollectionsModifier
         prop.ShouldSerialize = wrapper.ShouldSerialize;
     }
 
-    private static void BindReadOnlyCollection(JsonPropertyInfo prop)
+    private static void BindReadOnlyCollection(JsonPropertyInfo prop, Type itemType)
     {
-        var itemType = prop.PropertyType.GetGenericArgumentsFor(typeof(IReadOnlyCollection<>))[0];
         var method =
             typeof(IgnoreEmptyCollectionsModifier)
                 .GetMethod(nameof(BindReadOnlyCollectionOf), BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.NonPublic)
@@ -112,7 +110,7 @@ public static class IgnoreEmptyCollectionsModifier
         public bool ShouldSerialize(object obj, object? value) =>
             InvokeCondition(obj, value)
             ?? Fallback?.Invoke(obj, value)
-            ?? true;
+            ?? false;
 
         private bool? InvokeCondition(object obj, object? value)
         {
