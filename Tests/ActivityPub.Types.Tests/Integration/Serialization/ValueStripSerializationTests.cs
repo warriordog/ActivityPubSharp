@@ -77,22 +77,6 @@ public class ValueStripSerializationTests : SerializationTests
     }
 
     [Fact]
-    public void NonNestablePropertiesShould_BeStripped_WhenNested()
-    {
-        ObjectUnderTest = new FakeObjectWithSpecialNullability
-        {
-            Source = new FakeObjectWithSpecialNullability()
-        };
-        JsonUnderTest.Should().HaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable));
-        JsonUnderTest.Should()
-            .HaveProperty(
-                "source",
-                source =>
-                    source.Should().NotHaveProperty(nameof(FakeObjectWithSpecialNullability.NonNestable))
-            );
-    }
-
-    [Fact]
     public void NonNullObjectsShould_BePreserved()
     {
         ObjectUnderTest = new ASObject
@@ -154,12 +138,6 @@ public class FakeObjectWithSpecialNullability : ASObject
         set => Entity.NeverIgnoreList = value;
     }
 
-    public bool NonNestable
-    {
-        get => Entity.NonNestable;
-        set => Entity.NonNestable = value;
-    }
-
     public int IgnoreWhenDefaultInt
     {
         get => Entity.IgnoreWhenDefaultInt;
@@ -187,8 +165,6 @@ public sealed class FakeObjectWithSpecialNullabilityEntity : ASEntity<FakeObject
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<string> NeverIgnoreList { get; set; } = new();
-
-    public bool NonNestable { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public int IgnoreWhenDefaultInt { get; set; }
