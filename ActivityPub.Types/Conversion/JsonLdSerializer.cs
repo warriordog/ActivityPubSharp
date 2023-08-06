@@ -40,8 +40,8 @@ public class JsonLdSerializer : IJsonLdSerializer
         SerializerOptions = new JsonSerializerOptions(JsonSerializerOptions.Default)
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             TypeInfoResolver = new DefaultJsonTypeInfoResolver()
+                .WithIgnoreEmptyCollections()
                 .WithBugFixes()
         };
 

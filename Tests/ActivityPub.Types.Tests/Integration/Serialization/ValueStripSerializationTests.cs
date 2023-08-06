@@ -136,19 +136,35 @@ public class FakeObjectWithSpecialNullability : ASObject
     private FakeObjectWithSpecialNullabilityEntity Entity { get; }
 
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public ASObject? NeverIgnoreObject { get; set; }
+    public ASObject? NeverIgnoreObject
+    {
+        get => Entity.NeverIgnoreObject;
+        set => Entity.NeverIgnoreObject = value;
+    }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public int NeverIgnoreInt { get; set; }
+    public int NeverIgnoreInt
+    {
+        get => Entity.NeverIgnoreInt;
+        set => Entity.NeverIgnoreInt = value;
+    }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public List<string> NeverIgnoreList { get; set; } = new();
+    public List<string> NeverIgnoreList
+    {
+        get => Entity.NeverIgnoreList;
+        set => Entity.NeverIgnoreList = value;
+    }
 
-    public bool NonNestable { get; set; }
+    public bool NonNestable
+    {
+        get => Entity.NonNestable;
+        set => Entity.NonNestable = value;
+    }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public int IgnoreWhenDefaultInt { get; set; }
+    public int IgnoreWhenDefaultInt
+    {
+        get => Entity.IgnoreWhenDefaultInt;
+        set => Entity.IgnoreWhenDefaultInt = value;
+    }
 }
 
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
@@ -156,6 +172,11 @@ public sealed class FakeObjectWithSpecialNullabilityEntity : ASEntity<FakeObject
 {
     public const string FakeObjectWithSpecialNullabilityEntityName = "FakeObjectWithSpecialNullability";
     public override string ASTypeName => FakeObjectWithSpecialNullabilityEntityName;
+
+    public override IReadOnlySet<string>? ReplacesASTypes { get; } = new HashSet<string>
+    {
+        ASObjectEntity.ObjectType
+    };
 
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
