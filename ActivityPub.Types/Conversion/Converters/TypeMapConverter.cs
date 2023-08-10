@@ -1,6 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -77,38 +78,23 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
         // Convert each type found in JSON
         foreach (var entityType in types)
-        {
-            // Read entity and attach to map
-            var entity = ReadEntity(jsonElement, meta, entityType);
-            typeMap.TryAdd(entity); // TryAdd is needed 
-        }
+            ReadEntity(jsonElement, meta, entityType);
     }
 
-    private ASEntity ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
+    private void ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
     {
-        // Recursively narrow to the most-appropriate type
-        entityType = NarrowEntityType(jsonElement, meta, entityType);
+        // We need to *also* convert any more-specific types, recursively
+        var adapters = GetAdaptersFor(entityType);
+        if (adapters.PickSubTypeForDeserializationAdapter?.TryNarrowTypeByJson(jsonElement, meta, out var narrowType) == true)
+            ReadEntity(jsonElement, meta, narrowType);
 
         // Use default conversion
-        return (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
-               ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
-    }
+        var entity = (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
+                     ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
 
-    private Type NarrowEntityType(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
-    {
-        // Its possible for this to chain multiple times.
-        // We use a loop here for performance.
-        while (true)
-        {
-            // Get adapters for type
-            var adapters = GetAdaptersFor(entityType);
-
-            // Attempt to narrow the type
-            if (adapters.PickSubTypeForDeserializationAdapter?.TryNarrowTypeByJson(jsonElement, meta, ref entityType) != true)
-                break;
-        }
-
-        return entityType;
+        // Add it to the graph.
+        // TryAdd is needed
+        meta.TypeMap.TryAdd(entity);
     }
 
     private static IEnumerable<string> ReadTypes(JsonElement jsonElement, JsonSerializerOptions options)
@@ -267,7 +253,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     private abstract class PickSubTypeForDeserializationAdapter
     {
-        public abstract bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, ref Type type);
+        public abstract bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type);
 
         public static PickSubTypeForDeserializationAdapter? CreateFor(Type type)
         {
@@ -282,7 +268,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private class PickSubTypeForDeserializationAdapter<T> : PickSubTypeForDeserializationAdapter
         where T : ISubTypeDeserialized
     {
-        public override bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, ref Type type)
-            => T.TryNarrowTypeByJson(element, meta, ref type);
+        public override bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
+            => T.TryNarrowTypeByJson(element, meta, out type);
     }
 }

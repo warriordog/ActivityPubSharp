@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
@@ -48,14 +49,16 @@ public sealed class ASTransitiveActivityEntity : ASEntity<ASTransitiveActivity>,
     [JsonPropertyName("object")]
     public required LinkableList<ASObject> Object { get; set; } = new();
 
-    public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, ref Type type)
+    public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
     {
         // Only change type if its targeted (it has the "target" property)
-        if (!element.TryGetProperty("target", out _))
-            return false;
+        if (element.TryGetProperty("target", out _))
+        {
+            type = typeof(ASTargetedActivityEntity);
+            return true;
+        }
 
-        // Pivot to the correct type
-        type = typeof(ASTargetedActivityEntity);
-        return true;
+        type = null;
+        return false;
     }
 }
