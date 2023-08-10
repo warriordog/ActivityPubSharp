@@ -12,21 +12,20 @@ public abstract class SampleTests : IClassFixture<JsonLdSerializerFixture>
     private readonly IJsonLdSerializer _jsonLdSerializer;
     protected SampleTests(JsonLdSerializerFixture fixture) => _jsonLdSerializer = fixture.JsonLdSerializer;
 
-    protected void TestSample(Type expectedType, string sampleType) => TestSample(expectedType, sampleType, sampleType);
+    protected void TestSample<TExpectedType>(string sampleType)
+        where TExpectedType : ASType
+        => TestSample<TExpectedType>(sampleType, sampleType);
 
-    protected void TestSample(Type expectedType, string sampleType, string sampleName)
+    protected void TestSample<TExpectedType>(string sampleType, string sampleName)
+        where TExpectedType : ASType
     {
-        // Quick check - not an assertion because this isn't part of the test.
-        if (!expectedType.IsAssignableTo(typeof(ASType)))
-            throw new ArgumentException("expected type must derive from ASType", nameof(expectedType));
-
         // Load sample
         var testInput = LoadJson(sampleName);
 
         // Test deserialize
         var valueObject = _jsonLdSerializer.Deserialize<ASType>(testInput);
         valueObject.Should().NotBeNull();
-        valueObject.Should().BeOfType(expectedType);
+        valueObject?.TypeMap.IsType<TExpectedType>().Should().BeTrue();
         valueObject?.TypeMap.ASTypes.Should().Contain(sampleType);
 
         // Test serialize

@@ -18,15 +18,15 @@ namespace ActivityPub.Types.AS;
 ///     It does not exist in the ActivityStreams standard.
 /// </remarks>
 /// <seealso cref="ASEntity{TType}" />
-public abstract class ASType
+public class ASType
 {
-    protected ASType()
+    public ASType()
     {
         TypeMap = new TypeMap();
         Entity = new ASTypeEntity { TypeMap = TypeMap };
     }
 
-    protected ASType(TypeMap typeMap)
+    public ASType(TypeMap typeMap)
     {
         TypeMap = typeMap;
         Entity = typeMap.AsEntity<ASTypeEntity>();
