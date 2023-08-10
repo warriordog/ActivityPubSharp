@@ -98,14 +98,14 @@ public sealed class ASActivityEntity : ASEntity<ASActivity>, ISubTypeDeserialize
     [JsonPropertyName("result")]
     public Linkable<ASObject>? Result { get; set; }
 
-    public static Type PickSubTypeForDeserialization(JsonElement element, DeserializationMetadata meta)
+    public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, ref Type type)
     {
-        // If it has the "object" property, then its Transitive.
-        var isTransient = element.TryGetProperty("object", out _);
+        // Only change type if its transitive (it has the "object" property)
+        if (!element.TryGetProperty("object", out _))
+            return false;
 
-        // Pivot to the correct type.
-        return isTransient
-            ? typeof(ASTransitiveActivityEntity)
-            : typeof(ASActivityEntity);
+        // Pivot to the correct type
+        type = typeof(ASTransitiveActivityEntity);
+        return true;
     }
 }

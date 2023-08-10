@@ -86,16 +86,29 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     private ASEntity ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
     {
-        // Get adapters for type
-        var adapters = GetAdaptersFor(entityType);
-
-        // Attempt to narrow the type
-        if (adapters.PickSubTypeForDeserializationAdapter != null)
-            entityType = adapters.PickSubTypeForDeserializationAdapter.PickSubTypeForDeserialization(jsonElement, meta);
+        // Recursively narrow to the most-appropriate type
+        entityType = NarrowEntityType(jsonElement, meta, entityType);
 
         // Use default conversion
         return (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
                ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
+    }
+
+    private Type NarrowEntityType(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
+    {
+        // Its possible for this to chain multiple times.
+        // We use a loop here for performance.
+        while (true)
+        {
+            // Get adapters for type
+            var adapters = GetAdaptersFor(entityType);
+
+            // Attempt to narrow the type
+            if (adapters.PickSubTypeForDeserializationAdapter?.TryNarrowTypeByJson(jsonElement, meta, ref entityType) != true)
+                break;
+        }
+
+        return entityType;
     }
 
     private static IEnumerable<string> ReadTypes(JsonElement jsonElement, JsonSerializerOptions options)
@@ -254,7 +267,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     private abstract class PickSubTypeForDeserializationAdapter
     {
-        public abstract Type PickSubTypeForDeserialization(JsonElement element, DeserializationMetadata meta);
+        public abstract bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, ref Type type);
 
         public static PickSubTypeForDeserializationAdapter? CreateFor(Type type)
         {
@@ -269,6 +282,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private class PickSubTypeForDeserializationAdapter<T> : PickSubTypeForDeserializationAdapter
         where T : ISubTypeDeserialized
     {
-        public override Type PickSubTypeForDeserialization(JsonElement element, DeserializationMetadata meta) => T.PickSubTypeForDeserialization(element, meta);
+        public override bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, ref Type type)
+            => T.TryNarrowTypeByJson(element, meta, ref type);
     }
 }

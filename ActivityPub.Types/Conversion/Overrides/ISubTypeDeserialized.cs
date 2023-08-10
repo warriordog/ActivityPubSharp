@@ -13,10 +13,11 @@ public interface ISubTypeDeserialized
     /// <summary>
     ///     Selects a more narrow type to convert instead of the containing type.
     ///     This will be called on deserialization.
-    ///     The returned type MUST be or derive from the containing type.
+    ///     Implementations should change the value of type and return true.
     /// </summary>
     /// <param name="element">Element containing JSON data for this object</param>
     /// <param name="meta">Context for the conversion</param>
-    /// <returns>Type of object to convert</returns>
-    public static abstract Type PickSubTypeForDeserialization(JsonElement element, DeserializationMetadata meta);
+    /// <param name="type">The type that will be constructed</param>
+    /// <returns>True if type was changed, false otherwise</returns>
+    public static abstract bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, ref Type type);
 }
