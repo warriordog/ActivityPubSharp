@@ -47,7 +47,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
         // Object input can be anything
         else if (jsonElement.ValueKind == JsonValueKind.Object)
-            ReadObject(jsonElement, meta, typeMap);
+            ReadObject(jsonElement, meta);
 
         // Other input is an error
         else
@@ -70,15 +70,19 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         typeMap.Add(type);
     }
 
-    private void ReadObject(JsonElement jsonElement, DeserializationMetadata meta, TypeMap typeMap)
+    private void ReadObject(JsonElement jsonElement, DeserializationMetadata meta)
     {
         // Enumerate and expand the full list of needed types
         var asTypes = ReadTypes(jsonElement, meta.JsonSerializerOptions);
-        var types = _asTypeInfoCache.MapASTypes(asTypes);
+        _asTypeInfoCache.MapASTypes(asTypes, out var mappedTypes, out var unmappedTypes);
 
-        // Convert each type found in JSON
-        foreach (var entityType in types)
+        // Convert each AS type that mapped to an object type
+        foreach (var entityType in mappedTypes)
             ReadEntity(jsonElement, meta, entityType);
+
+        // Record each AS type that did *not* map to an object type
+        foreach (var asType in unmappedTypes)
+            meta.TypeMap.AddUnmappedType(asType);
     }
 
     private void ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)

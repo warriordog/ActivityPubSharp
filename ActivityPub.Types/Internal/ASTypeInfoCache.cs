@@ -22,8 +22,10 @@ public interface IASTypeInfoCache
     ///     Unknown types are ignored.
     /// </summary>
     /// <param name="asTypes">Types to map. Case-sensitive.</param>
+    /// <param name="mappedTypes"></param>
+    /// <param name="unmappedTypes"></param>
     /// <returns>Set of all located types</returns>
-    internal HashSet<Type> MapASTypes(IEnumerable<string> asTypes);
+    internal void MapASTypes(IEnumerable<string> asTypes, out HashSet<Type> mappedTypes, out HashSet<string> unmappedTypes);
 
     /// <summary>
     ///     Find and load all ActivityStreams types in a particular assembly.
@@ -48,22 +50,21 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
     public bool IsASLinkType(string type) => _knownLinkTypes.Contains(type);
 
-    public HashSet<Type> MapASTypes(IEnumerable<string> asTypes)
+    public void MapASTypes(IEnumerable<string> asTypes, out HashSet<Type> mappedTypes, out HashSet<string> unmappedTypes)
     {
-        var types = new HashSet<Type>();
+        mappedTypes = new HashSet<Type>();
+        unmappedTypes = new HashSet<string>();
 
         foreach (var asType in asTypes)
         {
             // Map AS Type to .NET Type.
-            if (!_knownEntityMap.TryGetValue(asType, out var type))
-                // Skip if unknown
-                continue;
+            if (_knownEntityMap.TryGetValue(asType, out var type))
+                AddType(mappedTypes, type);
 
-            // Add the type
-            AddType(types, type);
+            // Record unknown
+            else
+                unmappedTypes.Add(asType);
         }
-
-        return types;
     }
 
     private void AddType(HashSet<Type> types, Type type)

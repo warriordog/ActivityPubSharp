@@ -222,4 +222,11 @@ public class TypeMap
 
         return true;
     }
+
+    /// <summary>
+    ///     Records an ActivityStreams type name as being present in the type graph, but not mapped to any known implementation class.
+    ///     Duplicates will be ignored.
+    /// </summary>
+    /// <param name="asTypeName">Name of the type to add</param>
+    internal void AddUnmappedType(string asTypeName) => _asTypes.Add(asTypeName);
 }
