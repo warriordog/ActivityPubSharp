@@ -9,14 +9,13 @@ using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
-using InternalUtils;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
 public class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
-    private readonly Dictionary<Type, ASBaseAdapters> _entityAdapters = new();
+    private readonly Dictionary<Type, PickSubTypeForDeserializationAdapter?> _pickSubTypeAdapter = new();
 
     public TypeMapConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
 
@@ -88,8 +87,8 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private void ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
     {
         // We need to *also* convert any more-specific types, recursively
-        var adapters = GetAdaptersFor(entityType);
-        if (adapters.PickSubTypeForDeserializationAdapter?.TryNarrowTypeByJson(jsonElement, meta, out var narrowType) == true)
+        var pickSubtypeAdapter = GetAdaptersFor(entityType);
+        if (pickSubtypeAdapter?.TryNarrowTypeByJson(jsonElement, meta, out var narrowType) == true)
             ReadEntity(jsonElement, meta, narrowType);
 
         // Use default conversion
@@ -166,13 +165,8 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         outputNode.WriteTo(writer, options);
     }
 
-    private void WriteEntity(ASEntity entity, Type entityType, JsonObject outputNode, SerializationMetadata meta)
+    private static void WriteEntity(ASEntity entity, Type entityType, JsonObject outputNode, SerializationMetadata meta)
     {
-        // Attempt TrySerialize
-        var adapters = GetAdaptersFor(entityType);
-        if (adapters.TrySerializeAdapter?.TrySerialize(entity, meta, outputNode) == true)
-            return;
-
         // Convert to an intermediate object
         var element = JsonSerializer.SerializeToElement(entity, entityType, meta.JsonSerializerOptions);
         if (element.ValueKind != JsonValueKind.Object)
@@ -225,47 +219,15 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         return true;
     }
 
-    private ASBaseAdapters GetAdaptersFor(Type type)
+    private PickSubTypeForDeserializationAdapter? GetAdaptersFor(Type type)
     {
-        if (!_entityAdapters.TryGetValue(type, out var adapters))
+        if (!_pickSubTypeAdapter.TryGetValue(type, out var adapter))
         {
-            adapters = CreateEntityAdaptersFor(type);
-            _entityAdapters[type] = adapters;
+            adapter = PickSubTypeForDeserializationAdapter.CreateFor(type);
+            _pickSubTypeAdapter[type] = adapter;
         }
 
-        return adapters;
-    }
-
-    private static ASBaseAdapters CreateEntityAdaptersFor(Type type) => new()
-    {
-        TrySerializeAdapter = TrySerializeAdapter.CreateFor(type),
-        PickSubTypeForDeserializationAdapter = PickSubTypeForDeserializationAdapter.CreateFor(type)
-    };
-
-    private class ASBaseAdapters
-    {
-        public TrySerializeAdapter? TrySerializeAdapter { get; init; }
-        public PickSubTypeForDeserializationAdapter? PickSubTypeForDeserializationAdapter { get; init; }
-    }
-
-    private abstract class TrySerializeAdapter
-    {
-        public abstract bool TrySerialize(ASEntity obj, SerializationMetadata meta, JsonObject node);
-
-        public static TrySerializeAdapter? CreateFor(Type type)
-        {
-            if (!type.IsAssignableToGenericType(typeof(ICustomJsonSerialized<>)))
-                return null;
-
-            var genericType = typeof(TrySerializeAdapter<>).MakeGenericType(type);
-            return (TrySerializeAdapter)Activator.CreateInstance(genericType)!;
-        }
-    }
-
-    private class TrySerializeAdapter<T> : TrySerializeAdapter
-        where T : ASEntity, ICustomJsonSerialized<T>
-    {
-        public override bool TrySerialize(ASEntity obj, SerializationMetadata meta, JsonObject node) => T.TrySerialize((T)obj, meta, node);
+        return adapter;
     }
 
     private abstract class PickSubTypeForDeserializationAdapter
