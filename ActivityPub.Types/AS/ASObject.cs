@@ -1,10 +1,14 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Attributes;
+using ActivityPub.Types.Conversion.Overrides;
+using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS;
@@ -299,7 +303,7 @@ public class ASObject : ASType
 /// <inheritdoc cref="ASObject" />
 [ASTypeKey(ObjectType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
-public sealed class ASObjectEntity : ASEntity<ASObject>
+public sealed class ASObjectEntity : ASEntity<ASObject>, ISubTypeDeserialized
 {
     public const string ObjectType = "Object";
     public override string ASTypeName => ObjectType;
@@ -404,4 +408,18 @@ public sealed class ASObjectEntity : ASEntity<ASObject>
     /// <inheritdoc cref="ASObject.Shares" />
     [JsonPropertyName("shares")]
     public Linkable<ASCollection>? Shares { get; set; }
+
+    public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
+    {
+        // Infer ASActor.
+        // This improves ergonomics when a regular object is used as an actor.
+        if (element.HasProperty("inbox") && element.HasProperty("outbox"))
+        {
+            type = typeof(ASActorEntity);
+            return true;
+        }
+
+        type = null;
+        return false;
+    }
 }
