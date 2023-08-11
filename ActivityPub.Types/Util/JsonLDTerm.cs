@@ -13,35 +13,13 @@ namespace ActivityPub.Types.Util;
 /// <seealso href="https://www.w3.org/TR/json-ld11/#dfn-term" />
 /// <seealso href="https://www.w3.org/TR/json-ld11/#terms" />
 [JsonConverter(typeof(JsonLDTermConverter))]
-public class JsonLDTerm : IEquatable<JsonLDTerm>
+public record JsonLDTerm
 {
     /// <summary>
     ///     A short-hand string that expands to an IRI, blank node identifier, or keyword.
     /// </summary>
     [JsonPropertyName("@id")]
     public required string Id { get; init; }
-
-    public bool Equals(JsonLDTerm? other)
-    {
-        if (ReferenceEquals(null, other))
-            return false;
-        if (ReferenceEquals(this, other))
-            return true;
-        return Id == other.Id;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj))
-            return false;
-        if (ReferenceEquals(this, obj))
-            return true;
-        if (obj.GetType() != GetType())
-            return false;
-        return Equals((JsonLDTerm)obj);
-    }
-
-    public override int GetHashCode() => Id.GetHashCode();
 }
 
 /// <summary>
@@ -49,33 +27,11 @@ public class JsonLDTerm : IEquatable<JsonLDTerm>
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/json-ld11/#dfn-expanded-term-definition" />
 /// <seealso href="https://www.w3.org/TR/json-ld11/#expanded-term-definition" />
-public class JsonLDExpandedTerm : JsonLDTerm, IEquatable<JsonLDExpandedTerm>
+public record JsonLDExpandedTerm : JsonLDTerm
 {
     /// <summary>
     ///     idk...
     /// </summary>
     [JsonPropertyName("@type")]
     public string? Type { get; init; }
-
-    public bool Equals(JsonLDExpandedTerm? other)
-    {
-        if (ReferenceEquals(null, other))
-            return false;
-        if (ReferenceEquals(this, other))
-            return true;
-        return base.Equals(other) && Type == other.Type;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj))
-            return false;
-        if (ReferenceEquals(this, obj))
-            return true;
-        if (obj.GetType() != GetType())
-            return false;
-        return Equals((JsonLDExpandedTerm)obj);
-    }
-
-    public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), Type);
 }

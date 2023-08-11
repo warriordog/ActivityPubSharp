@@ -16,7 +16,7 @@ namespace ActivityPub.Types.Util;
 /// <seealso href="https://www.w3.org/TR/json-ld11/#context-definitions" />
 /// <seealso href="https://www.w3.org/TR/json-ld11/#the-context" />
 [JsonConverter(typeof(JsonLDContextObjectConverter))]
-public class JsonLDContextObject : IEquatable<JsonLDContextObject>
+public record JsonLDContextObject
 {
     /// <summary>
     ///     Construct an external context
@@ -28,7 +28,7 @@ public class JsonLDContextObject : IEquatable<JsonLDContextObject>
     ///     Construct an embedded context
     /// </summary>
     /// <param name="terms">Terms to include in the context</param>
-    public JsonLDContextObject(IReadOnlyDictionary<string, JsonLDTerm> terms) => Terms = terms;
+    public JsonLDContextObject(IReadOnlyDictionary<string, JsonLDTerm> terms) => _terms = new TermMap(terms);
 
     /// <summary>
     ///     Immutable, shared reference to the ActivityStreams context.
@@ -59,16 +59,9 @@ public class JsonLDContextObject : IEquatable<JsonLDContextObject>
     ///     For an embedded context, these are the terms defined.
     ///     Important: terms may be defined by *other* external contexts.
     /// </summary>
-    public IReadOnlyDictionary<string, JsonLDTerm>? Terms { get; }
+    public IReadOnlyDictionary<string, JsonLDTerm>? Terms => _terms?.Data;
 
-    public bool Equals(JsonLDContextObject? other)
-    {
-        if (ReferenceEquals(null, other))
-            return false;
-        if (ReferenceEquals(this, other))
-            return true;
-        return ExternalLink == other.ExternalLink && Equals(Terms, other.Terms);
-    }
+    private readonly TermMap? _terms;
 
     /// <summary>
     ///     If this is an external context, gets the link value.
@@ -88,18 +81,42 @@ public class JsonLDContextObject : IEquatable<JsonLDContextObject>
         return IsEmbedded;
     }
 
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj))
-            return false;
-        if (ReferenceEquals(this, obj))
-            return true;
-        if (obj.GetType() != GetType())
-            return false;
-        return Equals((JsonLDContextObject)obj);
-    }
-
-    public override int GetHashCode() => HashCode.Combine(ExternalLink, Terms);
-
     public static implicit operator JsonLDContextObject(string str) => new(str);
+
+    private sealed class TermMap : IEquatable<TermMap>
+    {
+        private readonly Dictionary<string, JsonLDTerm> _data;
+        public IReadOnlyDictionary<string, JsonLDTerm> Data => _data;
+
+        public TermMap(IReadOnlyDictionary<string, JsonLDTerm> data) => _data = new Dictionary<string, JsonLDTerm>(data);
+
+
+        public bool Equals(TermMap? other)
+        {
+            if (null == other)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (_data.Count != other._data.Count)
+                return false;
+
+            foreach (var (key, value) in _data)
+            {
+                if (!other._data.TryGetValue(key, out var otherValue))
+                    return false;
+
+                if (!value.Equals(otherValue))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public override bool Equals(object? obj) => ReferenceEquals(this, obj) || obj is TermMap other && Equals(other);
+
+        public override int GetHashCode()
+            => _data.Aggregate(1, (h, e) => HashCode.Combine(h, e.Key.GetHashCode(), e.Value.GetHashCode()));
+    }
 }
