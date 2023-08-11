@@ -4,7 +4,7 @@
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Attributes;
 
-namespace ActivityPub.Types.Tests.Unit;
+namespace ActivityPub.Types.Tests.Unit.AS;
 
 public abstract class ASTypeTests
 {
