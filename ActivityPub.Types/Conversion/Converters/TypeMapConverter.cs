@@ -99,6 +99,10 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Add it to the graph.
         // TryAdd is needed
         meta.TypeMap.TryAdd(entity);
+
+        // Remove the entity-level set.
+        // We need it for conversion, but only until TypeMap is updated
+        entity.UnmappedProperties = null;
     }
 
     private static IEnumerable<string> ReadTypes(JsonElement jsonElement, JsonSerializerOptions options)
@@ -149,7 +153,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         var outputNode = new JsonObject(meta.JsonNodeOptions);
 
         // Write the TypeMap's own properties into the node
-        WriteTypeMap(typeMap, outputNode, options);
+        WriteTypeMap(typeMap, outputNode, meta);
 
         // Write all entities into the node
         foreach (var (entityType, entity) in typeMap.AllEntities)
@@ -182,18 +186,27 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         }
     }
 
-    private static void WriteTypeMap(TypeMap typeMap, JsonObject outputNode, JsonSerializerOptions options)
+    private static void WriteTypeMap(TypeMap typeMap, JsonObject outputNode, SerializationMetadata meta)
     {
         // "type" - AS / AP types. Can be string or array.
-        outputNode["type"] = JsonSerializer.SerializeToNode(typeMap.ASTypes, options);
+        outputNode["type"] = JsonSerializer.SerializeToNode(typeMap.ASTypes, meta.JsonSerializerOptions);
 
         // "@context" - JSON-LD context. Can be string, array, or object.
-        outputNode["@context"] = JsonSerializer.SerializeToNode(typeMap.LDContext, options);
+        outputNode["@context"] = JsonSerializer.SerializeToNode(typeMap.LDContext, meta.JsonSerializerOptions);
+
+        // Unmapped (overflow) JSON properties
+        if (typeMap.UnmappedProperties != null)
+            foreach (var (key, value) in typeMap.UnmappedProperties)
+                outputNode[key] = value.ToNode(meta.JsonNodeOptions);
     }
 
     private static bool TryWriteAsLink(Utf8JsonWriter writer, TypeMap typeMap)
     {
         var linkEntities = typeMap.LinkEntities.ToList();
+
+        // If there are any unmapped properties, then bail
+        if (typeMap.UnmappedProperties?.Any() == true)
+            return false;
 
         // If there are any non-link entities, then bail
         if (typeMap.AllEntities.Count > linkEntities.Count)

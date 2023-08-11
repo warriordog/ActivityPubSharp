@@ -44,14 +44,18 @@ public abstract class LinkSerializationTests : SerializationTests
         public void SerializeToObject_WhenUnknownPropsAreSet()
         {
             const string UnknownProp = "some_unknown_prop";
-            ObjectUnderTest = new ASLink
+            var link = new ASLink
             {
                 HRef = "https://example.com/",
-                UnknownJsonProperties =
+                TypeMap =
                 {
-                    [UnknownProp] = JsonSerializer.SerializeToElement(1)
+                    UnmappedProperties = new Dictionary<string, JsonElement>
+                    {
+                        [UnknownProp] = JsonSerializer.SerializeToElement(1)
+                    }
                 }
             };
+            ObjectUnderTest = link;
             JsonUnderTest.ValueKind.Should().Be(JsonValueKind.Object);
             JsonUnderTest.Should().HaveProperty(UnknownProp);
         }

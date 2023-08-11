@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text.Json.Serialization.Metadata;
 using InternalUtils;
 
-namespace ActivityPub.Types.Conversion.Converters;
+namespace ActivityPub.Types.Conversion.Modifiers;
 
 public static class IgnoreEmptyCollectionsModifier
 {

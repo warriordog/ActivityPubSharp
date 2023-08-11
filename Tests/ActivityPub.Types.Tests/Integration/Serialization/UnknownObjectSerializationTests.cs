@@ -19,9 +19,12 @@ public abstract class UnknownObjectSerializationTests : SerializationTests
             ObjectUnderTest = new ASObject
             {
                 Duration = "PTS5",
-                UnknownJsonProperties =
+                TypeMap =
                 {
-                    [UnknownPropName] = JsonSerializer.SerializeToElement(UnknownPropValue)
+                    UnmappedProperties = new Dictionary<string, JsonElement>
+                    {
+                        [UnknownPropName] = JsonSerializer.SerializeToElement(UnknownPropValue)
+                    }
                 }
             };
 

@@ -50,8 +50,8 @@ public abstract class UnknownObjectDeserializationTests : DeserializationTests<A
         public void CaptureUnknownProperties()
         {
             JsonUnderTest = """{"type":"Object","fake_made_up_property":"made_up_value"}""";
-            ObjectUnderTest.UnknownJsonProperties.Should().ContainKey("fake_made_up_property");
-            ObjectUnderTest.UnknownJsonProperties["fake_made_up_property"].GetString().Should().Be("made_up_value");
+            ObjectUnderTest.TypeMap.UnmappedProperties.Should().ContainKey("fake_made_up_property");
+            ObjectUnderTest.TypeMap.UnmappedProperties!["fake_made_up_property"].GetString().Should().Be("made_up_value");
         }
     }
 }

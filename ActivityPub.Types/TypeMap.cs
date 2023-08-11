@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Converters;
@@ -55,6 +56,13 @@ public class TypeMap
 
     public IJsonLDContext LDContext => _ldContext;
     private readonly JsonLDContext _ldContext;
+
+    /// <summary>
+    ///     Properties that exist in the JSON, but did not map to any properties.
+    /// </summary>
+    [JsonInclude]
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? UnmappedProperties { internal get; set; }
 
     /// <summary>
     ///     Checks if the object contains a particular type entity.
@@ -220,7 +228,29 @@ public class TypeMap
         if (instance is ILinkEntity linkEntity)
             _linkEntities.Add(linkEntity);
 
+        // Populate and/or filter the list of unmapped properties
+        NarrowUnmappedProperties(instance);
+
         return true;
+    }
+
+    // Inefficient implementation
+    private void NarrowUnmappedProperties(ASEntity entity)
+    {
+        // Skip if the properties weren't populated
+        if (entity.UnmappedProperties == null)
+            return;
+
+        // If this is the first entity, then just directly set the map
+        if (UnmappedProperties == null)
+            UnmappedProperties = entity.UnmappedProperties;
+
+        // Otherwise, we merge.
+        else
+            UnmappedProperties.Keys
+                .Except(entity.UnmappedProperties.Keys)
+                .ToList()
+                .ForEach(k => UnmappedProperties.Remove(k));
     }
 
     /// <summary>

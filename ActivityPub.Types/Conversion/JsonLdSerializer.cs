@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using ActivityPub.Types.Conversion.Converters;
+using ActivityPub.Types.Conversion.Modifiers;
 using ActivityPub.Types.Internal;
 
 namespace ActivityPub.Types.Conversion;

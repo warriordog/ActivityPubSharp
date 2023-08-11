@@ -4,7 +4,7 @@
 using System.Text.Json.Serialization.Metadata;
 using ActivityPub.Types.AS;
 
-namespace ActivityPub.Types.Conversion.Converters;
+namespace ActivityPub.Types.Conversion.Modifiers;
 
 /// <summary>
 ///     Custom type modifier to work around bugs in System.Text.Json.

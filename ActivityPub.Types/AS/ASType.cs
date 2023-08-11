@@ -2,7 +2,6 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
 
@@ -38,12 +37,6 @@ public class ASType
     ///     Type graph that contains this object.
     /// </summary>
     public TypeMap TypeMap { get; }
-
-    /// <summary>
-    ///     Populated after deserialization.
-    ///     Contains all JSON properties that did not map to any known .NET property.
-    /// </summary>
-    internal Dictionary<string, JsonElement> UnknownJsonProperties => Entity.UnknownJsonProperties;
 
     /// <summary>
     ///     Provides the globally unique identifier for an Object or Link.
@@ -131,9 +124,6 @@ public sealed class ASTypeEntity : ASEntity<ASType>, ILinkEntity
 {
     private string? _id;
 
-    /// <inheritdoc cref="ASType.UnknownJsonProperties" />
-    internal Dictionary<string, JsonElement> UnknownJsonProperties { get; } = new();
-
     /// <inheritdoc cref="ASType.Id" />
     [JsonPropertyName("id")]
     public string? Id
@@ -171,5 +161,5 @@ public sealed class ASTypeEntity : ASEntity<ASType>, ILinkEntity
     [JsonPropertyName("mediaType")]
     public string? MediaType { get; set; }
 
-    public bool RequiresObjectForm => Id != null || AttributedTo.Count != 0 || Preview != null || Name != null || MediaType != null || UnknownJsonProperties.Count != 0;
+    public bool RequiresObjectForm => Id != null || AttributedTo.Count != 0 || Preview != null || Name != null || MediaType != null;
 }

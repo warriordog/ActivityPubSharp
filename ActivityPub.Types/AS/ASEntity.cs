@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using InternalUtils;
 
@@ -58,6 +59,10 @@ public abstract class ASEntity
     }
 
     internal Type NonEntityType { get; }
+
+    [JsonInclude]
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? UnmappedProperties { internal get; set; }
 
     /// <summary>
     ///     Creates an instance of the non-entity type that can wrap this entity.
