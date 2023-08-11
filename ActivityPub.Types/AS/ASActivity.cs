@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Conversion.Overrides;
+using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS;
@@ -102,7 +103,7 @@ public sealed class ASActivityEntity : ASEntity<ASActivity>, ISubTypeDeserialize
     public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
     {
         // Only change type if its transitive (it has the "object" property)
-        if (element.TryGetProperty("object", out var _))
+        if (element.HasProperty("object"))
         {
             type = typeof(ASTransitiveActivityEntity);
             return true;

@@ -86,4 +86,9 @@ internal static class JsonExtensions
     {
         PropertyNameCaseInsensitive = options.PropertyNameCaseInsensitive
     };
+
+    /// <summary>
+    ///     Checks if the JSON element contains a property with a specified name.
+    /// </summary>
+    internal static bool HasProperty(this JsonElement element, string name) => element.TryGetProperty(name, out var _);
 }
