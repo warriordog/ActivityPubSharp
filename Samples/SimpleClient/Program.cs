@@ -4,7 +4,7 @@
 // See https://aka.ms/new-console-template for more information
 
 using ActivityPub.Client;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

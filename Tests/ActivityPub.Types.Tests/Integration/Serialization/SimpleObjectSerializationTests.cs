@@ -1,8 +1,10 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Extended.Actor;
-using ActivityPub.Types.Extended.Object;
+using ActivityPub.Types.AS;
+using ActivityPub.Types.AS.Collection;
+using ActivityPub.Types.AS.Extended.Actor;
+using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
 using ActivityPub.Types.Util;
 
@@ -10,15 +12,19 @@ namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public abstract class SimpleObjectSerializationTests : SerializationTests
 {
+    private SimpleObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     public class EmptyObject : SimpleObjectSerializationTests
     {
+        public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void ShouldWriteObject()
         {
             ObjectUnderTest = new ASObject();
             JsonUnderTest.Should().BeJsonObject();
         }
-        
+
         [Fact]
         public void ShouldIncludeContext()
         {
@@ -30,31 +36,31 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         public void ShouldIncludeType()
         {
             ObjectUnderTest = new ASObject();
-            JsonUnderTest.Should().HaveASType(ASObject.ObjectType);
+            JsonUnderTest.Should().HaveASType(ASObjectEntity.ObjectType);
         }
 
         [Fact]
         public void ShouldIncludeOnlyTypeAndContext()
         {
             ObjectUnderTest = new ASObject();
-            
+
             var props = JsonUnderTest.EnumerateObject().ToList();
 
             props.Should().HaveCount(2);
             props.Should().Contain(p => p.Name == "type");
             props.Should().Contain(p => p.Name == "@context");
         }
-        
-        public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class Subclass : SimpleObjectSerializationTests
     {
+        public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void ShouldSerializeToCorrectType()
         {
             ObjectUnderTest = new ImageObject();
-            JsonUnderTest.Should().HaveASType(ImageObject.ImageType);
+            JsonUnderTest.Should().HaveASType(ImageObjectEntity.ImageType);
         }
 
         [Fact]
@@ -74,16 +80,16 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             };
 
             JsonUnderTest.Should().HaveStringProperty("inbox", "https://example.com/actor/inbox");
-            JsonUnderTest.Should().HaveStringProperty("outbox",  "https://example.com/actor/outbox");
+            JsonUnderTest.Should().HaveStringProperty("outbox", "https://example.com/actor/outbox");
             JsonUnderTest.GetProperty("image").Should().HaveASType("Image");
             JsonUnderTest.Should().HaveStringProperty("id", "https://example.com/actor/id");
         }
-        
-        public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class FullObject : SimpleObjectSerializationTests
     {
+        public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void ShouldIncludeAllProperties()
         {
@@ -101,10 +107,13 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Image = new ImageObject(),
                 InReplyTo = new ASObject(),
                 Location = new ASObject(),
-                Replies = new ASObject(),
-                Tag = new() { new ASObject() },
-                To = new() { new ASObject() },
-                Url = new() { "https://example.com" },
+                Replies = new ASCollection
+                {
+                    Items = new LinkableList<ASObject> { new ASObject() }
+                },
+                Tag = new LinkableList<ASObject> { new ASObject() },
+                To = new LinkableList<ASObject> { new ASObject() },
+                Url = new List<ASLink> { "https://example.com" },
                 Content = new NaturalLanguageString("content"),
                 Duration = "PT5S",
                 StartTime = DateTime.Now,
@@ -118,12 +127,12 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
 
                 // From ASType
                 Id = "https://example.com/some.uri",
-                AttributedTo = new() { new ASObject() },
+                AttributedTo = new LinkableList<ASObject> { new ASObject() },
                 Preview = new ASObject(),
                 Name = new NaturalLanguageString("name"),
                 MediaType = "text/html"
             };
-            
+
             // From ASObject
             JsonUnderTest.Should().HaveProperty("attachment");
             JsonUnderTest.Should().HaveProperty("audience");
@@ -158,9 +167,5 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             JsonUnderTest.Should().HaveProperty("name");
             JsonUnderTest.Should().HaveProperty("mediaType");
         }
-        
-        public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
-
-    private SimpleObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

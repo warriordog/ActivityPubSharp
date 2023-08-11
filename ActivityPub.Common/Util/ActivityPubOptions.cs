@@ -4,15 +4,15 @@
 namespace ActivityPub.Common.Util;
 
 /// <summary>
-/// Injected into all JSON-LD classes to provide common settings 
+///     Injected into all JSON-LD classes to provide common settings
 /// </summary>
 public class ActivityPubOptions
 {
     /// <summary>
-    /// HTTP responses will only be recognized as ActivityPub if they match one of these content types.
-    /// This maps to the Content-Type header.
+    ///     HTTP responses will only be recognized as ActivityPub if they match one of these content types.
+    ///     This maps to the Content-Type header.
     /// </summary>
-    /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type"/>
+    /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type" />
     public HashSet<string> ResponseContentTypes { get; set; } = new()
     {
         "application/activity+json",
@@ -21,10 +21,10 @@ public class ActivityPubOptions
     };
 
     /// <summary>
-    /// Content types to request from remote servers, in priority order.
-    /// This maps to the Accept header.
+    ///     Content types to request from remote servers, in priority order.
+    ///     This maps to the Accept header.
     /// </summary>
-    /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept"/>
+    /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept" />
     public List<string> RequestContentTypes { get; set; } = new()
     {
         "application/activity+json",

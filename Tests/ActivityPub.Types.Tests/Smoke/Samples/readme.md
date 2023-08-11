@@ -1,7 +1,8 @@
 ﻿# Real-world Samples
 
 These samples are included to "smoke out" potential crashes or other high-level bugs in the code base.
-By running real-world JSON through the library, we can ensure that interaction with that software is at least *possible* without crashing.
+By running real-world JSON through the library, we can ensure that interaction with that software is at least
+*possible* without crashing.
 
 **Important note:**
 [the project file](../../ActivityPub.Types.Tests.csproj) includes a directive to include all ".jsonld" files in this directory / subdirectories.
@@ -24,6 +25,7 @@ If the `csproj` file must ever be regenerated, then make sure to include these l
 | [Glitch-Soc](GlitchSoc)            | Microblogging | Fork of Mastodon | [GlitchSocSampleTests.cs](GlitchSoc/GlitchSocSampleTests.cs) |
 
 ## Tips:
+
 * Download `Person` from Mastodon / Glitch-soc / Misskey / Foundkey / Firefish (Calckey):
   ```powershell
   $output = "Person.jsonld"

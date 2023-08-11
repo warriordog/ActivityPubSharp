@@ -1,5 +1,8 @@
 ﻿<component name="ProjectCodeStyleConfiguration">
-  <code_scheme name="Project" version="173">
-    <option name="AUTODETECT_INDENTS" value="false" />
-  </code_scheme>
+    <code_scheme name="Project" version="173">
+        <option name="AUTODETECT_INDENTS" value="false" />
+        <Markdown>
+            <option name="WRAP_TEXT_IF_LONG" value="false" />
+        </Markdown>
+    </code_scheme>
 </component>

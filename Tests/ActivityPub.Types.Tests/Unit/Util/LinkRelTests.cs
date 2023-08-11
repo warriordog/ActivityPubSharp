@@ -9,7 +9,7 @@ public class LinkRelTests
 {
     private string InputString { get; set; } = "";
     private LinkRel LinkUnderTest => new(InputString);
-    
+
     [Fact]
     public void ShouldWrapValidString()
     {
@@ -41,7 +41,6 @@ public class LinkRelTests
     [Fact]
     public void ShouldThrow_IfStringContainsCarriageReturn()
     {
-        
         InputString = "has\rcr";
         Assert.Throws<ArgumentException>(() => LinkUnderTest);
     }

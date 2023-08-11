@@ -1,4 +1,5 @@
-﻿using ActivityPub.Types.Collection;
+﻿using ActivityPub.Types.AS;
+using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.Tests.Util.Fixtures;
 
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
@@ -8,62 +9,66 @@ namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
 public abstract class CollectionDeserializationTests : DeserializationTests<ASObject>
 {
+    private CollectionDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     public class ItemsShould : CollectionDeserializationTests
     {
+        public ItemsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void PopulateInCollection()
         {
             JsonUnderTest = """{"type":"Collection","totalItems":1,"items":[{}]}""";
-            
-            ObjectUnderTest.Should().BeOfType<ASCollection<ASObject>>();
-            ObjectUnderTest.As<ASCollection<ASObject>>().HasItems.Should().BeTrue();
-            ObjectUnderTest.As<ASCollection<ASObject>>().Items.Should().NotBeNull();
-            ObjectUnderTest.As<ASCollection<ASObject>>().Items.Should().HaveCount(1);
+
+            ObjectUnderTest.Is<ASCollection>().Should().BeTrue();
+            ObjectUnderTest.As<ASCollection>().HasItems.Should().BeTrue();
+            ObjectUnderTest.As<ASCollection>().Items.Should().NotBeNull();
+            ObjectUnderTest.As<ASCollection>().Items.Should().HaveCount(1);
         }
 
         [Fact]
         public void PopulateInOrderedCollection()
         {
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":1,"orderedItems":[{}]}""";
-            
-            ObjectUnderTest.Should().BeOfType<ASOrderedCollection<ASObject>>();
-            ObjectUnderTest.As<ASOrderedCollection<ASObject>>().HasItems.Should().BeTrue();
-            ObjectUnderTest.As<ASOrderedCollection<ASObject>>().Items.Should().NotBeNull();
-            ObjectUnderTest.As<ASOrderedCollection<ASObject>>().Items.Should().HaveCount(1);
+
+            ObjectUnderTest.Is<ASOrderedCollection>().Should().BeTrue();
+            ObjectUnderTest.As<ASOrderedCollection>().HasItems.Should().BeTrue();
+            ObjectUnderTest.As<ASOrderedCollection>().Items.Should().NotBeNull();
+            ObjectUnderTest.As<ASOrderedCollection>().Items.Should().HaveCount(1);
         }
-        
+
         [Fact]
         public void PopulateInCollectionPage()
         {
             JsonUnderTest = """{"type":"CollectionPage","totalItems":1,"items":[{}]}""";
-            
-            ObjectUnderTest.Should().BeOfType<ASCollectionPage<ASObject>>();
-            ObjectUnderTest.As<ASCollectionPage<ASObject>>().HasItems.Should().BeTrue();
-            ObjectUnderTest.As<ASCollectionPage<ASObject>>().Items.Should().NotBeNull();
-            ObjectUnderTest.As<ASCollectionPage<ASObject>>().Items.Should().HaveCount(1);
+
+            ObjectUnderTest.Is<ASCollectionPage>().Should().BeTrue();
+            ObjectUnderTest.As<ASCollectionPage>().HasItems.Should().BeTrue();
+            ObjectUnderTest.As<ASCollectionPage>().Items.Should().NotBeNull();
+            ObjectUnderTest.As<ASCollectionPage>().Items.Should().HaveCount(1);
         }
 
         [Fact]
         public void PopulateInOrderedCollectionPage()
         {
             JsonUnderTest = """{"type":"OrderedCollectionPage","totalItems":1,"orderedItems":[{}]}""";
-            
-            ObjectUnderTest.Should().BeOfType<ASOrderedCollectionPage<ASObject>>();
-            ObjectUnderTest.As<ASOrderedCollectionPage<ASObject>>().HasItems.Should().BeTrue();
-            ObjectUnderTest.As<ASOrderedCollectionPage<ASObject>>().Items.Should().NotBeNull();
-            ObjectUnderTest.As<ASOrderedCollectionPage<ASObject>>().Items.Should().HaveCount(1);
+
+            ObjectUnderTest.Is<ASOrderedCollectionPage>().Should().BeTrue();
+            ObjectUnderTest.As<ASOrderedCollectionPage>().HasItems.Should().BeTrue();
+            ObjectUnderTest.As<ASOrderedCollectionPage>().Items.Should().NotBeNull();
+            ObjectUnderTest.As<ASOrderedCollectionPage>().Items.Should().HaveCount(1);
         }
-        
-        public ItemsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
     public class LinkElementTests : CollectionDeserializationTests
     {
+        public LinkElementTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         [Fact]
         public void PopulateLinkElements()
         {
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":1,"orderedItems":[{"type":"Link","href":"https://example.com"}]}""";
-            var obj = ObjectUnderTest.As<ASOrderedCollection<ASObject>>();
+            var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(1);
             obj.Items?.First().HasLink.Should().BeTrue();
             obj.Items?.First().Link?.HRef.Should().Be("https://example.com");
@@ -74,7 +79,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         public void PopulateLinkElements_WhenInStringForm()
         {
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":1,"orderedItems":["https://example.com"]}""";
-            var obj = ObjectUnderTest.As<ASOrderedCollection<ASObject>>();
+            var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(1);
             obj.Items?.First().HasLink.Should().BeTrue();
             obj.Items?.First().Link?.HRef.Should().Be("https://example.com");
@@ -85,15 +90,11 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         public void PopulateMixedLists()
         {
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":2,"orderedItems":[{},{"type":"Link","href":"https://example.com/1"},"https://example.com/2"]}""";
-            var obj = ObjectUnderTest.As<ASOrderedCollection<ASObject>>();
+            var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(2);
             obj.Items?[0].HasValue.Should().BeTrue();
             obj.Items?[1].HasLink.Should().BeTrue();
             obj.Items?[2].HasLink.Should().BeTrue();
         }
-        
-        public LinkElementTests(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
-
-    private CollectionDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

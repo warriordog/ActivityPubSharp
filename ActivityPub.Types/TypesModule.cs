@@ -2,8 +2,8 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Runtime.CompilerServices;
-using ActivityPub.Types.Internal.TypeInfo;
-using ActivityPub.Types.Json;
+using ActivityPub.Types.Conversion;
+using ActivityPub.Types.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -20,16 +20,14 @@ public static class TypesModule
 {
     public static void TryAddTypesModule(this IServiceCollection services)
     {
-        services.TryAddSingleton<IJsonTypeInfoCache, JsonTypeInfoCache>();
-        services.TryAddSingleton<IASTypeInfoCache>(p =>
-        {
-            var jsonTypeInfo = p.GetRequiredService<IJsonTypeInfoCache>();
-            var cache = new ASTypeInfoCache(jsonTypeInfo);
-
-            cache.RegisterAllAssemblies();
-
-            return cache;
-        });
+        services.TryAddSingleton<IASTypeInfoCache>(
+            _ =>
+            {
+                var cache = new ASTypeInfoCache();
+                cache.RegisterAllAssemblies();
+                return cache;
+            }
+        );
         services.TryAddSingleton<IJsonLdSerializer, JsonLdSerializer>();
     }
 }

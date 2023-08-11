@@ -1,4 +1,5 @@
-﻿using ActivityPub.Types.Util;
+﻿using ActivityPub.Types.AS;
+using ActivityPub.Types.Util;
 
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -7,19 +8,18 @@ namespace ActivityPub.Types.Tests.Unit.Util;
 
 public abstract class LinkableTests
 {
-    
-    private ASLink Link { get; set; } = new() { HRef = "https://example.com/some.uri" };
-    private Linkable<ASObject> WithLink { get; set; }
-        
-    private ASObject Value { get; set; } = new();
-    private Linkable<ASObject> WithValue { get; set; }
-
     protected LinkableTests()
     {
-        WithLink = new(Link);
-        WithValue = new(Value);
+        WithLink = new Linkable<ASObject>(Link);
+        WithValue = new Linkable<ASObject>(Value);
     }
-    
+
+    private ASLink Link { get; } = new() { HRef = "https://example.com/some.uri" };
+    private Linkable<ASObject> WithLink { get; }
+
+    private ASObject Value { get; } = new();
+    private Linkable<ASObject> WithValue { get; }
+
     public class ConstructorShould : LinkableTests
     {
         [Fact]
@@ -30,7 +30,7 @@ public abstract class LinkableTests
             WithLink.HasLink.Should().BeTrue();
             WithLink.Link.Should().Be(Link);
         }
-        
+
         [Fact]
         public void SetProperties_FromValue()
         {
@@ -39,12 +39,12 @@ public abstract class LinkableTests
             WithValue.HasLink.Should().BeFalse();
             WithValue.Link.Should().BeNull();
         }
-        
+
         [Fact]
         public void SetProperties_FromLinkable()
         {
             var second = new Linkable<ASObject>(WithValue);
-            
+
             second.HasValue.Should().BeTrue();
             second.Value.Should().Be(Value);
             second.HasLink.Should().BeFalse();
@@ -95,7 +95,6 @@ public abstract class LinkableTests
 
     public class TryGetValueShould : LinkableTests
     {
-
         [Fact]
         public void ReturnFalse_WhenItHasLink() => WithLink.TryGetValue(out _).Should().BeFalse();
 
@@ -105,7 +104,7 @@ public abstract class LinkableTests
             WithLink.TryGetValue(out var link);
             link.Should().BeNull();
         }
-        
+
         [Fact]
         public void ReturnTrue_WhenItHasValue() => WithValue.TryGetValue(out _).Should().BeTrue();
 
@@ -113,7 +112,7 @@ public abstract class LinkableTests
         public void ReturnValue_WhenItHasValue()
         {
             WithValue.TryGetValue(out var value);
-            value.Should().Be(value); 
+            value.Should().Be(value);
         }
     }
 

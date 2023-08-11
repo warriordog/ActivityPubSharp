@@ -1,7 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Extended.Link;
+using ActivityPub.Types.AS.Extended.Link;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Extended.Link;
@@ -9,8 +9,8 @@ namespace ActivityPub.Types.Tests.Unit.Extended.Link;
 public abstract class MentionLinkTests
 {
     private const string TestUriString = "https://example.com/some.uri";
-    private Uri TestUri { get; set; } = new(TestUriString);
-    private ASUri TestASUri { get; set; } = new(TestUriString);
+    private Uri TestUri { get; } = new(TestUriString);
+    private ASUri TestASUri { get; } = new(TestUriString);
 
     public class OperatorTests : MentionLinkTests
     {
