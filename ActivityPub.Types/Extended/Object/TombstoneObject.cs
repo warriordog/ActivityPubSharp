@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// A Tombstone represents a content object that has been deleted.
 /// It can be used in Collections to signify that there used to be an object at this position, but it has been deleted.
 /// </summary>
-[ASTypeKey(TombstoneType)]
+[APTypeAttribute(TombstoneType)]
 public class TombstoneObject : ASObject
 {
     public const string TombstoneType = "Tombstone";
