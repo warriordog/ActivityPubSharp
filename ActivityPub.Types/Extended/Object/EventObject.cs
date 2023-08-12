@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents any kind of event.
 /// </summary>
-[ASTypeKey(EventType)]
+[APTypeAttribute(EventType)]
 public class EventObject : ASObject
 {
     public const string EventType = "Event";
