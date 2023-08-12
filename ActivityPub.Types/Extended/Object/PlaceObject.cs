@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a logical or physical location.
 /// </summary>
-[ASTypeKey(PlaceType)]
+[APTypeAttribute(PlaceType)]
 public class PlaceObject : ASObject
 {
     public const string PlaceType = "Place";
