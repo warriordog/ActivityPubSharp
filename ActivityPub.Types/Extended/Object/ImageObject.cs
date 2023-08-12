@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// An image document of any kind 
 /// </summary>
-[ASTypeKey(ImageType)]
+[APTypeAttribute(ImageType)]
 public class ImageObject : DocumentObject
 {
     public const string ImageType = "Image";
