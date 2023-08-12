@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a Web Page. 
 /// </summary>
-[ASTypeKey(PageType)]
+[APTypeAttribute(PageType)]
 public class PageObject : DocumentObject
 {
     public const string PageType = "Page";
