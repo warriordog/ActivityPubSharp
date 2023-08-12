@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents an audio document of any kind. 
 /// </summary>
-[ASTypeKey(AudioType)]
+[APTypeAttribute(AudioType)]
 public class AudioObject : DocumentObject
 {
     public const string AudioType = "Audio";
