@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Represents a service of any kind.
 /// </summary>
-[ASTypeKey(ServiceType)]
+[APTypeAttribute(ServiceType)]
 public class ServiceActor : ASActor
 {
     public const string ServiceType = "Service";
