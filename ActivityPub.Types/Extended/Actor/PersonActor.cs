@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Represents an individual person. 
 /// </summary>
-[ASTypeKey(PersonType)]
+[APTypeAttribute(PersonType)]
 public class PersonActor : ASActor
 {
     public const string PersonType = "Person";
