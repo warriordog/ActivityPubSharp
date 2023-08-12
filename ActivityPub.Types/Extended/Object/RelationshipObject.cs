@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// Describes a relationship between two individuals.
 /// The subject and object properties are used to identify the connected individuals.
 /// </summary>
-[ASTypeKey(RelationshipType)]
+[APTypeAttribute(RelationshipType)]
 public class RelationshipObject : ASObject
 {
     public const string RelationshipType = "Relationship";
