@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents any kind of multi-paragraph written work.
 /// </summary>
-[ASTypeKey(ArticleType)]
+[APTypeAttribute(ArticleType)]
 public class ArticleObject : ASObject
 {
     public const string ArticleType = "Article";
