@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a document of any kind. 
 /// </summary>
-[ASTypeKey(DocumentType)]
+[APTypeAttribute(DocumentType)]
 public class DocumentObject : ASObject
 {
     public const string DocumentType = "Document";
