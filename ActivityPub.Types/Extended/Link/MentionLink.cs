@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Extended.Link;
 /// <summary>
 /// A specialized Link that represents an @mention. 
 /// </summary>
-[ASTypeKey(MentionType)]
+[APTypeAttribute(MentionType)]
 public class MentionLink : ASLink
 {
     public const string MentionType = "Mention";
