@@ -102,7 +102,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
             var isASLink = type.IsAssignableTo(typeof(ASLink));
             
             // Process each attribute on the type
-            var typeAttributes = type.GetCustomAttributes<ASTypeKeyAttribute>();
+            var typeAttributes = type.GetCustomAttributes<ASTypeAttribute>();
             foreach (var typeAttr in typeAttributes)
             {
                 // Have to lowercase this for accurate checking
