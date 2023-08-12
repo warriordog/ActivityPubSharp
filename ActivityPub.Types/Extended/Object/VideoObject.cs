@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a video document of any kind. 
 /// </summary>
-[ASTypeKey(VideoType)]
+[APTypeAttribute(VideoType)]
 public class VideoObject : DocumentObject
 {
     public const string VideoType = "Video";
