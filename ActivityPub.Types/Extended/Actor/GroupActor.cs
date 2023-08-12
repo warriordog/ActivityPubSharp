@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Represents a formal or informal collective of Actors. 
 /// </summary>
-[ASTypeKey(GroupType)]
+[APTypeAttribute(GroupType)]
 public class GroupActor : ASActor
 {
     public const string GroupType = "Group";
