@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Object;
 /// <summary>
 /// Represents a short written work typically less than a single paragraph in length. 
 /// </summary>
-[ASTypeKey(NoteType)]
+[APTypeAttribute(NoteType)]
 public class NoteObject : ASObject
 {
     public const string NoteType = "Note";
