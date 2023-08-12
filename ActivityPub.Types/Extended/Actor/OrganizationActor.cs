@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Represents an organization. 
 /// </summary>
-[ASTypeKey(OrganizationType)]
+[APTypeAttribute(OrganizationType)]
 public class OrganizationActor : ASActor
 {
     public const string OrganizationType = "Organization";
