@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Extended.Actor;
 /// <summary>
 /// Describes a software application. 
 /// </summary>
-[ASTypeKey(ApplicationType)]
+[APTypeAttribute(ApplicationType)]
 public class ApplicationActor : ASActor
 {
     public const string ApplicationType = "Application";
