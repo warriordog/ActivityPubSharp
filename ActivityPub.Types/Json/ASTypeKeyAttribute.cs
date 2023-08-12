@@ -7,7 +7,7 @@ namespace ActivityPub.Types.Json;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 [MeansImplicitUse]
-public sealed class ASTypeKeyAttribute : Attribute
+public sealed class ASTypeAttribute : Attribute
 {
     /// <summary>
     /// ActivityStreams type name
@@ -15,5 +15,5 @@ public sealed class ASTypeKeyAttribute : Attribute
     /// <seealso cref="ASType.Types"/>
     public readonly string Type;
 
-    public ASTypeKeyAttribute(string type) => Type = type;
+    public ASTypeAttribute(string type) => Type = type;
 }
