@@ -38,7 +38,6 @@ public class LinkableConverter : JsonConverterFactory
 }
 
 internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
-    where T : ASObject
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
