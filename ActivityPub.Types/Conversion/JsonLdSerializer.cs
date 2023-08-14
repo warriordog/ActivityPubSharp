@@ -7,6 +7,7 @@ using System.Text.Json.Serialization.Metadata;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Conversion.Modifiers;
 using ActivityPub.Types.Internal;
+using Microsoft.Extensions.Options;
 
 namespace ActivityPub.Types.Conversion;
 
@@ -36,22 +37,22 @@ public interface IJsonLdSerializer
 
 public class JsonLdSerializer : IJsonLdSerializer
 {
-    public JsonLdSerializer(IASTypeInfoCache asTypeInfoCache)
-    {
-        SerializerOptions = new JsonSerializerOptions(JsonSerializerOptions.Default)
+    public JsonLdSerializer(IOptions<JsonLdSerializerOptions> serializerOptions, IASTypeInfoCache asTypeInfoCache) =>
+        SerializerOptions = new JsonSerializerOptions(serializerOptions.Value.DefaultJsonSerializerOptions)
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             TypeInfoResolver = new DefaultJsonTypeInfoResolver()
                 .WithIgnoreEmptyCollections()
-                .WithBugFixes()
+                .WithBugFixes(),
+            Converters =
+            {
+                new TypeMapConverter(asTypeInfoCache),
+                new ASTypeConverter(),
+                new LinkableConverter(asTypeInfoCache),
+                new ListableConverter(),
+                new ListableReadOnlyConverter()
+            }
         };
-
-        SerializerOptions.Converters.Add(new TypeMapConverter(asTypeInfoCache));
-        SerializerOptions.Converters.Add(new ASTypeConverter());
-        SerializerOptions.Converters.Add(new LinkableConverter(asTypeInfoCache));
-        SerializerOptions.Converters.Add(new ListableConverter());
-        SerializerOptions.Converters.Add(new ListableReadOnlyConverter());
-    }
 
     public JsonSerializerOptions SerializerOptions { get; }
 

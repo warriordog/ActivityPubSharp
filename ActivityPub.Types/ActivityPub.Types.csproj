@@ -17,4 +17,10 @@
     </ItemGroup>
 
 
+    <ItemGroup>
+        <Reference Include="Microsoft.Extensions.Options">
+            <HintPath>..\..\..\.nuget\packages\microsoft.extensions.options\7.0.1\lib\net7.0\Microsoft.Extensions.Options.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
 </Project>

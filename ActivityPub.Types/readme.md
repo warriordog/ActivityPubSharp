@@ -111,3 +111,9 @@ See the [ActivityStreams documentation](https://www.w3.org/TR/activitystreams-co
 
 * Several properties and edge cases are not correctly handled. See the [issue tracker](https://github.com/warriordog/ActivityPubSharp/issues) for details.
 * Only a minimal subset of JSON-LD is supported. For full compatibility, it is necessary to override the default [JsonLdSerializer](Conversion/JsonLdSerializer.cs) and pre-process the incoming JSON.
+
+## Available Options
+
+| Options Class                                                    | Configuration Path          | Description                                                                |
+|------------------------------------------------------------------|-----------------------------|----------------------------------------------------------------------------|
+| [JsonLdSerializerOptions](Conversion/JsonLdSerializerOptions.cs) | N/A - not mapped by default | Options for the default [JsonLdSerializer](Conversion/JsonLdSerializer.cs) |

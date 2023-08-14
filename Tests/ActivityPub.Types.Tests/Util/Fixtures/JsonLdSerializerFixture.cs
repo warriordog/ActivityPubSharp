@@ -4,6 +4,7 @@
 using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Internal;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
 
 namespace ActivityPub.Types.Tests.Util.Fixtures;
 
@@ -21,9 +22,13 @@ public sealed class JsonLdSerializerFixture
         ASTypeInfoCache = new ASTypeInfoCache();
         ASTypeInfoCache.RegisterAllAssemblies();
 
-        JsonLdSerializer = new JsonLdSerializer(ASTypeInfoCache);
+        JsonLdSerializerOptions = new JsonLdSerializerOptions();
+        var serializerOptions = Options.Create(JsonLdSerializerOptions);
+
+        JsonLdSerializer = new JsonLdSerializer(serializerOptions, ASTypeInfoCache);
     }
 
     public IASTypeInfoCache ASTypeInfoCache { get; }
     public IJsonLdSerializer JsonLdSerializer { get; }
+    public JsonLdSerializerOptions JsonLdSerializerOptions { get; }
 }
