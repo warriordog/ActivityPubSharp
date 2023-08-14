@@ -113,7 +113,7 @@ public class ASActor : ASObject
     /// <remarks>
     ///     This should technically be a Linkable{ActorEndpoints}, but ActorEndpoints does not extend ASType
     /// </remarks>
-    public ActorEndpoints? Endpoints
+    public Linkable<ActorEndpoints>? Endpoints
     {
         get => Entity.Endpoints;
         set => Entity.Endpoints = value;
@@ -154,7 +154,7 @@ public sealed class ASActorEntity : ASEntity<ASActor>
 
     /// <inheritdoc cref="ASActor.Endpoints" />
     [JsonPropertyName("endpoints")]
-    public ActorEndpoints? Endpoints { get; set; }
+    public Linkable<ActorEndpoints>? Endpoints { get; set; }
 }
 
 /// <summary>
