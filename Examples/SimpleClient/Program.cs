@@ -22,7 +22,7 @@ builder.TryAddClientModule();
 builder.Services.AddHostedService<ConsoleService>();
 
 // Enable pretty-printing
-builder.Services.Configure<IJsonLdSerializer>(serializer => serializer.SerializerOptions.WriteIndented = true);
+builder.Services.Configure<JsonLdSerializerOptions>(o => o.DefaultJsonSerializerOptions.WriteIndented = true);
 
 // Start host
 using var host = builder.Build();
