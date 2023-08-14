@@ -15,11 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C54CED61
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Types.Tests", "Tests\ActivityPub.Types.Tests\ActivityPub.Types.Tests.csproj", "{D750AD19-106E-4A0E-9ADB-A64F50713082}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleClient", "Samples\SimpleClient\SimpleClient.csproj", "{95EDC087-659C-412A-9FBD-1B959694FD3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleClient", "Examples\SimpleClient\SimpleClient.csproj", "{95EDC087-659C-412A-9FBD-1B959694FD3F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{B8B3D775-1A7F-4C38-B14C-F113016B51D1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{B8B3D775-1A7F-4C38-B14C-F113016B51D1}"
 	ProjectSection(SolutionItems) = preProject
-		Samples\readme.md = Samples\readme.md
+		Examples\readme.md = Examples\readme.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivityPub.Common", "ActivityPub.Common\ActivityPub.Common.csproj", "{B101E7CB-6CA8-444F-8E27-33D65D377F02}"

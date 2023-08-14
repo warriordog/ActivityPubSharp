@@ -53,6 +53,12 @@ For example, included services all utilize the [`IJsonLdSerializer` interface](A
 Most default implementations expose configuration objects that are compatible with the Options Pattern.
 User-accessible DI services and and options are described in the README for each individual package.
 
+## Getting Started
+
+ActivityPubSharp is not yet production-ready.
+Most high-level functionality is not implemented.
+There is, however, [an example package](Examples) available with reference code.
+
 ## Technical Details
 
 ### Requirements
