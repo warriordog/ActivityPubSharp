@@ -7,7 +7,7 @@ namespace ActivityPub.Types.Json;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 [MeansImplicitUse]
-public sealed class ASTypeAttribute : Attribute
+public sealed class APTypeAttribute : Attribute
 {
     /// <summary>
     /// ActivityStreams type name
