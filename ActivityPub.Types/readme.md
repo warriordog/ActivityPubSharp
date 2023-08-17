@@ -96,7 +96,7 @@ JSON-LD contexts are followed while constructing extension types, although prope
 
 ### Usage
 
-At startup, the module scans all loaded assemblies and registers any type deriving from [ASType](AS/ASType.cs) and containing an [ASTypeKey](Attributes/ASTypeKeyAttribute.cs) attribute.
+At startup, the module scans all loaded assemblies and registers any type deriving from [ASType](AS/ASType.cs) and containing an [APType](Attributes/APTypeAttribute.cs) attribute.
 Registered extension classes will be automatically constructed by the [polymorphic converter](Conversion/Converters/TypeMapConverter.cs).
 Polymorphic extension types will be handled by the Entities system described above.
 

@@ -16,7 +16,7 @@ public class ViewActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="ViewActivity" />
-[ASTypeKey(ViewType)]
+[APType(ViewType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ViewActivityEntity : ASEntity<ViewActivity>
 {

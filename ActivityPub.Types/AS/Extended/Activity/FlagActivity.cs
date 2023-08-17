@@ -17,7 +17,7 @@ public class FlagActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="FlagActivity" />
-[ASTypeKey(FlagType)]
+[APType(FlagType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class FlagActivityEntity : ASEntity<FlagActivity>
 {

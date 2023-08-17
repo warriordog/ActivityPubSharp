@@ -18,7 +18,7 @@ public class UpdateActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="UpdateActivity" />
-[ASTypeKey(UpdateType)]
+[APType(UpdateType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class UpdateActivityEntity : ASEntity<UpdateActivity>
 {

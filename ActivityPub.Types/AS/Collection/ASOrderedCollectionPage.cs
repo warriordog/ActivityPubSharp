@@ -67,7 +67,7 @@ public class ASOrderedCollectionPage : ASOrderedCollection
 }
 
 /// <inheritdoc cref="ASOrderedCollectionPage" />
-[ASTypeKey(OrderedCollectionPageType)]
+[APType(OrderedCollectionPageType)]
 [ImpliesOtherEntity(typeof(ASOrderedCollectionEntity))]
 public sealed class ASOrderedCollectionPageEntity : ASEntity<ASOrderedCollectionPage>
 {

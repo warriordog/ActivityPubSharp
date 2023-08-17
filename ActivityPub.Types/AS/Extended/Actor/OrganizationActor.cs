@@ -16,7 +16,7 @@ public class OrganizationActor : ASActor
 }
 
 /// <inheritdoc cref="OrganizationActor" />
-[ASTypeKey(OrganizationType)]
+[APType(OrganizationType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class OrganizationActorEntity : ASEntity<OrganizationActor>
 {

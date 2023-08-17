@@ -17,7 +17,7 @@ public class OfferActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="OfferActivity" />
-[ASTypeKey(OfferType)]
+[APType(OfferType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class OfferActivityEntity : ASEntity<OfferActivity>
 {

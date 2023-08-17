@@ -16,7 +16,7 @@ public class ServiceActor : ASActor
 }
 
 /// <inheritdoc cref="ServiceActor" />
-[ASTypeKey(ServiceType)]
+[APType(ServiceType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class ServiceActorEntity : ASEntity<ServiceActor>
 {

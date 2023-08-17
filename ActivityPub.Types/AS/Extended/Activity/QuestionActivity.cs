@@ -73,7 +73,7 @@ public class QuestionActivity : ASIntransitiveActivity
 }
 
 /// <inheritdoc cref="QuestionActivity" />
-[ASTypeKey(QuestionType)]
+[APType(QuestionType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
 public sealed class QuestionActivityEntity : ASEntity<QuestionActivity>
 {

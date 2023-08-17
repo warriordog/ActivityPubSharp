@@ -16,7 +16,7 @@ public class IgnoreActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="IgnoreActivity" />
-[ASTypeKey(IgnoreType)]
+[APType(IgnoreType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class IgnoreActivityEntity : ASEntity<IgnoreActivity>
 {

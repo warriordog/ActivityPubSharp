@@ -16,7 +16,7 @@ public class GroupActor : ASActor
 }
 
 /// <inheritdoc cref="GroupActor" />
-[ASTypeKey(GroupType)]
+[APType(GroupType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class GroupActorEntity : ASEntity<GroupActor>
 {

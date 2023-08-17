@@ -18,7 +18,7 @@ public class TravelActivity : ASIntransitiveActivity
 }
 
 /// <inheritdoc cref="TravelActivity" />
-[ASTypeKey(TravelType)]
+[APType(TravelType)]
 [ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
 public sealed class TravelActivityEntity : ASEntity<TravelActivity>
 {

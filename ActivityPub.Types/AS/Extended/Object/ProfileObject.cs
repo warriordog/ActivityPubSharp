@@ -28,7 +28,7 @@ public class ProfileObject : ASObject
 }
 
 /// <inheritdoc cref="ProfileObject" />
-[ASTypeKey(ProfileType)]
+[APType(ProfileType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ProfileObjectEntity : ASEntity<ProfileObject>
 {

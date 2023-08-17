@@ -71,7 +71,7 @@ public class ASActivity : ASObject
 }
 
 /// <inheritdoc cref="ASActivity" />
-[ASTypeKey(ActivityType)]
+[APType(ActivityType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASActivityEntity : ASEntity<ASActivity>, ISubTypeDeserialized
 {

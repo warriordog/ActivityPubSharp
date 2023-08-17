@@ -90,7 +90,7 @@ public class ASLink : ASType
 }
 
 /// <inheritdoc cref="ASLink" />
-[ASTypeKey(LinkType)]
+[APType(LinkType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
 public sealed class ASLinkEntity : ASEntity<ASLink>, ILinkEntity
 {
