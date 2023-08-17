@@ -16,7 +16,7 @@ public class ArticleObject : ASObject
 }
 
 /// <inheritdoc cref="ArticleObject" />
-[ASTypeKey(ArticleType)]
+[APType(ArticleType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ArticleObjectEntity : ASEntity<ArticleObject>
 {

@@ -16,7 +16,7 @@ public class ReadActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="ReadActivity" />
-[ASTypeKey(ReadType)]
+[APType(ReadType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ReadActivityEntity : ASEntity<ReadActivity>
 {

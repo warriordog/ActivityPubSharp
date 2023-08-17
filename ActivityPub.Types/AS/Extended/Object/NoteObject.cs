@@ -16,7 +16,7 @@ public class NoteObject : ASObject
 }
 
 /// <inheritdoc cref="NoteObject" />
-[ASTypeKey(NoteType)]
+[APType(NoteType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class NoteObjectEntity : ASEntity<NoteObject>
 {

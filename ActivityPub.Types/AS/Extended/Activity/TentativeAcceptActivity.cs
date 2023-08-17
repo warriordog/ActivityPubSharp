@@ -16,7 +16,7 @@ public class TentativeAcceptActivity : AcceptActivity
 }
 
 /// <inheritdoc cref="TentativeAcceptActivity" />
-[ASTypeKey(TentativeAcceptType)]
+[APType(TentativeAcceptType)]
 [ImpliesOtherEntity(typeof(AcceptActivityEntity))]
 public sealed class TentativeAcceptActivityEntity : ASEntity<TentativeAcceptActivity>
 {

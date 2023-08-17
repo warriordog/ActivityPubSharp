@@ -16,7 +16,7 @@ public class CreateActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="CreateActivity" />
-[ASTypeKey(CreateType)]
+[APType(CreateType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class CreateActivityEntity : ASEntity<CreateActivity>
 {

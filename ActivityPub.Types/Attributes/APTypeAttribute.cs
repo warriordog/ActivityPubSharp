@@ -13,12 +13,12 @@ namespace ActivityPub.Types.Attributes;
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 [BaseTypeRequired(typeof(ASEntity))]
 [MeansImplicitUse]
-public sealed class ASTypeKeyAttribute : Attribute
+public sealed class APTypeAttribute : Attribute
 {
     /// <summary>
     ///     ActivityStreams type name
     /// </summary>
     public readonly string Type;
 
-    public ASTypeKeyAttribute(string type) => Type = type;
+    public APTypeAttribute(string type) => Type = type;
 }

@@ -16,7 +16,7 @@ public class ListenActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="ListenActivity" />
-[ASTypeKey(ListenType)]
+[APType(ListenType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class ListenActivityEntity : ASEntity<ListenActivity>
 {

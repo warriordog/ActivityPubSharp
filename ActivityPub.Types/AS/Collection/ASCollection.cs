@@ -101,7 +101,7 @@ public class ASCollection : ASObject
 }
 
 /// <inheritdoc cref="ASCollection" />
-[ASTypeKey(CollectionType)]
+[APType(CollectionType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASCollectionEntity : ASEntity<ASCollection>
 {

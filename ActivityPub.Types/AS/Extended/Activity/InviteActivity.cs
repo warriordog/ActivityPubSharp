@@ -16,7 +16,7 @@ public class InviteActivity : OfferActivity
 }
 
 /// <inheritdoc cref="InviteActivity" />
-[ASTypeKey(InviteType)]
+[APType(InviteType)]
 [ImpliesOtherEntity(typeof(OfferActivityEntity))]
 public sealed class InviteActivityEntity : ASEntity<InviteActivity>
 {

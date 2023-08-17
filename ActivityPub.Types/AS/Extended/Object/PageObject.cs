@@ -16,7 +16,7 @@ public class PageObject : DocumentObject
 }
 
 /// <inheritdoc cref="PageObject" />
-[ASTypeKey(PageType)]
+[APType(PageType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
 public sealed class PageObjectEntity : ASEntity<PageObject>
 {
