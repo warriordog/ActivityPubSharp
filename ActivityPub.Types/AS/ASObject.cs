@@ -78,7 +78,7 @@ public class ASObject : ASType
 
     /// <summary>
     ///     Identifies the context within which the object exists or an activity was performed.
-    ///     THIS IS *NOT* THE JSON-LD CONTEXT! For that, you need <see cref="ASType.JsonLdContext" />
+    ///     THIS IS *NOT* THE JSON-LD CONTEXT! For that, you need <see cref="TypeMap.LDContext" />
     /// </summary>
     /// <remarks>
     ///     The notion of "context" used is intentionally vague.
