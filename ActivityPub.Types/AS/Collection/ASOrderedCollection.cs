@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
@@ -18,7 +19,7 @@ namespace ActivityPub.Types.AS.Collection;
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection" />
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection" />
-public class ASOrderedCollection : ASObject
+public class ASOrderedCollection : ASObject, IEnumerable<Linkable<ASObject>>
 {
     public ASOrderedCollection() => Entity = new ASOrderedCollectionEntity { TypeMap = TypeMap };
     public ASOrderedCollection(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASOrderedCollectionEntity>();
@@ -99,6 +100,32 @@ public class ASOrderedCollection : ASObject
     public bool HasItems => Items?.Any() == true;
 
     public static implicit operator ASOrderedCollection(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
+
+    public IEnumerator<Linkable<ASObject>> GetEnumerator()
+    {
+        if (Items == null)
+        {
+            yield break;
+        }
+
+        foreach (var item in Items)
+        {
+            if (item.HasValue)
+            {
+                yield return item.Value;
+            }
+
+            if (item.HasLink)
+            {
+                yield return item.Link;
+            }
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }
 
 /// <inheritdoc cref="ASOrderedCollection" />
