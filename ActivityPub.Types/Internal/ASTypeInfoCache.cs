@@ -45,6 +45,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
     private readonly Dictionary<Type, HashSet<Type>> _impliedEntityMap = new();
     private readonly Dictionary<string, Type> _knownEntityMap = new();
     private readonly HashSet<string> _knownLinkTypes = new();
+    private readonly HashSet<Assembly> _registeredAssemblies = new();
 
     public bool IsKnownASType(string asTypeName) => _knownEntityMap.ContainsKey(asTypeName);
 
@@ -93,48 +94,64 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
     public void RegisterAssembly(Assembly assembly)
     {
+        // Make sure we only check each assembly once.
+        // Its an extremely heavy operation.
+        if (!_registeredAssemblies.Add(assembly))
+            return;
+
+        // This is a new assembly, so we need to check every type
         foreach (var type in assembly.GetTypes())
+            RegisterType(type);
+    }
+
+    private void RegisterType(Type type)
+    {
+        // Skip if its not an AS type
+        if (!type.IsAssignableTo(typeof(ASEntity)))
+            return;
+
+        // Make sure we only check each type once.
+        if (!_allASEntities.Add(type))
+            return;
+
+        // Process all [APConvertible] attributes to register all ActivityStreams context/type pairs
+        RegisterConvertibles(type);
+
+        // Register all implied types
+        RegisterImpliedTypes(type);
+    }
+
+    private void RegisterConvertibles(Type type)
+    {
+        // Pre-check this here for performance.
+        // Its possible for the loop to run multiple times.
+        var isASLink = type.IsAssignableTo(typeof(ILinkEntity));
+
+        // Process each APConvertible attribute on the type
+        foreach (var convertibleAttr in type.GetCustomAttributes<APConvertibleAttribute>())
         {
-            // Skip if its not an AS type
-            if (!type.IsAssignableTo(typeof(ASEntity)))
-                continue;
+            var typeName = convertibleAttr.Type;
 
-            // Skip if we've already registered it
-            if (_allASEntities.Contains(type))
-                continue;
+            // Check for dupes
+            if (_knownEntityMap.TryGetValue(typeName, out var originalType))
+                throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
 
-            // Pre-check this here for performance.
-            // Its possible for the loop to run multiple times.
-            var isASLink = type.IsAssignableTo(typeof(ILinkEntity));
+            // Register mapping
+            _knownEntityMap[typeName] = type;
 
-            // Process each APConvertible attribute on the type
-            var convertibleAttrs = type.GetCustomAttributes<APConvertibleAttribute>();
-            foreach (var convertibleAttr in convertibleAttrs)
-            {
-                var typeName = convertibleAttr.Type;
-
-                // Check for dupes
-                if (_knownEntityMap.TryGetValue(typeName, out var originalType))
-                    throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
-
-                // Register mapping
-                _knownEntityMap[typeName] = type;
-
-                // If it derives from ASLink, then record it as an additional link type
-                if (isASLink)
-                    _knownLinkTypes.Add(typeName);
-            }
-
-            // Register all implied types
-            var impliesAttributes = type
-                .GetCustomAttributes<ImpliesOtherEntityAttribute>()
-                .Select(attr => attr.Type)
-                .ToHashSet();
-            if (impliesAttributes.Any())
-                _impliedEntityMap[type] = impliesAttributes;
-
-            // Record it as an AS type, even if we didn't register
-            _allASEntities.Add(type);
+            // If it derives from ASLink, then record it as an additional link type
+            if (isASLink)
+                _knownLinkTypes.Add(typeName);
         }
+    }
+
+    private void RegisterImpliedTypes(Type type)
+    {
+        var impliesAttributes = type
+            .GetCustomAttributes<ImpliesOtherEntityAttribute>()
+            .Select(attr => attr.Type)
+            .ToHashSet();
+        if (impliesAttributes.Any())
+            _impliedEntityMap[type] = impliesAttributes;
     }
 }
