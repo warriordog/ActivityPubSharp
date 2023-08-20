@@ -17,7 +17,7 @@ public class LikeActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="LikeActivity" />
-[APType(LikeType)]
+[APConvertible(LikeType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class LikeActivityEntity : ASEntity<LikeActivity>
 {

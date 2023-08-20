@@ -102,7 +102,7 @@ public class ASOrderedCollection : ASObject
 }
 
 /// <inheritdoc cref="ASOrderedCollection" />
-[APType(OrderedCollectionType)]
+[APConvertible(OrderedCollectionType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class ASOrderedCollectionEntity : ASEntity<ASOrderedCollection>
 {

@@ -18,7 +18,7 @@ public class AddActivity : ASTargetedActivity
 }
 
 /// <inheritdoc cref="AddActivity" />
-[APType(AddType)]
+[APConvertible(AddType)]
 [ImpliesOtherEntity(typeof(ASTargetedActivityEntity))]
 public sealed class AddActivityEntity : ASEntity<AddActivity>
 {

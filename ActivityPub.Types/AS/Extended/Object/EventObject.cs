@@ -16,7 +16,7 @@ public class EventObject : ASObject
 }
 
 /// <inheritdoc cref="EventObject" />
-[APType(EventType)]
+[APConvertible(EventType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class EventObjectEntity : ASEntity<EventObject>
 {

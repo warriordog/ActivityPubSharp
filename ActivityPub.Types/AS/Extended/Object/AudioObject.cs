@@ -16,7 +16,7 @@ public class AudioObject : DocumentObject
 }
 
 /// <inheritdoc cref="AudioObject" />
-[APType(AudioType)]
+[APConvertible(AudioType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
 public sealed class AudioObjectEntity : ASEntity<AudioObject>
 {

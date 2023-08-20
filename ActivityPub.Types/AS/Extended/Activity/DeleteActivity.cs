@@ -17,7 +17,7 @@ public class DeleteActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="DeleteActivity" />
-[APType(DeleteType)]
+[APConvertible(DeleteType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class DeleteActivityEntity : ASEntity<DeleteActivity>
 {

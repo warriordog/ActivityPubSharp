@@ -19,7 +19,7 @@ public class BlockActivity : IgnoreActivity
 }
 
 /// <inheritdoc cref="BlockActivity" />
-[APType(BlockType)]
+[APConvertible(BlockType)]
 [ImpliesOtherEntity(typeof(IgnoreActivityEntity))]
 public sealed class BlockActivityEntity : ASEntity<BlockActivity>
 {

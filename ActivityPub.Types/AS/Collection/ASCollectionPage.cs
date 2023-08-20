@@ -67,7 +67,7 @@ public class ASCollectionPage : ASCollection
 }
 
 /// <inheritdoc cref="ASCollectionPage" />
-[APType(CollectionPageType)]
+[APConvertible(CollectionPageType)]
 [ImpliesOtherEntity(typeof(ASCollectionEntity))]
 public sealed class ASCollectionPageEntity : ASEntity<ASCollectionPage>
 {

@@ -100,15 +100,24 @@ public abstract class ASEntity<TType> : ASEntity
     }
 }
 
+// TODO remove or fix
+// /// <summary>
+// ///     Indicates that this entity has an ActivityStreams name and/or context.
+// ///     It will be parsed from JSON and its name will be included when serializing.
+// /// </summary>
+// public interface INamedEntity
+// {
+// }
+
 /// <summary>
-/// Indicates that this entity is part of the "Link" AS type or an extension of it.
-/// Links MUST implement this interface, otherwise conversion may fail.
+///     Indicates that this entity is part of the "Link" AS type or an extension of it.
+///     Links MUST implement this interface, otherwise conversion may fail.
 /// </summary>
 public interface ILinkEntity
 {
     /// <summary>
-    /// True if the link's current state can only be represented by the object form.
-    /// MUST return true if any properties are populated, other than HRef!
+    ///     True if the link's current state can only be represented by the object form.
+    ///     MUST return true if any properties are populated, other than HRef!
     /// </summary>
     [JsonIgnore]
     public bool RequiresObjectForm { get; }

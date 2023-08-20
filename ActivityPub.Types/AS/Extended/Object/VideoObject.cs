@@ -16,7 +16,7 @@ public class VideoObject : DocumentObject
 }
 
 /// <inheritdoc cref="VideoObject" />
-[APType(VideoType)]
+[APConvertible(VideoType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
 public sealed class VideoObjectEntity : ASEntity<VideoObject>
 {

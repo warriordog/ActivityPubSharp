@@ -107,11 +107,11 @@ public class ASTypeInfoCache : IASTypeInfoCache
             // Its possible for the loop to run multiple times.
             var isASLink = type.IsAssignableTo(typeof(ILinkEntity));
 
-            // Process each APType attribute on the type
-            var typeAttributes = type.GetCustomAttributes<APTypeAttribute>();
-            foreach (var typeAttr in typeAttributes)
+            // Process each APConvertible attribute on the type
+            var convertibleAttrs = type.GetCustomAttributes<APConvertibleAttribute>();
+            foreach (var convertibleAttr in convertibleAttrs)
             {
-                var typeName = typeAttr.Type;
+                var typeName = convertibleAttr.Type;
 
                 // Check for dupes
                 if (_knownEntityMap.TryGetValue(typeName, out var originalType))

@@ -17,7 +17,7 @@ public class AnnounceActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="AnnounceActivity" />
-[APType(AnnounceType)]
+[APConvertible(AnnounceType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class AnnounceActivityEntity : ASEntity<AnnounceActivity>
 {

@@ -18,7 +18,7 @@ public class UndoActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="UndoActivity" />
-[APType(UndoType)]
+[APConvertible(UndoType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class UndoActivityEntity : ASEntity<UndoActivity>
 {

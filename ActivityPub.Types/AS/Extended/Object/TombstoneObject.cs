@@ -38,7 +38,7 @@ public class TombstoneObject : ASObject
 }
 
 /// <inheritdoc cref="TombstoneObject" />
-[APType(TombstoneType)]
+[APConvertible(TombstoneType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class TombstoneObjectEntity : ASEntity<TombstoneObject>
 {

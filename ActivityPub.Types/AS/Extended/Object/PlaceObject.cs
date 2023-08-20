@@ -83,7 +83,7 @@ public class PlaceObject : ASObject
 }
 
 /// <inheritdoc cref="PlaceObject" />
-[APType(PlaceType)]
+[APConvertible(PlaceType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class PlaceObjectEntity : ASEntity<PlaceObject>
 {

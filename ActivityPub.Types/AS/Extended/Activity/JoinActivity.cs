@@ -17,7 +17,7 @@ public class JoinActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="JoinActivity" />
-[APType(JoinType)]
+[APConvertible(JoinType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class JoinActivityEntity : ASEntity<JoinActivity>
 {

@@ -29,7 +29,7 @@ public class MentionLink : ASLink
 /// <summary>
 ///     A specialized Link that represents an @mention.
 /// </summary>
-[APType(MentionType)]
+[APConvertible(MentionType)]
 [ImpliesOtherEntity(typeof(ASLinkEntity))]
 public sealed class MentionLinkEntity : ASEntity<MentionLink>
 {

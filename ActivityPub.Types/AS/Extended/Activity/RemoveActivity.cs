@@ -17,7 +17,7 @@ public class RemoveActivity : ASTargetedActivity
 }
 
 /// <inheritdoc cref="RemoveActivity" />
-[APType(RemoveType)]
+[APConvertible(RemoveType)]
 [ImpliesOtherEntity(typeof(ASTargetedActivityEntity))]
 public sealed class RemoveActivityEntity : ASEntity<RemoveActivity>
 {

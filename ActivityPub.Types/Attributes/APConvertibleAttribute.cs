@@ -13,12 +13,19 @@ namespace ActivityPub.Types.Attributes;
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 [BaseTypeRequired(typeof(ASEntity))]
 [MeansImplicitUse]
-public sealed class APTypeAttribute : Attribute
+public sealed class APConvertibleAttribute : Attribute
 {
     /// <summary>
     ///     ActivityStreams type name
     /// </summary>
     public readonly string Type;
 
-    public APTypeAttribute(string type) => Type = type;
+    /// <summary>
+    ///     JSON-LD context that defines this type.
+    ///     Will be used for conversion.
+    ///     Defaults to the base ActivityStreams context.
+    /// </summary>
+    public string? Context { get; init; }
+
+    public APConvertibleAttribute(string type) => Type = type;
 }

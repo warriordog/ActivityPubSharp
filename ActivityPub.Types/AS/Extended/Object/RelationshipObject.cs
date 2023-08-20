@@ -53,7 +53,7 @@ public class RelationshipObject : ASObject
 }
 
 /// <inheritdoc cref="RelationshipObject" />
-[APType(RelationshipType)]
+[APConvertible(RelationshipType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class RelationshipObjectEntity : ASEntity<RelationshipObject>
 {

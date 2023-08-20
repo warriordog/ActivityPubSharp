@@ -17,7 +17,7 @@ public class LeaveActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="LeaveActivity" />
-[APType(LeaveType)]
+[APConvertible(LeaveType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class LeaveActivityEntity : ASEntity<LeaveActivity>
 {

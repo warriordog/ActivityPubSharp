@@ -16,7 +16,7 @@ public class ImageObject : DocumentObject
 }
 
 /// <inheritdoc cref="ImageObject" />
-[APType(ImageType)]
+[APConvertible(ImageType)]
 [ImpliesOtherEntity(typeof(DocumentObjectEntity))]
 public sealed class ImageObjectEntity : ASEntity<ImageObject>
 {

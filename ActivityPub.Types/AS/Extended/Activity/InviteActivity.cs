@@ -16,7 +16,7 @@ public class InviteActivity : OfferActivity
 }
 
 /// <inheritdoc cref="InviteActivity" />
-[APType(InviteType)]
+[APConvertible(InviteType)]
 [ImpliesOtherEntity(typeof(OfferActivityEntity))]
 public sealed class InviteActivityEntity : ASEntity<InviteActivity>
 {

@@ -16,7 +16,7 @@ public class ApplicationActor : ASActor
 }
 
 /// <inheritdoc cref="ApplicationActor" />
-[APType(ApplicationType)]
+[APConvertible(ApplicationType)]
 [ImpliesOtherEntity(typeof(ASActorEntity))]
 public sealed class ApplicationActorEntity : ASEntity<ApplicationActor>
 {

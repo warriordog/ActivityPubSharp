@@ -301,7 +301,7 @@ public class ASObject : ASType
 }
 
 /// <inheritdoc cref="ASObject" />
-[APType(ObjectType)]
+[APConvertible(ObjectType)]
 [ImpliesOtherEntity(typeof(ASTypeEntity))]
 public sealed class ASObjectEntity : ASEntity<ASObject>, ISubTypeDeserialized
 {

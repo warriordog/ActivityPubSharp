@@ -17,7 +17,7 @@ public class MoveActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="MoveActivity" />
-[APType(MoveType)]
+[APConvertible(MoveType)]
 [ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
 public sealed class MoveActivityEntity : ASEntity<MoveActivity>
 {

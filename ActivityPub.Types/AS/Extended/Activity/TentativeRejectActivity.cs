@@ -16,7 +16,7 @@ public class TentativeRejectActivity : RejectActivity
 }
 
 /// <inheritdoc cref="TentativeRejectActivity" />
-[APType(TentativeRejectType)]
+[APConvertible(TentativeRejectType)]
 [ImpliesOtherEntity(typeof(RejectActivityEntity))]
 public sealed class TentativeRejectActivityEntity : ASEntity<TentativeRejectActivity>
 {

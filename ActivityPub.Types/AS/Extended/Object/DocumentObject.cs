@@ -16,7 +16,7 @@ public class DocumentObject : ASObject
 }
 
 /// <inheritdoc cref="DocumentObject" />
-[APType(DocumentType)]
+[APConvertible(DocumentType)]
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
 public sealed class DocumentObjectEntity : ASEntity<DocumentObject>
 {
