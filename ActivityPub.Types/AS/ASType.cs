@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS;
 
@@ -17,6 +18,7 @@ namespace ActivityPub.Types.AS;
 ///     It does not exist in the ActivityStreams standard.
 /// </remarks>
 /// <seealso cref="ASEntity{TType}" />
+[UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature, ImplicitUseTargetFlags.WithInheritors)]
 public class ASType
 {
     public ASType()
