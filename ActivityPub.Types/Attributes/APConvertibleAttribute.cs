@@ -23,7 +23,7 @@ public sealed class APConvertibleAttribute : Attribute
     /// <summary>
     ///     JSON-LD context that defines this type.
     ///     Will be used for conversion.
-    ///     Defaults to the base ActivityStreams context.
+    ///     If unset, then this type is treated as "global" and will be watched solely based on the type, irregardless of context.
     /// </summary>
     public string? Context { get; init; }
 
