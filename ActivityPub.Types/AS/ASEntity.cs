@@ -100,15 +100,6 @@ public abstract class ASEntity<TType> : ASEntity
     }
 }
 
-// TODO remove or fix
-// /// <summary>
-// ///     Indicates that this entity has an ActivityStreams name and/or context.
-// ///     It will be parsed from JSON and its name will be included when serializing.
-// /// </summary>
-// public interface INamedEntity
-// {
-// }
-
 /// <summary>
 ///     Indicates that this entity is part of the "Link" AS type or an extension of it.
 ///     Links MUST implement this interface, otherwise conversion may fail.
