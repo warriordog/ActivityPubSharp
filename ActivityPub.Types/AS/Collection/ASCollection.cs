@@ -100,31 +100,9 @@ public class ASCollection : ASObject, IEnumerable<Linkable<ASObject>>
 
     public static implicit operator ASCollection(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
 
-    public IEnumerator<Linkable<ASObject>> GetEnumerator()
-    {
-        if (Items == null)
-        {
-            yield break;
-        }
+    public IEnumerator<Linkable<ASObject>> GetEnumerator() => Items?.GetEnumerator() ?? Enumerable.Empty<Linkable<ASObject>>().GetEnumerator();
 
-        foreach (var item in Items)
-        {
-            if (item.HasValue)
-            {
-                yield return item.Value;
-            }
-
-            if (item.HasLink)
-            {
-                yield return item.Link;
-            }
-        }
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
 /// <inheritdoc cref="ASCollection" />
