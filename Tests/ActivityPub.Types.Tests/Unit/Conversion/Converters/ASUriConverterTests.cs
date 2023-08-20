@@ -4,7 +4,7 @@
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Tests.Unit.Conversions.Converters;
+namespace ActivityPub.Types.Tests.Unit.Conversion.Converters;
 
 public abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConverter>
 {
