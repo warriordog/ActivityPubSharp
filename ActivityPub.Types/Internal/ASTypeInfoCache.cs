@@ -12,9 +12,9 @@ namespace ActivityPub.Types.Internal;
 /// </summary>
 public interface IASTypeInfoCache
 {
-    internal bool IsKnownASType(string asTypeName);
+    public bool IsKnownASType(string asTypeName);
 
-    internal bool IsASLinkType(string type);
+    public bool IsASLinkType(string type);
 
     /// <summary>
     ///     Finds the .NET type(s) that implement a set of AS types.
