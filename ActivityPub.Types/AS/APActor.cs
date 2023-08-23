@@ -16,17 +16,17 @@ namespace ActivityPub.Types.AS;
 ///     It does not exist in the ActivityStreams or ActivityPub standards.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects" />
-public class ASActor : ASObject
+public class APActor : ASObject
 {
-    public ASActor() => Entity = new ASActorEntity
+    public APActor() => Entity = new APActorEntity
     {
         TypeMap = TypeMap,
         Inbox = null!,
         Outbox = null!
     };
 
-    public ASActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASActorEntity>();
-    private ASActorEntity Entity { get; }
+    public APActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<APActorEntity>();
+    private APActorEntity Entity { get; }
 
 
     /// <summary>
@@ -120,39 +120,39 @@ public class ASActor : ASObject
     }
 }
 
-/// <inheritdoc cref="ASActor" />
+/// <inheritdoc cref="APActor" />
 [ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASActorEntity : ASEntity<ASActor>
+public sealed class APActorEntity : ASEntity<APActor>
 {
-    /// <inheritdoc cref="ASActor.Inbox" />
+    /// <inheritdoc cref="APActor.Inbox" />
     [JsonPropertyName("inbox")]
     public required ASLink Inbox { get; set; }
 
-    /// <inheritdoc cref="ASActor.Outbox" />
+    /// <inheritdoc cref="APActor.Outbox" />
     [JsonPropertyName("outbox")]
     public required ASLink Outbox { get; set; }
 
-    /// <inheritdoc cref="ASActor.Following" />
+    /// <inheritdoc cref="APActor.Following" />
     [JsonPropertyName("following")]
     public ASLink? Following { get; set; }
 
-    /// <inheritdoc cref="ASActor.Followers" />
+    /// <inheritdoc cref="APActor.Followers" />
     [JsonPropertyName("followers")]
     public ASLink? Followers { get; set; }
 
-    /// <inheritdoc cref="ASActor.Liked" />
+    /// <inheritdoc cref="APActor.Liked" />
     [JsonPropertyName("liked")]
     public ASLink? Liked { get; set; }
 
-    /// <inheritdoc cref="ASActor.Streams" />
+    /// <inheritdoc cref="APActor.Streams" />
     [JsonPropertyName("streams")]
     public ASType? Streams { get; set; }
 
-    /// <inheritdoc cref="ASActor.PreferredUsername" />
+    /// <inheritdoc cref="APActor.PreferredUsername" />
     [JsonPropertyName("preferredUsername")]
     public NaturalLanguageString? PreferredUsername { get; set; }
 
-    /// <inheritdoc cref="ASActor.Endpoints" />
+    /// <inheritdoc cref="APActor.Endpoints" />
     [JsonPropertyName("endpoints")]
     public Linkable<ActorEndpoints>? Endpoints { get; set; }
 }

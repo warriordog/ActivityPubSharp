@@ -19,7 +19,7 @@ Types are implemented as classes and grouped as follows:
 * [`ActivityPub.Types.AS.Collection`](AS/Collection) - Collection / page types.
 * [`ActivityPub.Types.AS.Extended.Object`](AS/Extended/Object) - Extended Object types. These all derive from [`ASObject`](AS/ASObject.cs).
 * [`ActivityPub.Types.AS.Extended.Link`](AS/Extended/Link) - Extended Link types. These all derive from [`ASLink`](AS/ASLink.cs).
-* [`ActivityPub.Types.AS.Extended.Actor`](AS/Extended/Actor) - Extended Actor types. These all derive from [`ASActor`](AS/ASActor.cs).
+* [`ActivityPub.Types.AS.Extended.Actor`](AS/Extended/Actor) - Extended Actor types. These all derive from [`APActor`](AS/APActor.cs).
 * [`ActivityPub.Types.AS.Extended.Activity`](AS/Extended/Activity) - Extended Activity types. These all derive from [`ASActivity`](AS/ASActivity.cs) or one of the synthetic types described below.
 
 ## Synthetic Types
@@ -28,7 +28,7 @@ To improve developer experience, a few synthetic intermediate types have been in
 These are as follows:
 
 * [`ASType`](AS/ASType.cs) - a common type between [`Link`](AS/ASLink.cs) and [`Object`](AS/ASObject.cs). This enables support for the `Range: Link | Object` construction that is common within the ActivityStreams specification.
-* [`ASActor`](AS/ASActor.cs) - base type for Actor objects. Defined object types may extend this directly, and any other compatible object (includes Inbox and Outbox) will be "promoted" to include this as a standalone.
+* [`APActor`](AS/APActor.cs) - base type for Actor objects. Defined object types may extend this directly, and any other compatible object (includes Inbox and Outbox) will be "promoted" to include this as a standalone.
 * [`ASTransitiveActivity`](AS/ASTransitiveActivity.cs) - a mirror to [`IntransitiveActivity`](AS/ASIntransitiveActivity.cs) that implies just the opposite. Transitive activities support the [`object` property](https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object).
 * [`ASTargetedActivity`](AS/ASTargetedActivity.cs) - extension of `TransitiveActivity` for activities which contain a [`target` property](https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target).
 

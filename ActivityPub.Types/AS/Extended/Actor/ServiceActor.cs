@@ -8,7 +8,7 @@ namespace ActivityPub.Types.AS.Extended.Actor;
 /// <summary>
 ///     Represents a service of any kind.
 /// </summary>
-public class ServiceActor : ASActor
+public class ServiceActor : APActor
 {
     public ServiceActor() => Entity = new ServiceActorEntity { TypeMap = TypeMap };
     public ServiceActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ServiceActorEntity>();
@@ -17,7 +17,7 @@ public class ServiceActor : ASActor
 
 /// <inheritdoc cref="ServiceActor" />
 [APConvertible(ServiceType)]
-[ImpliesOtherEntity(typeof(ASActorEntity))]
+[ImpliesOtherEntity(typeof(APActorEntity))]
 public sealed class ServiceActorEntity : ASEntity<ServiceActor>
 {
     public const string ServiceType = "Service";

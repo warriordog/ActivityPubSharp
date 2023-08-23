@@ -68,7 +68,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         {
             ObjectUnderTest = new PersonActor
             {
-                // From ASActor
+                // From APActor
                 Inbox = "https://example.com/actor/inbox",
                 Outbox = "https://example.com/actor/outbox",
 

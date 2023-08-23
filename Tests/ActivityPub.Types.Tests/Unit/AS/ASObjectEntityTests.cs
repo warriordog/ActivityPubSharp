@@ -19,12 +19,12 @@ public abstract class ASObjectEntityTests
         };
 
         [Fact]
-        public void ReturnASActor_WhenJsonHasInboxAndOutbox()
+        public void ReturnAPActor_WhenJsonHasInboxAndOutbox()
         {
             var json = JsonSerializer.SerializeToElement(new { inbox = "i", outbox = "o" });
             var result = ASObjectEntity.TryNarrowTypeByJson(json, _stubMetadata, out var type);
             result.Should().BeTrue();
-            type.Should().Be(typeof(ASActorEntity));
+            type.Should().Be(typeof(APActorEntity));
         }
 
         [Fact]

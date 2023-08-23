@@ -8,7 +8,7 @@ namespace ActivityPub.Types.AS.Extended.Actor;
 /// <summary>
 ///     Represents an organization.
 /// </summary>
-public class OrganizationActor : ASActor
+public class OrganizationActor : APActor
 {
     public OrganizationActor() => Entity = new OrganizationActorEntity { TypeMap = TypeMap };
     public OrganizationActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<OrganizationActorEntity>();
@@ -17,7 +17,7 @@ public class OrganizationActor : ASActor
 
 /// <inheritdoc cref="OrganizationActor" />
 [APConvertible(OrganizationType)]
-[ImpliesOtherEntity(typeof(ASActorEntity))]
+[ImpliesOtherEntity(typeof(APActorEntity))]
 public sealed class OrganizationActorEntity : ASEntity<OrganizationActor>
 {
     public const string OrganizationType = "Organization";
