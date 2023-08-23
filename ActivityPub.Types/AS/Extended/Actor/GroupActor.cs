@@ -8,7 +8,7 @@ namespace ActivityPub.Types.AS.Extended.Actor;
 /// <summary>
 ///     Represents a formal or informal collective of Actors.
 /// </summary>
-public class GroupActor : ASActor
+public class GroupActor : APActor
 {
     public GroupActor() => Entity = new GroupActorEntity { TypeMap = TypeMap };
     public GroupActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<GroupActorEntity>();
@@ -17,7 +17,7 @@ public class GroupActor : ASActor
 
 /// <inheritdoc cref="GroupActor" />
 [APConvertible(GroupType)]
-[ImpliesOtherEntity(typeof(ASActorEntity))]
+[ImpliesOtherEntity(typeof(APActorEntity))]
 public sealed class GroupActorEntity : ASEntity<GroupActor>
 {
     public const string GroupType = "Group";

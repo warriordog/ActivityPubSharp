@@ -8,7 +8,7 @@ namespace ActivityPub.Types.AS.Extended.Actor;
 /// <summary>
 ///     Represents an individual person.
 /// </summary>
-public class PersonActor : ASActor
+public class PersonActor : APActor
 {
     public PersonActor() => Entity = new PersonActorEntity { TypeMap = TypeMap };
     public PersonActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PersonActorEntity>();
@@ -17,7 +17,7 @@ public class PersonActor : ASActor
 
 /// <inheritdoc cref="PersonActor" />
 [APConvertible(PersonType)]
-[ImpliesOtherEntity(typeof(ASActorEntity))]
+[ImpliesOtherEntity(typeof(APActorEntity))]
 public sealed class PersonActorEntity : ASEntity<PersonActor>
 {
     public const string PersonType = "Person";

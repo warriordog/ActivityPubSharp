@@ -7,7 +7,7 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public abstract class ActorDeserializationTests : DeserializationTests<ASActor>
+public abstract class ActorDeserializationTests : DeserializationTests<APActor>
 {
     private ActorDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
@@ -86,7 +86,7 @@ public abstract class ActorDeserializationTests : DeserializationTests<ASActor>
                             }
                             """;
 
-            ObjectUnderTest.Is<ASActor>().Should().BeTrue();
+            ObjectUnderTest.Is<APActor>().Should().BeTrue();
         }
     }
 }

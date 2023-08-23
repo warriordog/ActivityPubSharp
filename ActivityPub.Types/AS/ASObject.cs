@@ -280,7 +280,7 @@ public class ASObject : ASType
     ///     This is a list of all Like activities with this object as the object property, added as a side effect.
     /// </summary>
     /// <remarks>
-    ///     Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="ASActor.Liked" /> collection.
+    ///     Care should be taken to not confuse the the likes collection with the similarly named but different <see cref="APActor.Liked" /> collection.
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitypub/#likes" />
     public Linkable<ASCollection>? Likes
@@ -411,11 +411,11 @@ public sealed class ASObjectEntity : ASEntity<ASObject>, ISubTypeDeserialized
 
     public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
     {
-        // Infer ASActor.
+        // Infer APActor.
         // This improves ergonomics when a regular object is used as an actor.
         if (element.HasProperty("inbox") && element.HasProperty("outbox"))
         {
-            type = typeof(ASActorEntity);
+            type = typeof(APActorEntity);
             return true;
         }
 

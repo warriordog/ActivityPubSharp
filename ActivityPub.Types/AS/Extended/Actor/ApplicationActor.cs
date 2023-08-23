@@ -8,7 +8,7 @@ namespace ActivityPub.Types.AS.Extended.Actor;
 /// <summary>
 ///     Describes a software application.
 /// </summary>
-public class ApplicationActor : ASActor
+public class ApplicationActor : APActor
 {
     public ApplicationActor() => Entity = new ApplicationActorEntity { TypeMap = TypeMap };
     public ApplicationActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ApplicationActorEntity>();
@@ -17,7 +17,7 @@ public class ApplicationActor : ASActor
 
 /// <inheritdoc cref="ApplicationActor" />
 [APConvertible(ApplicationType)]
-[ImpliesOtherEntity(typeof(ASActorEntity))]
+[ImpliesOtherEntity(typeof(APActorEntity))]
 public sealed class ApplicationActorEntity : ASEntity<ApplicationActor>
 {
     public const string ApplicationType = "Application";
