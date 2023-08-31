@@ -24,6 +24,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             ObjectUnderTest.As<ASCollection>().HasItems.Should().BeTrue();
             ObjectUnderTest.As<ASCollection>().Items.Should().NotBeNull();
             ObjectUnderTest.As<ASCollection>().Items.Should().HaveCount(1);
+            ObjectUnderTest.As<ASCollection>().Should().HaveCount(1);
         }
 
         [Fact]
@@ -35,6 +36,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             ObjectUnderTest.As<ASOrderedCollection>().HasItems.Should().BeTrue();
             ObjectUnderTest.As<ASOrderedCollection>().Items.Should().NotBeNull();
             ObjectUnderTest.As<ASOrderedCollection>().Items.Should().HaveCount(1);
+            ObjectUnderTest.As<ASOrderedCollection>().Should().HaveCount(1);
         }
 
         [Fact]
@@ -46,6 +48,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             ObjectUnderTest.As<ASCollectionPage>().HasItems.Should().BeTrue();
             ObjectUnderTest.As<ASCollectionPage>().Items.Should().NotBeNull();
             ObjectUnderTest.As<ASCollectionPage>().Items.Should().HaveCount(1);
+            ObjectUnderTest.As<ASCollectionPage>().Should().HaveCount(1);
         }
 
         [Fact]
@@ -57,6 +60,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             ObjectUnderTest.As<ASOrderedCollectionPage>().HasItems.Should().BeTrue();
             ObjectUnderTest.As<ASOrderedCollectionPage>().Items.Should().NotBeNull();
             ObjectUnderTest.As<ASOrderedCollectionPage>().Items.Should().HaveCount(1);
+            ObjectUnderTest.As<ASOrderedCollectionPage>().Should().HaveCount(1);
         }
     }
 
@@ -70,6 +74,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":1,"orderedItems":[{"type":"Link","href":"https://example.com"}]}""";
             var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(1);
+            obj.Should().HaveCount(1);
             obj.Items?.First().HasLink.Should().BeTrue();
             obj.Items?.First().Link?.HRef.Should().Be("https://example.com");
         }
@@ -81,6 +86,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":1,"orderedItems":["https://example.com"]}""";
             var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(1);
+            obj.Should().HaveCount(1);
             obj.Items?.First().HasLink.Should().BeTrue();
             obj.Items?.First().Link?.HRef.Should().Be("https://example.com");
         }
@@ -92,6 +98,7 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
             JsonUnderTest = """{"type":"OrderedCollection","totalItems":2,"orderedItems":[{},{"type":"Link","href":"https://example.com/1"},"https://example.com/2"]}""";
             var obj = ObjectUnderTest.As<ASOrderedCollection>();
             obj.TotalItems.Should().Be(2);
+            obj.Should().HaveCount(3);
             obj.Items?[0].HasValue.Should().BeTrue();
             obj.Items?[1].HasLink.Should().BeTrue();
             obj.Items?[2].HasLink.Should().BeTrue();
