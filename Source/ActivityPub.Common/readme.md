@@ -1,7 +1,7 @@
 ﻿# ActivityPub.Common
 
 Contains types and logic needed by multiple ActivityPubSharp packages.
-Unlike [internal projects](../Internal), this module is available to user code.
+Unlike [the internal utilities](../InternalUtils), this module is available to user code.
 It is loaded implicitly by most other packages, but you can initialize it manually through [CommonModule](CommonModule.cs).
 All important services and configuration classes are bound through DI.
 

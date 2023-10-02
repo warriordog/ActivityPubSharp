@@ -9,18 +9,12 @@
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2023.2.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1"/>
         <PackageReference Include="System.Text.Json" Version="7.0.3"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Internal\InternalUtils\InternalUtils.csproj"/>
-    </ItemGroup>
-
-
-    <ItemGroup>
-        <Reference Include="Microsoft.Extensions.Options">
-            <HintPath>..\..\..\.nuget\packages\microsoft.extensions.options\7.0.1\lib\net7.0\Microsoft.Extensions.Options.dll</HintPath>
-        </Reference>
+        <ProjectReference Include="..\InternalUtils\InternalUtils.csproj"/>
     </ItemGroup>
 
 </Project>

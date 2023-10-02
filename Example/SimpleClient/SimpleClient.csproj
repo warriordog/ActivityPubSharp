@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\ActivityPub.Client\ActivityPub.Client.csproj"/>
-        <ProjectReference Include="..\..\ActivityPub.Types\ActivityPub.Types.csproj"/>
-        <ProjectReference Include="..\..\Internal\InternalUtils\InternalUtils.csproj"/>
+        <ProjectReference Include="..\..\Source\ActivityPub.Client\ActivityPub.Client.csproj"/>
+        <ProjectReference Include="..\..\Source\ActivityPub.Types\ActivityPub.Types.csproj"/>
+        <ProjectReference Include="..\..\Source\InternalUtils\InternalUtils.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

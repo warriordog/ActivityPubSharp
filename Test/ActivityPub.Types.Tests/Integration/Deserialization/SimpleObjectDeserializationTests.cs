@@ -44,17 +44,17 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         public void ShouldIncludePropertiesFromBaseTypes()
         {
             JsonUnderTest = """
-            {
-                "@context": "https://www.w3.org/ns/activitystreams",
-                "type": "Person",
-                "inbox": "https://example.com/actor/inbox",
-                "outbox": "https://example.com/actor/outbox",
-                "image": {
-                    "type": "Image"
-                },
-                "id": "https://example.com/actor/id"
-            }
-            """;
+                            {
+                                "@context": "https://www.w3.org/ns/activitystreams",
+                                "type": "Person",
+                                "inbox": "https://example.com/actor/inbox",
+                                "outbox": "https://example.com/actor/outbox",
+                                "image": {
+                                    "type": "Image"
+                                },
+                                "id": "https://example.com/actor/id"
+                            }
+                            """;
 
             ObjectUnderTest.Is<PersonActor>().Should().BeTrue();
             var personUnderTest = ObjectUnderTest.As<PersonActor>();
@@ -95,45 +95,45 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         {
             JsonUnderTest =
                 """
-                {
-                    "attachment":[{}],
-                    "audience":[{}],
-                    "bcc":[{}],
-                    "bto":[{}],
-                    "cc":[{}],
-                    "context":{},
-                    "generator":{},
-                    "icon":{"type":"Image"},
-                    "image":{"type":"Image"},
-                    "inReplyTo":{},
-                    "location":{},
-                    "replies":{
-                        "type":"Collection",
-                        "totalItems":1,
-                        "items":[{}]
-                    },
-                    "tag":[{}],
-                    "to":[{}],
-                    "url":"https://example.com",
-                    "content":"content",
-                    "duration":"PT5S",
-                    "startTime":"2023-06-26T21:30:09.2872331-04:00",
-                    "endTime":"2023-06-26T21:30:09.2873668-04:00",
-                    "published":"2023-06-26T21:30:09.2874915-04:00",
-                    "summary":"summary",
-                    "updated":"2023-06-26T21:30:09.2877318-04:00",
-                    "source":{},
-                    "likes":"https://example.com/likes.collection",
-                    "shares":"https://example.com/shares.collection",
-                    "type":"Object",
-                    "@context":"https://www.w3.org/ns/activitystreams",
-                    "id":"https://example.com/some.uri",
-                    "attributedTo":[{}],
-                    "preview":{},
-                    "name":"name",
-                    "mediaType":"text/html"
-                }
-            """;
+                    {
+                        "attachment":[{}],
+                        "audience":[{}],
+                        "bcc":[{}],
+                        "bto":[{}],
+                        "cc":[{}],
+                        "context":{},
+                        "generator":{},
+                        "icon":{"type":"Image"},
+                        "image":{"type":"Image"},
+                        "inReplyTo":{},
+                        "location":{},
+                        "replies":{
+                            "type":"Collection",
+                            "totalItems":1,
+                            "items":[{}]
+                        },
+                        "tag":[{}],
+                        "to":[{}],
+                        "url":"https://example.com",
+                        "content":"content",
+                        "duration":"PT5S",
+                        "startTime":"2023-06-26T21:30:09.2872331-04:00",
+                        "endTime":"2023-06-26T21:30:09.2873668-04:00",
+                        "published":"2023-06-26T21:30:09.2874915-04:00",
+                        "summary":"summary",
+                        "updated":"2023-06-26T21:30:09.2877318-04:00",
+                        "source":{},
+                        "likes":"https://example.com/likes.collection",
+                        "shares":"https://example.com/shares.collection",
+                        "type":"Object",
+                        "@context":"https://www.w3.org/ns/activitystreams",
+                        "id":"https://example.com/some.uri",
+                        "attributedTo":[{}],
+                        "preview":{},
+                        "name":"name",
+                        "mediaType":"text/html"
+                    }
+                """;
 
             ObjectUnderTest.Is<ASObject>().Should().BeTrue();
             ObjectUnderTest.Attachment.Should().HaveCount(1);

@@ -11,6 +11,6 @@ These projects contain automated unit, integration, and smoke testing classes.
 
 ## Test Projects
 
-| ActivityPubSharp Package                  | Testing Project                                    |
-|-------------------------------------------|----------------------------------------------------|
-| [ActivityPub.Types](../ActivityPub.Types) | [ActivityPub.Types.Tests](ActivityPub.Types.Tests) |
+| ActivityPubSharp Package                         | Testing Project                                    |
+|--------------------------------------------------|----------------------------------------------------|
+| [ActivityPub.Types](../Source/ActivityPub.Types) | [ActivityPub.Types.Tests](ActivityPub.Types.Tests) |

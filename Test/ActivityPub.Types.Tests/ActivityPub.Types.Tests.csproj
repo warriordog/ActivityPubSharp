@@ -20,23 +20,16 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\ActivityPub.Types\ActivityPub.Types.csproj"/>
+        <ProjectReference Include="..\..\Source\ActivityPub.Types\ActivityPub.Types.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <None Remove="Smoke\Samples\**\*.jsonld"/>
         <EmbeddedResource Include="Smoke\Samples\**\*.jsonld"/>
     </ItemGroup>
-
-
-    <ItemGroup>
-        <Reference Include="Microsoft.Extensions.Options">
-            <HintPath>..\..\..\..\.nuget\packages\microsoft.extensions.options\7.0.1\lib\net7.0\Microsoft.Extensions.Options.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
 
 </Project>
