@@ -6,4 +6,4 @@ This section contains instructions, tips, and guidelines for contributing to the
 
 ## Section Guide
 
-* [Contributing to Documentation](contributing_to_docs.md) - resources for contributing to the project documentation.
+* [Contributing to Documentation](contributing_to_documentation.md) - resources for contributing to the project documentation.
