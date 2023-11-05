@@ -31,8 +31,8 @@ Additionally, this assists with unit testing and can be easily integrated into a
 ### The following high-level use cases are available:
 
 #### Client Operations
+* `GetCollection` - Enumerates elements of a local or remote collection, with optional pagination and authentication.
 * `GetObject` - Accesses a local or remote object, with optional authentication.
-* `ReadCollection` - Enumerates elements of a local or remote collection, with optional pagination and authentication.
 
 #### Server Operations
 * `CreateActor` - Creates a new actor locally.
