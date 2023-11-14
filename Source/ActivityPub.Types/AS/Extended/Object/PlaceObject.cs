@@ -1,18 +1,34 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
 /// <summary>
 ///     Represents a logical or physical location.
 /// </summary>
-public class PlaceObject : ASObject
+public class PlaceObject : ASObject, IASModel<PlaceObject, PlaceObjectEntity, ASObject>
 {
-    public PlaceObject() => Entity = new PlaceObjectEntity { TypeMap = TypeMap };
-    public PlaceObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PlaceObjectEntity>();
+    public const string PlaceType = "Place";
+    static string IASModel<PlaceObject>.ASTypeName => PlaceType;
+
+    public PlaceObject() : this(new TypeMap()) {}
+
+    public PlaceObject(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new PlaceObjectEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public PlaceObject(TypeMap typeMap, PlaceObjectEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<PlaceObjectEntity>();
+
+    static PlaceObject IASModel<PlaceObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+
     private PlaceObjectEntity Entity { get; }
 
     /// <summary>
@@ -83,18 +99,8 @@ public class PlaceObject : ASObject
 }
 
 /// <inheritdoc cref="PlaceObject" />
-[APConvertible(PlaceType)]
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class PlaceObjectEntity : ASEntity<PlaceObject>
+public sealed class PlaceObjectEntity : ASEntity<PlaceObject, PlaceObjectEntity>
 {
-    public const string PlaceType = "Place";
-    public override string ASTypeName => PlaceType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-
     /// <inheritdoc cref="PlaceObject.Accuracy" />
     [JsonPropertyName("accuracy")]
     public float? Accuracy { get; set; }

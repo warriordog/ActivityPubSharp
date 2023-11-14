@@ -1,7 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -10,23 +11,27 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Travel is an IntransitiveObject whose actor specifies the direct object.
 ///     If the target or origin are not specified, either can be determined by context.
 /// </summary>
-public class TravelActivity : ASIntransitiveActivity
+public class TravelActivity : ASIntransitiveActivity, IASModel<TravelActivity, TravelActivityEntity, ASIntransitiveActivity>
 {
-    public TravelActivity() => Entity = new TravelActivityEntity { TypeMap = TypeMap };
-    public TravelActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TravelActivityEntity>();
+    public const string TravelType = "Travel";
+    static string IASModel<TravelActivity>.ASTypeName => TravelType;
+
+    public TravelActivity() : this(new TypeMap()) {}
+
+    public TravelActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new TravelActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public TravelActivity(TypeMap typeMap, TravelActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<TravelActivityEntity>();
+
+    static TravelActivity IASModel<TravelActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private TravelActivityEntity Entity { get; }
 }
 
 /// <inheritdoc cref="TravelActivity" />
-[APConvertible(TravelType)]
-[ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
-public sealed class TravelActivityEntity : ASEntity<TravelActivity>
-{
-    public const string TravelType = "Travel";
-    public override string ASTypeName => TravelType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASIntransitiveActivityEntity.IntransitiveActivityType
-    };
-}
+public sealed class TravelActivityEntity : ASEntity<TravelActivity, TravelActivityEntity> {}

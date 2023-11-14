@@ -1,8 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -10,10 +10,26 @@ namespace ActivityPub.Types.AS.Extended.Object;
 ///     A Tombstone represents a content object that has been deleted.
 ///     It can be used in Collections to signify that there used to be an object at this position, but it has been deleted.
 /// </summary>
-public class TombstoneObject : ASObject
+public class TombstoneObject : ASObject, IASModel<TombstoneObject, TombstoneObjectEntity, ASObject>
 {
-    public TombstoneObject() => Entity = new TombstoneObjectEntity { TypeMap = TypeMap };
-    public TombstoneObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TombstoneObjectEntity>();
+    public const string TombstoneType = "Tombstone";
+    static string IASModel<TombstoneObject>.ASTypeName => TombstoneType;
+
+    public TombstoneObject() : this(new TypeMap()) {}
+
+    public TombstoneObject(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new TombstoneObjectEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public TombstoneObject(TypeMap typeMap, TombstoneObjectEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<TombstoneObjectEntity>();
+
+    static TombstoneObject IASModel<TombstoneObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+
     private TombstoneObjectEntity Entity { get; }
 
     /// <summary>
@@ -38,18 +54,8 @@ public class TombstoneObject : ASObject
 }
 
 /// <inheritdoc cref="TombstoneObject" />
-[APConvertible(TombstoneType)]
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class TombstoneObjectEntity : ASEntity<TombstoneObject>
+public sealed class TombstoneObjectEntity : ASEntity<TombstoneObject, TombstoneObjectEntity>
 {
-    public const string TombstoneType = "Tombstone";
-    public override string ASTypeName => TombstoneType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-
     /// <inheritdoc cref="TombstoneObject.FormerType" />
     [JsonPropertyName("formerType")]
     public string? FormerType { get; set; }

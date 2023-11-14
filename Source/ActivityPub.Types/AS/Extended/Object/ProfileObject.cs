@@ -1,8 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -10,10 +10,26 @@ namespace ActivityPub.Types.AS.Extended.Object;
 ///     A Profile is a content object that describes another Object, typically used to describe Actor Type objects.
 ///     The describes property is used to reference the object being described by the profile.
 /// </summary>
-public class ProfileObject : ASObject
+public class ProfileObject : ASObject, IASModel<ProfileObject, ProfileObjectEntity, ASObject>
 {
-    public ProfileObject() => Entity = new ProfileObjectEntity { TypeMap = TypeMap };
-    public ProfileObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ProfileObjectEntity>();
+    public const string ProfileType = "Profile";
+    static string IASModel<ProfileObject>.ASTypeName => ProfileType;
+
+    public ProfileObject() : this(new TypeMap()) {}
+
+    public ProfileObject(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ProfileObjectEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ProfileObject(TypeMap typeMap, ProfileObjectEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<ProfileObjectEntity>();
+
+    static ProfileObject IASModel<ProfileObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+
     private ProfileObjectEntity Entity { get; }
 
     /// <summary>
@@ -28,18 +44,8 @@ public class ProfileObject : ASObject
 }
 
 /// <inheritdoc cref="ProfileObject" />
-[APConvertible(ProfileType)]
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ProfileObjectEntity : ASEntity<ProfileObject>
+public sealed class ProfileObjectEntity : ASEntity<ProfileObject, ProfileObjectEntity>
 {
-    public const string ProfileType = "Profile";
-    public override string ASTypeName => ProfileType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-
     /// <inheritdoc cref="ProfileObject.Describes" />
     [JsonPropertyName("describes")]
     public ASObject? Describes { get; set; }

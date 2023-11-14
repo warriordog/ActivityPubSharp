@@ -2,8 +2,8 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS.Collection;
@@ -15,10 +15,25 @@ namespace ActivityPub.Types.AS.Collection;
 ///     Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the CollectionPage type.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage" />
-public class ASOrderedCollectionPage : ASOrderedCollection
+public class ASOrderedCollectionPage : ASOrderedCollection, IASModel<ASOrderedCollectionPage, ASOrderedCollectionPageEntity, ASOrderedCollection>
 {
-    public ASOrderedCollectionPage() => Entity = new ASOrderedCollectionPageEntity { TypeMap = TypeMap };
-    public ASOrderedCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASOrderedCollectionPageEntity>();
+    public const string OrderedCollectionPageType = "OrderedCollectionPage";
+    static string IASModel<ASOrderedCollectionPage>.ASTypeName => OrderedCollectionPageType;
+
+    public ASOrderedCollectionPage() : this(new TypeMap()) {}
+
+    public ASOrderedCollectionPage(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASOrderedCollectionPageEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASOrderedCollectionPage(TypeMap typeMap, ASOrderedCollectionPageEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<ASOrderedCollectionPageEntity>();
+
+    static ASOrderedCollectionPage IASModel<ASOrderedCollectionPage>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private ASOrderedCollectionPageEntity Entity { get; }
 
 
@@ -67,18 +82,8 @@ public class ASOrderedCollectionPage : ASOrderedCollection
 }
 
 /// <inheritdoc cref="ASOrderedCollectionPage" />
-[APConvertible(OrderedCollectionPageType)]
-[ImpliesOtherEntity(typeof(ASOrderedCollectionEntity))]
-public sealed class ASOrderedCollectionPageEntity : ASEntity<ASOrderedCollectionPage>
+public sealed class ASOrderedCollectionPageEntity : ASEntity<ASOrderedCollectionPage, ASOrderedCollectionPageEntity>
 {
-    public const string OrderedCollectionPageType = "OrderedCollectionPage";
-    public override string ASTypeName => OrderedCollectionPageType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASOrderedCollectionEntity.OrderedCollectionType
-    };
-
     /// <inheritdoc cref="ASOrderedCollectionPage.Next" />
     [JsonPropertyName("next")]
     public Linkable<ASOrderedCollectionPage>? Next { get; set; }

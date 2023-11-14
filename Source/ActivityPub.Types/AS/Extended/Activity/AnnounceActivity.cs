@@ -1,7 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -9,23 +10,27 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor is calling the target's attention the object.
 ///     The origin typically has no defined meaning.
 /// </summary>
-public class AnnounceActivity : ASTransitiveActivity
+public class AnnounceActivity : ASTransitiveActivity, IASModel<AnnounceActivity, AnnounceActivityEntity, ASTransitiveActivity>
 {
-    public AnnounceActivity() => Entity = new AnnounceActivityEntity { TypeMap = TypeMap };
-    public AnnounceActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<AnnounceActivityEntity>();
+    public const string AnnounceType = "Announce";
+    static string IASModel<AnnounceActivity>.ASTypeName => AnnounceType;
+
+    public AnnounceActivity() : this(new TypeMap()) {}
+
+    public AnnounceActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new AnnounceActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public AnnounceActivity(TypeMap typeMap, AnnounceActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<AnnounceActivityEntity>();
+
+    static AnnounceActivity IASModel<AnnounceActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private AnnounceActivityEntity Entity { get; }
 }
 
 /// <inheritdoc cref="AnnounceActivity" />
-[APConvertible(AnnounceType)]
-[ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class AnnounceActivityEntity : ASEntity<AnnounceActivity>
-{
-    public const string AnnounceType = "Announce";
-    public override string ASTypeName => AnnounceType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASActivityEntity.ActivityType
-    };
-}
+public sealed class AnnounceActivityEntity : ASEntity<AnnounceActivity, AnnounceActivityEntity> {}

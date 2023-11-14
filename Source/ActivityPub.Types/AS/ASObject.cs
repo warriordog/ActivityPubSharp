@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
@@ -18,10 +17,25 @@ namespace ActivityPub.Types.AS;
 ///     The Object type serves as the base type for most of the other kinds of objects defined in the Activity Vocabulary, including other Core types such as Activity, IntransitiveActivity, Collection and OrderedCollection.
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
-public class ASObject : ASType
+public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
 {
-    public ASObject() => Entity = new ASObjectEntity { TypeMap = TypeMap };
-    public ASObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASObjectEntity>();
+    public const string ObjectType = "Object";
+    static string IASModel<ASObject>.ASTypeName => ObjectType;
+
+    public ASObject() : this(new TypeMap()) {}
+
+    public ASObject(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASObjectEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASObject(TypeMap typeMap, ASObjectEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<ASObjectEntity>();
+
+    static ASObject IASModel<ASObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private ASObjectEntity Entity { get; }
 
 
@@ -301,14 +315,8 @@ public class ASObject : ASType
 }
 
 /// <inheritdoc cref="ASObject" />
-[APConvertible(ObjectType)]
-[ImpliesOtherEntity(typeof(ASTypeEntity))]
-public sealed class ASObjectEntity : ASEntity<ASObject>, ISubTypeDeserialized
+public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, ISubTypeDeserialized
 {
-    public const string ObjectType = "Object";
-    public override string ASTypeName => ObjectType;
-
-
     /// <inheritdoc cref="ASObject.Attachment" />
     [JsonPropertyName("attachment")]
     public LinkableList<ASObject> Attachment { get; set; } = new();

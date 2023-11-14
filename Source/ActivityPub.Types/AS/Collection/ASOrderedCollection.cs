@@ -5,7 +5,6 @@ using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS.Collection;
@@ -19,10 +18,25 @@ namespace ActivityPub.Types.AS.Collection;
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection" />
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection" />
-public class ASOrderedCollection : ASObject, IEnumerable<Linkable<ASObject>>
+public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrderedCollectionEntity, ASObject>, IEnumerable<Linkable<ASObject>>
 {
-    public ASOrderedCollection() => Entity = new ASOrderedCollectionEntity { TypeMap = TypeMap };
-    public ASOrderedCollection(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASOrderedCollectionEntity>();
+    public const string OrderedCollectionType = "OrderedCollection";
+    static string IASModel<ASOrderedCollection>.ASTypeName => OrderedCollectionType;
+
+    public ASOrderedCollection() : this(new TypeMap()) {}
+
+    public ASOrderedCollection(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASOrderedCollectionEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASOrderedCollection(TypeMap typeMap, ASOrderedCollectionEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<ASOrderedCollectionEntity>();
+
+    static ASOrderedCollection IASModel<ASOrderedCollection>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private ASOrderedCollectionEntity Entity { get; }
 
 
@@ -107,20 +121,8 @@ public class ASOrderedCollection : ASObject, IEnumerable<Linkable<ASObject>>
 }
 
 /// <inheritdoc cref="ASOrderedCollection" />
-[APConvertible(OrderedCollectionType)]
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASOrderedCollectionEntity : ASEntity<ASOrderedCollection>
+public sealed class ASOrderedCollectionEntity : ASEntity<ASOrderedCollection, ASOrderedCollectionEntity>
 {
-    public const string OrderedCollectionType = "OrderedCollection";
-
-    private int? _totalItems;
-    public override string ASTypeName => OrderedCollectionType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-
     /// <inheritdoc cref="ASOrderedCollection.Current" />
     [JsonPropertyName("current")]
     public Linkable<ASOrderedCollectionPage>? Current { get; set; }
@@ -142,6 +144,8 @@ public sealed class ASOrderedCollectionEntity : ASEntity<ASOrderedCollection>
         get => _totalItems ?? Items?.Count ?? 0;
         set => _totalItems = Math.Max(value, 0);
     }
+
+    private int? _totalItems;
 
     /// <inheritdoc cref="ASOrderedCollection.Items" />
     [JsonPropertyName("orderedItems")]

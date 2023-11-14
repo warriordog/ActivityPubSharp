@@ -1,8 +1,8 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 using JetBrains.Annotations;
 
@@ -16,16 +16,26 @@ namespace ActivityPub.Types.AS;
 ///     It does not exist in the ActivityStreams or ActivityPub standards.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects" />
-public class APActor : ASObject
+public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
 {
-    public APActor() => Entity = new APActorEntity
-    {
-        TypeMap = TypeMap,
-        Inbox = null!,
-        Outbox = null!
-    };
+    public APActor() : this(new TypeMap()) {}
 
-    public APActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<APActorEntity>();
+    public APActor(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new APActorEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public APActor(TypeMap typeMap, APActorEntity? entity) : base(typeMap, null)
+    {
+        Entity = entity ?? typeMap.AsEntity<APActorEntity>();
+        Inbox = Entity.Inbox ?? throw new ArgumentException($"The provided entity is invalid - required {nameof(APActorEntity.Inbox)} property is missing");
+        Outbox = Entity.Outbox ?? throw new ArgumentException($"The provided entity is invalid - required {nameof(APActorEntity.Outbox)} property is missing");
+    }
+
+    static APActor IASModel<APActor>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private APActorEntity Entity { get; }
 
 
@@ -36,7 +46,7 @@ public class APActor : ASObject
     /// <seealso href="https://www.w3.org/TR/activitypub/#inbox" />
     public required ASLink Inbox
     {
-        get => Entity.Inbox;
+        get => Entity.Inbox!;
         set => Entity.Inbox = value;
     }
 
@@ -47,7 +57,7 @@ public class APActor : ASObject
     /// <seealso href="https://www.w3.org/TR/activitypub/#outbox" />
     public required ASLink Outbox
     {
-        get => Entity.Outbox;
+        get => Entity.Outbox!;
         set => Entity.Outbox = value;
     }
 
@@ -121,16 +131,15 @@ public class APActor : ASObject
 }
 
 /// <inheritdoc cref="APActor" />
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class APActorEntity : ASEntity<APActor>
+public sealed class APActorEntity : ASEntity<APActor, APActorEntity>
 {
     /// <inheritdoc cref="APActor.Inbox" />
     [JsonPropertyName("inbox")]
-    public required ASLink Inbox { get; set; }
+    public ASLink? Inbox { get; set; }
 
     /// <inheritdoc cref="APActor.Outbox" />
     [JsonPropertyName("outbox")]
-    public required ASLink Outbox { get; set; }
+    public ASLink? Outbox { get; set; }
 
     /// <inheritdoc cref="APActor.Following" />
     [JsonPropertyName("following")]

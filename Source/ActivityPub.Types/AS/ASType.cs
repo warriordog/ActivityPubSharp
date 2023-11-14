@@ -10,28 +10,35 @@ namespace ActivityPub.Types.AS;
 
 /// <summary>
 ///     Base type of all ActivityStreams / ActivityPub objects.
-///     Subtypes MUST NOT contain any properties!
-///     Instead, all data should be stored in a matching entity class which derives from <see cref="ASEntity{TType}" />.
+///     Subtypes MUST NOT contain any fields or auto-properties!
+///     Instead, all data should be stored in a matching entity class which derives from <see cref="ASEntity" />.
 /// </summary>
 /// <remarks>
 ///     This is a synthetic type created to help adapt ActivityStreams to the .NET object model.
 ///     It does not exist in the ActivityStreams standard.
 /// </remarks>
-/// <seealso cref="ASEntity{TType}" />
+/// <seealso cref="ASEntity" />
 [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature, ImplicitUseTargetFlags.WithInheritors)]
-public class ASType
+public class ASType : IASModel<ASType, ASTypeEntity>
 {
-    public ASType()
-    {
-        TypeMap = new TypeMap();
-        Entity = new ASTypeEntity { TypeMap = TypeMap };
-    }
+    public ASType() : this(new TypeMap()) {}
 
     public ASType(TypeMap typeMap)
     {
+        Entity = new ASTypeEntity();
         TypeMap = typeMap;
-        Entity = typeMap.AsEntity<ASTypeEntity>();
+        TypeMap.Add(Entity);
     }
+
+    [SetsRequiredMembers]
+    public ASType(TypeMap typeMap, ASTypeEntity? entity)
+    {
+        TypeMap = typeMap;
+        Entity = entity ?? typeMap.AsEntity<ASTypeEntity>();
+    }
+
+    static ASType IASModel<ASType>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
 
     private ASTypeEntity Entity { get; }
 
@@ -107,22 +114,22 @@ public class ASType
 
     /// <inheritdoc cref="TypeMap.IsType{T}()" />
     public bool Is<T>()
-        where T : ASType
+        where T : ASType, IASModel<T>
         => TypeMap.IsType<T>();
 
     /// <inheritdoc cref="TypeMap.IsType{T}(out T?)" />
     public bool Is<T>([NotNullWhen(true)] out T? instance)
-        where T : ASType
+        where T : ASType, IASModel<T>
         => TypeMap.IsType(out instance);
 
     /// <inheritdoc cref="TypeMap.AsType{T}" />
     public T As<T>()
-        where T : ASType
+        where T : ASType, IASModel<T>
         => TypeMap.AsType<T>();
 }
 
 /// <inheritdoc cref="ASType" />
-public sealed class ASTypeEntity : ASEntity<ASType>, ILinkEntity
+public sealed class ASTypeEntity : ASEntity<ASType, ASTypeEntity>
 {
     private string? _id;
 
@@ -163,5 +170,5 @@ public sealed class ASTypeEntity : ASEntity<ASType>, ILinkEntity
     [JsonPropertyName("mediaType")]
     public string? MediaType { get; set; }
 
-    public bool RequiresObjectForm => Id != null || AttributedTo.Count != 0 || Preview != null || Name != null || MediaType != null;
+    public override bool RequiresObjectForm => Id != null || AttributedTo.Count != 0 || Preview != null || Name != null || MediaType != null;
 }

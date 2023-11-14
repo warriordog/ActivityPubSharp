@@ -1,8 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
@@ -13,10 +13,25 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     That is, the Question object is an Activity, but the direct object is the question itself and therefore it would not contain an object property.
 ///     Either of the anyOf and oneOf properties MAY be used to express possible answers, but a Question object MUST NOT have both properties.
 /// </summary>
-public class QuestionActivity : ASIntransitiveActivity
+public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivity, QuestionActivityEntity, ASIntransitiveActivity>
 {
-    public QuestionActivity() => Entity = new QuestionActivityEntity { TypeMap = TypeMap };
-    public QuestionActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<QuestionActivityEntity>();
+    public const string QuestionType = "Question";
+    static string IASModel<QuestionActivity>.ASTypeName => QuestionType;
+
+    public QuestionActivity() : this(new TypeMap()) {}
+
+    public QuestionActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new QuestionActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public QuestionActivity(TypeMap typeMap, QuestionActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<QuestionActivityEntity>();
+
+    static QuestionActivity IASModel<QuestionActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private QuestionActivityEntity Entity { get; }
 
     /// <summary>
@@ -73,20 +88,10 @@ public class QuestionActivity : ASIntransitiveActivity
 }
 
 /// <inheritdoc cref="QuestionActivity" />
-[APConvertible(QuestionType)]
-[ImpliesOtherEntity(typeof(ASIntransitiveActivityEntity))]
-public sealed class QuestionActivityEntity : ASEntity<QuestionActivity>
+public sealed class QuestionActivityEntity : ASEntity<QuestionActivity, QuestionActivityEntity>
 {
-    public const string QuestionType = "Question";
-
     private bool? _closed;
     private DateTime? _closedAt;
-    public override string ASTypeName => QuestionType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASIntransitiveActivityEntity.IntransitiveActivityType
-    };
 
     /// <inheritdoc cref="QuestionActivity.OneOf" />
     [JsonPropertyName("oneOf")]

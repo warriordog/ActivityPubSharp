@@ -36,7 +36,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         public void ShouldIncludeType()
         {
             ObjectUnderTest = new ASObject();
-            JsonUnderTest.Should().HaveASType(ASObjectEntity.ObjectType);
+            JsonUnderTest.Should().HaveASType(ASObject.ObjectType);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         public void ShouldSerializeToCorrectType()
         {
             ObjectUnderTest = new ImageObject();
-            JsonUnderTest.Should().HaveASType(ImageObjectEntity.ImageType);
+            JsonUnderTest.Should().HaveASType(ImageObject.ImageType);
         }
 
         [Fact]

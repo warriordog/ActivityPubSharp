@@ -13,11 +13,11 @@ public abstract class SampleTests : IClassFixture<JsonLdSerializerFixture>
     protected SampleTests(JsonLdSerializerFixture fixture) => _jsonLdSerializer = fixture.JsonLdSerializer;
 
     protected void TestSample<TExpectedType>(string sampleType)
-        where TExpectedType : ASType
+        where TExpectedType : ASType, IASModel<TExpectedType>
         => TestSample<TExpectedType>(sampleType, sampleType);
 
     protected void TestSample<TExpectedType>(string sampleType, string sampleName)
-        where TExpectedType : ASType
+        where TExpectedType : ASType, IASModel<TExpectedType>
     {
         // Load sample
         var testInput = LoadJson(sampleName);

@@ -1,8 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using ActivityPub.Types.AS;
-using ActivityPub.Types.Attributes;
 
 namespace ActivityPub.Types.Tests.Unit.AS;
 
@@ -24,7 +24,7 @@ public abstract class ASTypeTests
         [Fact]
         public void ContainTypeName_ByDefault()
         {
-            ObjectUnderTest.TypeMap.ASTypes.Should().Contain(StubASTypeEntity.StubType);
+            ObjectUnderTest.TypeMap.ASTypes.Should().Contain(StubASType.StubType);
         }
     }
 
@@ -65,17 +65,27 @@ public abstract class ASTypeTests
         }
     }
 
-    private class StubASType : ASType
+    private class StubASType : ASType, IASModel<StubASType, StubASTypeEntity, ASType>
     {
-        public StubASType() => Entity = new StubASTypeEntity { TypeMap = TypeMap };
-        public StubASType(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<StubASTypeEntity>();
+        public const string StubType = "Stub";
+        static string IASModel<StubASType>.ASTypeName => StubType;
+
+        public StubASType() : this(new TypeMap()) {}
+
+        public StubASType(TypeMap typeMap) : base(typeMap)
+        {
+            Entity = new StubASTypeEntity();
+            TypeMap.Add(Entity);
+        }
+
+        [SetsRequiredMembers]
+        public StubASType(TypeMap typeMap, StubASTypeEntity? entity) : base(typeMap, null)
+            => Entity = entity ?? typeMap.AsEntity<StubASTypeEntity>();
+
+        static StubASType IASModel<StubASType>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
         private StubASTypeEntity Entity { get; }
     }
 
-    [ImpliesOtherEntity(typeof(ASTypeEntity))]
-    private sealed class StubASTypeEntity : ASEntity<StubASType>
-    {
-        public const string StubType = "Stub";
-        public override string ASTypeName => StubType;
-    }
+    private sealed class StubASTypeEntity : ASEntity<StubASType, StubASTypeEntity> {}
 }

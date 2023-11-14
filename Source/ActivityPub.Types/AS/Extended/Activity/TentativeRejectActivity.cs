@@ -1,30 +1,35 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
 /// <summary>
 ///     A specialization of Reject in which the rejection is considered tentative.
 /// </summary>
-public class TentativeRejectActivity : RejectActivity
+public class TentativeRejectActivity : RejectActivity, IASModel<TentativeRejectActivity, TentativeRejectActivityEntity, RejectActivity>
 {
-    public TentativeRejectActivity() => Entity = new TentativeRejectActivityEntity { TypeMap = TypeMap };
-    public TentativeRejectActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<TentativeRejectActivityEntity>();
+    public const string TentativeRejectType = "TentativeReject";
+    static string IASModel<TentativeRejectActivity>.ASTypeName => TentativeRejectType;
+
+    public TentativeRejectActivity() : this(new TypeMap()) {}
+
+    public TentativeRejectActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new TentativeRejectActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public TentativeRejectActivity(TypeMap typeMap, TentativeRejectActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<TentativeRejectActivityEntity>();
+
+    static TentativeRejectActivity IASModel<TentativeRejectActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private TentativeRejectActivityEntity Entity { get; }
 }
 
 /// <inheritdoc cref="TentativeRejectActivity" />
-[APConvertible(TentativeRejectType)]
-[ImpliesOtherEntity(typeof(RejectActivityEntity))]
-public sealed class TentativeRejectActivityEntity : ASEntity<TentativeRejectActivity>
-{
-    public const string TentativeRejectType = "TentativeReject";
-    public override string ASTypeName => TentativeRejectType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        RejectActivityEntity.RejectType
-    };
-}
+public sealed class TentativeRejectActivityEntity : ASEntity<TentativeRejectActivity, TentativeRejectActivityEntity> {}

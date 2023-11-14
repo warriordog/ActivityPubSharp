@@ -1,7 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -9,23 +10,27 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor likes, recommends or endorses the object.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class LikeActivity : ASTransitiveActivity
+public class LikeActivity : ASTransitiveActivity, IASModel<LikeActivity, LikeActivityEntity, ASTransitiveActivity>
 {
-    public LikeActivity() => Entity = new LikeActivityEntity { TypeMap = TypeMap };
-    public LikeActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<LikeActivityEntity>();
+    public const string LikeType = "Like";
+    static string IASModel<LikeActivity>.ASTypeName => LikeType;
+
+    public LikeActivity() : this(new TypeMap()) {}
+
+    public LikeActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new LikeActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public LikeActivity(TypeMap typeMap, LikeActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<LikeActivityEntity>();
+
+    static LikeActivity IASModel<LikeActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private LikeActivityEntity Entity { get; }
 }
 
 /// <inheritdoc cref="LikeActivity" />
-[APConvertible(LikeType)]
-[ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class LikeActivityEntity : ASEntity<LikeActivity>
-{
-    public const string LikeType = "Like";
-    public override string ASTypeName => LikeType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASActivityEntity.ActivityType
-    };
-}
+public sealed class LikeActivityEntity : ASEntity<LikeActivity, LikeActivityEntity> {}

@@ -16,20 +16,20 @@ public class GlitchSocSampleTests : SampleTests
     public GlitchSocSampleTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
-    public void AnnounceShouldConvert() => TestSample<AnnounceActivity>(AnnounceActivityEntity.AnnounceType);
+    public void AnnounceShouldConvert() => TestSample<AnnounceActivity>(AnnounceActivity.AnnounceType);
 
 
     [Fact]
-    public void CollectionShouldConvert() => TestSample<ASCollection>(ASCollectionEntity.CollectionType);
+    public void CollectionShouldConvert() => TestSample<ASCollection>(ASCollection.CollectionType);
 
     [Fact]
-    public void CollectionPageShouldConvert() => TestSample<ASCollectionPage>(ASCollectionPageEntity.CollectionPageType);
+    public void CollectionPageShouldConvert() => TestSample<ASCollectionPage>(ASCollectionPage.CollectionPageType);
 
     [Fact]
-    public void CreateShouldConvert() => TestSample<CreateActivity>(CreateActivityEntity.CreateType);
+    public void CreateShouldConvert() => TestSample<CreateActivity>(CreateActivity.CreateType);
 
     [Fact]
-    public void DocumentShouldConvert() => TestSample<DocumentObject>(DocumentObjectEntity.DocumentType);
+    public void DocumentShouldConvert() => TestSample<DocumentObject>(DocumentObject.DocumentType);
 
     [Fact]
     public void EmojiShouldConvert() => TestSample<ASObject>("Emoji");
@@ -38,25 +38,25 @@ public class GlitchSocSampleTests : SampleTests
     public void HashtagShouldConvert() => TestSample<ASObject>("Hashtag");
 
     [Fact]
-    public void ImageShouldConvert() => TestSample<ImageObject>(ImageObjectEntity.ImageType);
+    public void ImageShouldConvert() => TestSample<ImageObject>(ImageObject.ImageType);
 
     [Fact]
-    public void KeyShouldConvert() => TestSample<ASObject>(ASObjectEntity.ObjectType, "Key");
+    public void KeyShouldConvert() => TestSample<ASObject>(ASObject.ObjectType, "Key");
 
     [Fact]
-    public void MentionShouldConvert() => TestSample<MentionLink>(MentionLinkEntity.MentionType);
+    public void MentionShouldConvert() => TestSample<MentionLink>(MentionLink.MentionType);
 
     [Fact]
-    public void NoteShouldConvert() => TestSample<NoteObject>(NoteObjectEntity.NoteType);
+    public void NoteShouldConvert() => TestSample<NoteObject>(NoteObject.NoteType);
 
     [Fact]
-    public void OrderedCollectionShouldConvert() => TestSample<ASOrderedCollection>(ASOrderedCollectionEntity.OrderedCollectionType);
+    public void OrderedCollectionShouldConvert() => TestSample<ASOrderedCollection>(ASOrderedCollection.OrderedCollectionType);
 
     [Fact]
-    public void OrderedCollectionPageShouldConvert() => TestSample<ASOrderedCollectionPage>(ASOrderedCollectionPageEntity.OrderedCollectionPageType);
+    public void OrderedCollectionPageShouldConvert() => TestSample<ASOrderedCollectionPage>(ASOrderedCollectionPage.OrderedCollectionPageType);
 
     [Fact]
-    public void PersonActorShouldConvert() => TestSample<PersonActor>(PersonActorEntity.PersonType);
+    public void PersonActorShouldConvert() => TestSample<PersonActor>(PersonActor.PersonType);
 
     [Fact]
     public void PropertyValueShouldConvert() => TestSample<ASObject>("PropertyValue");

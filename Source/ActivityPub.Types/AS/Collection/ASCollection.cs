@@ -5,7 +5,6 @@ using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS.Collection;
@@ -19,10 +18,25 @@ namespace ActivityPub.Types.AS.Collection;
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection" />
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection" />
-public class ASCollection : ASObject, IEnumerable<Linkable<ASObject>>
+public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity, ASObject>, IEnumerable<Linkable<ASObject>>
 {
-    public ASCollection() => Entity = new ASCollectionEntity { TypeMap = TypeMap };
-    public ASCollection(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionEntity>();
+    public const string CollectionType = "Collection";
+    static string IASModel<ASCollection>.ASTypeName => CollectionType;
+
+    public ASCollection() : this(new TypeMap()) {}
+
+    public ASCollection(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASCollectionEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASCollection(TypeMap typeMap, ASCollectionEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<ASCollectionEntity>();
+
+    static ASCollection IASModel<ASCollection>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private ASCollectionEntity Entity { get; }
 
     /// <summary>
@@ -106,20 +120,8 @@ public class ASCollection : ASObject, IEnumerable<Linkable<ASObject>>
 }
 
 /// <inheritdoc cref="ASCollection" />
-[APConvertible(CollectionType)]
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASCollectionEntity : ASEntity<ASCollection>
+public sealed class ASCollectionEntity : ASEntity<ASCollection, ASCollectionEntity>
 {
-    public const string CollectionType = "Collection";
-
-    private int? _totalItems;
-    public override string ASTypeName => CollectionType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-
     /// <inheritdoc cref="ASCollection.Current" />
     [JsonPropertyName("current")]
     public Linkable<ASCollectionPage>? Current { get; set; }
@@ -141,6 +143,8 @@ public sealed class ASCollectionEntity : ASEntity<ASCollection>
         get => _totalItems ?? Items?.Count ?? 0;
         set => _totalItems = Math.Max(value, 0);
     }
+
+    private int? _totalItems;
 
     /// <inheritdoc cref="ASCollection.Items" />
     [JsonPropertyName("items")]

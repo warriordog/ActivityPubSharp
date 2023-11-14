@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Reflection.Emit;
 
 namespace InternalUtils;
@@ -201,5 +202,69 @@ internal static class TypeExtensions
         il.Emit(OpCodes.Newobj, constructor);
         il.Emit(OpCodes.Ret);
         return dynamicConstructor;
+    }
+
+    internal static MethodInfo GetRequiredMethod(this Type type, string methodName, BindingFlags bindingFlags = BindingFlags.Default)
+    {
+        var method = type.GetMethod(methodName, bindingFlags);
+        if (method == null)
+            throw new MissingMethodException(type.FullName, methodName);
+
+        return method;
+    }
+
+    /// <summary>
+    ///     Creates a delegate that calls the provided method using a specified generic type.
+    ///     Additional generic overloads are automatically constructed as-needed, and cached for the lifetime of the delegate.
+    ///     An object can be provided to bind instance methods.
+    /// </summary>
+    /// <exception cref="ArgumentException">When <see cref="method"/> is static but <see cref="instance"/> is non-null</exception>
+    /// <exception cref="ArgumentException">When <see cref="method"/> is non-static but <see cref="instance"/> null</exception>
+    internal static Func<Type, TResult> CreateGenericPivot<TResult>(this MethodInfo method, object? instance = null)
+    {
+        CheckMethodInstanceAlignment(method, instance);
+
+        var cache = new Dictionary<Type, Func<TResult>>();
+        return type =>
+        {
+            if (!cache.TryGetValue(type, out var genericDelegate))
+            {
+                genericDelegate = method
+                    .MakeGenericMethod(type)
+                    .CreateDelegate<Func<TResult>>(instance);
+                cache[type] = genericDelegate;
+            }
+
+            return genericDelegate();
+        };
+    }
+
+    /// <inheritdoc cref="CreateGenericPivot{TResult}"/>
+    internal static Func<Type, TArg, TResult> CreateGenericPivot<TArg, TResult>(this MethodInfo method, object? instance = null)
+    {
+        CheckMethodInstanceAlignment(method, instance);
+        
+        var cache = new Dictionary<Type, Func<TArg, TResult>>();
+        return (type, arg) =>
+        {
+            if (!cache.TryGetValue(type, out var genericDelegate))
+            {
+                genericDelegate = method
+                    .MakeGenericMethod(type)
+                    .CreateDelegate<Func<TArg, TResult>>(instance);
+                cache[type] = genericDelegate;
+            }
+
+            return genericDelegate(arg);
+        };
+    }
+    
+    private static void CheckMethodInstanceAlignment(MethodInfo method, object? instance)
+    {
+        if (method.IsStatic && instance != null)
+            throw new ArgumentException("instance must be null for static method", nameof(instance));
+
+        if (!method.IsStatic && instance == null)
+            throw new ArgumentException("instance must be provided for instance methods", nameof(instance));
     }
 }

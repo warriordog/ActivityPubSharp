@@ -1,8 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS;
@@ -15,15 +15,28 @@ namespace ActivityPub.Types.AS;
 ///     Properties of the Link are properties of the reference as opposed to properties of the resource.
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link" />
-public class ASLink : ASType
+public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
 {
-    public ASLink() => Entity = new ASLinkEntity
-    {
-        TypeMap = TypeMap,
-        HRef = null!
-    };
+    public const string LinkType = "Link";
+    static string IASModel<ASLink>.ASTypeName => LinkType;
 
-    public ASLink(TypeMap typeMap) : base(typeMap) => Entity = typeMap.AsEntity<ASLinkEntity>();
+    public ASLink() : this(new TypeMap()) {}
+
+    public ASLink(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASLinkEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASLink(TypeMap typeMap, ASLinkEntity? entity) : base(typeMap, null)
+    {
+        Entity = entity ?? typeMap.AsEntity<ASLinkEntity>();
+        HRef = Entity.HRef ?? throw new ArgumentException($"The provided entity is invalid - required {nameof(ASLinkEntity.HRef)} property is missing");
+    }
+
+    static ASLink IASModel<ASLink>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private ASLinkEntity Entity { get; }
 
     /// <summary>
@@ -32,7 +45,7 @@ public class ASLink : ASType
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-href" />
     public required ASUri HRef
     {
-        get => Entity.HRef;
+        get => Entity.HRef!; // null-safe because its required here
         set => Entity.HRef = value;
     }
 
@@ -90,16 +103,11 @@ public class ASLink : ASType
 }
 
 /// <inheritdoc cref="ASLink" />
-[APConvertible(LinkType)]
-[ImpliesOtherEntity(typeof(ASTypeEntity))]
-public sealed class ASLinkEntity : ASEntity<ASLink>, ILinkEntity
+public sealed class ASLinkEntity : ASEntity<ASLink, ASLinkEntity>
 {
-    public const string LinkType = "Link";
-    public override string ASTypeName => LinkType;
-
     /// <inheritdoc cref="ASLink.HRef" />
     [JsonPropertyName("href")]
-    public required ASUri HRef { get; set; }
+    public ASUri? HRef { get; set; }
 
     /// <inheritdoc cref="ASLink.HRefLang" />
     [JsonPropertyName("hreflang")]
@@ -117,5 +125,5 @@ public sealed class ASLinkEntity : ASEntity<ASLink>, ILinkEntity
     [JsonPropertyName("rel")]
     public HashSet<LinkRel> Rel { get; set; } = new();
 
-    public bool RequiresObjectForm => HRefLang != null || Width != null || Height != null || Rel.Count != 0;
+    public override bool RequiresObjectForm => HRefLang != null || Width != null || Height != null || Rel.Count != 0;
 }

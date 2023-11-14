@@ -16,34 +16,34 @@ public class FirefishSampleTests : SampleTests
     public FirefishSampleTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
-    public void CreateShouldConvert() => TestSample<CreateActivity>(CreateActivityEntity.CreateType);
+    public void CreateShouldConvert() => TestSample<CreateActivity>(CreateActivity.CreateType);
 
     [Fact]
     public void HashtagShouldConvert() => TestSample<ASObject>("Hashtag");
 
     [Fact]
-    public void ImageShouldConvert() => TestSample<ImageObject>(ImageObjectEntity.ImageType);
+    public void ImageShouldConvert() => TestSample<ImageObject>(ImageObject.ImageType);
 
     [Fact]
     public void KeyShouldConvert() => TestSample<ASObject>("Key");
 
     [Fact]
-    public void MentionShouldConvert() => TestSample<MentionLink>(MentionLinkEntity.MentionType);
+    public void MentionShouldConvert() => TestSample<MentionLink>(MentionLink.MentionType);
 
     [Fact]
-    public void NoteShouldConvert() => TestSample<NoteObject>(NoteObjectEntity.NoteType);
+    public void NoteShouldConvert() => TestSample<NoteObject>(NoteObject.NoteType);
 
     [Fact]
-    public void ObjectShouldConvert() => TestSample<ASObject>(ASObjectEntity.ObjectType);
+    public void ObjectShouldConvert() => TestSample<ASObject>(ASObject.ObjectType);
 
     [Fact]
-    public void OrderedCollectionShouldConvert() => TestSample<ASOrderedCollection>(ASOrderedCollectionEntity.OrderedCollectionType);
+    public void OrderedCollectionShouldConvert() => TestSample<ASOrderedCollection>(ASOrderedCollection.OrderedCollectionType);
 
     [Fact]
-    public void OrderedCollectionPageShouldConvert() => TestSample<ASOrderedCollectionPage>(ASOrderedCollectionPageEntity.OrderedCollectionPageType);
+    public void OrderedCollectionPageShouldConvert() => TestSample<ASOrderedCollectionPage>(ASOrderedCollectionPage.OrderedCollectionPageType);
 
     [Fact]
-    public void PersonActorShouldConvert() => TestSample<PersonActor>(PersonActorEntity.PersonType);
+    public void PersonActorShouldConvert() => TestSample<PersonActor>(PersonActor.PersonType);
 
     [Fact]
     public void PropertyValueShouldConvert() => TestSample<ASObject>("PropertyValue");

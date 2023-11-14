@@ -1,7 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -11,23 +12,27 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     The typical use is to support social systems that allow one user to block activities or content of other users.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class BlockActivity : IgnoreActivity
+public class BlockActivity : IgnoreActivity, IASModel<BlockActivity, BlockActivityEntity, IgnoreActivity>
 {
-    public BlockActivity() => Entity = new BlockActivityEntity { TypeMap = TypeMap };
-    public BlockActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<BlockActivityEntity>();
+    public const string BlockType = "Block";
+    static string IASModel<BlockActivity>.ASTypeName => BlockType;
+
+    public BlockActivity() : this(new TypeMap()) {}
+
+    public BlockActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new BlockActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public BlockActivity(TypeMap typeMap, BlockActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<BlockActivityEntity>();
+
+    static BlockActivity IASModel<BlockActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private BlockActivityEntity Entity { get; }
 }
 
 /// <inheritdoc cref="BlockActivity" />
-[APConvertible(BlockType)]
-[ImpliesOtherEntity(typeof(IgnoreActivityEntity))]
-public sealed class BlockActivityEntity : ASEntity<BlockActivity>
-{
-    public const string BlockType = "Block";
-    public override string ASTypeName => BlockType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        IgnoreActivityEntity.IgnoreType
-    };
-}
+public sealed class BlockActivityEntity : ASEntity<BlockActivity, BlockActivityEntity> {}

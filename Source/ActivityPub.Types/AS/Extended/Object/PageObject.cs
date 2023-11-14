@@ -1,30 +1,36 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
 /// <summary>
 ///     Represents a Web Page.
 /// </summary>
-public class PageObject : DocumentObject
+public class PageObject : DocumentObject, IASModel<PageObject, PageObjectEntity, DocumentObject>
 {
-    public PageObject() => Entity = new PageObjectEntity { TypeMap = TypeMap };
-    public PageObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<PageObjectEntity>();
+    public const string PageType = "Page";
+    static string IASModel<PageObject>.ASTypeName => PageType;
+
+    public PageObject() : this(new TypeMap()) {}
+
+    public PageObject(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new PageObjectEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public PageObject(TypeMap typeMap, PageObjectEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<PageObjectEntity>();
+
+    static PageObject IASModel<PageObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+
     private PageObjectEntity Entity { get; }
 }
 
 /// <inheritdoc cref="PageObject" />
-[APConvertible(PageType)]
-[ImpliesOtherEntity(typeof(DocumentObjectEntity))]
-public sealed class PageObjectEntity : ASEntity<PageObject>
-{
-    public const string PageType = "Page";
-    public override string ASTypeName => PageType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        DocumentObjectEntity.DocumentType
-    };
-}
+public sealed class PageObjectEntity : ASEntity<PageObject, PageObjectEntity> {}

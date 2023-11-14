@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -9,15 +10,23 @@ using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
+using InternalUtils;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
 public class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
-    private readonly Dictionary<Type, PickSubTypeForDeserializationAdapter?> _pickSubTypeAdapter = new();
+    private readonly Dictionary<Type, TypeSelector?> _typeSelectorCache = new();
+    private readonly Func<Type, TypeSelector> _createTypeSelector;
 
-    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
+    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache)
+    {
+        _asTypeInfoCache = asTypeInfoCache;
+        _createTypeSelector = typeof(TypeMapConverter)
+            .GetRequiredMethod(nameof(CreateTypeSelector), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+            .CreateGenericPivot<TypeSelector>(this);
+    }
 
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -73,7 +82,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         // Enumerate and expand the full list of needed types
         var asTypes = ReadTypes(jsonElement, meta.JsonSerializerOptions);
-        _asTypeInfoCache.MapASTypes(asTypes, out var mappedTypes, out var unmappedTypes);
+        _asTypeInfoCache.MapASTypesToEntities(asTypes, out var mappedTypes, out var unmappedTypes);
 
         // Convert each AS type that mapped to an object type
         foreach (var entityType in mappedTypes)
@@ -87,8 +96,8 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private void ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
     {
         // We need to *also* convert any more-specific types, recursively
-        var pickSubtypeAdapter = GetAdaptersFor(entityType);
-        if (pickSubtypeAdapter?.TryNarrowTypeByJson(jsonElement, meta, out var narrowType) == true)
+        var typeSelector = GetTypeSelector(entityType);
+        if (typeSelector != null && typeSelector.TryNarrowType(jsonElement, meta, out var narrowType))
             ReadEntity(jsonElement, meta, narrowType);
 
         // Use default conversion
@@ -116,7 +125,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             types = new HashSet<string>();
 
         // Make sure we always have object
-        types.Add(ASObjectEntity.ObjectType);
+        types.Add(ASObject.ObjectType);
 
         return types;
     }
@@ -180,7 +189,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         }
     }
 
-    private static void WriteTypeMap(TypeMap typeMap, JsonObject outputNode, SerializationMetadata meta)
+    private void WriteTypeMap(TypeMap typeMap, JsonObject outputNode, SerializationMetadata meta)
     {
         // "type" - AS / AP types. Can be string or array.
         outputNode["type"] = JsonSerializer.SerializeToNode(typeMap.ASTypes, meta.JsonSerializerOptions);
@@ -196,18 +205,12 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 
     private static bool TryWriteAsLink(Utf8JsonWriter writer, TypeMap typeMap)
     {
-        var linkEntities = typeMap.LinkEntities.ToList();
-
         // If there are any unmapped properties, then bail
         if (typeMap.UnmappedProperties?.Any() == true)
             return false;
 
-        // If there are any non-link entities, then bail
-        if (typeMap.AllEntities.Count > linkEntities.Count)
-            return false;
-
         // If there is any data in any link entities, then bail
-        if (linkEntities.Any(link => link.RequiresObjectForm))
+        if (typeMap.AllEntities.Values.Any(link => link.RequiresObjectForm))
             return false;
 
         // If there is no ASLinkEntity, then bail
@@ -215,39 +218,41 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             return false;
 
         // Finally - its safe to write string form
-        writer.WriteStringValue(linkEntity.HRef);
+        var href = linkEntity.HRef?.ToString();
+        if (href == null)
+            writer.WriteNullValue();
+        else
+            writer.WriteStringValue(href);
         return true;
     }
 
-    private PickSubTypeForDeserializationAdapter? GetAdaptersFor(Type type)
+
+    private TypeSelector? GetTypeSelector(Type type)
     {
-        if (!_pickSubTypeAdapter.TryGetValue(type, out var adapter))
+        if (!_typeSelectorCache.TryGetValue(type, out var selector))
         {
-            adapter = PickSubTypeForDeserializationAdapter.CreateFor(type);
-            _pickSubTypeAdapter[type] = adapter;
+            if (type.IsAssignableTo(typeof(ISubTypeDeserialized)))
+                selector = _createTypeSelector(type);
+            
+            _typeSelectorCache[type] = selector;
         }
 
-        return adapter;
+        return selector;
     }
 
-    private abstract class PickSubTypeForDeserializationAdapter
+    private static TypeSelector CreateTypeSelector<TEntity>()
+        where TEntity : ISubTypeDeserialized
+        => new GenericTypeSelector<TEntity>();
+
+    private abstract class TypeSelector
     {
-        public abstract bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type);
-
-        public static PickSubTypeForDeserializationAdapter? CreateFor(Type type)
-        {
-            if (!type.IsAssignableTo(typeof(ISubTypeDeserialized)))
-                return null;
-
-            var genericType = typeof(PickSubTypeForDeserializationAdapter<>).MakeGenericType(type);
-            return (PickSubTypeForDeserializationAdapter)Activator.CreateInstance(genericType)!;
-        }
+        public abstract bool TryNarrowType(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type);
     }
 
-    private class PickSubTypeForDeserializationAdapter<T> : PickSubTypeForDeserializationAdapter
+    private class GenericTypeSelector<T> : TypeSelector
         where T : ISubTypeDeserialized
     {
-        public override bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
+        public override bool TryNarrowType(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
             => T.TryNarrowTypeByJson(element, meta, out type);
     }
 }

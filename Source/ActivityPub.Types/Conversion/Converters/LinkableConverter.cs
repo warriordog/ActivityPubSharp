@@ -1,6 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -50,17 +51,25 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
         // Parse into abstract form
         var jsonElement = JsonElement.ParseValue(ref reader);
 
-        // If its a string OR an object of type ASLink, then its a link
-        if (jsonElement.ValueKind == JsonValueKind.String || IsASLink(jsonElement))
+        // If it's a string, then it's a link
+        if (jsonElement.ValueKind == JsonValueKind.String)
         {
-            // Delegate link construction back to the parser
             var link = jsonElement.Deserialize<ASLink>(options);
             if (link == null)
-                throw new JsonException($"Failed to parse {typeToConvert} - Could not construct link object");
+                throw new JsonException($"Failed to parse {typeToConvert} - Could not construct link object of type {typeof(ASLink)}");
             return new Linkable<T>(link);
         }
 
-        // Otherwise, its the payload data
+        // If it's an object of type ASLink, then it's still a link
+        if (TryGetLinkType(jsonElement, out var linkType))
+        {
+            var link = (ASLink?)jsonElement.Deserialize(linkType, options);
+            if (link == null)
+                throw new JsonException($"Failed to parse {typeToConvert} - Could not construct link object of type {linkType}");
+            return new Linkable<T>(link);
+        }
+
+        // Anything else is the payload data
         var obj = jsonElement.Deserialize<T>(options);
         if (obj == null)
             throw new JsonException($"Failed to parse {typeToConvert} - Could not construct value object");
@@ -79,5 +88,19 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
             throw new ArgumentException($"{typeof(Linkable<T>)} is invalid - it has neither a link nor a value");
     }
 
-    private bool IsASLink(JsonElement element) => element.TryGetASType(out var type) && _asTypeInfoCache.IsASLinkType(type);
+    private bool TryGetLinkType(JsonElement element, [NotNullWhen(true)] out Type? linkType)
+    {
+        linkType = null;
+
+        // Firstly, it must have a decodable AS type name
+        if (!element.TryGetASType(out var asType))
+            return false;
+
+        // Second, that name must map to a known model type
+        if (!_asTypeInfoCache.TryGetModelType(asType, out linkType))
+            return false;
+
+        // Finally, the model must be a link
+        return linkType.IsAssignableTo(typeof(ASLink));
+    }
 }

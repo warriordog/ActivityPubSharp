@@ -1,9 +1,10 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using ActivityPub.Types.AS;
-using ActivityPub.Types.Attributes;
+using InternalUtils;
 
 namespace ActivityPub.Types.Internal;
 
@@ -12,20 +13,22 @@ namespace ActivityPub.Types.Internal;
 /// </summary>
 public interface IASTypeInfoCache
 {
-    public bool IsKnownASType(string asTypeName);
-
-    public bool IsASLinkType(string type);
-
     /// <summary>
     ///     Finds the .NET type(s) that implement a set of AS types.
     ///     Implied types are automatically included.
-    ///     Unknown types are ignored.
+    ///     Unknown types are safely ignored.
     /// </summary>
     /// <param name="asTypes">Types to map. Case-sensitive.</param>
-    /// <param name="mappedTypes"></param>
-    /// <param name="unmappedTypes"></param>
+    /// <param name="mappedEntities">All known entities that represent the types.</param>
+    /// <param name="unmappedTypes">Any AS types that did not map to an entity.</param>
     /// <returns>Set of all located types</returns>
-    internal void MapASTypes(IEnumerable<string> asTypes, out HashSet<Type> mappedTypes, out HashSet<string> unmappedTypes);
+    internal void MapASTypesToEntities(IEnumerable<string> asTypes, out HashSet<Type> mappedEntities, out HashSet<string> unmappedTypes);
+
+    /// <summary>
+    ///     Gets the .NET type that implements a specified AS type.
+    ///     Returns true on success or false on failure, following the TryGet pattern.
+    /// </summary>
+    bool TryGetModelType(string asType, [NotNullWhen(true)] out Type? modelType);
 
     /// <summary>
     ///     Find and load all ActivityStreams types in a particular assembly.
@@ -41,49 +44,49 @@ public interface IASTypeInfoCache
 
 public class ASTypeInfoCache : IASTypeInfoCache
 {
-    private readonly HashSet<Type> _allASEntities = new();
-    private readonly Dictionary<Type, HashSet<Type>> _impliedEntityMap = new();
-    private readonly Dictionary<string, Type> _knownEntityMap = new();
-    private readonly HashSet<string> _knownLinkTypes = new();
     private readonly HashSet<Assembly> _registeredAssemblies = new();
+    
+    private readonly Dictionary<Type, ModelMeta> _typeMetaMap = new();
+    private readonly Dictionary<string, ModelMeta> _nameMetaMap = new();
 
-    public bool IsKnownASType(string asTypeName) => _knownEntityMap.ContainsKey(asTypeName);
+    /// <summary>
+    ///     Calls <see cref="CreateTypeMetadataFor{T}"/> with a specified value for T.
+    /// </summary>
+    private readonly Func<Type, ModelMeta> _createTypeMetadataFor;
 
-    public bool IsASLinkType(string type) => _knownLinkTypes.Contains(type);
+    public ASTypeInfoCache() =>
+        // I really hate doing this :sob:
+        _createTypeMetadataFor = typeof(ASTypeInfoCache)
+            .GetRequiredMethod(nameof(CreateTypeMetadataFor), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+            .CreateGenericPivot<ModelMeta>(this);
 
-    public void MapASTypes(IEnumerable<string> asTypes, out HashSet<Type> mappedTypes, out HashSet<string> unmappedTypes)
+    public void MapASTypesToEntities(IEnumerable<string> asTypes, out HashSet<Type> mappedEntities, out HashSet<string> unmappedTypes)
     {
-        mappedTypes = new HashSet<Type>();
+        mappedEntities = new HashSet<Type>();
         unmappedTypes = new HashSet<string>();
 
         foreach (var asType in asTypes)
         {
             // Map AS Type to .NET Type.
-            if (_knownEntityMap.TryGetValue(asType, out var type))
-                AddType(mappedTypes, type);
+            if (_nameMetaMap.TryGetValue(asType, out var meta))
+                mappedEntities.AddRange(meta.EntityTypeChain);
 
-            // Record unknown
+            // Record unknown types too
             else
                 unmappedTypes.Add(asType);
         }
     }
 
-    private void AddType(HashSet<Type> types, Type type)
+    public bool TryGetModelType(string asType, [NotNullWhen(true)] out Type? modelType)
     {
-        // Check + add.
-        // If already present, then skip next steps.
-        // This is both a performance boost + minimizes impact of a circular dependency bug.
-        if (!types.Add(type))
-            return;
+        if (_nameMetaMap.TryGetValue(asType, out var meta))
+        {
+            modelType = meta.ModelType;
+            return true;
+        }
 
-        // Map type to implied types.
-        // Skip if there are none.
-        if (!_impliedEntityMap.TryGetValue(type, out var impliedTypes))
-            return;
-
-        // Add all the implied types
-        foreach (var impliedType in impliedTypes)
-            AddType(types, impliedType);
+        modelType = null;
+        return false;
     }
 
     public void RegisterAllAssemblies()
@@ -106,52 +109,95 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
     private void RegisterType(Type type)
     {
-        // Skip if its not an AS type
-        if (!type.IsAssignableTo(typeof(ASEntity)))
+        // Skip if we've already check it
+        if (_typeMetaMap.ContainsKey(type))
             return;
 
-        // Make sure we only check each type once.
-        if (!_allASEntities.Add(type))
+        // Skip if it's not an AS type
+        if (!type.IsAssignableTo(typeof(ASType)))
             return;
 
-        // Process all [APConvertible] attributes to register all ActivityStreams context/type pairs
-        RegisterConvertibles(type);
+        // Skip if it's not a model
+        var modelType = typeof(IASModel<>).MakeGenericType(type);
+        if (!type.IsAssignableTo(modelType))
+            return;
 
-        // Register all implied types
-        RegisterImpliedTypes(type);
-    }
+        // Make sure that base types are populated first
+        if (type.BaseType != null)
+            RegisterType(type.BaseType);
 
-    private void RegisterConvertibles(Type type)
-    {
-        // Pre-check this here for performance.
-        // Its possible for the loop to run multiple times.
-        var isASLink = type.IsAssignableTo(typeof(ILinkEntity));
+        var meta = _createTypeMetadataFor(type);
+        _typeMetaMap[type] = meta;
 
-        // Process each APConvertible attribute on the type
-        foreach (var convertibleAttr in type.GetCustomAttributes<APConvertibleAttribute>())
+        // Also check for duplicate AS type names
+        if (meta.ASTypeName != null)
         {
-            var typeName = convertibleAttr.Type;
+            if (_nameMetaMap.TryGetValue(meta.ASTypeName, out var conflictMeta))
+                throw new ApplicationException($"Multiple classes are using AS type name {meta.ASTypeName}: trying to register {type} on top of {conflictMeta.ModelType}");
 
-            // Check for dupes
-            if (_knownEntityMap.TryGetValue(typeName, out var originalType))
-                throw new ApplicationException($"Multiple classes are using AS type name {typeName}: trying to register {type} on top of {originalType}");
-
-            // Register mapping
-            _knownEntityMap[typeName] = type;
-
-            // If it derives from ASLink, then record it as an additional link type
-            if (isASLink)
-                _knownLinkTypes.Add(typeName);
+            _nameMetaMap[meta.ASTypeName] = meta;
         }
     }
 
-    private void RegisterImpliedTypes(Type type)
+    private ModelMeta CreateTypeMetadataFor<T>()
+        where T : IASModel<T>
     {
-        var impliesAttributes = type
-            .GetCustomAttributes<ImpliesOtherEntityAttribute>()
-            .Select(attr => attr.Type)
-            .ToHashSet();
-        if (impliesAttributes.Any())
-            _impliedEntityMap[type] = impliesAttributes;
+        var modelType = typeof(T);
+
+        return new ModelMeta
+        {
+            ModelType = modelType,
+            EntityTypeChain = GetEntityTypeChain<T>(modelType),
+            EntityType = T.EntityType,
+            ASTypeName = T.ASTypeName
+        };
+    }
+    
+    private List<Type> GetEntityTypeChain<T>(Type modelType)
+        where T : IASModel<T>
+    {
+        var entityTypes = new List<Type>
+        {
+            T.EntityType
+        };
+        
+        for (var baseType = modelType.BaseType; baseType != null; baseType = baseType.BaseType)
+        {
+            // Some base types may not be models.
+            // If this happens, we need to skip but NOT bail out!
+            if (!_typeMetaMap.TryGetValue(baseType, out var baseMeta))
+                continue;
+            
+            entityTypes.Add(baseMeta.EntityType);
+        }
+
+        return entityTypes;
+    }
+
+    /// <summary>
+    ///     Cached metadata about an AS Model.
+    /// </summary>
+    private class ModelMeta
+    {
+        /// <summary>
+        ///     Type of the model class
+        /// </summary>
+        public required Type ModelType { get; init; }
+        
+        /// <summary>
+        ///     Type of the entity class, taken from <see cref="IASModel{TModel}.EntityType"/>.
+        /// </summary>
+        public required Type EntityType { get; init; }
+        
+        /// <summary>
+        ///     List of all entities required to represent the data used by this model.
+        ///     Effectively, it is <see cref="EntityType"/> along with the entity type of every ancestor model.
+        /// </summary>
+        public required IReadOnlyList<Type> EntityTypeChain { get; init; }
+        
+        /// <summary>
+        ///     The model's AS type name, taken from <see cref="IASModel{TModel}.ASTypeName"/>.
+        /// </summary>
+        public string? ASTypeName { get; init; }
     }
 }

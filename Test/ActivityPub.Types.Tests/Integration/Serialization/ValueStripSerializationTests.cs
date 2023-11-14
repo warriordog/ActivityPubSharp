@@ -1,11 +1,11 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Tests.Util.Fixtures;
 using ActivityPub.Types.Util;
 
@@ -113,10 +113,26 @@ public class ValueStripSerializationTests : SerializationTests
     }
 }
 
-public class FakeObjectWithSpecialNullability : ASObject
+public class FakeObjectWithSpecialNullability : ASObject, IASModel<FakeObjectWithSpecialNullability, FakeObjectWithSpecialNullabilityEntity, ASObject>
 {
-    public FakeObjectWithSpecialNullability() => Entity = new FakeObjectWithSpecialNullabilityEntity { TypeMap = TypeMap };
-    public FakeObjectWithSpecialNullability(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<FakeObjectWithSpecialNullabilityEntity>();
+    public const string FakeObjectWithSpecialNullabilityType = "FakeObjectWithSpecialNullability";
+    static string IASModel<FakeObjectWithSpecialNullability>.ASTypeName => FakeObjectWithSpecialNullabilityType;
+
+    public FakeObjectWithSpecialNullability() : this(new TypeMap()) {}
+
+    public FakeObjectWithSpecialNullability(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new FakeObjectWithSpecialNullabilityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public FakeObjectWithSpecialNullability(TypeMap typeMap, FakeObjectWithSpecialNullabilityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<FakeObjectWithSpecialNullabilityEntity>();
+
+    static FakeObjectWithSpecialNullability IASModel<FakeObjectWithSpecialNullability>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+
     private FakeObjectWithSpecialNullabilityEntity Entity { get; }
 
 
@@ -145,18 +161,8 @@ public class FakeObjectWithSpecialNullability : ASObject
     }
 }
 
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class FakeObjectWithSpecialNullabilityEntity : ASEntity<FakeObjectWithSpecialNullability>
+public sealed class FakeObjectWithSpecialNullabilityEntity : ASEntity<FakeObjectWithSpecialNullability, FakeObjectWithSpecialNullabilityEntity>
 {
-    public const string FakeObjectWithSpecialNullabilityEntityName = "FakeObjectWithSpecialNullability";
-    public override string ASTypeName => FakeObjectWithSpecialNullabilityEntityName;
-
-    public override IReadOnlySet<string>? ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-
-
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public ASObject? NeverIgnoreObject { get; set; }
 

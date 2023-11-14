@@ -2,8 +2,8 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS.Collection;
@@ -15,10 +15,25 @@ namespace ActivityPub.Types.AS.Collection;
 ///     Refer to the <a href="https://www.w3.org/TR/activitystreams-core/#collection">Activity Streams 2.0 Core specification</a> for a complete description of the CollectionPage type.
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage" />
-public class ASCollectionPage : ASCollection
+public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASCollectionPageEntity, ASCollection>
 {
-    public ASCollectionPage() => Entity = new ASCollectionPageEntity { TypeMap = TypeMap };
-    public ASCollectionPage(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASCollectionPageEntity>();
+    public const string CollectionPageType = "CollectionPage";
+    static string IASModel<ASCollectionPage>.ASTypeName => CollectionPageType;
+
+    public ASCollectionPage() : this(new TypeMap()) {}
+
+    public ASCollectionPage(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASCollectionPageEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASCollectionPage(TypeMap typeMap, ASCollectionPageEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<ASCollectionPageEntity>();
+
+    static ASCollectionPage IASModel<ASCollectionPage>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private ASCollectionPageEntity Entity { get; }
 
 
@@ -67,18 +82,8 @@ public class ASCollectionPage : ASCollection
 }
 
 /// <inheritdoc cref="ASCollectionPage" />
-[APConvertible(CollectionPageType)]
-[ImpliesOtherEntity(typeof(ASCollectionEntity))]
-public sealed class ASCollectionPageEntity : ASEntity<ASCollectionPage>
+public sealed class ASCollectionPageEntity : ASEntity<ASCollectionPage, ASCollectionPageEntity>
 {
-    public const string CollectionPageType = "CollectionPage";
-    public override string ASTypeName => CollectionPageType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASCollectionEntity.CollectionType
-    };
-
     /// <inheritdoc cref="ASCollectionPage.Next" />
     [JsonPropertyName("next")]
     public Linkable<ASCollectionPage>? Next { get; set; }

@@ -1,7 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -10,23 +11,27 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Following is defined in the sense typically used within Social systems in which the actor is interested in any activity performed by or on the object.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class FollowActivity : ASTransitiveActivity
+public class FollowActivity : ASTransitiveActivity, IASModel<FollowActivity, FollowActivityEntity, ASTransitiveActivity>
 {
-    public FollowActivity() => Entity = new FollowActivityEntity { TypeMap = TypeMap };
-    public FollowActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<FollowActivityEntity>();
+    public const string FollowType = "Follow";
+    static string IASModel<FollowActivity>.ASTypeName => FollowType;
+
+    public FollowActivity() : this(new TypeMap()) {}
+
+    public FollowActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new FollowActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public FollowActivity(TypeMap typeMap, FollowActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<FollowActivityEntity>();
+
+    static FollowActivity IASModel<FollowActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private FollowActivityEntity Entity { get; }
 }
 
 /// <inheritdoc cref="FollowActivity" />
-[APConvertible(FollowType)]
-[ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class FollowActivityEntity : ASEntity<FollowActivity>
-{
-    public const string FollowType = "Follow";
-    public override string ASTypeName => FollowType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASActivityEntity.ActivityType
-    };
-}
+public sealed class FollowActivityEntity : ASEntity<FollowActivity, FollowActivityEntity> {}

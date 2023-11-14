@@ -1,7 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -9,23 +10,27 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor has joined the object.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class JoinActivity : ASTransitiveActivity
+public class JoinActivity : ASTransitiveActivity, IASModel<JoinActivity, JoinActivityEntity, ASTransitiveActivity>
 {
-    public JoinActivity() => Entity = new JoinActivityEntity { TypeMap = TypeMap };
-    public JoinActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<JoinActivityEntity>();
+    public const string JoinType = "Join";
+    static string IASModel<JoinActivity>.ASTypeName => JoinType;
+
+    public JoinActivity() : this(new TypeMap()) {}
+
+    public JoinActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new JoinActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public JoinActivity(TypeMap typeMap, JoinActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<JoinActivityEntity>();
+
+    static JoinActivity IASModel<JoinActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private JoinActivityEntity Entity { get; }
 }
 
 /// <inheritdoc cref="JoinActivity" />
-[APConvertible(JoinType)]
-[ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class JoinActivityEntity : ASEntity<JoinActivity>
-{
-    public const string JoinType = "Join";
-    public override string ASTypeName => JoinType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASActivityEntity.ActivityType
-    };
-}
+public sealed class JoinActivityEntity : ASEntity<JoinActivity, JoinActivityEntity> {}

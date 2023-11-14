@@ -52,6 +52,13 @@ These functions should be sufficient to comfortably work with most valid Activit
 All related instances are automatically linked - that is, changes to one instance will be reflected in all others associated with the same object.
 This is true even for base types and instances that are constructed later.
 
+### Models vs Entities
+
+* Models utilize **inheritance**, while entities use **composition**.
+* Entities are automatically constructed during JSON conversion, while models are lazy-constructed on-use.
+* Within a single type graph, entities are singletons while models may be duplicated.
+* Models represent the "expected" shape of an AS object. Entities model the "actual" runtime shape.
+
 ### Implementation
 
 Entities are implemented as an extra **sealed** and **non-inheriting** class associated with each type.
@@ -96,7 +103,7 @@ JSON-LD contexts are followed while constructing extension types, although prope
 
 ### Usage
 
-At startup, the module scans all loaded assemblies and registers any type deriving from [ASType](AS/ASType.cs) and containing an [APType](Attributes/APTypeAttribute.cs) attribute.
+At startup, the module scans all loaded assemblies and registers any type deriving from [ASType](AS/ASType.cs) and implementing [IASModel](IASModel.cs).
 Registered extension classes will be automatically constructed by the [polymorphic converter](Conversion/Converters/TypeMapConverter.cs).
 Polymorphic extension types will be handled by the Entities system described above.
 

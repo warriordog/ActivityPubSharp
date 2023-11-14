@@ -1,30 +1,36 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
 /// <summary>
 ///     Represents a short written work typically less than a single paragraph in length.
 /// </summary>
-public class NoteObject : ASObject
+public class NoteObject : ASObject, IASModel<NoteObject, NoteObjectEntity, ASObject>
 {
-    public NoteObject() => Entity = new NoteObjectEntity { TypeMap = TypeMap };
-    public NoteObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<NoteObjectEntity>();
+    public const string NoteType = "Note";
+    static string IASModel<NoteObject>.ASTypeName => NoteType;
+
+    public NoteObject() : this(new TypeMap()) {}
+
+    public NoteObject(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new NoteObjectEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public NoteObject(TypeMap typeMap, NoteObjectEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<NoteObjectEntity>();
+
+    static NoteObject IASModel<NoteObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+
     private NoteObjectEntity Entity { get; }
 }
 
 /// <inheritdoc cref="NoteObject" />
-[APConvertible(NoteType)]
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class NoteObjectEntity : ASEntity<NoteObject>
-{
-    public const string NoteType = "Note";
-    public override string ASTypeName => NoteType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-}
+public sealed class NoteObjectEntity : ASEntity<NoteObject, NoteObjectEntity> {}

@@ -4,7 +4,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
@@ -17,15 +16,25 @@ namespace ActivityPub.Types.AS;
 /// <remarks>
 ///     This is a synthetic type, and not part of the ActivityStreams standard.
 /// </remarks>
-public class ASTransitiveActivity : ASActivity
+public class ASTransitiveActivity : ASActivity, IASModel<ASTransitiveActivity, ASTransitiveActivityEntity, ASActivity>
 {
-    public ASTransitiveActivity() => Entity = new ASTransitiveActivityEntity
-    {
-        TypeMap = TypeMap,
-        Object = null!
-    };
+    public ASTransitiveActivity() : this(new TypeMap()) {}
 
-    public ASTransitiveActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASTransitiveActivityEntity>();
+    public ASTransitiveActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASTransitiveActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASTransitiveActivity(TypeMap typeMap, ASTransitiveActivityEntity? entity) : base(typeMap, null)
+    {
+        Entity = entity ?? typeMap.AsEntity<ASTransitiveActivityEntity>();
+        Object = Entity.Object;
+    }
+
+    static ASTransitiveActivity IASModel<ASTransitiveActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private ASTransitiveActivityEntity Entity { get; }
 
 
@@ -43,12 +52,11 @@ public class ASTransitiveActivity : ASActivity
 }
 
 /// <inheritdoc cref="ASTransitiveActivity" />
-[ImpliesOtherEntity(typeof(ASActivityEntity))]
-public sealed class ASTransitiveActivityEntity : ASEntity<ASTransitiveActivity>, ISubTypeDeserialized
+public sealed class ASTransitiveActivityEntity : ASEntity<ASTransitiveActivity, ASTransitiveActivityEntity>, ISubTypeDeserialized
 {
     /// <inheritdoc cref="ASTransitiveActivity.Object" />
     [JsonPropertyName("object")]
-    public required LinkableList<ASObject> Object { get; set; } = new();
+    public LinkableList<ASObject> Object { get; set; } = new();
 
     public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
     {

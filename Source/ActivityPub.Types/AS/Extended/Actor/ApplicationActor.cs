@@ -1,30 +1,36 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Actor;
 
 /// <summary>
 ///     Describes a software application.
 /// </summary>
-public class ApplicationActor : APActor
+public class ApplicationActor : APActor, IASModel<ApplicationActor, ApplicationActorEntity, APActor>
 {
-    public ApplicationActor() => Entity = new ApplicationActorEntity { TypeMap = TypeMap };
-    public ApplicationActor(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ApplicationActorEntity>();
+    public const string ApplicationType = "Application";
+    static string IASModel<ApplicationActor>.ASTypeName => ApplicationType;
+
+    public ApplicationActor() : this(new TypeMap()) {}
+
+    public ApplicationActor(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ApplicationActorEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ApplicationActor(TypeMap typeMap, ApplicationActorEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<ApplicationActorEntity>();
+
+    static ApplicationActor IASModel<ApplicationActor>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+
     private ApplicationActorEntity Entity { get; }
 }
 
 /// <inheritdoc cref="ApplicationActor" />
-[APConvertible(ApplicationType)]
-[ImpliesOtherEntity(typeof(APActorEntity))]
-public sealed class ApplicationActorEntity : ASEntity<ApplicationActor>
-{
-    public const string ApplicationType = "Application";
-    public override string ASTypeName => ApplicationType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-}
+public sealed class ApplicationActorEntity : ASEntity<ApplicationActor, ApplicationActorEntity> {}

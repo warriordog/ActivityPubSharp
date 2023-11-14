@@ -1,8 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS.Extended.Object;
@@ -11,10 +11,26 @@ namespace ActivityPub.Types.AS.Extended.Object;
 ///     Describes a relationship between two individuals.
 ///     The subject and object properties are used to identify the connected individuals.
 /// </summary>
-public class RelationshipObject : ASObject
+public class RelationshipObject : ASObject, IASModel<RelationshipObject, RelationshipObjectEntity, ASObject>
 {
-    public RelationshipObject() => Entity = new RelationshipObjectEntity { TypeMap = TypeMap };
-    public RelationshipObject(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<RelationshipObjectEntity>();
+    public const string RelationshipType = "Relationship";
+    static string IASModel<RelationshipObject>.ASTypeName => RelationshipType;
+
+    public RelationshipObject() : this(new TypeMap()) {}
+
+    public RelationshipObject(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new RelationshipObjectEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public RelationshipObject(TypeMap typeMap, RelationshipObjectEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<RelationshipObjectEntity>();
+
+    static RelationshipObject IASModel<RelationshipObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+
     private RelationshipObjectEntity Entity { get; }
 
     /// <summary>
@@ -53,18 +69,8 @@ public class RelationshipObject : ASObject
 }
 
 /// <inheritdoc cref="RelationshipObject" />
-[APConvertible(RelationshipType)]
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class RelationshipObjectEntity : ASEntity<RelationshipObject>
+public sealed class RelationshipObjectEntity : ASEntity<RelationshipObject, RelationshipObjectEntity>
 {
-    public const string RelationshipType = "Relationship";
-    public override string ASTypeName => RelationshipType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-
     /// <inheritdoc cref="RelationshipObject.Object" />
     [JsonPropertyName("object")]
     public LinkableList<ASObject> Object { get; set; } = new();

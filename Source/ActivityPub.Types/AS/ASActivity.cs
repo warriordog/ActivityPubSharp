@@ -4,7 +4,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
@@ -17,12 +16,26 @@ namespace ActivityPub.Types.AS;
 ///     It is important to note that the Activity type itself does not carry any specific semantics about the kind of action being taken.
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity" />
-public class ASActivity : ASObject
+public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObject>
 {
-    public ASActivity() => Entity = new ASActivityEntity { TypeMap = TypeMap };
-    public ASActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASActivityEntity>();
-    private ASActivityEntity Entity { get; }
+    public const string ActivityType = "Activity";
+    static string IASModel<ASActivity>.ASTypeName => ActivityType;
 
+    public ASActivity() : this(new TypeMap()) {}
+
+    public ASActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASActivity(TypeMap typeMap, ASActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<ASActivityEntity>();
+
+    static ASActivity IASModel<ASActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
+    private ASActivityEntity Entity { get; }
 
     /// <summary>
     ///     Describes one or more entities that either performed or are expected to perform the activity.
@@ -71,19 +84,8 @@ public class ASActivity : ASObject
 }
 
 /// <inheritdoc cref="ASActivity" />
-[APConvertible(ActivityType)]
-[ImpliesOtherEntity(typeof(ASObjectEntity))]
-public sealed class ASActivityEntity : ASEntity<ASActivity>, ISubTypeDeserialized
+public sealed class ASActivityEntity : ASEntity<ASActivity, ASActivityEntity>, ISubTypeDeserialized
 {
-    public const string ActivityType = "Activity";
-    public override string ASTypeName => ActivityType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASObjectEntity.ObjectType
-    };
-
-
     /// <inheritdoc cref="ASActivity.Actor" />
     [JsonPropertyName("actor")]
     public LinkableList<ASObject> Actor { get; set; } = new();

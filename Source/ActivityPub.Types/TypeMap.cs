@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Converters;
+using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -14,29 +15,18 @@ namespace ActivityPub.Types;
 public class TypeMap
 {
     private readonly Dictionary<Type, ASEntity> _allEntities = new();
+    private readonly CompositeASType _asTypes = new();
 
-    private readonly HashSet<string> _asTypes = new();
-
-    // All AS types that are replaced by at least one entity in the type graph
-    private readonly HashSet<string> _replacedASTypes = new();
-
-    // Cache of non-entity classes
+    // Cache of non-entity classes that have been constructed from this type graph.
     private readonly Dictionary<Type, ASType> _typeCache = new();
 
-    // Map non-entities to entity that can construct it
-    private readonly Dictionary<Type, ASEntity> _typeEntityMap = new();
-
-    // Set of all ASLink entities in the map
-    private readonly HashSet<ILinkEntity> _linkEntities = new();
-    public IReadOnlySet<ILinkEntity> LinkEntities => _linkEntities;
-
     /// <summary>
-    /// Constructs a new, empty type graph initialized with the ActivityStreams context.
+    ///     Constructs a new, empty type graph initialized with the ActivityStreams context.
     /// </summary>
     public TypeMap() : this(JsonLDContext.ActivityStreams) {}
 
     /// <summary>
-    /// Constructs a TypeMap with a pre-populated JSON-LD context.
+    ///     Constructs a TypeMap with a pre-populated JSON-LD context.
     /// </summary>
     /// <param name="ldContext"></param>
     internal TypeMap(JsonLDContext ldContext) => _ldContext = ldContext;
@@ -45,7 +35,7 @@ public class TypeMap
     ///     Live set of all unique ActivityStreams types represented by this graph.
     /// </summary>
     /// <seealso cref="AllEntities" />
-    public IReadOnlySet<string> ASTypes => _asTypes;
+    public IReadOnlySet<string> ASTypes => _asTypes.Types;
 
     /// <summary>
     ///     Live map of .NET types to loaded entities contained in this graph.
@@ -109,19 +99,35 @@ public class TypeMap
     }
 
     /// <summary>
+    ///     Gets an entity representing the graph as type T.
+    ///     If the graph doesn't already include T, then it will be expanded with a new instance.
+    /// </summary>
+    public T ToEntity<T>()
+        where T : ASEntity, new()
+    {
+        if (!IsEntity<T>(out var entity))
+        {
+            entity = new();
+            Add(entity);
+        }
+
+        return entity;
+    }
+
+    /// <summary>
     ///     Checks if the graph contains a particular type.
     /// </summary>
-    public bool IsType<T>()
-        where T : ASType
+    public bool IsType<TObject>()
+        where TObject : ASType, IASModel<TObject>
     {
-        var type = typeof(T);
+        var type = typeof(TObject);
 
         // Already cached -> yes
         if (_typeCache.ContainsKey(type))
             return true;
 
-        // Can be converted -> yes
-        if (_typeEntityMap.ContainsKey(type))
+        // Can create it (entity is in the graph) -> yes
+        if (_allEntities.ContainsKey(TObject.EntityType))
             return true;
 
         // Otherwise -> no
@@ -134,22 +140,22 @@ public class TypeMap
     /// </summary>
     /// <seealso cref="IsType{T}()" />
     /// <seealso cref="AsType{T}" />
-    public bool IsType<T>([NotNullWhen(true)] out T? instance)
-        where T : ASType
+    public bool IsType<TModel>([NotNullWhen(true)] out TModel? instance)
+        where TModel : ASType, IASModel<TModel>
     {
-        var type = typeof(T);
+        var type = typeof(TModel);
 
         // Already cached -> yes
         if (_typeCache.TryGetValue(type, out var instanceBase))
         {
-            instance = (T)instanceBase;
+            instance = (TModel)instanceBase;
             return true;
         }
 
-        // Can create it -> yes
-        if (_typeEntityMap.TryGetValue(type, out var entity) && entity.TryCreateTypeInstance(this, out var untypedInstance))
+        // Can create it (entity is in the graph) -> yes
+        if (_allEntities.ContainsKey(TModel.EntityType))
         {
-            instance = (T)untypedInstance;
+            instance = TModel.FromGraph(this);
             _typeCache[type] = instance;
             return true;
         }
@@ -168,13 +174,13 @@ public class TypeMap
     /// </remarks>
     /// <seealso cref="IsType{T}(out T?)" />
     /// <throws cref="InvalidCastException">If the graph cannot be represented by the type</throws>
-    public T AsType<T>()
-        where T : ASType
+    public TObject AsType<TObject>()
+        where TObject : ASType, IASModel<TObject>
     {
-        if (IsType<T>(out var instance))
+        if (IsType<TObject>(out var instance))
             return instance;
 
-        throw new InvalidCastException($"Can't represent the graph as type {typeof(T)}");
+        throw new InvalidCastException($"Can't represent the graph as type {typeof(TObject)}");
     }
 
     /// <summary>
@@ -197,42 +203,25 @@ public class TypeMap
     ///     This is not a technical limitation, but rather an intentional choice to prevent the construction of invalid objects.
     /// </remarks>
     /// <returns>true if the type was added, false if it was already in the type map</returns>
-    internal bool TryAdd(ASEntity instance)
+    internal bool TryAdd(ASEntity entity)
     {
-        var type = instance.GetType();
-
+        var type = entity.GetType();
         if (_allEntities.ContainsKey(type))
             return false;
 
         // Map the instance
-        _allEntities[type] = instance;
-        _typeEntityMap[instance.NonEntityType] = instance;
+        _allEntities[type] = entity;
 
         // Map the AS type
-        if (instance.ASTypeName != null)
-        {
-            // Update the replaced list
-            if (instance.ReplacesASTypes != null)
-                foreach (var replacedType in instance.ReplacesASTypes)
-                    _replacedASTypes.Add(replacedType);
-
-            // Add it to the type list and synchronize
-            _asTypes.Add(instance.ASTypeName);
-            _asTypes.RemoveWhere(
-                asType
-                    => _replacedASTypes.Contains(asType)
-            );
-        }
-
-        // Record link entities
-        if (instance is ILinkEntity linkEntity)
-            _linkEntities.Add(linkEntity);
+        if (entity.ASTypeName != null)
+            _asTypes.Add(entity.ASTypeName, entity.BaseTypeName);
 
         // Populate and/or filter the list of unmapped properties
-        NarrowUnmappedProperties(instance);
+        NarrowUnmappedProperties(entity);
 
         return true;
     }
+
 
     // Inefficient implementation
     private void NarrowUnmappedProperties(ASEntity entity)
@@ -257,6 +246,5 @@ public class TypeMap
     ///     Records an ActivityStreams type name as being present in the type graph, but not mapped to any known implementation class.
     ///     Duplicates will be ignored.
     /// </summary>
-    /// <param name="asTypeName">Name of the type to add</param>
     internal void AddUnmappedType(string asTypeName) => _asTypes.Add(asTypeName);
 }

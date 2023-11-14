@@ -1,7 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+using System.Diagnostics.CodeAnalysis;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS.Extended.Link;
@@ -9,10 +9,25 @@ namespace ActivityPub.Types.AS.Extended.Link;
 /// <summary>
 ///     A specialized Link that represents an @mention.
 /// </summary>
-public class MentionLink : ASLink
+public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLink>
 {
-    public MentionLink() => Entity = new MentionLinkEntity { TypeMap = TypeMap };
-    public MentionLink(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<MentionLinkEntity>();
+    public const string MentionType = "Mention";
+    static string IASModel<MentionLink>.ASTypeName => MentionType;
+
+    public MentionLink() : this(new TypeMap()) {}
+
+    public MentionLink(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new MentionLinkEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public MentionLink(TypeMap typeMap, MentionLinkEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<MentionLinkEntity>();
+
+    static MentionLink IASModel<MentionLink>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private MentionLinkEntity Entity { get; }
 
 
@@ -29,15 +44,4 @@ public class MentionLink : ASLink
 /// <summary>
 ///     A specialized Link that represents an @mention.
 /// </summary>
-[APConvertible(MentionType)]
-[ImpliesOtherEntity(typeof(ASLinkEntity))]
-public sealed class MentionLinkEntity : ASEntity<MentionLink>
-{
-    public const string MentionType = "Mention";
-    public override string ASTypeName => MentionType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASLinkEntity.LinkType
-    };
-}
+public sealed class MentionLinkEntity : ASEntity<MentionLink, MentionLinkEntity> {}

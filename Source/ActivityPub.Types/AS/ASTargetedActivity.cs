@@ -1,8 +1,8 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Attributes;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS;
@@ -10,15 +10,25 @@ namespace ActivityPub.Types.AS;
 /// <summary>
 ///     Synthetic base for activities which require a target.
 /// </summary>
-public class ASTargetedActivity : ASTransitiveActivity
+public class ASTargetedActivity : ASTransitiveActivity, IASModel<ASTargetedActivity, ASTargetedActivityEntity, ASTransitiveActivity>
 {
-    public ASTargetedActivity() => Entity = new ASTargetedActivityEntity
-    {
-        TypeMap = TypeMap,
-        Target = null!
-    };
+    public ASTargetedActivity() : this(new TypeMap()) {}
 
-    public ASTargetedActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<ASTargetedActivityEntity>();
+    public ASTargetedActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new ASTargetedActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public ASTargetedActivity(TypeMap typeMap, ASTargetedActivityEntity? entity) : base(typeMap, null)
+    {
+        Entity = entity ?? typeMap.AsEntity<ASTargetedActivityEntity>();
+        Target = Entity.Target;
+    }
+
+    static ASTargetedActivity IASModel<ASTargetedActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private ASTargetedActivityEntity Entity { get; }
 
 
@@ -39,10 +49,9 @@ public class ASTargetedActivity : ASTransitiveActivity
 }
 
 /// <inheritdoc cref="ASTargetedActivity" />
-[ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class ASTargetedActivityEntity : ASEntity<ASTargetedActivity>
+public sealed class ASTargetedActivityEntity : ASEntity<ASTargetedActivity, ASTargetedActivityEntity>
 {
     /// <inheritdoc cref="ASTargetedActivity.Target" />
     [JsonPropertyName("target")]
-    public required LinkableList<ASObject> Target { get; set; }
+    public LinkableList<ASObject> Target { get; set; } = new();
 }

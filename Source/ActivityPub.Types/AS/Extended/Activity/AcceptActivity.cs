@@ -1,7 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using ActivityPub.Types.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -9,23 +9,27 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor accepts the object.
 ///     The target property can be used in certain circumstances to indicate the context into which the object has been accepted.
 /// </summary>
-public class AcceptActivity : ASTransitiveActivity
+public class AcceptActivity : ASTransitiveActivity, IASModel<AcceptActivity, AcceptActivityEntity, ASTransitiveActivity>
 {
-    public AcceptActivity() => Entity = new AcceptActivityEntity { TypeMap = TypeMap };
-    public AcceptActivity(TypeMap typeMap) : base(typeMap) => Entity = TypeMap.AsEntity<AcceptActivityEntity>();
+    public const string AcceptType = "Accept";
+    static string IASModel<AcceptActivity>.ASTypeName => AcceptType;
+
+    public AcceptActivity() : this(new TypeMap()) {}
+
+    public AcceptActivity(TypeMap typeMap) : base(typeMap)
+    {
+        Entity = new AcceptActivityEntity();
+        TypeMap.Add(Entity);
+    }
+
+    [SetsRequiredMembers]
+    public AcceptActivity(TypeMap typeMap, AcceptActivityEntity? entity) : base(typeMap, null)
+        => Entity = entity ?? typeMap.AsEntity<AcceptActivityEntity>();
+
+    static AcceptActivity IASModel<AcceptActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
+
     private AcceptActivityEntity Entity { get; }
 }
 
 /// <inheritdoc cref="AcceptActivity" />
-[APConvertible(AcceptType)]
-[ImpliesOtherEntity(typeof(ASTransitiveActivityEntity))]
-public sealed class AcceptActivityEntity : ASEntity<AcceptActivity>
-{
-    public const string AcceptType = "Accept";
-    public override string ASTypeName => AcceptType;
-
-    public override IReadOnlySet<string> ReplacesASTypes { get; } = new HashSet<string>
-    {
-        ASActivityEntity.ActivityType
-    };
-}
+public sealed class AcceptActivityEntity : ASEntity<AcceptActivity, AcceptActivityEntity> {}
