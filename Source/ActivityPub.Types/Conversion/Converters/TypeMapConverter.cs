@@ -25,7 +25,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         _asTypeInfoCache = asTypeInfoCache;
         _createTypeSelector = typeof(TypeMapConverter)
             .GetRequiredMethod(nameof(CreateTypeSelector), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-            .CreateGenericPivot<TypeSelector>(this);
+            .CreateGenericPivot<TypeSelector>();
     }
 
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -135,7 +135,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Try to get the context property.
         if (jsonElement.ValueKind != JsonValueKind.Object || !jsonElement.TryGetProperty("@context", out var contextProp))
             // If missing then use default.
-            return JsonLDContext.ActivityStreams;
+            return JsonLDContext.CreateASContext();
 
         // Convert context
         return contextProp.Deserialize<JsonLDContext>(options)
