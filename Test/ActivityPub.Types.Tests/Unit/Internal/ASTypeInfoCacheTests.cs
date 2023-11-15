@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Internal;
+using ActivityPub.Types.Tests.Util.Fakes;
 
 namespace ActivityPub.Types.Tests.Unit.Internal;
 
@@ -42,6 +43,18 @@ public abstract class ASTypeInfoCacheTests
         public void NotIncludeOtherAssemblies()
         {
             CacheUnderTest.TryGetModelType(FakeTypeForASTypeInfoCacheTests.FakeTypeForASTypeInfoCacheTestsType, out _).Should().BeFalse();
+        }
+    }
+
+    public class AnonymousEntityTypesShould : ASTypeInfoCacheTests
+    {
+        public AnonymousEntityTypesShould() => CacheUnderTest.RegisterAllAssemblies();
+
+        [Fact]
+        public void IncludeAllDetectedAnonymousTypes()
+        {
+            var expectedType = typeof(AnonymousExtensionFakeEntity);
+            CacheUnderTest.AnonymousEntityTypes.Should().Contain(expectedType);
         }
     }
 }

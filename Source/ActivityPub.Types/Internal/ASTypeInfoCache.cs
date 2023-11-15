@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using ActivityPub.Types.AS;
+using ActivityPub.Types.Conversion.Overrides;
 using InternalUtils;
 
 namespace ActivityPub.Types.Internal;
@@ -29,6 +30,11 @@ public interface IASTypeInfoCache
     ///     Returns true on success or false on failure, following the TryGet pattern.
     /// </summary>
     bool TryGetModelType(string asType, [NotNullWhen(true)] out Type? modelType);
+    
+    /// <summary>
+    ///     All known types that implement <see cref="IAnonymousEntity"/>.
+    /// </summary>
+    internal IEnumerable<Type> AnonymousEntityTypes { get; }
 
     /// <summary>
     ///     Find and load all ActivityStreams types in a particular assembly.
@@ -48,6 +54,9 @@ public class ASTypeInfoCache : IASTypeInfoCache
     
     private readonly Dictionary<Type, ModelMeta> _typeMetaMap = new();
     private readonly Dictionary<string, ModelMeta> _nameMetaMap = new();
+
+    public IEnumerable<Type> AnonymousEntityTypes => _anonymousEntityTypes;
+    private readonly HashSet<Type> _anonymousEntityTypes = new();
 
     /// <summary>
     ///     Calls <see cref="CreateTypeMetadataFor{T}"/> with a specified value for T.
@@ -129,14 +138,20 @@ public class ASTypeInfoCache : IASTypeInfoCache
         var meta = _createTypeMetadataFor(type);
         _typeMetaMap[type] = meta;
 
-        // Also check for duplicate AS type names
+        // Register named entities
         if (meta.ASTypeName != null)
         {
+            // Check for duplicates!
             if (_nameMetaMap.TryGetValue(meta.ASTypeName, out var conflictMeta))
                 throw new ApplicationException($"Multiple classes are using AS type name {meta.ASTypeName}: trying to register {type} on top of {conflictMeta.ModelType}");
 
             _nameMetaMap[meta.ASTypeName] = meta;
         }
+        
+        // Register anonymous entities
+        var entityType = meta.EntityType;
+        if (entityType.IsAssignableTo(typeof(IAnonymousEntity)))
+            _anonymousEntityTypes.Add(entityType);
     }
 
     private ModelMeta CreateTypeMetadataFor<T>()

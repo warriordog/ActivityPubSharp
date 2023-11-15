@@ -17,15 +17,26 @@ namespace ActivityPub.Types.Conversion.Converters;
 public class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
+    
+    // TODO factor these into classes
+    
     private readonly Dictionary<Type, TypeSelector?> _typeSelectorCache = new();
     private readonly Func<Type, TypeSelector> _createTypeSelector;
 
+    private readonly Dictionary<Type, AnonymousChecker> _anonymousCheckerCache = new();
+    private readonly Func<Type, AnonymousChecker> _createAnonymousChecker;
+    
     public TypeMapConverter(IASTypeInfoCache asTypeInfoCache)
     {
         _asTypeInfoCache = asTypeInfoCache;
+        
         _createTypeSelector = typeof(TypeMapConverter)
             .GetRequiredMethod(nameof(CreateTypeSelector), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
             .CreateGenericPivot<TypeSelector>();
+        
+        _createAnonymousChecker = typeof(TypeMapConverter)
+            .GetRequiredMethod(nameof(CreateAnonymousChecker), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+            .CreateGenericPivot<AnonymousChecker>();
     }
 
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -49,9 +60,17 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         };
 
 
+        ReadKnownEntities(jsonElement, meta);
+        ReadAnonymousEntities(jsonElement, meta);
+
+        return typeMap;
+    }
+    
+    private void ReadKnownEntities(JsonElement jsonElement, DeserializationMetadata meta)
+    {
         // String input is a special case of Link
         if (jsonElement.ValueKind == JsonValueKind.String)
-            ReadString(jsonElement, typeMap);
+            ReadString(jsonElement, meta.TypeMap);
 
         // Object input can be anything
         else if (jsonElement.ValueKind == JsonValueKind.Object)
@@ -60,10 +79,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Other input is an error
         else
             throw new JsonException($"Can't convert TypeMap from {jsonElement.ValueKind}");
-
-        return typeMap;
     }
-
     private static void ReadString(JsonElement jsonElement, TypeMap typeMap)
     {
         // Read Link entity
@@ -91,6 +107,20 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Record each AS type that did *not* map to an object type
         foreach (var asType in unmappedTypes)
             meta.TypeMap.AddUnmappedType(asType);
+    }
+
+    
+    private void ReadAnonymousEntities(JsonElement jsonElement, DeserializationMetadata meta)
+    {
+        // Anonymous entities must be checked for every input JSON.
+        // Any that match are converted like normal entities, but skipping the usual AS type / context check.
+        foreach (var entityType in _asTypeInfoCache.AnonymousEntityTypes)
+        {
+            var checker = GetAnonymousChecker(entityType);
+            
+            if (checker.ShouldConvert(jsonElement))
+                ReadEntity(jsonElement, meta, entityType);
+        }
     }
 
     private void ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
@@ -254,5 +284,32 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     {
         public override bool TryNarrowType(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
             => T.TryNarrowTypeByJson(element, meta, out type);
+    }
+    
+    private AnonymousChecker GetAnonymousChecker(Type entityType)
+    {
+        if (!_anonymousCheckerCache.TryGetValue(entityType, out var checker))
+        {
+            checker = _createAnonymousChecker(entityType);
+            _anonymousCheckerCache[entityType] = checker;
+        }
+
+        return checker;
+    }
+    
+    private static AnonymousChecker CreateAnonymousChecker<TEntity>()
+        where TEntity : IAnonymousEntity
+        => new GenericAnonymousChecker<TEntity>();
+    
+    private abstract class AnonymousChecker
+    {
+        public abstract bool ShouldConvert(JsonElement jsonElement);
+    }
+
+    private class GenericAnonymousChecker<T> : AnonymousChecker
+        where T : IAnonymousEntity
+    {
+        public override bool ShouldConvert(JsonElement jsonElement)
+            => T.ShouldConvertFrom(jsonElement);
     }
 }
