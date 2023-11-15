@@ -4,6 +4,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
 
@@ -22,6 +23,11 @@ public abstract class ASEntity
     [JsonIgnore]
     public virtual string? ASTypeName => null;
 
+    /// <summary>
+    ///     JSON-LD context(s) that define this entity.
+    /// </summary>
+    public virtual IJsonLDContext DefiningContext => IJsonLDContext.ActivityStreams;
+    
     /// <summary>
     ///     AS type name of this entity's "base type".
     ///     When this entity is added to the graph, the target type will be removed if present.
@@ -52,4 +58,5 @@ public abstract class ASEntity<TModel, TEntity> : ASEntity
 {
     public sealed override string? ASTypeName => TModel.ASTypeName;
     public sealed override string? BaseTypeName => TModel.BaseTypeName;
+    public sealed override IJsonLDContext DefiningContext => TModel.DefiningContext;
 }

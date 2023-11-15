@@ -8,6 +8,7 @@ using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
+using InternalUtils;
 
 namespace ActivityPub.Types;
 
@@ -23,7 +24,7 @@ public class TypeMap
     /// <summary>
     ///     Constructs a new, empty type graph initialized with the ActivityStreams context.
     /// </summary>
-    public TypeMap() : this(JsonLDContext.ActivityStreams) {}
+    public TypeMap() : this(JsonLDContext.CreateASContext()) {}
 
     /// <summary>
     ///     Constructs a TypeMap with a pre-populated JSON-LD context.
@@ -219,6 +220,9 @@ public class TypeMap
         // Populate and/or filter the list of unmapped properties
         NarrowUnmappedProperties(entity);
 
+        // Register the JSON-LD context
+        _ldContext.AddRange(entity.DefiningContext);
+        
         return true;
     }
 

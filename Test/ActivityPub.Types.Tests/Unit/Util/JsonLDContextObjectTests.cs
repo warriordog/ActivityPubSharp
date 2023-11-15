@@ -7,6 +7,31 @@ namespace ActivityPub.Types.Tests.Unit.Util;
 
 public abstract class JsonLDContextObjectTests
 {
+    public class ActivityStreamsShould : JsonLDContextObjectTests
+    {
+        [Fact]
+        public void ConstructLinkObject()
+        {
+            var context = JsonLDContextObject.ActivityStreams;
+            context.IsExternal.Should().BeTrue();
+        }
+
+        [Fact]
+        public void LinkToASContext()
+        {
+            var context = JsonLDContextObject.ActivityStreams;
+            context.ExternalLink?.Should().Be("https://www.w3.org/ns/activitystreams");
+        }
+
+        [Fact]
+        public void ReturnSharedInstance()
+        {
+            var first = JsonLDContextObject.ActivityStreams;
+            var second = JsonLDContextObject.ActivityStreams;
+            first.Should().BeSameAs(second);
+        }
+    }
+    
     public class EqualsShould : JsonLDContextObjectTests
     {
         [Fact]

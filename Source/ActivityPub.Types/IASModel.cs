@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
 
@@ -27,6 +28,10 @@ public interface IASModel<out TModel>
     /// <inheritdoc cref="ASEntity.BaseTypeName"/>
     [JsonIgnore]
     public static virtual string? BaseTypeName => null;
+    
+    /// <inheritdoc cref="ASEntity.DefiningContext"/>
+    [JsonIgnore]
+    public static virtual IJsonLDContext DefiningContext => IJsonLDContext.ActivityStreams;
     
     /// <summary>
     ///     Constructs an instance from this type from a pre-populated type graph.

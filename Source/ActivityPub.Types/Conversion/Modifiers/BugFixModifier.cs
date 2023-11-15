@@ -16,6 +16,7 @@ public static class BugFixModifier
     {
         nameof(ASEntity.ASTypeName),
         nameof(ASEntity.BaseTypeName),
+        nameof(ASEntity.DefiningContext),
         nameof(ASEntity.RequiresObjectForm),
         nameof(IASModel<ASType>.EntityType)
     };

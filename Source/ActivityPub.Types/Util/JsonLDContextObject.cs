@@ -31,7 +31,7 @@ public record JsonLDContextObject
     public JsonLDContextObject(IReadOnlyDictionary<string, JsonLDTerm> terms) => _terms = new TermMap(terms);
 
     /// <summary>
-    ///     Immutable, shared reference to the ActivityStreams context.
+    ///     Immutable, shared reference to the ActivityStreams (ActivityPub) context.
     /// </summary>
     public static JsonLDContextObject ActivityStreams { get; } = new("https://www.w3.org/ns/activitystreams");
 
@@ -60,7 +60,6 @@ public record JsonLDContextObject
     ///     Important: terms may be defined by *other* external contexts.
     /// </summary>
     public IReadOnlyDictionary<string, JsonLDTerm>? Terms => _terms?.Data;
-
     private readonly TermMap? _terms;
 
     /// <summary>

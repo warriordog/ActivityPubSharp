@@ -14,7 +14,11 @@ namespace ActivityPub.Types.Util;
 /// <seealso href="https://www.w3.org/TR/json-ld11/#dfn-context" />
 /// <seealso href="https://www.w3.org/TR/json-ld11/#context-definitions" />
 /// <seealso href="https://www.w3.org/TR/json-ld11/#the-context" />
-public interface IJsonLDContext : IReadOnlySet<JsonLDContextObject> {}
+public interface IJsonLDContext : IReadOnlySet<JsonLDContextObject>
+{
+    /// <inheritdoc cref="JsonLDContextObject.ActivityStreams"/>
+    public static IJsonLDContext ActivityStreams { get; } = JsonLDContext.CreateASContext();
+}
 
 /// <summary>
 ///     Mutable implementation of IJsonLDContext.
@@ -36,7 +40,8 @@ public class JsonLDContext : HashSet<JsonLDContextObject>, IJsonLDContext
     /// <summary>
     ///     Constructs a new context, pre-initialized with the ActivityStreams context.
     /// </summary>
-    public static JsonLDContext ActivityStreams => new()
+    /// <seealso cref="JsonLDContextObject.ActivityStreams"/>
+    public static JsonLDContext CreateASContext() => new()
     {
         JsonLDContextObject.ActivityStreams
     };
