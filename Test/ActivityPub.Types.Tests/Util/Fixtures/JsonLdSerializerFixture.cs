@@ -30,8 +30,9 @@ public sealed class JsonLdSerializerFixture
         ConversionOptions = new ConversionOptions();
         var conversionOptions = Options.Create(ConversionOptions);
         var subTypePivot = new SubTypePivot();
+        var namelessEntityPivot = new NamelessEntityPivot();
         var anonymousEntityPivot = new AnonymousEntityPivot();
-        var typeMapConverter = new TypeMapConverter(ASTypeInfoCache, conversionOptions, subTypePivot, anonymousEntityPivot);
+        var typeMapConverter = new TypeMapConverter(ASTypeInfoCache, conversionOptions, subTypePivot, anonymousEntityPivot, namelessEntityPivot);
 
         var asTypeConverter = new ASTypeConverter();
         var linkableConverter = new LinkableConverter(ASTypeInfoCache);

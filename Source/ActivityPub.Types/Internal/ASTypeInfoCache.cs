@@ -37,6 +37,11 @@ public interface IASTypeInfoCache
     internal IEnumerable<Type> AnonymousEntityTypes { get; }
 
     /// <summary>
+    ///     All known types that implement <see cref="INamelessEntity"/>.
+    /// </summary>
+    internal IEnumerable<Type> NamelessEntityTypes { get; }
+    
+    /// <summary>
     ///     Find and load all ActivityStreams types in a particular assembly.
     /// </summary>
     /// <param name="assembly">Assembly to load</param>
@@ -57,6 +62,9 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
     public IEnumerable<Type> AnonymousEntityTypes => _anonymousEntityTypes;
     private readonly HashSet<Type> _anonymousEntityTypes = new();
+
+    public IEnumerable<Type> NamelessEntityTypes => _namelessEntityTypes;
+    private readonly HashSet<Type> _namelessEntityTypes = new();
 
     /// <summary>
     ///     Calls <see cref="CreateTypeMetadataFor{T}"/> with a specified value for T.
@@ -127,7 +135,8 @@ public class ASTypeInfoCache : IASTypeInfoCache
             return;
 
         // Skip if it's not a model
-        var modelType = typeof(IASModel<>).MakeGenericType(type);
+        if (!typeof(IASModel<>).TryMakeGenericType(out var modelType, type))
+            return;
         if (!type.IsAssignableTo(modelType))
             return;
 
@@ -139,19 +148,24 @@ public class ASTypeInfoCache : IASTypeInfoCache
         _typeMetaMap[type] = meta;
 
         // Register named entities
-        if (meta.ASTypeName != null)
+        var asTypeName = meta.ASTypeName;
+        if (asTypeName != null)
         {
             // Check for duplicates!
-            if (_nameMetaMap.TryGetValue(meta.ASTypeName, out var conflictMeta))
-                throw new ApplicationException($"Multiple classes are using AS type name {meta.ASTypeName}: trying to register {type} on top of {conflictMeta.ModelType}");
+            if (_nameMetaMap.TryGetValue(asTypeName, out var conflictMeta))
+                throw new ApplicationException($"Multiple classes are using AS type name {asTypeName}: trying to register {type} on top of {conflictMeta.ModelType}");
 
-            _nameMetaMap[meta.ASTypeName] = meta;
+            _nameMetaMap[asTypeName] = meta;
         }
         
         // Register anonymous entities
         var entityType = meta.EntityType;
         if (entityType.IsAssignableTo(typeof(IAnonymousEntity)))
             _anonymousEntityTypes.Add(entityType);
+        
+        // Register nameless entities
+        if (entityType.IsAssignableTo(typeof(INamelessEntity)))
+            _namelessEntityTypes.Add(entityType);
     }
 
     private ModelMeta CreateTypeMetadataFor<T>()

@@ -17,13 +17,15 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private readonly IASTypeInfoCache _asTypeInfoCache;
     private readonly IConversionOptions _conversionOptions;
     private readonly ISubTypePivot _subTypePivot;
+    private readonly INamelessEntityPivot _namelessEntityPivot;
     private readonly IAnonymousEntityPivot _anonymousEntityPivot;
     
-    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, ISubTypePivot subTypePivot, IAnonymousEntityPivot anonymousEntityPivot)
+    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, ISubTypePivot subTypePivot, IAnonymousEntityPivot anonymousEntityPivot, INamelessEntityPivot namelessEntityPivot)
     {
         _asTypeInfoCache = asTypeInfoCache;
         _subTypePivot = subTypePivot;
         _anonymousEntityPivot = anonymousEntityPivot;
+        _namelessEntityPivot = namelessEntityPivot;
         _conversionOptions = conversionOptions.Value;
     }
 
@@ -48,6 +50,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         };
         
         ReadKnownEntities(jsonElement, meta);
+        ReadNamelessEntities(jsonElement, meta);
         ReadAnonymousEntities(jsonElement, meta);
 
         return typeMap;
@@ -96,11 +99,19 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             meta.TypeMap.AddUnmappedType(asType);
     }
 
+    private void ReadNamelessEntities(JsonElement jsonElement, DeserializationMetadata meta)
+    {
+        // Nameless entities must be checked for every input JSON.
+        // Any that match are converted like normal entities, but skipping the usual AS type lookup.
+        foreach (var entityType in _asTypeInfoCache.NamelessEntityTypes)
+            if (_namelessEntityPivot.ShouldConvert(entityType, meta.LDContext))
+                ReadEntity(jsonElement, meta, entityType);
+    }
     
     private void ReadAnonymousEntities(JsonElement jsonElement, DeserializationMetadata meta)
     {
         // Anonymous entities must be checked for every input JSON.
-        // Any that match are converted like normal entities, but skipping the usual AS type / context check.
+        // Any that match are converted like normal entities, but skipping the usual AS type / context lookup.
         foreach (var entityType in _asTypeInfoCache.AnonymousEntityTypes)
             if (_anonymousEntityPivot.ShouldConvert(entityType, jsonElement))
                 ReadEntity(jsonElement, meta, entityType);

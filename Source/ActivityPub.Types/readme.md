@@ -70,11 +70,12 @@ However, it will be necessary if implementing a new extension or handling some r
 
 ### Entity Mapping
 
-APSharp includes a 3-step process to determine which entities should be constructed from an incoming JSON message.
+APSharp includes a 4-step process to determine which entities should be constructed from an incoming JSON message.
 All entities detected by at least one test will be converted and parsed.
 1. Map values of the `type` property to registered AS type names.
-2. Try all entities that implement [`IAnonymousEntity`](Conversion/Overrides/IAnonymousEntity.cs).
-3. Execute all configured [`IAnonymousEntitySelector`](Conversion/Overrides/IAnonymousEntitySelector.cs) instances.
+2. Try all entities that implement [`INamelessEntity`](Conversion/Overrides/INamelessEntity.cs).
+3. Try all entities that implement [`IAnonymousEntity`](Conversion/Overrides/IAnonymousEntity.cs).
+4. Try all configured [`IAnonymousEntitySelector`](Conversion/Overrides/IAnonymousEntitySelector.cs) instances.
 
 ## Utility Types
 

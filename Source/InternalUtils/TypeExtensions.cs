@@ -267,4 +267,20 @@ internal static class TypeExtensions
         if (!method.IsStatic && instance == null)
             throw new ArgumentException("instance must be provided for instance methods", nameof(instance));
     }
+
+    internal static bool TryMakeGenericType(this Type type, [NotNullWhen(true)] out Type? genericType, params Type[] arguments)
+    {
+        try
+        {
+            genericType = type.MakeGenericType(arguments);
+            return true;
+        }
+        
+        // This is actually the best way: https://stackoverflow.com/a/4864565
+        catch (ArgumentException)
+        {
+            genericType = null;
+            return false;
+        }
+    }
 }

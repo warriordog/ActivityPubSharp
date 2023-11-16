@@ -10,6 +10,7 @@ namespace ActivityPub.Types.Conversion.Overrides;
 ///     Exposes functionality to dynamically detect the entity within an arbitrary JSON message.
 /// </summary>
 /// <seealso cref="IAnonymousEntitySelector"/>
+/// <seealso cref="INamelessEntity"/>
 public interface IAnonymousEntity
 {
     /// <summary>

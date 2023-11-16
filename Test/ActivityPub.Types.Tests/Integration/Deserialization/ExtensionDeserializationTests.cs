@@ -66,5 +66,27 @@ public abstract class ExtensionDeserializationTests : DeserializationTests<ASObj
         public AnonymousExtensionsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
 
+    public class NamelessExtensionsShould : ExtensionDeserializationTests
+    {
+
+        [Fact]
+        public void NotConvert_FromNormalObject()
+        {
+            JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object","ExtendedString":"Hello, world!"}""";
+            ObjectUnderTest.Is<NamelessExtensionFake>().Should().BeFalse();
+        }
+        
+        [Fact]
+        public void Convert_FromMatchingContext()
+        {            
+            JsonUnderTest = """{"@context":["https://www.w3.org/ns/activitystreams","https://example.com/nameless"],"type":"Object","ExtendedString":"Hello, world!"}""";
+            
+            ObjectUnderTest.Is<AnonymousExtensionFake>().Should().BeTrue();
+            ObjectUnderTest.As<AnonymousExtensionFake>().ExtendedString.Should().Be("Hello, world!");
+        }
+        
+        public NamelessExtensionsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+    }
+
     protected ExtensionDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }
