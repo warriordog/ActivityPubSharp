@@ -24,6 +24,8 @@ public class UpdateActivity : ASTransitiveActivity, IASModel<UpdateActivity, Upd
         TypeMap.Add(Entity);
     }
 
+    public UpdateActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public UpdateActivity(TypeMap typeMap, UpdateActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<UpdateActivityEntity>();

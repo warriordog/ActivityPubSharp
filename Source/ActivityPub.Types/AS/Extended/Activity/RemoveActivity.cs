@@ -23,6 +23,8 @@ public class RemoveActivity : ASTargetedActivity, IASModel<RemoveActivity, Remov
         TypeMap.Add(Entity);
     }
 
+    public RemoveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public RemoveActivity(TypeMap typeMap, RemoveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<RemoveActivityEntity>();

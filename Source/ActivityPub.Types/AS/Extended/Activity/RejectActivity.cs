@@ -23,6 +23,8 @@ public class RejectActivity : ASTransitiveActivity, IASModel<RejectActivity, Rej
         TypeMap.Add(Entity);
     }
 
+    public RejectActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public RejectActivity(TypeMap typeMap, RejectActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<RejectActivityEntity>();

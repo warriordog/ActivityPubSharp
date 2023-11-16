@@ -31,6 +31,8 @@ public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity,
         TypeMap.Add(Entity);
     }
 
+    public ASCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ASCollection(TypeMap typeMap, ASCollectionEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASCollectionEntity>();

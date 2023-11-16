@@ -24,6 +24,8 @@ public class UndoActivity : ASTransitiveActivity, IASModel<UndoActivity, UndoAct
         TypeMap.Add(Entity);
     }
 
+    public UndoActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public UndoActivity(TypeMap typeMap, UndoActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<UndoActivityEntity>();

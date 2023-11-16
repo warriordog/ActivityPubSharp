@@ -23,6 +23,8 @@ public class JoinActivity : ASTransitiveActivity, IASModel<JoinActivity, JoinAct
         TypeMap.Add(Entity);
     }
 
+    public JoinActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public JoinActivity(TypeMap typeMap, JoinActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<JoinActivityEntity>();

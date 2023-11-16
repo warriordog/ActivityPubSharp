@@ -26,6 +26,8 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
         TypeMap.Add(Entity);
     }
 
+    public QuestionActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public QuestionActivity(TypeMap typeMap, QuestionActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<QuestionActivityEntity>();

@@ -22,6 +22,8 @@ public class PersonActor : APActor, IASModel<PersonActor, PersonActorEntity, APA
         TypeMap.Add(Entity);
     }
 
+    public PersonActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public PersonActor(TypeMap typeMap, PersonActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<PersonActorEntity>();

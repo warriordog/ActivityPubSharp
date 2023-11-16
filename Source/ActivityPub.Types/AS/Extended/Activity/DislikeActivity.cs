@@ -22,6 +22,8 @@ public class DislikeActivity : ASTransitiveActivity, IASModel<DislikeActivity, D
         TypeMap.Add(Entity);
     }
 
+    public DislikeActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public DislikeActivity(TypeMap typeMap, DislikeActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<DislikeActivityEntity>();

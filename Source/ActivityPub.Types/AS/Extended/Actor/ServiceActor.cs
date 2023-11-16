@@ -22,6 +22,8 @@ public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, 
         TypeMap.Add(Entity);
     }
 
+    public ServiceActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ServiceActor(TypeMap typeMap, ServiceActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ServiceActorEntity>();

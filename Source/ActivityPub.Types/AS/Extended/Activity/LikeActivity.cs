@@ -23,6 +23,8 @@ public class LikeActivity : ASTransitiveActivity, IASModel<LikeActivity, LikeAct
         TypeMap.Add(Entity);
     }
 
+    public LikeActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public LikeActivity(TypeMap typeMap, LikeActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<LikeActivityEntity>();

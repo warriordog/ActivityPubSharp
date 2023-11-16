@@ -29,6 +29,8 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
         TypeMap.Add(Entity);
     }
 
+    public ASActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ASActivity(TypeMap typeMap, ASActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASActivityEntity>();

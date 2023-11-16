@@ -20,6 +20,8 @@ public class ASTargetedActivity : ASTransitiveActivity, IASModel<ASTargetedActiv
         TypeMap.Add(Entity);
     }
 
+    public ASTargetedActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ASTargetedActivity(TypeMap typeMap, ASTargetedActivityEntity? entity) : base(typeMap, null)
     {

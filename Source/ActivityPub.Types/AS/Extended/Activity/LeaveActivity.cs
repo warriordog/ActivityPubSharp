@@ -23,6 +23,8 @@ public class LeaveActivity : ASTransitiveActivity, IASModel<LeaveActivity, Leave
         TypeMap.Add(Entity);
     }
 
+    public LeaveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public LeaveActivity(TypeMap typeMap, LeaveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<LeaveActivityEntity>();

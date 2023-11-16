@@ -22,12 +22,13 @@ public class ApplicationActor : APActor, IASModel<ApplicationActor, ApplicationA
         TypeMap.Add(Entity);
     }
 
+    public ApplicationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ApplicationActor(TypeMap typeMap, ApplicationActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ApplicationActorEntity>();
 
     static ApplicationActor IASModel<ApplicationActor>.FromGraph(TypeMap typeMap) => new(typeMap, null);
-
 
     private ApplicationActorEntity Entity { get; }
 }

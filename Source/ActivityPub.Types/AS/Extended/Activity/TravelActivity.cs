@@ -24,6 +24,8 @@ public class TravelActivity : ASIntransitiveActivity, IASModel<TravelActivity, T
         TypeMap.Add(Entity);
     }
 
+    public TravelActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public TravelActivity(TypeMap typeMap, TravelActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<TravelActivityEntity>();

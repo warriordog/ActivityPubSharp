@@ -22,6 +22,8 @@ public class OrganizationActor : APActor, IASModel<OrganizationActor, Organizati
         TypeMap.Add(Entity);
     }
 
+    public OrganizationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public OrganizationActor(TypeMap typeMap, OrganizationActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<OrganizationActorEntity>();

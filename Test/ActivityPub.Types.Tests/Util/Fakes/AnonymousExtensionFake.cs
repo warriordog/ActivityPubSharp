@@ -18,6 +18,8 @@ public class AnonymousExtensionFake : ASObject, IASModel<AnonymousExtensionFake,
         TypeMap.Add(Entity);
     }
 
+    public AnonymousExtensionFake(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public AnonymousExtensionFake(TypeMap typeMap, AnonymousExtensionFakeEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<AnonymousExtensionFakeEntity>();

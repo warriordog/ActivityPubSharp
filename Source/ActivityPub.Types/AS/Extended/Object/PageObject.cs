@@ -22,6 +22,8 @@ public class PageObject : DocumentObject, IASModel<PageObject, PageObjectEntity,
         TypeMap.Add(Entity);
     }
 
+    public PageObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public PageObject(TypeMap typeMap, PageObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<PageObjectEntity>();

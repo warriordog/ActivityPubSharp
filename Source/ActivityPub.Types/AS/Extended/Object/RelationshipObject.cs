@@ -24,6 +24,8 @@ public class RelationshipObject : ASObject, IASModel<RelationshipObject, Relatio
         TypeMap.Add(Entity);
     }
 
+    public RelationshipObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public RelationshipObject(TypeMap typeMap, RelationshipObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<RelationshipObjectEntity>();

@@ -22,6 +22,8 @@ public class TentativeRejectActivity : RejectActivity, IASModel<TentativeRejectA
         TypeMap.Add(Entity);
     }
 
+    public TentativeRejectActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public TentativeRejectActivity(TypeMap typeMap, TentativeRejectActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<TentativeRejectActivityEntity>();

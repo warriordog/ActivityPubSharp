@@ -22,6 +22,8 @@ public class VideoObject : DocumentObject, IASModel<VideoObject, VideoObjectEnti
         TypeMap.Add(Entity);
     }
 
+    public VideoObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public VideoObject(TypeMap typeMap, VideoObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<VideoObjectEntity>();

@@ -22,6 +22,8 @@ public class ReadActivity : ASTransitiveActivity, IASModel<ReadActivity, ReadAct
         TypeMap.Add(Entity);
     }
 
+    public ReadActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ReadActivity(TypeMap typeMap, ReadActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ReadActivityEntity>();

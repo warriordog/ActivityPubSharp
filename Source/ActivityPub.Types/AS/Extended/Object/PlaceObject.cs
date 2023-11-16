@@ -22,6 +22,8 @@ public class PlaceObject : ASObject, IASModel<PlaceObject, PlaceObjectEntity, AS
         TypeMap.Add(Entity);
     }
 
+    public PlaceObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public PlaceObject(TypeMap typeMap, PlaceObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<PlaceObjectEntity>();

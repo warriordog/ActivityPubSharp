@@ -28,6 +28,8 @@ public class ASOrderedCollectionPage : ASOrderedCollection, IASModel<ASOrderedCo
         TypeMap.Add(Entity);
     }
 
+    public ASOrderedCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ASOrderedCollectionPage(TypeMap typeMap, ASOrderedCollectionPageEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASOrderedCollectionPageEntity>();

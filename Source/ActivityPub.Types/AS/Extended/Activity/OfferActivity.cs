@@ -23,6 +23,8 @@ public class OfferActivity : ASTransitiveActivity, IASModel<OfferActivity, Offer
         TypeMap.Add(Entity);
     }
 
+    public OfferActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public OfferActivity(TypeMap typeMap, OfferActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<OfferActivityEntity>();

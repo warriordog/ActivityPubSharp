@@ -22,6 +22,8 @@ public class ArticleObject : ASObject, IASModel<ArticleObject, ArticleObjectEnti
         TypeMap.Add(Entity);
     }
 
+    public ArticleObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ArticleObject(TypeMap typeMap, ArticleObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ArticleObjectEntity>();

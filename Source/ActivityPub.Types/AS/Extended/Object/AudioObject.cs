@@ -22,6 +22,8 @@ public class AudioObject : DocumentObject, IASModel<AudioObject, AudioObjectEnti
         TypeMap.Add(Entity);
     }
 
+    public AudioObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public AudioObject(TypeMap typeMap, AudioObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<AudioObjectEntity>();

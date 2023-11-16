@@ -26,6 +26,8 @@ public class ASTransitiveActivity : ASActivity, IASModel<ASTransitiveActivity, A
         TypeMap.Add(Entity);
     }
 
+    public ASTransitiveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ASTransitiveActivity(TypeMap typeMap, ASTransitiveActivityEntity? entity) : base(typeMap, null)
     {

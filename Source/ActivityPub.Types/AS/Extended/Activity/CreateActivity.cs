@@ -22,6 +22,8 @@ public class CreateActivity : ASTransitiveActivity, IASModel<CreateActivity, Cre
         TypeMap.Add(Entity);
     }
 
+    public CreateActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public CreateActivity(TypeMap typeMap, CreateActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<CreateActivityEntity>();

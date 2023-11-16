@@ -22,6 +22,8 @@ public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLi
         TypeMap.Add(Entity);
     }
 
+    public MentionLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public MentionLink(TypeMap typeMap, MentionLinkEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<MentionLinkEntity>();

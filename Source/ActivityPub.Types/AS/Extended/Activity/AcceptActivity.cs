@@ -22,6 +22,8 @@ public class AcceptActivity : ASTransitiveActivity, IASModel<AcceptActivity, Acc
         TypeMap.Add(Entity);
     }
 
+    public AcceptActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public AcceptActivity(TypeMap typeMap, AcceptActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<AcceptActivityEntity>();

@@ -22,6 +22,8 @@ public class ListenActivity : ASTransitiveActivity, IASModel<ListenActivity, Lis
         TypeMap.Add(Entity);
     }
 
+    public ListenActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ListenActivity(TypeMap typeMap, ListenActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ListenActivityEntity>();

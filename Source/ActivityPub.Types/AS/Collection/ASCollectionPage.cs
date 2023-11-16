@@ -28,6 +28,8 @@ public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASColle
         TypeMap.Add(Entity);
     }
 
+    public ASCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ASCollectionPage(TypeMap typeMap, ASCollectionPageEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASCollectionPageEntity>();

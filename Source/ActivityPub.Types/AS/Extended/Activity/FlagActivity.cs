@@ -23,6 +23,8 @@ public class FlagActivity : ASTransitiveActivity, IASModel<FlagActivity, FlagAct
         TypeMap.Add(Entity);
     }
 
+    public FlagActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public FlagActivity(TypeMap typeMap, FlagActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<FlagActivityEntity>();

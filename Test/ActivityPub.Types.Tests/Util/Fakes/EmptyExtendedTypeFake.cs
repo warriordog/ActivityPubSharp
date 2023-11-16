@@ -24,6 +24,8 @@ public class EmptyExtendedTypeFake : ASType, IASModel<EmptyExtendedTypeFake, Emp
         TypeMap.Add(Entity);
     }
 
+    public EmptyExtendedTypeFake(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public EmptyExtendedTypeFake(TypeMap typeMap, EmptyExtendedTypeFakeEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<EmptyExtendedTypeFakeEntity>();

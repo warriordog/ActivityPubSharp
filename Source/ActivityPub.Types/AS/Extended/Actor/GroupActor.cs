@@ -22,6 +22,8 @@ public class GroupActor : APActor, IASModel<GroupActor, GroupActorEntity, APActo
         TypeMap.Add(Entity);
     }
 
+    public GroupActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public GroupActor(TypeMap typeMap, GroupActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<GroupActorEntity>();

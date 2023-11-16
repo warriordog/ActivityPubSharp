@@ -28,6 +28,8 @@ public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
         TypeMap.Add(Entity);
     }
 
+    public ASLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ASLink(TypeMap typeMap, ASLinkEntity? entity) : base(typeMap, null)
     {

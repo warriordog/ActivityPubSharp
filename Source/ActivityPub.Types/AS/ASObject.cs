@@ -30,6 +30,8 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
         TypeMap.Add(Entity);
     }
 
+    public ASObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ASObject(TypeMap typeMap, ASObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASObjectEntity>();

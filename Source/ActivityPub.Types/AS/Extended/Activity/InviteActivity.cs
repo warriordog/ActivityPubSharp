@@ -22,6 +22,8 @@ public class InviteActivity : OfferActivity, IASModel<InviteActivity, InviteActi
         TypeMap.Add(Entity);
     }
 
+    public InviteActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public InviteActivity(TypeMap typeMap, InviteActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<InviteActivityEntity>();

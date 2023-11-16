@@ -23,6 +23,8 @@ public class ProfileObject : ASObject, IASModel<ProfileObject, ProfileObjectEnti
         TypeMap.Add(Entity);
     }
 
+    public ProfileObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ProfileObject(TypeMap typeMap, ProfileObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ProfileObjectEntity>();

@@ -22,6 +22,8 @@ public class DocumentObject : ASObject, IASModel<DocumentObject, DocumentObjectE
         TypeMap.Add(Entity);
     }
 
+    public DocumentObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public DocumentObject(TypeMap typeMap, DocumentObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<DocumentObjectEntity>();

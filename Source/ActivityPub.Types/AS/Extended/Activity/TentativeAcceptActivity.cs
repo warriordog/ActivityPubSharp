@@ -22,6 +22,8 @@ public class TentativeAcceptActivity : AcceptActivity, IASModel<TentativeAcceptA
         TypeMap.Add(Entity);
     }
 
+    public TentativeAcceptActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public TentativeAcceptActivity(TypeMap typeMap, TentativeAcceptActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<TentativeAcceptActivityEntity>();

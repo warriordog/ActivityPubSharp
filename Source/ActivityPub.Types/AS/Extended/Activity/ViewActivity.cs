@@ -22,6 +22,8 @@ public class ViewActivity : ASTransitiveActivity, IASModel<ViewActivity, ViewAct
         TypeMap.Add(Entity);
     }
 
+    public ViewActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public ViewActivity(TypeMap typeMap, ViewActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ViewActivityEntity>();

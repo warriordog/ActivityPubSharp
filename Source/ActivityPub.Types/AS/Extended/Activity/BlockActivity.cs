@@ -25,6 +25,8 @@ public class BlockActivity : IgnoreActivity, IASModel<BlockActivity, BlockActivi
         TypeMap.Add(Entity);
     }
 
+    public BlockActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public BlockActivity(TypeMap typeMap, BlockActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<BlockActivityEntity>();

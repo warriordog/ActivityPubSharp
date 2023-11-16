@@ -25,6 +25,8 @@ public class NamelessExtensionFake : ASObject, IASModel<NamelessExtensionFake, N
         TypeMap.Add(Entity);
     }
 
+    public NamelessExtensionFake(ASType existingGraph) : this(existingGraph.TypeMap) {}
+
     [SetsRequiredMembers]
     public NamelessExtensionFake(TypeMap typeMap, NamelessExtensionFakeEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<NamelessExtensionFakeEntity>();
