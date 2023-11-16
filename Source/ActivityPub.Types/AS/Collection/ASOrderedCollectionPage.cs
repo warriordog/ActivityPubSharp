@@ -23,10 +23,7 @@ public class ASOrderedCollectionPage : ASOrderedCollection, IASModel<ASOrderedCo
     public ASOrderedCollectionPage() : this(new TypeMap()) {}
 
     public ASOrderedCollectionPage(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ASOrderedCollectionPageEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ASOrderedCollectionPageEntity>();
 
     public ASOrderedCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

@@ -17,10 +17,7 @@ public class DocumentObject : ASObject, IASModel<DocumentObject, DocumentObjectE
     public DocumentObject() : this(new TypeMap()) {}
 
     public DocumentObject(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new DocumentObjectEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<DocumentObjectEntity>();
 
     public DocumentObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

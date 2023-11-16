@@ -25,10 +25,7 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
     public ASObject() : this(new TypeMap()) {}
 
     public ASObject(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ASObjectEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ASObjectEntity>();
 
     public ASObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

@@ -17,10 +17,7 @@ public class TentativeAcceptActivity : AcceptActivity, IASModel<TentativeAcceptA
     public TentativeAcceptActivity() : this(new TypeMap()) {}
 
     public TentativeAcceptActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new TentativeAcceptActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<TentativeAcceptActivityEntity>();
 
     public TentativeAcceptActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

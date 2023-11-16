@@ -17,10 +17,7 @@ public class ReadActivity : ASTransitiveActivity, IASModel<ReadActivity, ReadAct
     public ReadActivity() : this(new TypeMap()) {}
 
     public ReadActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ReadActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ReadActivityEntity>();
 
     public ReadActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

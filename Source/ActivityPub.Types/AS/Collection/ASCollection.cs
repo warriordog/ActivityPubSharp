@@ -26,10 +26,7 @@ public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity,
     public ASCollection() : this(new TypeMap()) {}
 
     public ASCollection(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ASCollectionEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ASCollectionEntity>();
 
     public ASCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

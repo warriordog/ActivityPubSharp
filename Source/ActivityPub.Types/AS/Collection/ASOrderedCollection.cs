@@ -26,10 +26,7 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     public ASOrderedCollection() : this(new TypeMap()) {}
 
     public ASOrderedCollection(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ASOrderedCollectionEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ASOrderedCollectionEntity>();
 
     public ASOrderedCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

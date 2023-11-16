@@ -23,10 +23,7 @@ public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
     public ASLink() : this(new TypeMap()) {}
 
     public ASLink(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ASLinkEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ASLinkEntity>();
 
     public ASLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

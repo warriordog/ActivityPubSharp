@@ -15,10 +15,7 @@ public class ASTargetedActivity : ASTransitiveActivity, IASModel<ASTargetedActiv
     public ASTargetedActivity() : this(new TypeMap()) {}
 
     public ASTargetedActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ASTargetedActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ASTargetedActivityEntity>();
 
     public ASTargetedActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

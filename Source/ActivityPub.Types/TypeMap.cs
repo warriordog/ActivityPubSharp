@@ -178,6 +178,50 @@ public class TypeMap
     }
 
     /// <summary>
+    ///     Extends the TypeGraph to include a new entity.
+    ///     The entity must have a parameterless constructor.
+    ///     Throws an exception if the entity would be a duplicate or have unmet dependencies.
+    /// </summary>
+    /// <remarks>
+    ///     This function cannot accomodate entities with required members.
+    ///     Instead, <see cref="Extend{TEntity}(TEntity)"/> must be used.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">If the entity type already exists in the graph</exception>
+    /// <exception cref="InvalidOperationException">If the entity requires another entity that is missing from the graph</exception>
+    /// <see cref="Extend{TEntity}(TEntity)"/>
+    /// <seealso cref="AddEntity"/>
+    /// <seealso cref="TryAddEntity"/>
+    public TEntity Extend<TEntity>()
+        where TEntity : ASEntity, new()
+        => Extend(new TEntity());
+    
+    /// <summary>
+    ///     Extends the TypeGraph to include a new entity.
+    ///     Throws an exception if the entity would be a duplicate or have unmet dependencies.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">If the entity type already exists in the graph</exception>
+    /// <exception cref="InvalidOperationException">If the entity requires another entity that is missing from the graph</exception>
+    /// <see cref="Extend{TEntity}()"/>
+    /// <seealso cref="AddEntity"/>
+    /// <seealso cref="TryAddEntity"/>
+    public TEntity Extend<TEntity>(TEntity entity)
+        where TEntity : ASEntity
+    {
+        if (IsEntity<TEntity>())
+            throw new InvalidOperationException($"Cannot extend the graph with entity {typeof(TEntity)}: that type already exists in the graph");
+        
+        // Check dependencies - this is a workaround to avoid the risk case described in TryAdd().
+        if (entity.BaseTypeName != null && !AllASTypes.Contains(entity.BaseTypeName))
+            throw new InvalidOperationException($"Cannot extend the graph with entity {typeof(TEntity)}: missing base type {entity.BaseTypeName}");
+        
+        AddEntity(entity);
+        return entity;
+    }
+
+    /// <summary>
     ///     Like <see cref="TryAddEntity"/>, but throws if a conflicting entity already exists in the map.
     /// </summary>
     /// <throws cref="InvalidOperationException">If an object of this type already exists in the graph</throws>
@@ -188,15 +232,36 @@ public class TypeMap
     }
 
     /// <summary>
-    ///     Adds a new typed instance to the object.
+    ///     Adds a new typed instance to the graph.
     ///     Metadata such as AS types and JSON-LD context is automatically updated.
+    ///     User code should not call this method; use <see cref="Extend{TEntity}"/> instead.
     /// </summary>
     /// <remarks>
-    ///     This method is internal, as it should only be called by <see cref="ASEntity" /> constructor.
-    ///     User code should instead add a new type by passing an existing TypeMap into the constructor.
-    ///     This is not a technical limitation, but rather an intentional choice to prevent the construction of invalid objects.
+    ///     <para>
+    ///         This method is internal as it has strict semantics regarding its use.
+    ///         This is not a technical limitation, but rather an intentional choice to prevent the construction of invalid objects.
+    ///         It is possible to induce confusing runtime crashes if a required entity is skipped.
+    ///     </para>
+    ///     <para>
+    ///         For example, imagine that there is an empty TypeMap called "map".
+    ///         The following calls are made:
+    ///         <ul>
+    ///             <li>map.AddEntity(new ASTypeEntity())</li>
+    ///             <li>map.AddEntity(new ASActivityEntity())</li>
+    ///             <li>map.AsModel&lt;ASActivity&gt;()</li>
+    ///         </ul>
+    ///         The last call will throw an <see cref="InvalidCastException"/> stating that the graph cannot be represented as <see cref="ASObjectEntity"/>.
+    ///         This can be extremely hard to diagnose because <see cref="ASObjectEntity"/> does not even appear in the visible code.
+    ///     </para>
+    ///     <para>
+    ///         The <see cref="Extend{TEntity}"/> function, however, avoids this with an included dependency check.
+    ///         The second call to <see cref="AddEntity"/> will fail with a descriptive error message indicating that "Object" is missing from the graph.
+    ///         While still somewhat confusing, this method will additionally <b>fail fast</b> before the graph can even enter an invalid state.
+    ///         This ensures that errors are caught quickly and before they can spread to corrupt the application state.
+    ///     </para>
     /// </remarks>
     /// <returns>true if the type was added, false if it was already in the type map</returns>
+    /// <seealso cref="Extend{TEntity}"/>
     internal bool TryAddEntity(ASEntity entity)
     {
         var type = entity.GetType();

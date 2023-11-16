@@ -18,10 +18,7 @@ public class ProfileObject : ASObject, IASModel<ProfileObject, ProfileObjectEnti
     public ProfileObject() : this(new TypeMap()) {}
 
     public ProfileObject(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ProfileObjectEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ProfileObjectEntity>();
 
     public ProfileObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

@@ -18,10 +18,7 @@ public class AnnounceActivity : ASTransitiveActivity, IASModel<AnnounceActivity,
     public AnnounceActivity() : this(new TypeMap()) {}
 
     public AnnounceActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new AnnounceActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<AnnounceActivityEntity>();
 
     public AnnounceActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

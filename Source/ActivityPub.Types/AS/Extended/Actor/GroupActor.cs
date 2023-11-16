@@ -17,10 +17,7 @@ public class GroupActor : APActor, IASModel<GroupActor, GroupActorEntity, APActo
     public GroupActor() : this(new TypeMap()) {}
 
     public GroupActor(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new GroupActorEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<GroupActorEntity>();
 
     public GroupActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

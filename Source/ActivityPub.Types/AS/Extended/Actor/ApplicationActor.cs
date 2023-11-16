@@ -17,10 +17,7 @@ public class ApplicationActor : APActor, IASModel<ApplicationActor, ApplicationA
     public ApplicationActor() : this(new TypeMap()) {}
 
     public ApplicationActor(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ApplicationActorEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ApplicationActorEntity>();
 
     public ApplicationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

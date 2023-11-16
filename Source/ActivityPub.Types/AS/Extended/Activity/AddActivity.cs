@@ -18,10 +18,7 @@ public class AddActivity : ASTargetedActivity, IASModel<AddActivity, AddActivity
     public AddActivity() : this(new TypeMap()) {}
 
     public AddActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new AddActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<AddActivityEntity>();
 
     public AddActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

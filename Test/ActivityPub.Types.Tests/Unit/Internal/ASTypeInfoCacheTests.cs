@@ -101,10 +101,7 @@ public class FakeTypeForASTypeInfoCacheTests : ASLink, IASModel<FakeTypeForASTyp
     public FakeTypeForASTypeInfoCacheTests() : this(new TypeMap()) {}
 
     public FakeTypeForASTypeInfoCacheTests(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new FakeTypeForASTypeInfoCacheTestsEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<FakeTypeForASTypeInfoCacheTestsEntity>();
 
     public FakeTypeForASTypeInfoCacheTests(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

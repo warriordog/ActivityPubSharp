@@ -17,10 +17,7 @@ public class OrganizationActor : APActor, IASModel<OrganizationActor, Organizati
     public OrganizationActor() : this(new TypeMap()) {}
 
     public OrganizationActor(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new OrganizationActorEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<OrganizationActorEntity>();
 
     public OrganizationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

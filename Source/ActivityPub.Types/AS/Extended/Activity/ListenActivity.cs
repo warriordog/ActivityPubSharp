@@ -17,10 +17,7 @@ public class ListenActivity : ASTransitiveActivity, IASModel<ListenActivity, Lis
     public ListenActivity() : this(new TypeMap()) {}
 
     public ListenActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ListenActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ListenActivityEntity>();
 
     public ListenActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

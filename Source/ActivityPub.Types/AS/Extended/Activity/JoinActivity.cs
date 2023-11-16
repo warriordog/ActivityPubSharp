@@ -18,10 +18,7 @@ public class JoinActivity : ASTransitiveActivity, IASModel<JoinActivity, JoinAct
     public JoinActivity() : this(new TypeMap()) {}
 
     public JoinActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new JoinActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<JoinActivityEntity>();
 
     public JoinActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

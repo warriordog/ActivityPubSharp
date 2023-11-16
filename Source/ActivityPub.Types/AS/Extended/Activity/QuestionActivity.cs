@@ -21,10 +21,7 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
     public QuestionActivity() : this(new TypeMap()) {}
 
     public QuestionActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new QuestionActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<QuestionActivityEntity>();
 
     public QuestionActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

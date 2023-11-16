@@ -18,10 +18,7 @@ public class RemoveActivity : ASTargetedActivity, IASModel<RemoveActivity, Remov
     public RemoveActivity() : this(new TypeMap()) {}
 
     public RemoveActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new RemoveActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<RemoveActivityEntity>();
 
     public RemoveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

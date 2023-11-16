@@ -24,10 +24,7 @@ public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
     public APActor() : this(new TypeMap()) {}
 
     public APActor(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new APActorEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<APActorEntity>();
 
     public APActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

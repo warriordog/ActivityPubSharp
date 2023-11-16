@@ -17,10 +17,7 @@ public class CreateActivity : ASTransitiveActivity, IASModel<CreateActivity, Cre
     public CreateActivity() : this(new TypeMap()) {}
 
     public CreateActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new CreateActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<CreateActivityEntity>();
 
     public CreateActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

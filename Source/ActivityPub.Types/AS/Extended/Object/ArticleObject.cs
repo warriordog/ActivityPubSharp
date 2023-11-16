@@ -17,10 +17,7 @@ public class ArticleObject : ASObject, IASModel<ArticleObject, ArticleObjectEnti
     public ArticleObject() : this(new TypeMap()) {}
 
     public ArticleObject(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ArticleObjectEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ArticleObjectEntity>();
 
     public ArticleObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

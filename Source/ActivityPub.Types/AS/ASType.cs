@@ -25,9 +25,8 @@ public class ASType : IASModel<ASType, ASTypeEntity>
 
     public ASType(TypeMap typeMap)
     {
-        Entity = new ASTypeEntity();
         TypeMap = typeMap;
-        TypeMap.AddEntity(Entity);
+        Entity = TypeMap.Extend<ASTypeEntity>();
     }
 
     [SetsRequiredMembers]

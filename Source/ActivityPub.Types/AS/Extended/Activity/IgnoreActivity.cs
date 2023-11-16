@@ -17,10 +17,7 @@ public class IgnoreActivity : ASTransitiveActivity, IASModel<IgnoreActivity, Ign
     public IgnoreActivity() : this(new TypeMap()) {}
 
     public IgnoreActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new IgnoreActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<IgnoreActivityEntity>();
 
     public IgnoreActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

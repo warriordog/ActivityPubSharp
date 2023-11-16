@@ -20,10 +20,7 @@ public class BlockActivity : IgnoreActivity, IASModel<BlockActivity, BlockActivi
     public BlockActivity() : this(new TypeMap()) {}
 
     public BlockActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new BlockActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<BlockActivityEntity>();
 
     public BlockActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

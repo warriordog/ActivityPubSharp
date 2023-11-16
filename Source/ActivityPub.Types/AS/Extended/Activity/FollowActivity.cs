@@ -19,10 +19,7 @@ public class FollowActivity : ASTransitiveActivity, IASModel<FollowActivity, Fol
     public FollowActivity() : this(new TypeMap()) {}
 
     public FollowActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new FollowActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<FollowActivityEntity>();
 
     public FollowActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

@@ -21,10 +21,7 @@ public class ASTransitiveActivity : ASActivity, IASModel<ASTransitiveActivity, A
     public ASTransitiveActivity() : this(new TypeMap()) {}
 
     public ASTransitiveActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ASTransitiveActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ASTransitiveActivityEntity>();
 
     public ASTransitiveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

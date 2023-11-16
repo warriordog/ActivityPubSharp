@@ -17,10 +17,7 @@ public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, 
     public ServiceActor() : this(new TypeMap()) {}
 
     public ServiceActor(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ServiceActorEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ServiceActorEntity>();
 
     public ServiceActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

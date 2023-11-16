@@ -17,10 +17,7 @@ public class EventObject : ASObject, IASModel<EventObject, EventObjectEntity, AS
     public EventObject() : this(new TypeMap()) {}
 
     public EventObject(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new EventObjectEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<EventObjectEntity>();
 
     public EventObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

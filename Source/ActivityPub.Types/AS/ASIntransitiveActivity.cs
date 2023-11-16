@@ -19,10 +19,7 @@ public class ASIntransitiveActivity : ASActivity, IASModel<ASIntransitiveActivit
     public ASIntransitiveActivity() : this(new TypeMap()) {}
 
     public ASIntransitiveActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new ASIntransitiveActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<ASIntransitiveActivityEntity>();
 
     public ASIntransitiveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

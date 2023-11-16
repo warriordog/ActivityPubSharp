@@ -18,10 +18,7 @@ public class LeaveActivity : ASTransitiveActivity, IASModel<LeaveActivity, Leave
     public LeaveActivity() : this(new TypeMap()) {}
 
     public LeaveActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new LeaveActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<LeaveActivityEntity>();
 
     public LeaveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

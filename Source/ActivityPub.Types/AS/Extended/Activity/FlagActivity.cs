@@ -18,10 +18,7 @@ public class FlagActivity : ASTransitiveActivity, IASModel<FlagActivity, FlagAct
     public FlagActivity() : this(new TypeMap()) {}
 
     public FlagActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new FlagActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<FlagActivityEntity>();
 
     public FlagActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

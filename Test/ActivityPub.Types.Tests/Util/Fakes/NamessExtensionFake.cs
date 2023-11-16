@@ -20,10 +20,7 @@ public class NamelessExtensionFake : ASObject, IASModel<NamelessExtensionFake, N
     public NamelessExtensionFake() : this(new TypeMap()) {}
 
     public NamelessExtensionFake(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new NamelessExtensionFakeEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<NamelessExtensionFakeEntity>();
 
     public NamelessExtensionFake(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

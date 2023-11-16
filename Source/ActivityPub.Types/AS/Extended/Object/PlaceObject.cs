@@ -17,10 +17,7 @@ public class PlaceObject : ASObject, IASModel<PlaceObject, PlaceObjectEntity, AS
     public PlaceObject() : this(new TypeMap()) {}
 
     public PlaceObject(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new PlaceObjectEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<PlaceObjectEntity>();
 
     public PlaceObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

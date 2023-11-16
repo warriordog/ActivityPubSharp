@@ -19,10 +19,7 @@ public class UpdateActivity : ASTransitiveActivity, IASModel<UpdateActivity, Upd
     public UpdateActivity() : this(new TypeMap()) {}
 
     public UpdateActivity(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new UpdateActivityEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<UpdateActivityEntity>();
 
     public UpdateActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 

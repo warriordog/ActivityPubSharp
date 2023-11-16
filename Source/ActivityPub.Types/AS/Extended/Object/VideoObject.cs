@@ -17,10 +17,7 @@ public class VideoObject : DocumentObject, IASModel<VideoObject, VideoObjectEnti
     public VideoObject() : this(new TypeMap()) {}
 
     public VideoObject(TypeMap typeMap) : base(typeMap)
-    {
-        Entity = new VideoObjectEntity();
-        TypeMap.AddEntity(Entity);
-    }
+        => Entity = TypeMap.Extend<VideoObjectEntity>();
 
     public VideoObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
