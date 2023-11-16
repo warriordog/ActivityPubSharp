@@ -15,11 +15,14 @@ namespace ActivityPub.Types;
 [JsonConverter(typeof(TypeMapConverter))]
 public class TypeMap
 {
-    private readonly Dictionary<Type, ASEntity> _allEntities = new();
+    // Cache of AS type names that exist in this type graph.
     private readonly CompositeASType _asTypes = new();
 
-    // Cache of non-entity classes that have been constructed from this type graph.
-    private readonly Dictionary<Type, ASType> _typeCache = new();
+    // Cache of model classes that have been constructed from this type graph.
+    private readonly Dictionary<Type, ASType> _modelCache = new();
+    
+    // Cache of entity classes that have been added to this type graph.
+    private readonly Dictionary<Type, ASEntity> _entityCache = new();
 
     /// <summary>
     ///     Constructs a new, empty type graph initialized with the ActivityStreams context.
@@ -46,7 +49,7 @@ public class TypeMap
     ///     This may be a subset or superset of ASTypes.
     /// </summary>
     /// <seealso cref="ASTypes" />
-    public IReadOnlyDictionary<Type, ASEntity> AllEntities => _allEntities;
+    public IReadOnlyDictionary<Type, ASEntity> AllEntities => _entityCache;
 
     public IJsonLDContext LDContext => _ldContext;
     private readonly JsonLDContext _ldContext;
@@ -61,9 +64,9 @@ public class TypeMap
     /// <summary>
     ///     Checks if the object contains a particular type entity.
     /// </summary>
-    public bool IsEntity<T>()
-        where T : ASEntity
-        => _allEntities.ContainsKey(typeof(T));
+    public bool IsEntity<TEntity>()
+        where TEntity : ASEntity
+        => _entityCache.ContainsKey(typeof(TEntity));
 
     /// <summary>
     ///     Checks if the object contains a particular type entity.
@@ -71,12 +74,12 @@ public class TypeMap
     /// </summary>
     /// <seealso cref="IsEntity{T}()" />
     /// <seealso cref="AsEntity{T}" />
-    public bool IsEntity<T>([NotNullWhen(true)] out T? instance)
-        where T : ASEntity
+    public bool IsEntity<TEntity>([NotNullWhen(true)] out TEntity? instance)
+        where TEntity : ASEntity
     {
-        if (_allEntities.TryGetValue(typeof(T), out var instanceT))
+        if (_entityCache.TryGetValue(typeof(TEntity), out var instanceT))
         {
-            instance = (T)instanceT;
+            instance = (TEntity)instanceT;
             return true;
         }
 
@@ -93,45 +96,31 @@ public class TypeMap
     /// </remarks>
     /// <seealso cref="IsEntity{T}(out T?)" />
     /// <throws cref="InvalidCastException">If the object is not of type T</throws>
-    public T AsEntity<T>()
-        where T : ASEntity
+    public TEntity AsEntity<TEntity>()
+        where TEntity : ASEntity
     {
-        var type = typeof(T);
-        if (!_allEntities.TryGetValue(type, out var instance))
-            throw new InvalidCastException($"Can't represent the graph as entity {typeof(T)}");
-        return (T)instance;
+        var type = typeof(TEntity);
+        if (!_entityCache.TryGetValue(type, out var instance))
+            throw new InvalidCastException($"Can't represent the graph as entity {typeof(TEntity)}");
+        return (TEntity)instance;
     }
 
     /// <summary>
-    ///     Gets an entity representing the graph as type T.
-    ///     If the graph doesn't already include T, then it will be expanded with a new instance.
+    ///     Checks if the graph contains a particular model.
     /// </summary>
-    public T ToEntity<T>()
-        where T : ASEntity, new()
+    /// <seealso cref="IsModel{TModel}(out TModel?)" />
+    /// <seealso cref="AsModel{TModel}()" />
+    public bool IsModel<TModel>()
+        where TModel : ASType, IASModel<TModel>
     {
-        if (!IsEntity<T>(out var entity))
-        {
-            entity = new();
-            Add(entity);
-        }
-
-        return entity;
-    }
-
-    /// <summary>
-    ///     Checks if the graph contains a particular type.
-    /// </summary>
-    public bool IsType<TObject>()
-        where TObject : ASType, IASModel<TObject>
-    {
-        var type = typeof(TObject);
+        var type = typeof(TModel);
 
         // Already cached -> yes
-        if (_typeCache.ContainsKey(type))
+        if (_modelCache.ContainsKey(type))
             return true;
 
         // Can create it (entity is in the graph) -> yes
-        if (_allEntities.ContainsKey(TObject.EntityType))
+        if (_entityCache.ContainsKey(TModel.EntityType))
             return true;
 
         // Otherwise -> no
@@ -139,28 +128,28 @@ public class TypeMap
     }
 
     /// <summary>
-    ///     Checks if the graph contains a particular type.
-    ///     If so, then the instance of that type is extracted and returned.
+    ///     Checks if the graph contains a particular model.
+    ///     If so, then the instance of that model is extracted and returned.
     /// </summary>
-    /// <seealso cref="IsType{T}()" />
-    /// <seealso cref="AsType{T}" />
-    public bool IsType<TModel>([NotNullWhen(true)] out TModel? instance)
+    /// <seealso cref="IsModel{TModel}()"/>
+    /// <seealso cref="AsModel{TModel}()" />
+    public bool IsModel<TModel>([NotNullWhen(true)] out TModel? instance)
         where TModel : ASType, IASModel<TModel>
     {
         var type = typeof(TModel);
 
         // Already cached -> yes
-        if (_typeCache.TryGetValue(type, out var instanceBase))
+        if (_modelCache.TryGetValue(type, out var instanceBase))
         {
             instance = (TModel)instanceBase;
             return true;
         }
 
         // Can create it (entity is in the graph) -> yes
-        if (_allEntities.ContainsKey(TModel.EntityType))
+        if (_entityCache.ContainsKey(TModel.EntityType))
         {
             instance = TModel.FromGraph(this);
-            _typeCache[type] = instance;
+            _modelCache[type] = instance;
             return true;
         }
 
@@ -170,30 +159,31 @@ public class TypeMap
     }
 
     /// <summary>
-    ///     Gets an object representing the graph as type T.
+    ///     Gets an object representing the graph as model type T.
     /// </summary>
     /// <remarks>
     ///     This function will not extend the object to include a new type.
     ///     To safely convert to an instance that *might* be present, use Is().
     /// </remarks>
-    /// <seealso cref="IsType{T}(out T?)" />
+    /// <seealso cref="IsModel{TModel}()"/>
+    /// <seealso cref="IsModel{TModel}(out TModel?)" />
     /// <throws cref="InvalidCastException">If the graph cannot be represented by the type</throws>
-    public TObject AsType<TObject>()
+    public TObject AsModel<TObject>()
         where TObject : ASType, IASModel<TObject>
     {
-        if (IsType<TObject>(out var instance))
+        if (IsModel<TObject>(out var instance))
             return instance;
 
         throw new InvalidCastException($"Can't represent the graph as type {typeof(TObject)}");
     }
 
     /// <summary>
-    ///     Like <see cref="TryAdd"/>, but throws if a conflicting entity already exists in the map.
+    ///     Like <see cref="TryAddEntity"/>, but throws if a conflicting entity already exists in the map.
     /// </summary>
     /// <throws cref="InvalidOperationException">If an object of this type already exists in the graph</throws>
-    internal void Add(ASEntity instance)
+    internal void AddEntity(ASEntity instance)
     {
-        if (!TryAdd(instance))
+        if (!TryAddEntity(instance))
             throw new InvalidOperationException($"Can't add {instance.GetType()} to graph - it already exists in the TypeMap");
     }
 
@@ -207,14 +197,14 @@ public class TypeMap
     ///     This is not a technical limitation, but rather an intentional choice to prevent the construction of invalid objects.
     /// </remarks>
     /// <returns>true if the type was added, false if it was already in the type map</returns>
-    internal bool TryAdd(ASEntity entity)
+    internal bool TryAddEntity(ASEntity entity)
     {
         var type = entity.GetType();
-        if (_allEntities.ContainsKey(type))
+        if (_entityCache.ContainsKey(type))
             return false;
 
         // Map the instance
-        _allEntities[type] = entity;
+        _entityCache[type] = entity;
 
         // Map the AS type
         if (entity.ASTypeName != null)

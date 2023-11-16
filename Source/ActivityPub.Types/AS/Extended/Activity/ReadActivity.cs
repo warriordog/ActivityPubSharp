@@ -19,7 +19,7 @@ public class ReadActivity : ASTransitiveActivity, IASModel<ReadActivity, ReadAct
     public ReadActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ReadActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ReadActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

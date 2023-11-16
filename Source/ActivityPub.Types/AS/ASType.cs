@@ -27,7 +27,7 @@ public class ASType : IASModel<ASType, ASTypeEntity>
     {
         Entity = new ASTypeEntity();
         TypeMap = typeMap;
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     [SetsRequiredMembers]
@@ -112,20 +112,20 @@ public class ASType : IASModel<ASType, ASTypeEntity>
     }
 
 
-    /// <inheritdoc cref="TypeMap.IsType{T}()" />
-    public bool Is<T>()
-        where T : ASType, IASModel<T>
-        => TypeMap.IsType<T>();
+    /// <inheritdoc cref="Types.TypeMap.IsModel{TModel}()" />
+    public bool Is<TModel>()
+        where TModel : ASType, IASModel<TModel>
+        => TypeMap.IsModel<TModel>();
 
-    /// <inheritdoc cref="TypeMap.IsType{T}(out T?)" />
-    public bool Is<T>([NotNullWhen(true)] out T? instance)
-        where T : ASType, IASModel<T>
-        => TypeMap.IsType(out instance);
+    /// <inheritdoc cref="Types.TypeMap.IsModel{TModel}(out TModel?)" />
+    public bool Is<TModel>([NotNullWhen(true)] out TModel? instance)
+        where TModel : ASType, IASModel<TModel>
+        => TypeMap.IsModel(out instance);
 
-    /// <inheritdoc cref="TypeMap.AsType{T}" />
-    public T As<T>()
-        where T : ASType, IASModel<T>
-        => TypeMap.AsType<T>();
+    /// <inheritdoc cref="Types.TypeMap.AsModel{TModel}" />
+    public TModel As<TModel>()
+        where TModel : ASType, IASModel<TModel>
+        => TypeMap.AsModel<TModel>();
 }
 
 /// <inheritdoc cref="ASType" />

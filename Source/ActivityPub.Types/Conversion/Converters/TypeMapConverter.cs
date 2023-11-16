@@ -77,11 +77,11 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         {
             HRef = jsonElement.GetString()!
         };
-        typeMap.Add(link);
+        typeMap.AddEntity(link);
 
         // Create and attach empty Type entity
         var type = new ASTypeEntity();
-        typeMap.Add(type);
+        typeMap.AddEntity(type);
     }
 
     private void ReadObject(JsonElement jsonElement, DeserializationMetadata meta)
@@ -138,7 +138,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
                      ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
 
         // Add it to the graph.
-        meta.TypeMap.Add(entity);
+        meta.TypeMap.AddEntity(entity);
 
         // Remove the entity-level set.
         // We need it for conversion, but only until TypeMap is updated

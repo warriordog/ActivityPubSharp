@@ -19,7 +19,7 @@ public class DislikeActivity : ASTransitiveActivity, IASModel<DislikeActivity, D
     public DislikeActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new DislikeActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public DislikeActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

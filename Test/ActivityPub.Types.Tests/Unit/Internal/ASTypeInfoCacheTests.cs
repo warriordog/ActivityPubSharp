@@ -103,7 +103,7 @@ public class FakeTypeForASTypeInfoCacheTests : ASLink, IASModel<FakeTypeForASTyp
     public FakeTypeForASTypeInfoCacheTests(TypeMap typeMap) : base(typeMap)
     {
         Entity = new FakeTypeForASTypeInfoCacheTestsEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public FakeTypeForASTypeInfoCacheTests(ASType existingGraph) : this(existingGraph.TypeMap) {}

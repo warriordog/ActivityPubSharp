@@ -19,7 +19,7 @@ public class AcceptActivity : ASTransitiveActivity, IASModel<AcceptActivity, Acc
     public AcceptActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new AcceptActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public AcceptActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

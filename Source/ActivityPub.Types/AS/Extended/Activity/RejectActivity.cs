@@ -20,7 +20,7 @@ public class RejectActivity : ASTransitiveActivity, IASModel<RejectActivity, Rej
     public RejectActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new RejectActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public RejectActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

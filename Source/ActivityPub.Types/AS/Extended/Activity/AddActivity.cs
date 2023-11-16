@@ -20,7 +20,7 @@ public class AddActivity : ASTargetedActivity, IASModel<AddActivity, AddActivity
     public AddActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new AddActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public AddActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

@@ -21,7 +21,7 @@ public class ASIntransitiveActivity : ASActivity, IASModel<ASIntransitiveActivit
     public ASIntransitiveActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ASIntransitiveActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ASIntransitiveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

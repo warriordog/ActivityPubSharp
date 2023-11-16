@@ -19,7 +19,7 @@ public class NoteObject : ASObject, IASModel<NoteObject, NoteObjectEntity, ASObj
     public NoteObject(TypeMap typeMap) : base(typeMap)
     {
         Entity = new NoteObjectEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public NoteObject(ASType existingGraph) : this(existingGraph.TypeMap) {}

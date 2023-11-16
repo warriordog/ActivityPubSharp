@@ -36,28 +36,21 @@ These are as follows:
 
 ### Overview
 
-In addition to the types described above, ActivityPubSharp includes a second, lower-level type model referred to as the "Entity System".
-This feature can be ignored in most cases as it exists to support custom extensions and polymorphic types.
-It is, however, absolutely critical for those specific scenarios.
+In addition to the "model" types described above, ActivityPubSharp includes a second, lower-level type model referred to as the "entity system".
+This feature can be ignored in most cases, but it is absolutely critical to use or implement an ActivityStream extension.
 
 ### Usage
 
 The most common usage of the entity system can utilize a mid-level "easy path" - three special functions that are defined on all types.
 
-* `Is<T>()` - returns true if the object includes a provided type, either as a base / super type or as an entirely separate type defined in the `type` property.
-* `Is<T>(out T? instance)` - same as before, but also constructs and returns an instance of the target type. Follows the `TryGet` pattern.
-* `As<T>()` - same as before, but returns the constructed type instead of a boolean. Throws an exception if the object doesn't contain the provided type.
+* `Is<TModel>()` - returns true if the object includes a provided model, either as a base / super type or as an entirely separate type defined in the `type` property.
+* `Is<TModel>(out TModel? instance)` - same as before, but also constructs and returns an instance of the target model. Follows the `TryGet` pattern.
+* `As<TModel>()` - same as before, but returns the constructed model instead of a boolean. Throws an exception if the object doesn't contain the provided type.
 
 These functions should be sufficient to comfortably work with most valid ActivityPub objects, even polymorphic ones.
 All related instances are automatically linked - that is, changes to one instance will be reflected in all others associated with the same object.
 This is true even for base types and instances that are constructed later.
 
-### Models vs Entities
-
-* Models utilize **inheritance**, while entities use **composition**.
-* Entities are automatically constructed during JSON conversion, while models are lazy-constructed on-use.
-* Within a single type graph, entities are singletons while models may be duplicated.
-* Models represent the "expected" shape of an AS object. Entities model the "actual" runtime shape.
 
 ### Implementation
 
@@ -67,6 +60,13 @@ For example, `ASObject` has an associated entity called `ASObjectEntity`.
 Entities are typically placed in the same file as their associated type because the two are tightly coupled.
 Typically, application code will not need to work with entity types directly.
 However, it will be necessary if implementing a new extension or handling some rare edge cases.
+
+### Models vs Entities
+
+* Models utilize **inheritance**, while entities use **composition**.
+* Entities are automatically constructed during JSON conversion, while models are lazy-constructed on-use.
+* Within a single type graph, entities are singletons while models may be duplicated.
+* Models represent the "expected" shape of an AS object. Entities model the "actual" runtime shape.
 
 ### Entity Mapping
 

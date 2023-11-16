@@ -25,7 +25,7 @@ public class ASOrderedCollectionPage : ASOrderedCollection, IASModel<ASOrderedCo
     public ASOrderedCollectionPage(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ASOrderedCollectionPageEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ASOrderedCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}

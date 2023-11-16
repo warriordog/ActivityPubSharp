@@ -20,7 +20,7 @@ public class TombstoneObject : ASObject, IASModel<TombstoneObject, TombstoneObje
     public TombstoneObject(TypeMap typeMap) : base(typeMap)
     {
         Entity = new TombstoneObjectEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public TombstoneObject(ASType existingGraph) : this(existingGraph.TypeMap) {}

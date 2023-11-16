@@ -47,19 +47,19 @@ public abstract class TypeMapTests
         {
             var typeMap = new TypeMap();
             var entity = new ASTypeEntity();
-            typeMap.Add(entity);
+            typeMap.AddEntity(entity);
 
-            typeMap.TryAdd(entity).Should().BeFalse();
+            typeMap.TryAddEntity(entity).Should().BeFalse();
         }
 
         [Fact]
         public void ReturnFalse_IfEntityTypeIsDuplicate()
         {
             var typeMap = new TypeMap();
-            typeMap.Add(new ASTypeEntity());
+            typeMap.AddEntity(new ASTypeEntity());
 
             var entity = new ASTypeEntity();
-            typeMap.TryAdd(entity).Should().BeFalse();
+            typeMap.TryAddEntity(entity).Should().BeFalse();
         }
         
         [Fact]
@@ -67,9 +67,9 @@ public abstract class TypeMapTests
         {
             var typeMap = new TypeMap();
             var entity = new ASTypeEntity();
-            typeMap.Add(entity);
+            typeMap.AddEntity(entity);
 
-            typeMap.TryAdd(entity);
+            typeMap.TryAddEntity(entity);
 
             typeMap.AllEntities.Should().HaveCount(1);
         }
@@ -80,7 +80,7 @@ public abstract class TypeMapTests
             var typeMap = new TypeMap();
             var entity = new ASTypeEntity();
             
-            typeMap.TryAdd(entity).Should().BeTrue();
+            typeMap.TryAddEntity(entity).Should().BeTrue();
         }
 
         [Fact]
@@ -89,7 +89,7 @@ public abstract class TypeMapTests
             var typeMap = new TypeMap();
             var entity = new ASTypeEntity();
             
-            typeMap.TryAdd(entity);
+            typeMap.TryAddEntity(entity);
             
             
             typeMap.AllEntities.Should().ContainValue(entity);
@@ -99,9 +99,9 @@ public abstract class TypeMapTests
         public void MapEntity_IfItHasASType()
         {
             var typeMap = new TypeMap();
-            typeMap.Add(new ASTypeEntity());
+            typeMap.AddEntity(new ASTypeEntity());
          
-            typeMap.TryAdd(new ASObjectEntity());
+            typeMap.TryAddEntity(new ASObjectEntity());
 
             typeMap.ASTypes.Should().Contain(ASObject.ObjectType);
         }
@@ -110,7 +110,7 @@ public abstract class TypeMapTests
         public void SkipMapping_IfEntityHasNoASType()
         {
             var typeMap = new TypeMap();
-            typeMap.TryAdd(new ASTypeEntity());
+            typeMap.TryAddEntity(new ASTypeEntity());
             typeMap.ASTypes.Should().BeEmpty();
         }
 
@@ -133,7 +133,7 @@ public abstract class TypeMapTests
                 }
             };
 
-            typeMap.TryAdd(entity);
+            typeMap.TryAddEntity(entity);
 
             typeMap.UnmappedProperties.Should()
                 .HaveCount(1).And
@@ -151,7 +151,7 @@ public abstract class TypeMapTests
             };
             var typeMap = new TypeMap(originalContext);
             
-            typeMap.TryAdd(new EmptyExtendedTypeFakeEntity());
+            typeMap.TryAddEntity(new EmptyExtendedTypeFakeEntity());
             
             typeMap.LDContext.Should()
                 .HaveCount(3).And
@@ -167,11 +167,11 @@ public abstract class TypeMapTests
 
         protected TypeMapASTypeTests()
         {
-            TypeMapUnderTest.Add(new ASTypeEntity());
-            TypeMapUnderTest.Add(new ASObjectEntity());
-            TypeMapUnderTest.Add(new ASActivityEntity());
-            TypeMapUnderTest.Add(new LikeActivityEntity());
-            TypeMapUnderTest.Add(new DislikeActivityEntity());
+            TypeMapUnderTest.AddEntity(new ASTypeEntity());
+            TypeMapUnderTest.AddEntity(new ASObjectEntity());
+            TypeMapUnderTest.AddEntity(new ASActivityEntity());
+            TypeMapUnderTest.AddEntity(new LikeActivityEntity());
+            TypeMapUnderTest.AddEntity(new DislikeActivityEntity());
         }
     }
     public class ASTypesShould : TypeMapASTypeTests

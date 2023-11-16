@@ -19,7 +19,7 @@ public class PlaceObject : ASObject, IASModel<PlaceObject, PlaceObjectEntity, AS
     public PlaceObject(TypeMap typeMap) : base(typeMap)
     {
         Entity = new PlaceObjectEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public PlaceObject(ASType existingGraph) : this(existingGraph.TypeMap) {}

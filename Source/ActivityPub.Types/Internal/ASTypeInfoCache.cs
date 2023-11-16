@@ -67,14 +67,14 @@ public class ASTypeInfoCache : IASTypeInfoCache
     private readonly HashSet<Type> _namelessEntityTypes = new();
 
     /// <summary>
-    ///     Calls <see cref="CreateTypeMetadataFor{T}"/> with a specified value for T.
+    ///     Calls <see cref="CreateModelMetaFor{TModel}"/> with a specified value for T.
     /// </summary>
     private readonly Func<Type, ModelMeta> _createTypeMetadataFor;
 
     public ASTypeInfoCache() =>
         // I really hate doing this :sob:
         _createTypeMetadataFor = typeof(ASTypeInfoCache)
-            .GetRequiredMethod(nameof(CreateTypeMetadataFor), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+            .GetRequiredMethod(nameof(CreateModelMetaFor), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
             .CreateGenericPivot<ModelMeta>(this);
 
     public void MapASTypesToEntities(IEnumerable<string> asTypes, out HashSet<Type> mappedEntities, out HashSet<string> unmappedTypes)
@@ -168,26 +168,26 @@ public class ASTypeInfoCache : IASTypeInfoCache
             _namelessEntityTypes.Add(entityType);
     }
 
-    private ModelMeta CreateTypeMetadataFor<T>()
-        where T : IASModel<T>
+    private ModelMeta CreateModelMetaFor<TModel>()
+        where TModel : ASType, IASModel<TModel>
     {
-        var modelType = typeof(T);
+        var modelType = typeof(TModel);
 
         return new ModelMeta
         {
             ModelType = modelType,
-            EntityTypeChain = GetEntityTypeChain<T>(modelType),
-            EntityType = T.EntityType,
-            ASTypeName = T.ASTypeName
+            EntityTypeChain = GetEntityTypeChain<TModel>(modelType),
+            EntityType = TModel.EntityType,
+            ASTypeName = TModel.ASTypeName
         };
     }
     
-    private List<Type> GetEntityTypeChain<T>(Type modelType)
-        where T : IASModel<T>
+    private List<Type> GetEntityTypeChain<TModel>(Type modelType)
+        where TModel : ASType, IASModel<TModel>
     {
         var entityTypes = new List<Type>
         {
-            T.EntityType
+            TModel.EntityType
         };
         
         for (var baseType = modelType.BaseType; baseType != null; baseType = baseType.BaseType)

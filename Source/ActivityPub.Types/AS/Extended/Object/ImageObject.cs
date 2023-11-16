@@ -19,7 +19,7 @@ public class ImageObject : DocumentObject, IASModel<ImageObject, ImageObjectEnti
     public ImageObject(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ImageObjectEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ImageObject(ASType existingGraph) : this(existingGraph.TypeMap) {}

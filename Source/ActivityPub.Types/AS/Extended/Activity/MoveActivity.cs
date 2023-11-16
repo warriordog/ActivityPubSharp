@@ -20,7 +20,7 @@ public class MoveActivity : ASTransitiveActivity, IASModel<MoveActivity, MoveAct
     public MoveActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new MoveActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public MoveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

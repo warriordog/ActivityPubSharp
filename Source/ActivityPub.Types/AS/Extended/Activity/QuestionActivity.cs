@@ -23,7 +23,7 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
     public QuestionActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new QuestionActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public QuestionActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

@@ -19,7 +19,7 @@ public class ViewActivity : ASTransitiveActivity, IASModel<ViewActivity, ViewAct
     public ViewActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ViewActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ViewActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

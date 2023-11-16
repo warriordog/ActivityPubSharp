@@ -19,7 +19,7 @@ public class TentativeRejectActivity : RejectActivity, IASModel<TentativeRejectA
     public TentativeRejectActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new TentativeRejectActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public TentativeRejectActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

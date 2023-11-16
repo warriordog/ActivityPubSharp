@@ -19,7 +19,7 @@ public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, 
     public ServiceActor(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ServiceActorEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ServiceActor(ASType existingGraph) : this(existingGraph.TypeMap) {}

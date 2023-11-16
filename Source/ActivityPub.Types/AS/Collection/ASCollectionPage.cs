@@ -25,7 +25,7 @@ public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASColle
     public ASCollectionPage(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ASCollectionPageEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ASCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}

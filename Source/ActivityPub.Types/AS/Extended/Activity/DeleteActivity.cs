@@ -20,7 +20,7 @@ public class DeleteActivity : ASTransitiveActivity, IASModel<DeleteActivity, Del
     public DeleteActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new DeleteActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public DeleteActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

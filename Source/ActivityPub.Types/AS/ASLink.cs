@@ -25,7 +25,7 @@ public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
     public ASLink(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ASLinkEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ASLink(ASType existingGraph) : this(existingGraph.TypeMap) {}

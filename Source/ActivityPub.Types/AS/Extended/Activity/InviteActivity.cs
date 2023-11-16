@@ -19,7 +19,7 @@ public class InviteActivity : OfferActivity, IASModel<InviteActivity, InviteActi
     public InviteActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new InviteActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public InviteActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

@@ -20,7 +20,7 @@ public class OfferActivity : ASTransitiveActivity, IASModel<OfferActivity, Offer
     public OfferActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new OfferActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public OfferActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

@@ -21,7 +21,7 @@ public class FollowActivity : ASTransitiveActivity, IASModel<FollowActivity, Fol
     public FollowActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new FollowActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public FollowActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

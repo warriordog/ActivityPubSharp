@@ -37,7 +37,7 @@ internal class ASTypeConverter<T> : JsonConverter<T>
                       ?? throw new JsonException($"Can't convert {typeof(T)}: conversion to TypeMap returned null");
 
         // Then we just construct the target type. 
-        return typeMap.AsType<T>();
+        return typeMap.AsModel<T>();
     }
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)

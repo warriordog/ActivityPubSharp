@@ -19,7 +19,7 @@ public class PersonActor : APActor, IASModel<PersonActor, PersonActorEntity, APA
     public PersonActor(TypeMap typeMap) : base(typeMap)
     {
         Entity = new PersonActorEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public PersonActor(ASType existingGraph) : this(existingGraph.TypeMap) {}

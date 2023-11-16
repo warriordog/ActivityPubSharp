@@ -123,7 +123,7 @@ public class FakeObjectWithSpecialNullability : ASObject, IASModel<FakeObjectWit
     public FakeObjectWithSpecialNullability(TypeMap typeMap) : base(typeMap)
     {
         Entity = new FakeObjectWithSpecialNullabilityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public FakeObjectWithSpecialNullability(ASType existingGraph) : this(existingGraph.TypeMap) {}

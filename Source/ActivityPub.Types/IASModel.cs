@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Text.Json.Serialization;
+using ActivityPub.Types.AS;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types;
@@ -13,7 +14,7 @@ namespace ActivityPub.Types;
 /// </summary>
 /// <typeparam name="TModel">Type of the implementing class (the type of "this")</typeparam>
 public interface IASModel<out TModel>
-    where TModel : IASModel<TModel>
+    where TModel : ASType, IASModel<TModel>
 {
     /// <summary>
     ///     Type of the entity associated with this model.
@@ -47,7 +48,7 @@ public interface IASModel<out TModel>
 /// <typeparam name="TModel">Type of the implementing class (the type of "this")</typeparam>
 /// <typeparam name="TEntity">Type of this model's entity</typeparam>
 public interface IASModel<out TModel, out TEntity> : IASModel<TModel>
-    where TModel : IASModel<TModel, TEntity>
+    where TModel : ASType, IASModel<TModel, TEntity>
     where TEntity : ASEntity<TModel, TEntity>
 {
     static Type IASModel<TModel>.EntityType { get; } = typeof(TEntity);
@@ -64,7 +65,7 @@ public interface IASModel<out TModel, out TEntity> : IASModel<TModel>
 public interface IASModel<out TModel, out TEntity, out TBaseModel> : IASModel<TModel, TEntity>
     where TModel : TBaseModel, IASModel<TModel, TEntity, TBaseModel>
     where TEntity : ASEntity<TModel, TEntity>
-    where TBaseModel : IASModel<TBaseModel>
+    where TBaseModel : ASType, IASModel<TBaseModel>
 {
     static string? IASModel<TModel>.BaseTypeName => TBaseModel.ASTypeName ?? TBaseModel.BaseTypeName;
 }

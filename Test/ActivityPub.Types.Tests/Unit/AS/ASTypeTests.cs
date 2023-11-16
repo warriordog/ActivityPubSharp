@@ -75,7 +75,7 @@ public abstract class ASTypeTests
         public StubASType(TypeMap typeMap) : base(typeMap)
         {
             Entity = new StubASTypeEntity();
-            TypeMap.Add(Entity);
+            TypeMap.AddEntity(Entity);
         }
 
         [SetsRequiredMembers]

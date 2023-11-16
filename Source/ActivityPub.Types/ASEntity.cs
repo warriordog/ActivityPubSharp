@@ -53,7 +53,7 @@ public abstract class ASEntity
 }
 
 public abstract class ASEntity<TModel, TEntity> : ASEntity
-    where TModel : IASModel<TModel, TEntity>
+    where TModel : ASType, IASModel<TModel, TEntity>
     where TEntity : ASEntity<TModel, TEntity>
 {
     public sealed override string? ASTypeName => TModel.ASTypeName;

@@ -19,7 +19,7 @@ public class ArticleObject : ASObject, IASModel<ArticleObject, ArticleObjectEnti
     public ArticleObject(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ArticleObjectEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ArticleObject(ASType existingGraph) : this(existingGraph.TypeMap) {}

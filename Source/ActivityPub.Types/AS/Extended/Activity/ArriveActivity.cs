@@ -21,7 +21,7 @@ public class ArriveActivity : ASIntransitiveActivity, IASModel<ArriveActivity, A
     public ArriveActivity(TypeMap typeMap) : base(typeMap)
     {
         Entity = new ArriveActivityEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public ArriveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}

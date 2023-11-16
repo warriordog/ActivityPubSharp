@@ -19,7 +19,7 @@ public class OrganizationActor : APActor, IASModel<OrganizationActor, Organizati
     public OrganizationActor(TypeMap typeMap) : base(typeMap)
     {
         Entity = new OrganizationActorEntity();
-        TypeMap.Add(Entity);
+        TypeMap.AddEntity(Entity);
     }
 
     public OrganizationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
