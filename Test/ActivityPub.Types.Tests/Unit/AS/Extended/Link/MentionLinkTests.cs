@@ -4,7 +4,7 @@
 using ActivityPub.Types.AS.Extended.Link;
 using ActivityPub.Types.Util;
 
-namespace ActivityPub.Types.Tests.Unit.Extended.Link;
+namespace ActivityPub.Types.Tests.Unit.AS.Extended.Link;
 
 public abstract class MentionLinkTests
 {
