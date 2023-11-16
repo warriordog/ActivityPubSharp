@@ -2,7 +2,10 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using ActivityPub.Types.Conversion.Overrides;
+using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 using JetBrains.Annotations;
 
@@ -131,7 +134,7 @@ public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
 }
 
 /// <inheritdoc cref="APActor" />
-public sealed class APActorEntity : ASEntity<APActor, APActorEntity>
+public sealed class APActorEntity : ASEntity<APActor, APActorEntity>, IAnonymousEntity
 {
     /// <inheritdoc cref="APActor.Inbox" />
     [JsonPropertyName("inbox")]
@@ -164,13 +167,23 @@ public sealed class APActorEntity : ASEntity<APActor, APActorEntity>
     /// <inheritdoc cref="APActor.Endpoints" />
     [JsonPropertyName("endpoints")]
     public Linkable<ActorEndpoints>? Endpoints { get; set; }
+
+    public static bool ShouldConvertFrom(JsonElement inputJson)
+    {
+        if (inputJson.ValueKind != JsonValueKind.Object)
+            return false;
+
+        return
+            inputJson.HasProperty(nameof(Inbox)) &&
+            inputJson.HasProperty(nameof(Outbox));
+    }
 }
 
 /// <summary>
 ///     A json object which maps additional (typically server/domain-wide) endpoints which may be useful for an actor.
 /// </summary>
 /// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects" />
-[UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature)]
+[UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature, ImplicitUseTargetFlags.WithMembers)]
 public class ActorEndpoints
 {
     /// <summary>
