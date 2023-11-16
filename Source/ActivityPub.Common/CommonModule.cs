@@ -8,8 +8,14 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ActivityPub.Common;
 
+/// <summary>
+///     Dependency Injection for ActivityPub.Common
+/// </summary>
 public static class CommonModule
 {
+    /// <summary>
+    ///     Registers the module into the provided service collection
+    /// </summary>
     public static void TryAddCommonModule(this IServiceCollection services)
     {
         services.TryAddTypesModule();

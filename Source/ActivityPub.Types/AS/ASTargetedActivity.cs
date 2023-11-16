@@ -12,13 +12,27 @@ namespace ActivityPub.Types.AS;
 /// </summary>
 public class ASTargetedActivity : ASTransitiveActivity, IASModel<ASTargetedActivity, ASTargetedActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASTargetedActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASTargetedActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASTargetedActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASTargetedActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASTargetedActivity(TypeMap typeMap, ASTargetedActivityEntity? entity) : base(typeMap, null)
     {

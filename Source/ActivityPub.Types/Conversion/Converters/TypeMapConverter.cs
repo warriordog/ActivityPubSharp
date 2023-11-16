@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-public class TypeMapConverter : JsonConverter<TypeMap>
+internal class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     private readonly IConversionOptions _conversionOptions;

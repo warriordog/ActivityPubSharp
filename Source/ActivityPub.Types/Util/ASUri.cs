@@ -13,17 +13,35 @@ namespace ActivityPub.Types.Util;
 [JsonConverter(typeof(ASUriConverter))]
 public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 {
+    /// <summary>
+    ///     Constructs an ASUri by wrapping an existing native Uri.
+    /// </summary>
     public ASUri(Uri uri) => Uri = uri;
+    
+    /// <summary>
+    ///     Constructs an ASUri by parsing a string.
+    /// </summary>
+    /// <param name="uri"></param>
     public ASUri(string uri) => Uri = new Uri(uri);
+    
+    /// <summary>
+    ///     Parsed and expanded URI value of this object. 
+    /// </summary>
     public Uri Uri { get; }
 
+    /// <inheritdoc />
     public bool Equals(ASUri? other) => AreEqual(this, other);
+    /// <inheritdoc />
     public bool Equals(string? other) => AreEqual(this, other);
+    /// <inheritdoc />
     public bool Equals(Uri? other) => AreEqual(this, other);
 
+    /// <inheritdoc />
     public override string ToString() => Uri.ToString();
+    /// <inheritdoc />
     public override int GetHashCode() => Uri.GetHashCode();
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
@@ -41,15 +59,39 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
         return false;
     }
 
+    /// <summary>
+    ///     Compares two ASUri objects for equality.
+    /// </summary>
     public static bool operator ==(ASUri? left, ASUri? right) => AreEqual(left, right);
-    public static bool operator !=(ASUri? left, ASUri? right) => !AreEqual(left, right);
 
+    /// <summary>
+    ///     Compares two ASUri objects for equality.
+    /// </summary>
+    public static bool operator !=(ASUri? left, ASUri? right) => !AreEqual(left, right);
+    
+    /// <summary>
+    ///     Compares an ASUri against a native Uri.
+    /// </summary>
     public static bool operator ==(ASUri? left, Uri? right) => AreEqual(left, right);
+    
+    /// <summary>
+    ///     Compares an ASUri against a native Uri.
+    /// </summary>
     public static bool operator !=(ASUri? left, Uri? right) => !AreEqual(left, right);
 
+    /// <summary>
+    ///     Compares an ASUri against a string.
+    /// </summary>
     public static bool operator ==(ASUri? left, string? right) => AreEqual(left, right);
+    
+    /// <summary>
+    ///     Compares an ASUri against a string.
+    /// </summary>
     public static bool operator !=(ASUri? left, string? right) => !AreEqual(left, right);
-
+    
+    /// <summary>
+    ///     Compares two ASUri objects for equality.
+    /// </summary>
     public static bool AreEqual(ASUri? left, ASUri? right)
     {
         if (ReferenceEquals(left, right))
@@ -61,7 +103,10 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
         return left.Uri.Equals(right.Uri);
     }
-
+    
+    /// <summary>
+    ///     Compares an ASUri against a native Uri.
+    /// </summary>
     public static bool AreEqual(ASUri? left, Uri? right)
     {
         if (ReferenceEquals(null, right))
@@ -71,7 +116,10 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 
         return left.Uri.Equals(right);
     }
-
+    
+    /// <summary>
+    ///     Compares an ASUri against a string.
+    /// </summary>
     public static bool AreEqual(ASUri? left, string? right)
     {
         if (ReferenceEquals(null, right))
@@ -83,10 +131,23 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
         // ReSharper disable once SuspiciousTypeConversion.Global
         return left.Uri.Equals(right);
     }
-
+    /// <summary>
+    ///     Parses an ASUri from a string
+    /// </summary>
     public static implicit operator string(ASUri asUri) => asUri.ToString();
+
+    /// <summary>
+    ///     Converts this ASUri to its string value
+    /// </summary>
     public static implicit operator ASUri(string str) => new(str);
 
+    /// <summary>
+    ///     Converts a native Uri into a an ASUri
+    /// </summary>
     public static implicit operator ASUri(Uri uri) => new(uri);
+    
+    /// <summary>
+    ///     Converts an ASUri into a native Uri
+    /// </summary>
     public static implicit operator Uri(ASUri asUri) => asUri.Uri;
 }

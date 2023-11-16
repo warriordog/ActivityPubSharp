@@ -2,16 +2,22 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Common;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 
 namespace ActivityPub.Client;
 
+/// <summary>
+///     Dependency injection for the ActivityPub.Client module
+/// </summary>
 public static class ClientModule
 {
-    public static void TryAddClientModule(this HostApplicationBuilder builder)
+    /// <summary>
+    ///     Registers the module into the provided service collection
+    /// </summary>
+    public static void TryAddClientModule(this IServiceCollection serviceCollection)
     {
-        builder.Services.TryAddCommonModule();
-        builder.Services.TryAddSingleton<IActivityPubClient, ActivityPubClient>();
+        serviceCollection.TryAddCommonModule();
+        serviceCollection.TryAddSingleton<IActivityPubClient, ActivityPubClient>();
     }
 }

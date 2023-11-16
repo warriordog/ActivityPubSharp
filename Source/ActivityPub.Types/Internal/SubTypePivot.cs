@@ -9,7 +9,7 @@ using InternalUtils;
 
 namespace ActivityPub.Types.Internal;
 
-public interface ISubTypePivot
+internal interface ISubTypePivot
 {
     bool TryNarrowType(Type entityType, JsonElement jsonElement, DeserializationMetadata meta, [NotNullWhen(true)] out Type? narrowType);
 }

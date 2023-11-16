@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Object;
 /// </summary>
 public class ProfileObject : ASObject, IASModel<ProfileObject, ProfileObjectEntity, ASObject>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Profile" types.
+    /// </summary>
     public const string ProfileType = "Profile";
     static string IASModel<ProfileObject>.ASTypeName => ProfileType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ProfileObject() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ProfileObject(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ProfileObjectEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ProfileObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ProfileObject(TypeMap typeMap, ProfileObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ProfileObjectEntity>();

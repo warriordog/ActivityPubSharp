@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class ViewActivity : ASTransitiveActivity, IASModel<ViewActivity, ViewActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "View" types.
+    /// </summary>
     public const string ViewType = "View";
     static string IASModel<ViewActivity>.ASTypeName => ViewType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ViewActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ViewActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ViewActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ViewActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ViewActivity(TypeMap typeMap, ViewActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ViewActivityEntity>();

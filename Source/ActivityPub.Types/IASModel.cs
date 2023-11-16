@@ -43,7 +43,7 @@ public interface IASModel<out TModel>
 
 /// <summary>
 ///     Indicates that the class is a convertible ActivityStreams model.
-///     The <see cref="IASModel{TModel}.EntityType"/> property is automatically set to <see cref="TEntity"/>. 
+///     The <see cref="IASModel{TModel}.EntityType"/> property is automatically set to Entity. 
 /// </summary>
 /// <typeparam name="TModel">Type of the implementing class (the type of "this")</typeparam>
 /// <typeparam name="TEntity">Type of this model's entity</typeparam>
@@ -56,7 +56,7 @@ public interface IASModel<out TModel, out TEntity> : IASModel<TModel>
 
 /// <summary>
 ///     Indicates that the class is a convertible ActivityStreams model that shadows a base type.
-///     The <see cref="IASModel{TModel}.BaseTypeName"/> property is automatically populated from <see cref="TBaseModel"/>.
+///     The <see cref="IASModel{TModel}.BaseTypeName"/> property is automatically populated from TBaseModel.
 ///     If the base type does not have a type name, then the property is recursively populated from *its* base type.
 /// </summary>
 /// <typeparam name="TModel">Type of the implementing class (the type of "this")</typeparam>

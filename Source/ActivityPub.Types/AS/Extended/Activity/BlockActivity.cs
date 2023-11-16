@@ -14,16 +14,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class BlockActivity : IgnoreActivity, IASModel<BlockActivity, BlockActivityEntity, IgnoreActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Block" types.
+    /// </summary>
     public const string BlockType = "Block";
     static string IASModel<BlockActivity>.ASTypeName => BlockType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public BlockActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public BlockActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<BlockActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public BlockActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public BlockActivity(TypeMap typeMap, BlockActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<BlockActivityEntity>();

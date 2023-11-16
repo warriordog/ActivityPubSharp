@@ -19,16 +19,33 @@ namespace ActivityPub.Types.AS;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
 public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Object" types.
+    /// </summary>
     public const string ObjectType = "Object";
     static string IASModel<ASObject>.ASTypeName => ObjectType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASObject() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASObject(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASObjectEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASObject(TypeMap typeMap, ASObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASObjectEntity>();
@@ -416,6 +433,7 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, ISubTyp
     [JsonPropertyName("shares")]
     public Linkable<ASCollection>? Shares { get; set; }
 
+    /// <inheritdoc />
     public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
     {
         // Infer APActor.

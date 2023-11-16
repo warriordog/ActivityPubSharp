@@ -17,16 +17,33 @@ namespace ActivityPub.Types.AS.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollectionpage" />
 public class ASOrderedCollectionPage : ASOrderedCollection, IASModel<ASOrderedCollectionPage, ASOrderedCollectionPageEntity, ASOrderedCollection>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "OrderedCollectionPage" types.
+    /// </summary>
     public const string OrderedCollectionPageType = "OrderedCollectionPage";
     static string IASModel<ASOrderedCollectionPage>.ASTypeName => OrderedCollectionPageType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASOrderedCollectionPage() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASOrderedCollectionPage(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASOrderedCollectionPageEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASOrderedCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASOrderedCollectionPage(TypeMap typeMap, ASOrderedCollectionPageEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASOrderedCollectionPageEntity>();
@@ -77,6 +94,9 @@ public class ASOrderedCollectionPage : ASOrderedCollection, IASModel<ASOrderedCo
         set => Entity.StartIndex = value;
     }
 
+    /// <summary>
+    ///     Converts a list of objects into an ordered collection page.
+    /// </summary>
     public static implicit operator ASOrderedCollectionPage(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
 }
 

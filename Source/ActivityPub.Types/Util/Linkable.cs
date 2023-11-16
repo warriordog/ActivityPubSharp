@@ -10,38 +10,63 @@ namespace ActivityPub.Types.Util;
 ///     Synthetic wrapper for elements that can be included directly or referenced by a Link.
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
-public class Linkable<T>
+public sealed class Linkable<T>
 {
+    /// <summary>
+    ///     Creates a Linkable from a reference link
+    /// </summary>
     public Linkable(ASLink link)
     {
         Link = link;
         HasLink = true;
     }
 
+    /// <summary>
+    ///     Creates a linkable from a value object
+    /// </summary>
     public Linkable(T value)
     {
         Value = value;
         HasValue = true;
     }
 
+    /// <summary>
+    ///     Creates a linkable by cloning another linkable
+    /// </summary>
     public Linkable(Linkable<T> linkable)
     {
         HasValue = linkable.HasValue;
         Value = linkable.Value;
     }
 
+    /// <summary>
+    ///     True if this Linkable has a link reference
+    /// </summary>
     [MemberNotNullWhen(true, nameof(Link))]
     [MemberNotNullWhen(false, nameof(Value))]
     public bool HasLink { get; }
 
+    /// <summary>
+    ///     The link reference, or null if this linkable has an object.
+    /// </summary>
     public ASLink? Link { get; }
 
+    /// <summary>
+    ///     True if this Linkable has a value object
+    /// </summary>
     [MemberNotNullWhen(true, nameof(Value))]
     [MemberNotNullWhen(false, nameof(Link))]
     public bool HasValue { get; }
 
+    /// <summary>
+    ///     The value object, or null if this Linkable has a link reference
+    /// </summary>
     public T? Value { get; }
 
+    /// <summary>
+    ///     If this Linkable has a link, then returns true and assigns it to "link".
+    ///     Otherwise, returns false.
+    /// </summary>
     public bool TryGetLink([NotNullWhen(true)] out ASLink? link)
     {
         if (HasLink)
@@ -54,6 +79,10 @@ public class Linkable<T>
         return false;
     }
 
+    /// <summary>
+    ///     If this Linkable has a value, then returns true and assigns it to "value".
+    ///     Otherwise, returns false.
+    /// </summary>
     public bool TryGetValue([NotNullWhen(true)] out T? value)
     {
         if (HasValue)
@@ -66,8 +95,9 @@ public class Linkable<T>
         return false;
     }
 
-    protected bool Equals(Linkable<T> other) => Equals(Link, other.Link) && EqualityComparer<T?>.Default.Equals(Value, other.Value);
+    private bool Equals(Linkable<T> other) => Equals(Link, other.Link) && EqualityComparer<T?>.Default.Equals(Value, other.Value);
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
@@ -79,14 +109,32 @@ public class Linkable<T>
         return Equals((Linkable<T>)obj);
     }
 
+    /// <inheritdoc />
     public override int GetHashCode() => HashCode.Combine(Link, Value);
 
 
+    /// <inheritdoc cref="Linkable{T}(ASLink)"/>
     public static implicit operator Linkable<T>(ASLink link) => new(link);
+    
+    /// <inheritdoc cref="Linkable{T}(ASLink)"/>
     public static implicit operator Linkable<T>(ASUri link) => new((ASLink)link);
+    
+    /// <inheritdoc cref="Linkable{T}(ASLink)"/>
     public static implicit operator Linkable<T>(Uri link) => new((ASLink)link);
+    
+    /// <inheritdoc cref="Linkable{T}(ASLink)"/>
     public static implicit operator Linkable<T>(string link) => new((ASLink)link);
+    
+    /// <inheritdoc cref="Linkable{T}(T)"/>
     public static implicit operator Linkable<T>(T value) => new(value);
+    
+    /// <summary>
+    ///     Converts this Linkable to its reference link, or null if it has a value object
+    /// </summary>
     public static implicit operator ASLink?(Linkable<T>? linkable) => linkable?.Link;
+    
+    /// <summary>
+    ///     Converts this Linkable to its value object, or null if it has a reference link
+    /// </summary>
     public static implicit operator T?(Linkable<T>? linkable) => linkable == null ? default : linkable.Value;
 }

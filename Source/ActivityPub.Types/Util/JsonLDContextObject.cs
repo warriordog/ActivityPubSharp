@@ -80,6 +80,9 @@ public record JsonLDContextObject
         return IsEmbedded;
     }
 
+    /// <summary>
+    ///     Converts a string into a link-form context object
+    /// </summary>
     public static implicit operator JsonLDContextObject(string str) => new(str);
 
     private sealed class TermMap : IEquatable<TermMap>

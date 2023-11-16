@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class LikeActivity : ASTransitiveActivity, IASModel<LikeActivity, LikeActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Like" types.
+    /// </summary>
     public const string LikeType = "Like";
     static string IASModel<LikeActivity>.ASTypeName => LikeType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public LikeActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public LikeActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<LikeActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public LikeActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public LikeActivity(TypeMap typeMap, LikeActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<LikeActivityEntity>();

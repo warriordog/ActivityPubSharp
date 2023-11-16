@@ -7,7 +7,7 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-public class LinkRelConverter : JsonConverter<LinkRel>
+internal class LinkRelConverter : JsonConverter<LinkRel>
 {
     public override LinkRel? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType switch
     {

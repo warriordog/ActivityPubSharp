@@ -13,16 +13,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class UndoActivity : ASTransitiveActivity, IASModel<UndoActivity, UndoActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Undo" types.
+    /// </summary>
     public const string UndoType = "Undo";
     static string IASModel<UndoActivity>.ASTypeName => UndoType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public UndoActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public UndoActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<UndoActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public UndoActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public UndoActivity(TypeMap typeMap, UndoActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<UndoActivityEntity>();

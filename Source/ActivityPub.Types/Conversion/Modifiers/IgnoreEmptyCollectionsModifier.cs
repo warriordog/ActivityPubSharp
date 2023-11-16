@@ -5,6 +5,9 @@ using InternalUtils;
 
 namespace ActivityPub.Types.Conversion.Modifiers;
 
+/// <summary>
+///     Contract modifier that configures System.Text.Json to ignore empty collections from the JSON output.
+/// </summary>
 public static class IgnoreEmptyCollectionsModifier
 {
     /// <summary>

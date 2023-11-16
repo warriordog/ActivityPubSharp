@@ -18,13 +18,27 @@ namespace ActivityPub.Types.AS;
 /// </remarks>
 public class ASTransitiveActivity : ASActivity, IASModel<ASTransitiveActivity, ASTransitiveActivityEntity, ASActivity>
 {
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASTransitiveActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASTransitiveActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASTransitiveActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASTransitiveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASTransitiveActivity(TypeMap typeMap, ASTransitiveActivityEntity? entity) : base(typeMap, null)
     {
@@ -57,6 +71,7 @@ public sealed class ASTransitiveActivityEntity : ASEntity<ASTransitiveActivity, 
     [JsonPropertyName("object")]
     public LinkableList<ASObject> Object { get; set; } = new();
 
+    /// <inheritdoc />
     public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
     {
         // Only change type if its targeted (it has the "target" property)

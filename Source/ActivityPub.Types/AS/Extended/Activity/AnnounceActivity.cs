@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class AnnounceActivity : ASTransitiveActivity, IASModel<AnnounceActivity, AnnounceActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Announce" types.
+    /// </summary>
     public const string AnnounceType = "Announce";
     static string IASModel<AnnounceActivity>.ASTypeName => AnnounceType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public AnnounceActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public AnnounceActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<AnnounceActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public AnnounceActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public AnnounceActivity(TypeMap typeMap, AnnounceActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<AnnounceActivityEntity>();

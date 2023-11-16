@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Actor;
 /// </summary>
 public class ApplicationActor : APActor, IASModel<ApplicationActor, ApplicationActorEntity, APActor>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Application" types.
+    /// </summary>
     public const string ApplicationType = "Application";
     static string IASModel<ApplicationActor>.ASTypeName => ApplicationType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ApplicationActor() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ApplicationActor(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ApplicationActorEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ApplicationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ApplicationActor(TypeMap typeMap, ApplicationActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ApplicationActorEntity>();

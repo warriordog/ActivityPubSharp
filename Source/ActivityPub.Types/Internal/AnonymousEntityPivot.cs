@@ -8,7 +8,7 @@ using InternalUtils;
 
 namespace ActivityPub.Types.Internal;
 
-public interface IAnonymousEntityPivot
+internal interface IAnonymousEntityPivot
 {
     bool ShouldConvert(Type entityType, JsonElement jsonElement);
 }

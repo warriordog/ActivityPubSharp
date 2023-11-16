@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class InviteActivity : OfferActivity, IASModel<InviteActivity, InviteActivityEntity, OfferActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Invite" types.
+    /// </summary>
     public const string InviteType = "Invite";
     static string IASModel<InviteActivity>.ASTypeName => InviteType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public InviteActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public InviteActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<InviteActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public InviteActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public InviteActivity(TypeMap typeMap, InviteActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<InviteActivityEntity>();

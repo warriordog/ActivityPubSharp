@@ -47,16 +47,27 @@ public abstract class ASEntity
     [JsonIgnore]
     public virtual bool RequiresObjectForm => true;
 
+    /// <summary>
+    ///     Properties that exist in the JSON, but did not map to any properties.
+    /// </summary>
     [JsonInclude]
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? UnmappedProperties { internal get; set; }
 }
 
+/// <inheritdoc />
+/// <typeparam name="TModel">Type of the model associated with this entity. Will set the value of <see cref="ASTypeName"/> and <see cref="BaseTypeName"/>.</typeparam>
+/// <typeparam name="TEntity">Type of entity. Should be set to the type of "this"</typeparam>
 public abstract class ASEntity<TModel, TEntity> : ASEntity
     where TModel : ASType, IASModel<TModel, TEntity>
     where TEntity : ASEntity<TModel, TEntity>
 {
+    /// <inheritdoc />
     public sealed override string? ASTypeName => TModel.ASTypeName;
+
+    /// <inheritdoc />
     public sealed override string? BaseTypeName => TModel.BaseTypeName;
+
+    /// <inheritdoc />
     public sealed override IJsonLDContext DefiningContext => TModel.DefiningContext;
 }

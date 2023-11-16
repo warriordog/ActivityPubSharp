@@ -10,7 +10,7 @@ namespace ActivityPub.Types.Conversion.Converters;
 /// <summary>
 ///     Converts language-tagged strings
 /// </summary>
-public class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageString>
+internal class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageString>
 {
     public override NaturalLanguageString? Read(
         ref Utf8JsonReader reader,

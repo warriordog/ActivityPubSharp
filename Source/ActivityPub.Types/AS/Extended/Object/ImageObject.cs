@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Object;
 /// </summary>
 public class ImageObject : DocumentObject, IASModel<ImageObject, ImageObjectEntity, DocumentObject>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Image" types.
+    /// </summary>
     public const string ImageType = "Image";
     static string IASModel<ImageObject>.ASTypeName => ImageType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ImageObject() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ImageObject(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ImageObjectEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ImageObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ImageObject(TypeMap typeMap, ImageObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ImageObjectEntity>();

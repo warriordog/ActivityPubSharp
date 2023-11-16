@@ -16,13 +16,27 @@ public class EmptyExtendedTypeFake : ASType, IASModel<EmptyExtendedTypeFake, Emp
         ExtendedContext
     };
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public EmptyExtendedTypeFake() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public EmptyExtendedTypeFake(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<EmptyExtendedTypeFakeEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public EmptyExtendedTypeFake(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public EmptyExtendedTypeFake(TypeMap typeMap, EmptyExtendedTypeFakeEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<EmptyExtendedTypeFakeEntity>();

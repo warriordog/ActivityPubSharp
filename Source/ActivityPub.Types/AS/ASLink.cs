@@ -17,16 +17,33 @@ namespace ActivityPub.Types.AS;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link" />
 public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Link" types.
+    /// </summary>
     public const string LinkType = "Link";
     static string IASModel<ASLink>.ASTypeName => LinkType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASLink() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASLink(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASLinkEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASLink(TypeMap typeMap, ASLinkEntity? entity) : base(typeMap, null)
     {
@@ -91,13 +108,37 @@ public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
         set => Entity.Rel = value;
     }
 
+    /// <summary>
+    ///     Implicitly converts the link to a string using the value of <see cref="HRef"/>.
+    /// </summary>
     public static implicit operator string(ASLink link) => link.HRef;
+
+    /// <summary>
+    ///     Implicitly converts a string into a link.
+    ///     String value will be assigned to <see cref="HRef"/>.
+    /// </summary>
     public static implicit operator ASLink(string str) => new() { HRef = new ASUri(str) };
-
+    
+    /// <summary>
+    ///     Implicitly converts the link to a Uri using the value of <see cref="HRef"/>.
+    /// </summary>
     public static implicit operator Uri(ASLink link) => link.HRef.Uri;
+    
+    /// <summary>
+    ///     Implicitly converts a Uri into a link.
+    ///     Uri value will be assigned to <see cref="HRef"/>.
+    /// </summary>
     public static implicit operator ASLink(Uri uri) => new() { HRef = new ASUri(uri) };
-
+    
+    /// <summary>
+    ///     Implicitly converts the link to an ASUri using the value of <see cref="HRef"/>.
+    /// </summary>
     public static implicit operator ASUri(ASLink link) => link.HRef;
+    
+    /// <summary>
+    ///     Implicitly converts an ASUri into a link.
+    ///     Uri value will be assigned to <see cref="HRef"/>.
+    /// </summary>
     public static implicit operator ASLink(ASUri asUri) => new() { HRef = asUri };
 }
 
@@ -124,5 +165,6 @@ public sealed class ASLinkEntity : ASEntity<ASLink, ASLinkEntity>
     [JsonPropertyName("rel")]
     public HashSet<LinkRel> Rel { get; set; } = new();
 
+    /// <inheritdoc />
     public override bool RequiresObjectForm => HRefLang != null || Width != null || Height != null || Rel.Count != 0;
 }

@@ -20,16 +20,33 @@ namespace ActivityPub.Types.AS.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection" />
 public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrderedCollectionEntity, ASObject>, IEnumerable<Linkable<ASObject>>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "OrderedCollection" types.
+    /// </summary>
     public const string OrderedCollectionType = "OrderedCollection";
     static string IASModel<ASOrderedCollection>.ASTypeName => OrderedCollectionType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASOrderedCollection() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASOrderedCollection(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASOrderedCollectionEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASOrderedCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASOrderedCollection(TypeMap typeMap, ASOrderedCollectionEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASOrderedCollectionEntity>();
@@ -112,8 +129,15 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Items?.Any() == true;
 
-    public static implicit operator ASOrderedCollection(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
+    /// <summary>
+    ///     Converts a list of items into an ordered collection.
+    /// </summary>
+    public static implicit operator ASOrderedCollection(List<ASObject> collection) => new()
+    {
+        Items = new LinkableList<ASObject>(collection)
+    };
 
+    /// <inheritdoc />
     public IEnumerator<Linkable<ASObject>> GetEnumerator() => Items?.GetEnumerator() ?? Enumerable.Empty<Linkable<ASObject>>().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

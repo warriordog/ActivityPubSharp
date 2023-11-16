@@ -10,13 +10,26 @@ namespace ActivityPub.Types.Tests.Util.Fakes;
 
 public class AnonymousExtensionFake : ASObject, IASModel<AnonymousExtensionFake, AnonymousExtensionFakeEntity, ASObject>
 {
-    public AnonymousExtensionFake() : this(new TypeMap()) {}
+    /// <summary>
+    ///     Constructs a new instance with a new, empty type graph.
+    /// <summary>
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public AnonymousExtensionFake(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<AnonymousExtensionFakeEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public AnonymousExtensionFake(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public AnonymousExtensionFake(TypeMap typeMap, AnonymousExtensionFakeEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<AnonymousExtensionFakeEntity>();

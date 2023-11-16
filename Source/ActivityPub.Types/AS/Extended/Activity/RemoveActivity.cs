@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class RemoveActivity : ASTargetedActivity, IASModel<RemoveActivity, RemoveActivityEntity, ASTargetedActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Remove" types.
+    /// </summary>
     public const string RemoveType = "Remove";
     static string IASModel<RemoveActivity>.ASTypeName => RemoveType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public RemoveActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public RemoveActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<RemoveActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public RemoveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public RemoveActivity(TypeMap typeMap, RemoveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<RemoveActivityEntity>();

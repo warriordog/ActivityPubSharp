@@ -7,7 +7,7 @@ namespace ActivityPub.Types.Internal;
 ///     Represents the AS type name of a composite object.
 ///     More-specific subtypes will "shadow" (replace) more-generic base types. 
 /// </summary>
-public class CompositeASType
+internal class CompositeASType
 {
     private readonly HashSet<string> _allASTypes = new();
     private readonly HashSet<string> _flatASTypes = new();

@@ -13,16 +13,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class ArriveActivity : ASIntransitiveActivity, IASModel<ArriveActivity, ArriveActivityEntity, ASIntransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Arrive" types.
+    /// </summary>
     public const string ArriveType = "Arrive";
     static string IASModel<ArriveActivity>.ASTypeName => ArriveType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ArriveActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ArriveActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ArriveActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ArriveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ArriveActivity(TypeMap typeMap, ArriveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ArriveActivityEntity>();

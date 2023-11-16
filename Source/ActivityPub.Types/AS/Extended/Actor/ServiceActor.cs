@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Actor;
 /// </summary>
 public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, APActor>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Service" types.
+    /// </summary>
     public const string ServiceType = "Service";
     static string IASModel<ServiceActor>.ASTypeName => ServiceType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ServiceActor() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ServiceActor(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ServiceActorEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ServiceActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ServiceActor(TypeMap typeMap, ServiceActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ServiceActorEntity>();

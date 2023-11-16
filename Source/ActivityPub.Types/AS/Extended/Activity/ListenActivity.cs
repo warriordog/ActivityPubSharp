@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class ListenActivity : ASTransitiveActivity, IASModel<ListenActivity, ListenActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Listen" types.
+    /// </summary>
     public const string ListenType = "Listen";
     static string IASModel<ListenActivity>.ASTypeName => ListenType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ListenActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ListenActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ListenActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ListenActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ListenActivity(TypeMap typeMap, ListenActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ListenActivityEntity>();

@@ -16,7 +16,7 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Logging.ClearProviders();
 
 // Register ActivityPubSharp modules
-builder.TryAddClientModule();
+builder.Services.TryAddClientModule();
 
 // Add services
 builder.Services.AddHostedService<ConsoleService>();

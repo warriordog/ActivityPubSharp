@@ -35,10 +35,10 @@ public interface IJsonLdSerializer
     public JsonElement SerializeToElement<T>(T? value);
 }
 
-public class JsonLdSerializer : IJsonLdSerializer
+internal class JsonLdSerializer : IJsonLdSerializer
 {
     [SuppressMessage("ReSharper", "SuggestBaseTypeForParameterInConstructor")]
-    public JsonLdSerializer
+    internal JsonLdSerializer
     (
         IOptions<JsonLdSerializerOptions> serializerOptions,
         TypeMapConverter typeMapConverter,

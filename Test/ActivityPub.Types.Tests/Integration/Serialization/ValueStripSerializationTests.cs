@@ -115,16 +115,33 @@ public class ValueStripSerializationTests : SerializationTests
 
 public class FakeObjectWithSpecialNullability : ASObject, IASModel<FakeObjectWithSpecialNullability, FakeObjectWithSpecialNullabilityEntity, ASObject>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "FakeObjectWithSpecialNullability" types.
+    /// </summary>
     public const string FakeObjectWithSpecialNullabilityType = "FakeObjectWithSpecialNullability";
     static string IASModel<FakeObjectWithSpecialNullability>.ASTypeName => FakeObjectWithSpecialNullabilityType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public FakeObjectWithSpecialNullability() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public FakeObjectWithSpecialNullability(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<FakeObjectWithSpecialNullabilityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public FakeObjectWithSpecialNullability(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public FakeObjectWithSpecialNullability(TypeMap typeMap, FakeObjectWithSpecialNullabilityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<FakeObjectWithSpecialNullabilityEntity>();

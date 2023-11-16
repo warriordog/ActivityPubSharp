@@ -13,16 +13,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class FollowActivity : ASTransitiveActivity, IASModel<FollowActivity, FollowActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Follow" types.
+    /// </summary>
     public const string FollowType = "Follow";
     static string IASModel<FollowActivity>.ASTypeName => FollowType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public FollowActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public FollowActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<FollowActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public FollowActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public FollowActivity(TypeMap typeMap, FollowActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<FollowActivityEntity>();

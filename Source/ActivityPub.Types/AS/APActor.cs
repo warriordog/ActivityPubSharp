@@ -21,13 +21,27 @@ namespace ActivityPub.Types.AS;
 /// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects" />
 public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
 {
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public APActor() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public APActor(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<APActorEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public APActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public APActor(TypeMap typeMap, APActorEntity? entity) : base(typeMap, null)
     {
@@ -167,6 +181,7 @@ public sealed class APActorEntity : ASEntity<APActor, APActorEntity>, IAnonymous
     [JsonPropertyName("endpoints")]
     public Linkable<ActorEndpoints>? Endpoints { get; set; }
 
+    /// <inheritdoc />
     public static bool ShouldConvertFrom(JsonElement inputJson)
     {
         if (inputJson.ValueKind != JsonValueKind.Object)

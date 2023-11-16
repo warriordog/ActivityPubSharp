@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class DeleteActivity : ASTransitiveActivity, IASModel<DeleteActivity, DeleteActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Delete" types.
+    /// </summary>
     public const string DeleteType = "Delete";
     static string IASModel<DeleteActivity>.ASTypeName => DeleteType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public DeleteActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public DeleteActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<DeleteActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public DeleteActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public DeleteActivity(TypeMap typeMap, DeleteActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<DeleteActivityEntity>();

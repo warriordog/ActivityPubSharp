@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Object;
 /// </summary>
 public class NoteObject : ASObject, IASModel<NoteObject, NoteObjectEntity, ASObject>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Note" types.
+    /// </summary>
     public const string NoteType = "Note";
     static string IASModel<NoteObject>.ASTypeName => NoteType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public NoteObject() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public NoteObject(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<NoteObjectEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public NoteObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public NoteObject(TypeMap typeMap, NoteObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<NoteObjectEntity>();

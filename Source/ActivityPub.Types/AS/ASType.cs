@@ -21,14 +21,24 @@ namespace ActivityPub.Types.AS;
 [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature, ImplicitUseTargetFlags.WithInheritors)]
 public class ASType : IASModel<ASType, ASTypeEntity>
 {
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASType() : this(new TypeMap()) {}
-
+    
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASType(TypeMap typeMap)
     {
         TypeMap = typeMap;
         Entity = TypeMap.Extend<ASTypeEntity>();
     }
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASType(TypeMap typeMap, ASTypeEntity? entity)
     {
@@ -116,7 +126,7 @@ public class ASType : IASModel<ASType, ASTypeEntity>
         where TModel : ASType, IASModel<TModel>
         => TypeMap.IsModel<TModel>();
 
-    /// <inheritdoc cref="Types.TypeMap.IsModel{TModel}(out TModel?)" />
+    /// <inheritdoc cref="Types.TypeMap.IsModel{TModel}(out TModel)" />
     public bool Is<TModel>([NotNullWhen(true)] out TModel? instance)
         where TModel : ASType, IASModel<TModel>
         => TypeMap.IsModel(out instance);
@@ -169,5 +179,6 @@ public sealed class ASTypeEntity : ASEntity<ASType, ASTypeEntity>
     [JsonPropertyName("mediaType")]
     public string? MediaType { get; set; }
 
+    /// <inheritdoc />
     public override bool RequiresObjectForm => Id != null || AttributedTo.Count != 0 || Preview != null || Name != null || MediaType != null;
 }

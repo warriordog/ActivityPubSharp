@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Actor;
 /// </summary>
 public class PersonActor : APActor, IASModel<PersonActor, PersonActorEntity, APActor>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Person" types.
+    /// </summary>
     public const string PersonType = "Person";
     static string IASModel<PersonActor>.ASTypeName => PersonType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public PersonActor() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public PersonActor(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<PersonActorEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public PersonActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public PersonActor(TypeMap typeMap, PersonActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<PersonActorEntity>();

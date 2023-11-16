@@ -218,8 +218,8 @@ internal static class TypeExtensions
     ///     Additional generic overloads are automatically constructed as-needed, and cached for the lifetime of the delegate.
     ///     An object can be provided to bind instance methods.
     /// </summary>
-    /// <exception cref="ArgumentException">When <see cref="method"/> is static but <see cref="instance"/> is non-null</exception>
-    /// <exception cref="ArgumentException">When <see cref="method"/> is non-static but <see cref="instance"/> null</exception>
+    /// <exception cref="ArgumentException">When "method" is static but "instance" is non-null</exception>
+    /// <exception cref="ArgumentException">When "method" is non-static but "instance" is null</exception>
     internal static Func<Type, TResult> CreateGenericPivot<TResult>(this MethodInfo method, object? instance = null)
     {
         CheckMethodInstanceAlignment(method, instance);

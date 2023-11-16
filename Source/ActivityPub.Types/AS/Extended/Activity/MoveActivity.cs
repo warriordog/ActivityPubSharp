@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class MoveActivity : ASTransitiveActivity, IASModel<MoveActivity, MoveActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Move" types.
+    /// </summary>
     public const string MoveType = "Move";
     static string IASModel<MoveActivity>.ASTypeName => MoveType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public MoveActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public MoveActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<MoveActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public MoveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public MoveActivity(TypeMap typeMap, MoveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<MoveActivityEntity>();

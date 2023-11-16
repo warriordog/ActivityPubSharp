@@ -8,7 +8,7 @@ using InternalUtils;
 
 namespace ActivityPub.Types.Internal;
 
-public interface INamelessEntityPivot
+internal interface INamelessEntityPivot
 {
     bool ShouldConvert(Type entityType, IJsonLDContext jsonLDContext);
 }

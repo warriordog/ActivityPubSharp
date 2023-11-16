@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace ActivityPub.Types.Tests.Unit.Conversion.Converters;
 
-public abstract class JsonConverterTests<T, TConverter>
+internal abstract class JsonConverterTests<T, TConverter>
     where TConverter : JsonConverter<T>
 {
     protected abstract TConverter ConverterUnderTest { get; set; }

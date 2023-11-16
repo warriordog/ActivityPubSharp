@@ -3,15 +3,15 @@
 
 namespace InternalUtils;
 
-public static class CollectionExtensions
+internal static class CollectionExtensions
 {
-    public static void AddRange<T>(this ISet<T> set, IEnumerable<T> items)
+    internal static void AddRange<T>(this ISet<T> set, IEnumerable<T> items)
     {
         foreach (var item in items)
             set.Add(item);
     }
 
-    public static void RemoveWhere<T>(this IList<T> list, Predicate<T> condition)
+    internal static void RemoveWhere<T>(this IList<T> list, Predicate<T> condition)
     {
         for (var i = list.Count - 1; i >= 0; i--)
         {

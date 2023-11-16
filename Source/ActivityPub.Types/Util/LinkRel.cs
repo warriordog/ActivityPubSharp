@@ -18,6 +18,9 @@ public record LinkRel
     // Values are: "space" ( ), "tab" (\t), "line feed" (\n), "carriage return" (\r), and "comma" (,)
     private static readonly char[] IllegalChars = { '\u0020', '\u0009', '\u000A', '\u000C', '\u000D', '\u002C' };
 
+    /// <summary>
+    ///     Constructs a LinkRel from a raw input
+    /// </summary>
     public LinkRel(string value)
     {
         var badCharIdx = value.IndexOfAny(IllegalChars);
@@ -27,8 +30,18 @@ public record LinkRel
         Value = value;
     }
 
+    /// <summary>
+    ///     String value of the relation
+    /// </summary>
     public string Value { get; }
 
+    /// <summary>
+    ///     Converts a LinkRel to its string value
+    /// </summary>
     public static implicit operator string(LinkRel linkRel) => linkRel.Value;
+    
+    /// <summary>
+    ///     Parses a raw string into LinkRel
+    /// </summary>
     public static implicit operator LinkRel(string str) => new(str);
 }

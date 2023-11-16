@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class RejectActivity : ASTransitiveActivity, IASModel<RejectActivity, RejectActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Reject" types.
+    /// </summary>
     public const string RejectType = "Reject";
     static string IASModel<RejectActivity>.ASTypeName => RejectType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public RejectActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public RejectActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<RejectActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public RejectActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public RejectActivity(TypeMap typeMap, RejectActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<RejectActivityEntity>();

@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class ReadActivity : ASTransitiveActivity, IASModel<ReadActivity, ReadActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Read" types.
+    /// </summary>
     public const string ReadType = "Read";
     static string IASModel<ReadActivity>.ASTypeName => ReadType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ReadActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ReadActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ReadActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ReadActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ReadActivity(TypeMap typeMap, ReadActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ReadActivityEntity>();

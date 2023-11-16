@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class IgnoreActivity : ASTransitiveActivity, IASModel<IgnoreActivity, IgnoreActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Ignore" types.
+    /// </summary>
     public const string IgnoreType = "Ignore";
     static string IASModel<IgnoreActivity>.ASTypeName => IgnoreType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public IgnoreActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public IgnoreActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<IgnoreActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public IgnoreActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public IgnoreActivity(TypeMap typeMap, IgnoreActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<IgnoreActivityEntity>();

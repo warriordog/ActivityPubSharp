@@ -6,7 +6,7 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Conversion.Converters;
 
-public abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConverter>
+internal abstract class ASUriConverterTests : JsonConverterTests<ASUri, ASUriConverter>
 {
     protected override ASUriConverter ConverterUnderTest { get; set; } = new();
 

@@ -18,16 +18,33 @@ namespace ActivityPub.Types.AS;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity" />
 public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObject>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Activity" types.
+    /// </summary>
     public const string ActivityType = "Activity";
     static string IASModel<ASActivity>.ASTypeName => ActivityType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASActivity(TypeMap typeMap, ASActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASActivityEntity>();
@@ -101,6 +118,7 @@ public sealed class ASActivityEntity : ASEntity<ASActivity, ASActivityEntity>, I
     [JsonPropertyName("result")]
     public Linkable<ASObject>? Result { get; set; }
 
+    /// <inheritdoc />
     public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
     {
         // Only change type if its transitive (it has the "object" property)

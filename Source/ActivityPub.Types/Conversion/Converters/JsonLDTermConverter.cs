@@ -12,7 +12,7 @@ namespace ActivityPub.Types.Conversion.Converters;
 /// </summary>
 /// <seealso cref="JsonLDContextObjectConverter" />
 /// <seealso cref="JsonLDContextConverter" />
-public class JsonLDTermConverter : JsonConverter<JsonLDTerm>
+internal class JsonLDTermConverter : JsonConverter<JsonLDTerm>
 {
     public override JsonLDTerm? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

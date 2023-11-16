@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Object;
 /// </summary>
 public class TombstoneObject : ASObject, IASModel<TombstoneObject, TombstoneObjectEntity, ASObject>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Tombstone" types.
+    /// </summary>
     public const string TombstoneType = "Tombstone";
     static string IASModel<TombstoneObject>.ASTypeName => TombstoneType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public TombstoneObject() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public TombstoneObject(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<TombstoneObjectEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public TombstoneObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public TombstoneObject(TypeMap typeMap, TombstoneObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<TombstoneObjectEntity>();

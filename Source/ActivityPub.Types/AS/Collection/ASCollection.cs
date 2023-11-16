@@ -20,16 +20,33 @@ namespace ActivityPub.Types.AS.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection" />
 public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity, ASObject>, IEnumerable<Linkable<ASObject>>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Collection" types.
+    /// </summary>
     public const string CollectionType = "Collection";
     static string IASModel<ASCollection>.ASTypeName => CollectionType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASCollection() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASCollection(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASCollectionEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASCollection(TypeMap typeMap, ASCollectionEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASCollectionEntity>();
@@ -111,8 +128,15 @@ public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity,
     [MemberNotNullWhen(true, nameof(Items))]
     public bool HasItems => Items?.Any() == true;
 
-    public static implicit operator ASCollection(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
+    /// <summary>
+    ///     Converts a list of objects into an ASCollection.
+    /// </summary>
+    public static implicit operator ASCollection(List<ASObject> collection) => new()
+    {
+        Items = new LinkableList<ASObject>(collection)
+    };
 
+    /// <inheritdoc />
     public IEnumerator<Linkable<ASObject>> GetEnumerator() => Items?.GetEnumerator() ?? Enumerable.Empty<Linkable<ASObject>>().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

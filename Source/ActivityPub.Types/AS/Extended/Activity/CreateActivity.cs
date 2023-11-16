@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class CreateActivity : ASTransitiveActivity, IASModel<CreateActivity, CreateActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Create" types.
+    /// </summary>
     public const string CreateType = "Create";
     static string IASModel<CreateActivity>.ASTypeName => CreateType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public CreateActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public CreateActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<CreateActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public CreateActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public CreateActivity(TypeMap typeMap, CreateActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<CreateActivityEntity>();

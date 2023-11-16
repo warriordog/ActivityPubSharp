@@ -12,16 +12,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class OfferActivity : ASTransitiveActivity, IASModel<OfferActivity, OfferActivityEntity, ASTransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Offer" types.
+    /// </summary>
     public const string OfferType = "Offer";
     static string IASModel<OfferActivity>.ASTypeName => OfferType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public OfferActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public OfferActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<OfferActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public OfferActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public OfferActivity(TypeMap typeMap, OfferActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<OfferActivityEntity>();

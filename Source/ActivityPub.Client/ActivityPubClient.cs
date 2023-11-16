@@ -19,6 +19,11 @@ public class ActivityPubClient : IActivityPubClient
     private readonly HttpClient _httpClient = new();
     private readonly IJsonLdSerializer _jsonLdSerializer;
 
+    /// <summary>
+    ///     Constructs a new ActivityPub client
+    /// </summary>
+    /// <param name="apOptions">Options for the ActivityPub protocol</param>
+    /// <param name="jsonLdSerializer">JSON-LD serializer</param>
     public ActivityPubClient(ActivityPubOptions apOptions, IJsonLdSerializer jsonLdSerializer)
     {
         _apOptions = apOptions;
@@ -33,14 +38,18 @@ public class ActivityPubClient : IActivityPubClient
         }
     }
 
+    /// <inheritdoc />
     public int DefaultGetRecursion { get; set; }
 
+    /// <inheritdoc />
     public async Task<T> Get<T>(Uri uri, int? maxRecursion = null, CancellationToken cancellationToken = default)
         where T : ASType
         => (T)await Get(uri, typeof(T), maxRecursion, cancellationToken);
 
+    /// <inheritdoc />
     public int DefaultResolveRecursion { get; set; } = 1;
 
+    /// <inheritdoc />
     public async Task<T> Resolve<T>(Linkable<T> linkable, int? maxRecursion = null, CancellationToken cancellationToken = default)
         where T : ASObject
     {
@@ -53,6 +62,7 @@ public class ActivityPubClient : IActivityPubClient
         return await Get<T>(linkable.Link, maxRecursion - 1, cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<List<T>> Resolve<T>(LinkableList<T> linkables, int? maxRecursion = null, CancellationToken cancellationToken = default)
         where T : ASObject
     {
@@ -93,6 +103,7 @@ public class ActivityPubClient : IActivityPubClient
 
     #region Dispose
 
+    /// <inheritdoc />
     public void Dispose()
     {
         // Dispose of unmanaged resources.
@@ -102,6 +113,9 @@ public class ActivityPubClient : IActivityPubClient
         GC.SuppressFinalize(this);
     }
 
+    /// <summary>
+    ///     Dispose the object's resources
+    /// </summary>
     protected virtual void Dispose(bool disposing)
     {
         if (_disposed)

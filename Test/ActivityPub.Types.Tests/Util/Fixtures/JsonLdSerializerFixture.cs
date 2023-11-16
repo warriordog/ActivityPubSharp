@@ -41,8 +41,8 @@ public sealed class JsonLdSerializerFixture
         JsonLdSerializer = new JsonLdSerializer(serializerOptions, typeMapConverter, asTypeConverter, linkableConverter, listableConverter, listableReadOnlyConverter);
     }
 
-    public IASTypeInfoCache ASTypeInfoCache { get; }
-    public IJsonLdSerializer JsonLdSerializer { get; }
-    public JsonLdSerializerOptions JsonLdSerializerOptions { get; }
-    public ConversionOptions ConversionOptions { get; }
+    internal IASTypeInfoCache ASTypeInfoCache { get; }
+    internal IJsonLdSerializer JsonLdSerializer { get; }
+    internal JsonLdSerializerOptions JsonLdSerializerOptions { get; }
+    internal ConversionOptions ConversionOptions { get; }
 }

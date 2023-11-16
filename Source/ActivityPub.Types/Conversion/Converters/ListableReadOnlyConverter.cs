@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Conversion.Converters;
 ///     Converts types that can be a list of elements, or a single elements.
 ///     Essentially: T | T[]
 /// </summary>
-public class ListableReadOnlyConverter : JsonConverterFactory
+internal class ListableReadOnlyConverter : JsonConverterFactory
 {
     public override bool CanConvert(Type type) =>
         // We only convert concrete types deriving from ICollection<T>
@@ -31,7 +31,7 @@ public class ListableReadOnlyConverter : JsonConverterFactory
     }
 }
 
-public class ListableReadOnlyConverter<TItem, TCollection> : JsonConverter<TCollection>
+internal class ListableReadOnlyConverter<TItem, TCollection> : JsonConverter<TCollection>
     where TCollection : IReadOnlyCollection<TItem>
 {
     public override TCollection Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

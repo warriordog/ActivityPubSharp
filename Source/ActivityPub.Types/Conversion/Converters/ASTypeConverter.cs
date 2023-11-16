@@ -7,7 +7,7 @@ using ActivityPub.Types.AS;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-public class ASTypeConverter : JsonConverterFactory
+internal class ASTypeConverter : JsonConverterFactory
 {
     private readonly Type _asTypeType = typeof(ASType);
 

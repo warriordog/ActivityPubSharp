@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Object;
 /// </summary>
 public class DocumentObject : ASObject, IASModel<DocumentObject, DocumentObjectEntity, ASObject>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Document" types.
+    /// </summary>
     public const string DocumentType = "Document";
     static string IASModel<DocumentObject>.ASTypeName => DocumentType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public DocumentObject() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public DocumentObject(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<DocumentObjectEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public DocumentObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public DocumentObject(TypeMap typeMap, DocumentObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<DocumentObjectEntity>();

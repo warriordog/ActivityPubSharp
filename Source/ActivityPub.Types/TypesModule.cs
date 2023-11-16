@@ -17,8 +17,14 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ActivityPub.Types;
 
+/// <summary>
+///     Dependency Injection for the ActivityPub.Types package.
+/// </summary>
 public static class TypesModule
 {
+    /// <summary>
+    ///     Registers the module into a provided service collection.
+    /// </summary>
     public static void TryAddTypesModule(this IServiceCollection services)
     {
         services.TryAddSingleton<ISubTypePivot, SubTypePivot>();

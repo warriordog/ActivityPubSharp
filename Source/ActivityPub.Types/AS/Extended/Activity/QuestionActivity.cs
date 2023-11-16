@@ -15,16 +15,33 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// </summary>
 public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivity, QuestionActivityEntity, ASIntransitiveActivity>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Question" types.
+    /// </summary>
     public const string QuestionType = "Question";
     static string IASModel<QuestionActivity>.ASTypeName => QuestionType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public QuestionActivity() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public QuestionActivity(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<QuestionActivityEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public QuestionActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public QuestionActivity(TypeMap typeMap, QuestionActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<QuestionActivityEntity>();

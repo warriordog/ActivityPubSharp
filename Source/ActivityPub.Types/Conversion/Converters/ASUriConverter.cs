@@ -8,7 +8,7 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-public class ASUriConverter : JsonConverter<ASUri>
+internal class ASUriConverter : JsonConverter<ASUri>
 {
     public override ASUri Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

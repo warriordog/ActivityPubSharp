@@ -31,7 +31,7 @@ public interface IActivityPubClient : IDisposable
 
     /// <summary>
     ///     Retrieves and validates an ActivityPub object.
-    ///     Links are automatically followed, up to <see cref="maxRecursion" /> layers of recursion.
+    ///     Links are automatically followed, up to maxRecursion layers of recursion.
     /// </summary>
     /// <param name="uri">URI to the object</param>
     /// <param name="maxRecursion">Maximum depth to recurse while populating the returned object. Defaults to <see cref="DefaultGetRecursion" />.</param>

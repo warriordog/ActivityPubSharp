@@ -14,7 +14,7 @@ namespace ActivityPub.Types.Conversion.Converters;
 /// <summary>
 ///     Converts types that can be either <see cref="ASLink" /> or some other type.
 /// </summary>
-public class LinkableConverter : JsonConverterFactory
+internal class LinkableConverter : JsonConverterFactory
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;

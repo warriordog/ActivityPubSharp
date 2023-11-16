@@ -12,7 +12,7 @@ namespace ActivityPub.Types.Internal;
 /// <summary>
 ///     Extracts and stores metadata for ActivityStreams types within the application.
 /// </summary>
-public interface IASTypeInfoCache
+internal interface IASTypeInfoCache
 {
     /// <summary>
     ///     Finds the .NET type(s) that implement a set of AS types.
@@ -53,7 +53,7 @@ public interface IASTypeInfoCache
     void RegisterAllAssemblies();
 }
 
-public class ASTypeInfoCache : IASTypeInfoCache
+internal class ASTypeInfoCache : IASTypeInfoCache
 {
     private readonly HashSet<Assembly> _registeredAssemblies = new();
     
@@ -71,7 +71,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
     /// </summary>
     private readonly Func<Type, ModelMeta> _createTypeMetadataFor;
 
-    public ASTypeInfoCache() =>
+    internal ASTypeInfoCache() =>
         // I really hate doing this :sob:
         _createTypeMetadataFor = typeof(ASTypeInfoCache)
             .GetRequiredMethod(nameof(CreateModelMetaFor), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)

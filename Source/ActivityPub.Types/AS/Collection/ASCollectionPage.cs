@@ -17,16 +17,33 @@ namespace ActivityPub.Types.AS.Collection;
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collectionpage" />
 public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASCollectionPageEntity, ASCollection>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "CollectionPage" types.
+    /// </summary>
     public const string CollectionPageType = "CollectionPage";
     static string IASModel<ASCollectionPage>.ASTypeName => CollectionPageType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public ASCollectionPage() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASCollectionPage(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<ASCollectionPageEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public ASCollectionPage(TypeMap typeMap, ASCollectionPageEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASCollectionPageEntity>();
@@ -77,7 +94,13 @@ public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASColle
         set => Entity.StartIndex = value;
     }
 
-    public static implicit operator ASCollectionPage(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
+    /// <summary>
+    ///     Converts a list of objects into a collection page.
+    /// </summary>
+    public static implicit operator ASCollectionPage(List<ASObject> collection) => new()
+    {
+        Items = new LinkableList<ASObject>(collection)
+    };
 }
 
 /// <inheritdoc cref="ASCollectionPage" />

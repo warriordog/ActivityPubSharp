@@ -11,16 +11,33 @@ namespace ActivityPub.Types.AS.Extended.Link;
 /// </summary>
 public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLink>
 {
+    /// <summary>
+    ///     ActivityStreams type name for "Mention" types.
+    /// </summary>
     public const string MentionType = "Mention";
     static string IASModel<MentionLink>.ASTypeName => MentionType;
 
+    /// <summary>
+    ///     Constructs a new instance and attaches it to a new, empty type graph.
+    /// </summary>
     public MentionLink() : this(new TypeMap()) {}
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public MentionLink(TypeMap typeMap) : base(typeMap)
         => Entity = TypeMap.Extend<MentionLinkEntity>();
 
+    /// <summary>
+    ///     Constructs a new instance and extends an existing type graph from a provided model.
+    /// </summary>
+    /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public MentionLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+    /// <summary>
+    ///     Constructs a new instance using entities from an existing type graph.
+    /// </summary>
     [SetsRequiredMembers]
     public MentionLink(TypeMap typeMap, MentionLinkEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<MentionLinkEntity>();
@@ -29,14 +46,37 @@ public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLi
 
     private MentionLinkEntity Entity { get; }
 
-
+    /// <summary>
+    ///     Implicitly converts the link to a string using the value of <see cref="ASLink.HRef"/>.
+    /// </summary>
     public static implicit operator string(MentionLink link) => link.HRef;
+
+    /// <summary>
+    ///     Implicitly converts a string into a link.
+    ///     String value will be assigned to <see cref="ASLink.HRef"/>.
+    /// </summary>
     public static implicit operator MentionLink(string str) => new() { HRef = new ASUri(str) };
-
+    
+    /// <summary>
+    ///     Implicitly converts the link to a Uri using the value of <see cref="ASLink.HRef"/>.
+    /// </summary>
     public static implicit operator Uri(MentionLink link) => link.HRef.Uri;
+    
+    /// <summary>
+    ///     Implicitly converts a Uri into a link.
+    ///     Uri value will be assigned to <see cref="ASLink.HRef"/>.
+    /// </summary>
     public static implicit operator MentionLink(Uri uri) => new() { HRef = new ASUri(uri) };
-
+    
+    /// <summary>
+    ///     Implicitly converts the link to an ASUri using the value of <see cref="ASLink.HRef"/>.
+    /// </summary>
     public static implicit operator ASUri(MentionLink link) => link.HRef;
+    
+    /// <summary>
+    ///     Implicitly converts an ASUri into a link.
+    ///     Uri value will be assigned to <see cref="ASLink.HRef"/>.
+    /// </summary>
     public static implicit operator MentionLink(ASUri asUri) => new() { HRef = asUri };
 }
 

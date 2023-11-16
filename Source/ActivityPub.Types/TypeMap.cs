@@ -12,6 +12,10 @@ using InternalUtils;
 
 namespace ActivityPub.Types;
 
+/// <summary>
+///     Implements a "type graph", which is a form of emulated multiple inheritance.
+///     This adapts the ActivityStreams dynamic type model to the C# static type model.
+/// </summary>
 [JsonConverter(typeof(TypeMapConverter))]
 public class TypeMap
 {
@@ -51,6 +55,10 @@ public class TypeMap
     /// <seealso cref="ASTypes" />
     public IReadOnlyDictionary<Type, ASEntity> AllEntities => _entityCache;
 
+    /// <summary>
+    ///     JSON-LD context that describes this object.
+    ///     This returns a live instance that will be automatically updated whenever the graph is extended.
+    /// </summary>
     public IJsonLDContext LDContext => _ldContext;
     private readonly JsonLDContext _ldContext;
 
@@ -94,7 +102,7 @@ public class TypeMap
     ///     This function will not extend the object to include a new type.
     ///     To safely convert to an instance that *might* be present, use Is().
     /// </remarks>
-    /// <seealso cref="IsEntity{T}(out T?)" />
+    /// <seealso cref="IsEntity{T}(out T)" />
     /// <throws cref="InvalidCastException">If the object is not of type T</throws>
     public TEntity AsEntity<TEntity>()
         where TEntity : ASEntity
@@ -108,7 +116,7 @@ public class TypeMap
     /// <summary>
     ///     Checks if the graph contains a particular model.
     /// </summary>
-    /// <seealso cref="IsModel{TModel}(out TModel?)" />
+    /// <seealso cref="IsModel{TModel}(out TModel)" />
     /// <seealso cref="AsModel{TModel}()" />
     public bool IsModel<TModel>()
         where TModel : ASType, IASModel<TModel>
@@ -166,7 +174,7 @@ public class TypeMap
     ///     To safely convert to an instance that *might* be present, use Is().
     /// </remarks>
     /// <seealso cref="IsModel{TModel}()"/>
-    /// <seealso cref="IsModel{TModel}(out TModel?)" />
+    /// <seealso cref="IsModel{TModel}(out TModel)" />
     /// <throws cref="InvalidCastException">If the graph cannot be represented by the type</throws>
     public TObject AsModel<TObject>()
         where TObject : ASType, IASModel<TObject>
@@ -234,7 +242,7 @@ public class TypeMap
     /// <summary>
     ///     Adds a new typed instance to the graph.
     ///     Metadata such as AS types and JSON-LD context is automatically updated.
-    ///     User code should not call this method; use <see cref="Extend{TEntity}"/> instead.
+    ///     User code should not call this method; use <see cref="Extend{TEntity}()"/> instead.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -254,14 +262,14 @@ public class TypeMap
     ///         This can be extremely hard to diagnose because <see cref="ASObjectEntity"/> does not even appear in the visible code.
     ///     </para>
     ///     <para>
-    ///         The <see cref="Extend{TEntity}"/> function, however, avoids this with an included dependency check.
+    ///         The <see cref="Extend{TEntity}()"/> function, however, avoids this with an included dependency check.
     ///         The second call to <see cref="AddEntity"/> will fail with a descriptive error message indicating that "Object" is missing from the graph.
     ///         While still somewhat confusing, this method will additionally <b>fail fast</b> before the graph can even enter an invalid state.
     ///         This ensures that errors are caught quickly and before they can spread to corrupt the application state.
     ///     </para>
     /// </remarks>
     /// <returns>true if the type was added, false if it was already in the type map</returns>
-    /// <seealso cref="Extend{TEntity}"/>
+    /// <seealso cref="Extend{TEntity}()"/>
     internal bool TryAddEntity(ASEntity entity)
     {
         var type = entity.GetType();
