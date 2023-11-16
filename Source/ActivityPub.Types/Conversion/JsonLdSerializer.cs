@@ -1,13 +1,12 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Conversion.Modifiers;
-using ActivityPub.Types.Conversion.Overrides;
-using ActivityPub.Types.Internal;
 using Microsoft.Extensions.Options;
 
 namespace ActivityPub.Types.Conversion;
@@ -38,8 +37,17 @@ public interface IJsonLdSerializer
 
 public class JsonLdSerializer : IJsonLdSerializer
 {
-    public JsonLdSerializer(IOptions<JsonLdSerializerOptions> serializerOptions, IOptions<ConversionOptions> conversionOptions, IASTypeInfoCache asTypeInfoCache) =>
-        SerializerOptions = new JsonSerializerOptions(serializerOptions.Value.DefaultJsonSerializerOptions)
+    [SuppressMessage("ReSharper", "SuggestBaseTypeForParameterInConstructor")]
+    public JsonLdSerializer
+    (
+        IOptions<JsonLdSerializerOptions> serializerOptions,
+        TypeMapConverter typeMapConverter,
+        ASTypeConverter asTypeConverter,
+        LinkableConverter linkableConverter,
+        ListableConverter listableConverter,
+        ListableReadOnlyConverter listableReadOnlyConverter
+    )
+        => SerializerOptions = new JsonSerializerOptions(serializerOptions.Value.DefaultJsonSerializerOptions)
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             TypeInfoResolver = new DefaultJsonTypeInfoResolver()
@@ -47,12 +55,11 @@ public class JsonLdSerializer : IJsonLdSerializer
                 .WithBugFixes(),
             Converters =
             {
-                // TODO factor these out into DI
-                new TypeMapConverter(asTypeInfoCache, conversionOptions),
-                new ASTypeConverter(),
-                new LinkableConverter(asTypeInfoCache),
-                new ListableConverter(),
-                new ListableReadOnlyConverter()
+                typeMapConverter,
+                asTypeConverter,
+                linkableConverter,
+                listableConverter,
+                listableReadOnlyConverter
             }
         };
 

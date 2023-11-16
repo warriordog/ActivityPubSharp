@@ -3,6 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using ActivityPub.Types.Conversion;
+using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -20,6 +21,10 @@ public static class TypesModule
 {
     public static void TryAddTypesModule(this IServiceCollection services)
     {
+        services.TryAddSingleton<ISubTypePivot, SubTypePivot>();
+        services.TryAddSingleton<IAnonymousEntityPivot, AnonymousEntityPivot>();
+        services.TryAddSingleton<IJsonLdSerializer, JsonLdSerializer>();
+        
         services.TryAddSingleton<IASTypeInfoCache>(
             _ =>
             {
@@ -28,6 +33,11 @@ public static class TypesModule
                 return cache;
             }
         );
-        services.TryAddSingleton<IJsonLdSerializer, JsonLdSerializer>();
+        
+        services.AddSingleton<TypeMapConverter>();
+        services.AddSingleton<ASTypeConverter>();
+        services.AddSingleton<LinkableConverter>();
+        services.AddSingleton<ListableConverter>();
+        services.AddSingleton<ListableReadOnlyConverter>();
     }
 }

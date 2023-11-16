@@ -1,8 +1,6 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -10,7 +8,6 @@ using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
-using InternalUtils;
 using Microsoft.Extensions.Options;
 
 namespace ActivityPub.Types.Conversion.Converters;
@@ -19,27 +16,15 @@ public class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     private readonly IConversionOptions _conversionOptions;
+    private readonly ISubTypePivot _subTypePivot;
+    private readonly IAnonymousEntityPivot _anonymousEntityPivot;
     
-    // TODO factor these into classes
-    
-    private readonly Dictionary<Type, TypeSelector?> _typeSelectorCache = new();
-    private readonly Func<Type, TypeSelector> _createTypeSelector;
-
-    private readonly Dictionary<Type, AnonymousChecker> _anonymousCheckerCache = new();
-    private readonly Func<Type, AnonymousChecker> _createAnonymousChecker;
-    
-    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions)
+    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, ISubTypePivot subTypePivot, IAnonymousEntityPivot anonymousEntityPivot)
     {
         _asTypeInfoCache = asTypeInfoCache;
+        _subTypePivot = subTypePivot;
+        _anonymousEntityPivot = anonymousEntityPivot;
         _conversionOptions = conversionOptions.Value;
-        
-        _createTypeSelector = typeof(TypeMapConverter)
-            .GetRequiredMethod(nameof(CreateTypeSelector), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-            .CreateGenericPivot<TypeSelector>();
-        
-        _createAnonymousChecker = typeof(TypeMapConverter)
-            .GetRequiredMethod(nameof(CreateAnonymousChecker), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-            .CreateGenericPivot<AnonymousChecker>();
     }
 
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -117,12 +102,8 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Anonymous entities must be checked for every input JSON.
         // Any that match are converted like normal entities, but skipping the usual AS type / context check.
         foreach (var entityType in _asTypeInfoCache.AnonymousEntityTypes)
-        {
-            var checker = GetAnonymousChecker(entityType);
-            
-            if (checker.ShouldConvert(jsonElement))
+            if (_anonymousEntityPivot.ShouldConvert(entityType, jsonElement))
                 ReadEntity(jsonElement, meta, entityType);
-        }
         
         // Registered anonymous entity selectors must also run for every input.
         // They can each identify any number of anonymous entities.
@@ -138,8 +119,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             return;
         
         // We need to *also* convert any more-specific types, recursively
-        var typeSelector = GetTypeSelector(entityType);
-        if (typeSelector != null && typeSelector.TryNarrowType(jsonElement, meta, out var narrowType))
+        if (_subTypePivot.TryNarrowType(entityType, jsonElement, meta, out var narrowType))
             ReadEntity(jsonElement, meta, narrowType);
 
         // Use default conversion
@@ -265,62 +245,5 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         else
             writer.WriteStringValue(href);
         return true;
-    }
-
-
-    private TypeSelector? GetTypeSelector(Type type)
-    {
-        if (!_typeSelectorCache.TryGetValue(type, out var selector))
-        {
-            if (type.IsAssignableTo(typeof(ISubTypeDeserialized)))
-                selector = _createTypeSelector(type);
-            
-            _typeSelectorCache[type] = selector;
-        }
-
-        return selector;
-    }
-
-    private static TypeSelector CreateTypeSelector<TEntity>()
-        where TEntity : ISubTypeDeserialized
-        => new GenericTypeSelector<TEntity>();
-
-    private abstract class TypeSelector
-    {
-        public abstract bool TryNarrowType(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type);
-    }
-
-    private class GenericTypeSelector<T> : TypeSelector
-        where T : ISubTypeDeserialized
-    {
-        public override bool TryNarrowType(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
-            => T.TryNarrowTypeByJson(element, meta, out type);
-    }
-    
-    private AnonymousChecker GetAnonymousChecker(Type entityType)
-    {
-        if (!_anonymousCheckerCache.TryGetValue(entityType, out var checker))
-        {
-            checker = _createAnonymousChecker(entityType);
-            _anonymousCheckerCache[entityType] = checker;
-        }
-
-        return checker;
-    }
-    
-    private static AnonymousChecker CreateAnonymousChecker<TEntity>()
-        where TEntity : IAnonymousEntity
-        => new GenericAnonymousChecker<TEntity>();
-    
-    private abstract class AnonymousChecker
-    {
-        public abstract bool ShouldConvert(JsonElement jsonElement);
-    }
-
-    private class GenericAnonymousChecker<T> : AnonymousChecker
-        where T : IAnonymousEntity
-    {
-        public override bool ShouldConvert(JsonElement jsonElement)
-            => T.ShouldConvertFrom(jsonElement);
     }
 }
