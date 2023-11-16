@@ -11,13 +11,14 @@ public abstract class DeserializationTests<T> : IClassFixture<JsonLdSerializerFi
     // Cached for performance
     private Lazy<T> _objectUnderTest;
 
+    protected JsonLdSerializerFixture SerializerFixture { get; }
+    protected IJsonLdSerializer JsonLdSerializer => SerializerFixture.JsonLdSerializer;
+    
     protected DeserializationTests(JsonLdSerializerFixture fixture)
     {
-        JsonLdSerializer = fixture.JsonLdSerializer;
+        SerializerFixture = fixture;
         _objectUnderTest = new Lazy<T>(() => throw new ApplicationException("Test error: please set JsonUnderTest before calling ObjectUnderTest"));
     }
-
-    protected IJsonLdSerializer JsonLdSerializer { get; }
 
     protected string JsonUnderTest
     {

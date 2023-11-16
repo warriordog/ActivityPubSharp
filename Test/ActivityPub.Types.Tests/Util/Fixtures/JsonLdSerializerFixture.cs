@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Types.Conversion;
+using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
@@ -25,10 +26,14 @@ public sealed class JsonLdSerializerFixture
         JsonLdSerializerOptions = new JsonLdSerializerOptions();
         var serializerOptions = Options.Create(JsonLdSerializerOptions);
 
-        JsonLdSerializer = new JsonLdSerializer(serializerOptions, ASTypeInfoCache);
+        ConversionOptions = new ConversionOptions();
+        var conversionOptions = Options.Create(ConversionOptions);
+
+        JsonLdSerializer = new JsonLdSerializer(serializerOptions, conversionOptions, ASTypeInfoCache);
     }
 
     public IASTypeInfoCache ASTypeInfoCache { get; }
     public IJsonLdSerializer JsonLdSerializer { get; }
     public JsonLdSerializerOptions JsonLdSerializerOptions { get; }
+    public ConversionOptions ConversionOptions { get; }
 }

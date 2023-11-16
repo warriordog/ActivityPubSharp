@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Conversion.Modifiers;
+using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using Microsoft.Extensions.Options;
 
@@ -37,7 +38,7 @@ public interface IJsonLdSerializer
 
 public class JsonLdSerializer : IJsonLdSerializer
 {
-    public JsonLdSerializer(IOptions<JsonLdSerializerOptions> serializerOptions, IASTypeInfoCache asTypeInfoCache) =>
+    public JsonLdSerializer(IOptions<JsonLdSerializerOptions> serializerOptions, IOptions<ConversionOptions> conversionOptions, IASTypeInfoCache asTypeInfoCache) =>
         SerializerOptions = new JsonSerializerOptions(serializerOptions.Value.DefaultJsonSerializerOptions)
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
@@ -46,7 +47,8 @@ public class JsonLdSerializer : IJsonLdSerializer
                 .WithBugFixes(),
             Converters =
             {
-                new TypeMapConverter(asTypeInfoCache),
+                // TODO factor these out into DI
+                new TypeMapConverter(asTypeInfoCache, conversionOptions),
                 new ASTypeConverter(),
                 new LinkableConverter(asTypeInfoCache),
                 new ListableConverter(),

@@ -9,6 +9,7 @@ namespace ActivityPub.Types.Conversion.Overrides;
 ///     Indicates that the entity's presence in an object cannot be detected by any built-in method.
 ///     Exposes functionality to dynamically detect the entity within an arbitrary JSON message.
 /// </summary>
+/// <seealso cref="IAnonymousEntitySelector"/>
 public interface IAnonymousEntity
 {
     /// <summary>

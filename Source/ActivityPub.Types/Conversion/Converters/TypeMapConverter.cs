@@ -11,12 +11,14 @@ using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 using InternalUtils;
+using Microsoft.Extensions.Options;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
 public class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
+    private readonly IConversionOptions _conversionOptions;
     
     // TODO factor these into classes
     
@@ -26,9 +28,10 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private readonly Dictionary<Type, AnonymousChecker> _anonymousCheckerCache = new();
     private readonly Func<Type, AnonymousChecker> _createAnonymousChecker;
     
-    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache)
+    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions)
     {
         _asTypeInfoCache = asTypeInfoCache;
+        _conversionOptions = conversionOptions.Value;
         
         _createTypeSelector = typeof(TypeMapConverter)
             .GetRequiredMethod(nameof(CreateTypeSelector), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
@@ -58,8 +61,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             LDContext = context,
             TypeMap = typeMap
         };
-
-
+        
         ReadKnownEntities(jsonElement, meta);
         ReadAnonymousEntities(jsonElement, meta);
 
@@ -121,10 +123,20 @@ public class TypeMapConverter : JsonConverter<TypeMap>
             if (checker.ShouldConvert(jsonElement))
                 ReadEntity(jsonElement, meta, entityType);
         }
+        
+        // Registered anonymous entity selectors must also run for every input.
+        // They can each identify any number of anonymous entities.
+        foreach (var selector in _conversionOptions.AnonymousEntitySelectors)
+            foreach (var entityType in selector.SelectAnonymousEntities(jsonElement))
+                ReadEntity(jsonElement, meta, entityType);
     }
 
     private void ReadEntity(JsonElement jsonElement, DeserializationMetadata meta, Type entityType)
     {
+        // Skip if the entity is already in the graph
+        if (meta.TypeMap.AllEntities.ContainsKey(entityType))
+            return;
+        
         // We need to *also* convert any more-specific types, recursively
         var typeSelector = GetTypeSelector(entityType);
         if (typeSelector != null && typeSelector.TryNarrowType(jsonElement, meta, out var narrowType))
@@ -135,8 +147,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
                      ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
 
         // Add it to the graph.
-        // TryAdd is needed
-        meta.TypeMap.TryAdd(entity);
+        meta.TypeMap.Add(entity);
 
         // Remove the entity-level set.
         // We need it for conversion, but only until TypeMap is updated

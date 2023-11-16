@@ -63,10 +63,18 @@ This is true even for base types and instances that are constructed later.
 
 Entities are implemented as an extra **sealed** and **non-inheriting** class associated with each type.
 By convention, they are named the same as the type class with an `Entity` suffix.
-For example, `ASObject` has an associated entities called `ASObjectEntity`.
+For example, `ASObject` has an associated entity called `ASObjectEntity`.
 Entities are typically placed in the same file as their associated type because the two are tightly coupled.
 Typically, application code will not need to work with entity types directly.
 However, it will be necessary if implementing a new extension or handling some rare edge cases.
+
+### Entity Mapping
+
+APSharp includes a 3-step process to determine which entities should be constructed from an incoming JSON message.
+All entities detected by at least one test will be converted and parsed.
+1. Map values of the `type` property to registered AS type names.
+2. Try all entities that implement [`IAnonymousEntity`](Conversion/Overrides/IAnonymousEntity.cs).
+3. Execute all configured [`IAnonymousEntitySelector`](Conversion/Overrides/IAnonymousEntitySelector.cs) instances.
 
 ## Utility Types
 
@@ -124,3 +132,4 @@ See the [ActivityStreams documentation](https://www.w3.org/TR/activitystreams-co
 | Options Class                                                    | Configuration Path          | Description                                                                |
 |------------------------------------------------------------------|-----------------------------|----------------------------------------------------------------------------|
 | [JsonLdSerializerOptions](Conversion/JsonLdSerializerOptions.cs) | N/A - not mapped by default | Options for the default [JsonLdSerializer](Conversion/JsonLdSerializer.cs) |
+| [ConversionOptions](Conversion/Overrides/ConversionOptions.cs)   | N/A - not mapped by default | General JSON / JSON-LD conversion options                                  |
