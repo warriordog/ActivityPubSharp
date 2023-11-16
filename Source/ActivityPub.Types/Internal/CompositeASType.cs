@@ -9,15 +9,23 @@ namespace ActivityPub.Types.Internal;
 /// </summary>
 public class CompositeASType
 {
-    // TODO consider adding "all"
-
-    private readonly HashSet<string> _asTypes = new();
+    private readonly HashSet<string> _allASTypes = new();
+    private readonly HashSet<string> _flatASTypes = new();
     private readonly HashSet<string> _replacedASTypes = new();
 
     /// <summary>
     ///     AS type names that are represented by this object, excluding those that have been shadowed.
+    ///     The returned object is a live, read-only view of the collection.
+    ///     Changes will be reflected immediately.
     /// </summary>
-    public IReadOnlySet<string> Types => _asTypes;
+    public IReadOnlySet<string> Types => _flatASTypes;
+
+    /// <summary>
+    ///     AS type names that are represented by this object, including those that have been shadowed.
+    ///     The returned object is a live, read-only view of the collection.
+    ///     Changes will be reflected immediately.
+    /// </summary>
+    public IReadOnlySet<string> AllTypes => _allASTypes;
 
     /// <summary>
     ///     Adds a new type.
@@ -26,15 +34,20 @@ public class CompositeASType
     /// <param name="replacedType">Optional, name of the type that is replaced by this one</param>
     public void Add(string type, string? replacedType = null)
     {
+        // Add it to the superset.
+        // This doubles as a duplicate check to avoid extra set operations.
+        if (!_allASTypes.Add(type))
+            return;
+        
         // Replace the base type
         if (replacedType != null)
         {
             _replacedASTypes.Add(replacedType);
-            _asTypes.Remove(replacedType);
+            _flatASTypes.Remove(replacedType);
         }
 
-        // Add the new type
+        // Add the new type, if it's not flattened away
         if (!_replacedASTypes.Contains(type))
-            _asTypes.Add(type);
+            _flatASTypes.Add(type);
     }
 }

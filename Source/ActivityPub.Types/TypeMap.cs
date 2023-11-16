@@ -32,11 +32,14 @@ public class TypeMap
     /// <param name="ldContext"></param>
     internal TypeMap(JsonLDContext ldContext) => _ldContext = ldContext;
 
-    /// <summary>
-    ///     Live set of all unique ActivityStreams types represented by this graph.
-    /// </summary>
-    /// <seealso cref="AllEntities" />
+
+    /// <inheritdoc cref="CompositeASType.Types"/>
+    /// <seealso cref="AllASTypes"/>
     public IReadOnlySet<string> ASTypes => _asTypes.Types;
+
+    /// <inheritdoc cref="CompositeASType.AllTypes"/>
+    /// <seealso cref="ASTypes"/>
+    public IReadOnlySet<string> AllASTypes => _asTypes.AllTypes;
 
     /// <summary>
     ///     Live map of .NET types to loaded entities contained in this graph.

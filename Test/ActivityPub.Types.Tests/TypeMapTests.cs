@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Types.AS;
+using ActivityPub.Types.AS.Extended.Activity;
 using ActivityPub.Types.Tests.Util.Fakes;
 using ActivityPub.Types.Util;
 
@@ -157,6 +158,57 @@ public abstract class TypeMapTests
                 .Contain(JsonLDContextObject.ActivityStreams).And
                 .Contain(ExtraContext).And
                 .Contain(EmptyExtendedTypeFake.ExtendedContext);
+        }
+    }
+
+    public abstract class TypeMapASTypeTests : TypeMapTests
+    {
+        protected TypeMap TypeMapUnderTest { get; } = new();
+
+        protected TypeMapASTypeTests()
+        {
+            TypeMapUnderTest.Add(new ASTypeEntity());
+            TypeMapUnderTest.Add(new ASObjectEntity());
+            TypeMapUnderTest.Add(new ASActivityEntity());
+            TypeMapUnderTest.Add(new LikeActivityEntity());
+            TypeMapUnderTest.Add(new DislikeActivityEntity());
+        }
+    }
+    public class ASTypesShould : TypeMapASTypeTests
+    {
+        [Fact]
+        public void ContainAllTopLevelTypes()
+        {
+            TypeMapUnderTest.ASTypes.Should()
+                .Contain(LikeActivity.LikeType)
+                .And.Contain(DislikeActivity.DislikeType);
+        }
+
+        [Fact]
+        public void NotContainAnyShadowedTypes()
+        {
+            TypeMapUnderTest.ASTypes.Should()
+                .NotContain(ASObject.ObjectType)
+                .And.NotContain(ASActivity.ActivityType);
+        }
+    }
+
+    public class AllASTypesShould : TypeMapASTypeTests
+    {
+        [Fact]
+        public void ContainAllTopLevelTypes()
+        {
+            TypeMapUnderTest.AllASTypes.Should()
+                .Contain(LikeActivity.LikeType)
+                .And.Contain(DislikeActivity.DislikeType);
+        }
+
+        [Fact]
+        public void ContainAllShadowedTypes()
+        {
+            TypeMapUnderTest.AllASTypes.Should()
+                .Contain(ASObject.ObjectType)
+                .And.Contain(ASActivity.ActivityType);
         }
     }
 }
