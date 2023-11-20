@@ -69,19 +69,30 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     ///     Identifies one or more objects used (or to be used) in the completion of an Activity.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-instrument" />
-    public Linkable<ASObject>? Instrument
+    public LinkableList<ASObject>? Instrument
     {
         get => Entity.Instrument;
         set => Entity.Instrument = value;
     }
 
     /// <summary>
+    /// Describes an object of any kind. The Object type serves as the base type for most of the other kinds of objects
+    /// defined in the Activity Vocabulary, including other Core types such as Activity, IntransitiveActivity,
+    /// Collection and OrderedCollection. 
+    /// </summary>
+    public LinkableList<ASObject>? Object
+    {
+        get => Entity.Object;
+        set => Entity.Object = value;
+    }
+    
+    /// <summary>
     ///     Describes an indirect object of the activity from which the activity is directed.
     ///     The precise meaning of the origin is the object of the English preposition "from".
     ///     For instance, in the activity "John moved an item to List B from List A", the origin of the activity is "List A".
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-origin" />
-    public Linkable<ASObject>? Origin
+    public LinkableList<ASObject>? Origin
     {
         get => Entity.Origin;
         set => Entity.Origin = value;
@@ -92,10 +103,22 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     ///     For instance, if a particular action results in the creation of a new resource, the result property can be used to describe that new resource.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-result" />
-    public Linkable<ASObject>? Result
+    public LinkableList<ASObject>? Result
     {
         get => Entity.Result;
         set => Entity.Result = value;
+    }
+
+    /// <summary>
+    /// Describes the indirect object, or target, of the activity. The precise meaning of the target is largely
+    /// dependent on the type of action being described but will often be the object of the English preposition "to".
+    /// For instance, in the activity "John added a movie to his wishlist", the target of the activity is John's
+    /// wishlist. An activity can have more than one target. 
+    /// </summary>
+    public LinkableList<ASObject>? Target
+    {
+        get => Entity.Target;
+        set => Entity.Target = value;
     }
 }
 
@@ -108,15 +131,23 @@ public sealed class ASActivityEntity : ASEntity<ASActivity, ASActivityEntity>, I
 
     /// <inheritdoc cref="ASActivity.Instrument" />
     [JsonPropertyName("instrument")]
-    public Linkable<ASObject>? Instrument { get; set; }
+    public LinkableList<ASObject>? Instrument { get; set; }
+    
+    /// <inheritdoc cref="ASActivity.Object" />
+    [JsonPropertyName("object")]
+    public LinkableList<ASObject>? Object { get; set; }
 
     /// <inheritdoc cref="ASActivity.Origin" />
     [JsonPropertyName("origin")]
-    public Linkable<ASObject>? Origin { get; set; }
+    public LinkableList<ASObject>? Origin { get; set; }
 
     /// <inheritdoc cref="ASActivity.Result" />
     [JsonPropertyName("result")]
-    public Linkable<ASObject>? Result { get; set; }
+    public LinkableList<ASObject>? Result { get; set; }
+    
+    /// <inheritdoc cref="ASActivity.Target">
+    [JsonPropertyName("target")]
+    public LinkableList<ASObject>? Target { get; set; }
 
     /// <inheritdoc />
     public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
