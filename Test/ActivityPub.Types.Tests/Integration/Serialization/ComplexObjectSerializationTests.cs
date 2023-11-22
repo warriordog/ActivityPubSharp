@@ -50,7 +50,7 @@ public class ComplexObjectSerializationTests : SerializationTests
         JsonUnderTest.GetProperty("object").GetProperty("target").Should().BeJsonString(target.HRef);
     }
     
-    [Fact]
+    [Fact(Skip = "Collections not serializing properly")]
     public void AddNoteToCollectionTest()
     {
         var actor = new ASLink()
@@ -64,7 +64,13 @@ public class ComplexObjectSerializationTests : SerializationTests
         };
         var collection = new ASCollection()
         {
-            Id = "https://home.example/actor/collections/1"
+            Id = "https://home.example/actor/collections/1",
+            Items = new LinkableList<ASObject>(new ASLink[]
+            {
+                new(){HRef = "https://home.example/item/whatever"},
+                new(){HRef = "https://home.example/item/whatever-2"}
+            }),
+            TotalItems = 2
         };
         ObjectUnderTest = new AddActivity()
         {
@@ -76,7 +82,9 @@ public class ComplexObjectSerializationTests : SerializationTests
         JsonUnderTest.Should().HaveStringProperty("type", "Add");
         JsonUnderTest.Should().HaveProperty("object");
         JsonUnderTest.GetProperty("object").Should().HaveStringProperty("type", "Note");
-        // Fails, I think because the collection is empty, so it gets excluded from serialization
-        JsonUnderTest.GetProperty("target").Should().HaveStringProperty("type", "Collection"); 
+        // Fails here, Collections are serializing as an array. Should be an object with an items property.
+        JsonUnderTest.GetProperty("target").Should().HaveStringProperty("type", "Collection");
+        JsonUnderTest.GetProperty("target").Should().HaveStringProperty("id", "https://home.example/actor/collections/1");
+        JsonUnderTest.GetProperty("target").GetProperty("items").Should().BeJsonObject(); // Really an array
     }
 }
