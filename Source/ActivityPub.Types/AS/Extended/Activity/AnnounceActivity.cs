@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor is calling the target's attention the object.
 ///     The origin typically has no defined meaning.
 /// </summary>
-public class AnnounceActivity : ASTransitiveActivity, IASModel<AnnounceActivity, AnnounceActivityEntity, ASTransitiveActivity>
+public class AnnounceActivity : ASActivity, IASModel<AnnounceActivity, AnnounceActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Announce" types.

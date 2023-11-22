@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor has left the object.
 ///     The target and origin typically have no meaning.
 /// </summary>
-public class LeaveActivity : ASTransitiveActivity, IASModel<LeaveActivity, LeaveActivityEntity, ASTransitiveActivity>
+public class LeaveActivity : ASActivity, IASModel<LeaveActivity, LeaveActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Leave" types.

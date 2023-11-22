@@ -11,7 +11,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Note, however, that this vocabulary does not define a mechanism for describing the actual set of modifications made to object.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class UpdateActivity : ASTransitiveActivity, IASModel<UpdateActivity, UpdateActivityEntity, ASTransitiveActivity>
+public class UpdateActivity : ASActivity, IASModel<UpdateActivity, UpdateActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Update" types.

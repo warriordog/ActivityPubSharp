@@ -2,10 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Conversion.Overrides;
-using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS;
@@ -76,10 +73,10 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     }
 
     /// <summary>
-    /// Describes an object of any kind. The Object type serves as the base type for most of the other kinds of objects
-    /// defined in the Activity Vocabulary, including other Core types such as Activity, IntransitiveActivity,
-    /// Collection and OrderedCollection. 
+    ///     Describes the direct object of the activity.
+    ///     For instance, in the activity "John added a movie to his wishlist", the object of the activity is the movie added.
     /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
     public LinkableList<ASObject>? Object
     {
         get => Entity.Object;
@@ -110,11 +107,13 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     }
 
     /// <summary>
-    /// Describes the indirect object, or target, of the activity. The precise meaning of the target is largely
-    /// dependent on the type of action being described but will often be the object of the English preposition "to".
-    /// For instance, in the activity "John added a movie to his wishlist", the target of the activity is John's
-    /// wishlist. An activity can have more than one target. 
+    ///     Describes the indirect object, or target, of the activity.
+    ///     The precise meaning of the target is largely dependent on the type of action being described but will often be the object of the English preposition "to".
+    ///     For instance, in the activity "John added a movie to his wishlist", the target of the activity is John's wishlist.
+    ///     An activity can have more than one target.
     /// </summary>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target" />
+    /// <seealso href="https://www.w3.org/TR/activitypub/#client-addressing" />
     public LinkableList<ASObject>? Target
     {
         get => Entity.Target;
@@ -123,7 +122,7 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
 }
 
 /// <inheritdoc cref="ASActivity" />
-public sealed class ASActivityEntity : ASEntity<ASActivity, ASActivityEntity>, ISubTypeDeserialized
+public sealed class ASActivityEntity : ASEntity<ASActivity, ASActivityEntity>
 {
     /// <inheritdoc cref="ASActivity.Actor" />
     [JsonPropertyName("actor")]
@@ -145,21 +144,7 @@ public sealed class ASActivityEntity : ASEntity<ASActivity, ASActivityEntity>, I
     [JsonPropertyName("result")]
     public LinkableList<ASObject>? Result { get; set; }
     
-    /// <inheritdoc cref="ASActivity.Target">
+    /// <inheritdoc cref="ASActivity.Target" />
     [JsonPropertyName("target")]
     public LinkableList<ASObject>? Target { get; set; }
-
-    /// <inheritdoc />
-    public static bool TryNarrowTypeByJson(JsonElement element, DeserializationMetadata meta, [NotNullWhen(true)] out Type? type)
-    {
-        // Only change type if its transitive (it has the "object" property)
-        if (element.HasProperty("object"))
-        {
-            type = typeof(ASTransitiveActivityEntity);
-            return true;
-        }
-
-        type = null;
-        return false;
-    }
 }

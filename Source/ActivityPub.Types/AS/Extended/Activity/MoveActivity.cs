@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor has moved object from origin to target.
 ///     If the origin or target are not specified, either can be determined by context.
 /// </summary>
-public class MoveActivity : ASTransitiveActivity, IASModel<MoveActivity, MoveActivityEntity, ASTransitiveActivity>
+public class MoveActivity : ASActivity, IASModel<MoveActivity, MoveActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Move" types.

@@ -18,16 +18,16 @@ public class ActivityDeserializationTests : DeserializationTests<ASActivity>
     }
 
     [Fact]
-    public void TransitiveActivitiesShould_DeserializeToASTransitiveActivity()
+    public void TransitiveActivitiesShould_DeserializeToASActivity()
     {
         JsonUnderTest = """{"type":"Activity","object":{}}""";
-        ObjectUnderTest.Is<ASTransitiveActivity>().Should().BeTrue();
+        ObjectUnderTest.Is<ASActivity>().Should().BeTrue();
     }
 
     [Fact]
-    public void TargetedActivitiesShould_DeserializeToASTargetedActivity()
+    public void TargetedActivitiesShould_DeserializeToASActivity()
     {
         JsonUnderTest = """{"type":"Activity","object":{},"target":{}}""";
-        ObjectUnderTest.Is<ASTargetedActivity>().Should().BeTrue();
+        ObjectUnderTest.Is<ASActivity>().Should().BeTrue();
     }
 }

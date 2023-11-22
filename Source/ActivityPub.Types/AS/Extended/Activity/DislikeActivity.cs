@@ -9,7 +9,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// <summary>
 ///     Indicates that the actor dislikes the object.
 /// </summary>
-public class DislikeActivity : ASTransitiveActivity, IASModel<DislikeActivity, DislikeActivityEntity, ASTransitiveActivity>
+public class DislikeActivity : ASActivity, IASModel<DislikeActivity, DislikeActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Dislike" types.

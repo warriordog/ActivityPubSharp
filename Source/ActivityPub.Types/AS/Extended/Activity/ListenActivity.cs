@@ -9,7 +9,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// <summary>
 ///     Indicates that the actor has listened to the object.
 /// </summary>
-public class ListenActivity : ASTransitiveActivity, IASModel<ListenActivity, ListenActivityEntity, ASTransitiveActivity>
+public class ListenActivity : ASActivity, IASModel<ListenActivity, ListenActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Listen" types.

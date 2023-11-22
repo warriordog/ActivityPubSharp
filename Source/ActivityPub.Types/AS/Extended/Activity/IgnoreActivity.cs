@@ -9,7 +9,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// <summary>
 ///     Indicates that the actor is ignoring the object. The target and origin typically have no defined meaning.
 /// </summary>
-public class IgnoreActivity : ASTransitiveActivity, IASModel<IgnoreActivity, IgnoreActivityEntity, ASTransitiveActivity>
+public class IgnoreActivity : ASActivity, IASModel<IgnoreActivity, IgnoreActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Ignore" types.
