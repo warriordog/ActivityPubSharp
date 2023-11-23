@@ -12,36 +12,39 @@ namespace ActivityPub.Types.Tests.Integration.Serialization;
 
 public class ComplexObjectSerializationTests : SerializationTests
 {
-    public ComplexObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture)
-    {
-    }
+    public ComplexObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
     public void AcceptFollowWithObjectTest()
     {
-        var follower = new ASLink()
+        var follower = new ASLink
         {
             HRef = "https://peer.example/actor",
         };
-        var target = new ASLink()
+        var target = new ASLink
         {
             HRef = "https://home.example/actor",
         };
-        var follow = new FollowActivity()
+        var follow = new FollowActivity
         {
             Id = "https://peer.example/actor/activities/1",
-            Object = new LinkableList<ASObject>() { follower },
-            Target = new LinkableList<ASObject>() { target },
+            Object = new LinkableList<ASObject> { follower },
+            Target = new LinkableList<ASObject> { target },
         };
-        ObjectUnderTest = new AcceptActivity()
+        ObjectUnderTest = new AcceptActivity
         {
-            Actor = new LinkableList<ASObject>() { target },
-            Object = new LinkableList<ASObject>() { (ASObject)follow },
+            Actor = new LinkableList<ASObject> { target },
+            Object = new LinkableList<ASObject> { (ASObject)follow },
         };
+        
         // Accept
-        JsonUnderTest.Should().HaveStringProperty("type", "Accept");
-        JsonUnderTest.Should().HaveProperty("object");
-        JsonUnderTest.GetProperty("object").Should().HaveStringProperty("type", "Follow");
+        JsonUnderTest
+            .Should().BeJsonObject()
+            .And.HaveStringProperty("type", "Accept")
+            .And.HaveProperty("object");
+        JsonUnderTest.GetProperty("object")
+            .Should().BeJsonObject()
+            .And.HaveStringProperty("type", "Follow");
         
         // Follow
         JsonUnderTest.GetProperty("object").Should().HaveProperty("object");
@@ -50,19 +53,19 @@ public class ComplexObjectSerializationTests : SerializationTests
         JsonUnderTest.GetProperty("object").GetProperty("target").Should().BeJsonString(target.HRef);
     }
     
-    [Fact(Skip = "Collections not serializing properly")]
+    [Fact]
     public void AddNoteToCollectionTest()
     {
-        var actor = new ASLink()
+        var actor = new ASLink
         {
             HRef = "https://home.example/actor",
         };
-        var note = new NoteObject()
+        var note = new NoteObject
         {
             Id = "https://peer.example/actor/activities/1",
             Content = new NaturalLanguageString("This is a note"),
         };
-        var collection = new ASCollection()
+        var collection = new ASCollection
         {
             Id = "https://home.example/actor/collections/1",
             Items = new LinkableList<ASObject>(new ASLink[]
@@ -72,19 +75,25 @@ public class ComplexObjectSerializationTests : SerializationTests
             }),
             TotalItems = 2
         };
-        ObjectUnderTest = new AddActivity()
+        ObjectUnderTest = new AddActivity
         {
-            Actor = new LinkableList<ASObject>() { actor },
-            Object = new LinkableList<ASObject>() { (ASObject)note },
-            Target = new LinkableList<ASObject>(collection)
+            Actor = new LinkableList<ASObject> { actor },
+            Object = new LinkableList<ASObject> { note },
+            Target = new LinkableList<ASObject> { collection }
         };
         
-        JsonUnderTest.Should().HaveStringProperty("type", "Add");
-        JsonUnderTest.Should().HaveProperty("object");
-        JsonUnderTest.GetProperty("object").Should().HaveStringProperty("type", "Note");
-        // Fails here, Collections are serializing as an array. Should be an object with an items property.
-        JsonUnderTest.GetProperty("target").Should().HaveStringProperty("type", "Collection");
-        JsonUnderTest.GetProperty("target").Should().HaveStringProperty("id", "https://home.example/actor/collections/1");
-        JsonUnderTest.GetProperty("target").GetProperty("items").Should().BeJsonObject(); // Really an array
+        JsonUnderTest
+            .Should().BeJsonObject()
+            .And.HaveStringProperty("type", "Add")
+            .And.HaveProperty("object")
+            .And.HaveProperty("target");
+        JsonUnderTest.GetProperty("object")
+            .Should().BeJsonObject()
+            .And.HaveStringProperty("type", "Note");
+        JsonUnderTest.GetProperty("target")
+            .Should().BeJsonObject()
+            .And.HaveStringProperty("type", "Collection")
+            .And.HaveStringProperty("id", "https://home.example/actor/collections/1")
+            .And.HaveArrayProperty("items");
     }
 }
