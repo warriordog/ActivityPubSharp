@@ -11,10 +11,6 @@ namespace ActivityPub.Types.Tests.Util.Fakes;
 public class AnonymousExtensionFake : ASObject, IASModel<AnonymousExtensionFake, AnonymousExtensionFakeEntity, ASObject>
 {
     /// <summary>
-    ///     Constructs a new instance with a new, empty type graph.
-    /// <summary>
-
-    /// <summary>
     ///     Constructs a new instance and extends an existing type graph.
     /// </summary>
     /// <seealso cref="TypeMap.Extend{TEntity}()" />
