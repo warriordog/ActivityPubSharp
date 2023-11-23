@@ -24,7 +24,7 @@ public class LinkableList<T> : List<Linkable<T>>
     
     /// <inheritdoc cref="LinkableList{T}(IEnumerable{Linkable{T}})" />
     public LinkableList(IEnumerable<ASLink> links) => AddRange(links);
-
+    
     /// <summary>
     ///     All link items within the collection.
     /// </summary>
@@ -38,16 +38,6 @@ public class LinkableList<T> : List<Linkable<T>>
     public IEnumerable<T> ValueItems => this
         .Where(linkable => linkable.HasValue)
         .Select(linkable => linkable.Value!);
-
-    /// <summary>
-    ///     Adds a new value to the list
-    /// </summary>
-    public void Add(T value) => Add(new Linkable<T>(value));
-    
-    /// <summary>
-    ///     Adds a new link to the list
-    /// </summary>
-    public void Add(ASLink link) => Add(new Linkable<T>(link));
 
     /// <summary>
     ///     Adds multiple values to the list
