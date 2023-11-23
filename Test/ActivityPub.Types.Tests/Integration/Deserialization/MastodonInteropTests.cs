@@ -30,11 +30,11 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
         
         ObjectUnderTest.Is<ASActivity>(out var activity).Should().BeTrue();
         activity!.Actor.Should().NotBeEmpty();
-        activity!.Object.Should().NotBeEmpty();
+        activity.Object.Should().NotBeEmpty();
         
-        activity.Object!.First()!.Value!.Is<ASActivity>(out var nestedActivity).Should().BeTrue();
+        activity.Object!.First().Value!.Is<ASActivity>(out var nestedActivity).Should().BeTrue();
         nestedActivity!.Actor.Should().NotBeEmpty();
-        nestedActivity!.Object.Should().NotBeEmpty();
+        nestedActivity.Object.Should().NotBeEmpty();
     }
     
     [Fact]
@@ -55,14 +55,14 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
         
         ObjectUnderTest.Is<ASActivity>(out var activity).Should().BeTrue();
         activity!.Actor.Should().NotBeEmpty();
-        activity!.Object.Should().NotBeEmpty();
+        activity.Object.Should().NotBeEmpty();
         
-        activity.Object!.First()!.Value!.Is<ASActivity>(out var nestedActivity).Should().BeTrue();
+        activity.Object!.First().Value!.Is<ASActivity>(out var nestedActivity).Should().BeTrue();
         nestedActivity!.Actor.Should().NotBeEmpty();
     }
     
     [Fact(Skip = "ContentMap not deserializing")]
-    public void MastodonUpateNoteActivityTest()
+    public void MastodonUpdateNoteActivityTest()
     {
         JsonUnderTest = """
                         {
@@ -129,7 +129,7 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
         ObjectUnderTest.Is<ASActivity>(out var activity).Should().BeTrue();
         activity!.Object.Should().NotBeEmpty();
         
-        activity.Object!.First()!.Value!.Is<ASObject>(out var note).Should().BeTrue();
+        activity.Object!.First().Value!.Is<ASObject>(out var note).Should().BeTrue();
         Assert.NotNull(note);
         note.Summary.Should().BeNull();
         // The language maps seem not to be working. Or, they're not mapped correctly.
