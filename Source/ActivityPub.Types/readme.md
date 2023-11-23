@@ -29,8 +29,6 @@ These are as follows:
 
 * [`ASType`](AS/ASType.cs) - a common type between [`Link`](AS/ASLink.cs) and [`Object`](AS/ASObject.cs). This enables support for the `Range: Link | Object` construction that is common within the ActivityStreams specification.
 * [`APActor`](AS/APActor.cs) - base type for Actor objects. Defined object types may extend this directly, and any other compatible object (includes Inbox and Outbox) will be "promoted" to include this as a standalone.
-* [`ASActivity`](AS/ASActivity.cs) - a mirror to [`IntransitiveActivity`](AS/ASIntransitiveActivity.cs) that implies just the opposite. Transitive activities support the [`object` property](https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object).
-* [`ASActivity`](AS/ASActivity.cs) - extension of `TransitiveActivity` for activities which contain a [`target` property](https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target).
 
 ## Entities
 
