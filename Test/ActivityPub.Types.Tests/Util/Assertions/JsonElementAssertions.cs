@@ -12,51 +12,86 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
 {
     public JsonElementAssertions(JsonElement value) : base(value) {}
 
-    public void HaveProperty(string name)
+    public AndConstraint<JsonElementAssertions> HaveProperty(string name)
     {
         BeJsonObject();
 
         if (!Subject.TryGetProperty(name, out _))
             Assert.Fail($"Expected object to contain property {name}, but it does not");
+
+        return new AndConstraint<JsonElementAssertions>(this);
     }
 
-    public void HaveProperty(string name, Action<JsonElement> inspector)
+    public AndConstraint<JsonElementAssertions> HaveProperty(string name, Action<JsonElement> inspector)
     {
         HaveProperty(name);
         var prop = Subject.GetProperty(name);
         inspector(prop);
+
+        return new AndConstraint<JsonElementAssertions>(this);
     }
 
-    public void NotHaveProperty(string name)
+    public AndConstraint<JsonElementAssertions> NotHaveProperty(string name)
     {
         BeJsonObject();
 
         if (Subject.TryGetProperty(name, out _))
             Assert.Fail($"Expected object to not contain property {name}, but it does");
+
+        return new AndConstraint<JsonElementAssertions>(this);
     }
 
-    public void HaveStringProperty(string name, string value)
+    public AndConstraint<JsonElementAssertions> HaveStringProperty(string name, string value)
     {
         HaveProperty(name);
         Subject.GetProperty(name).Should().BeJsonString(value);
+
+        return new AndConstraint<JsonElementAssertions>(this);
     }
 
-    public void BeJsonString() => Subject.ValueKind.Should().Be(JsonValueKind.String);
+    public AndConstraint<JsonElementAssertions> HaveArrayProperty(string name)
+    {
+        HaveProperty(name);
+        Subject.GetProperty(name).ValueKind.Should().Be(JsonValueKind.Array);
 
-    public void BeJsonString(string value)
+        return new AndConstraint<JsonElementAssertions>(this);
+    }
+
+    public AndConstraint<JsonElementAssertions> BeJsonString()
+    {
+        Subject.ValueKind.Should().Be(JsonValueKind.String);
+
+        return new AndConstraint<JsonElementAssertions>(this);
+    }
+
+    public AndConstraint<JsonElementAssertions> BeJsonString(string value)
     {
         BeJsonString();
         Subject.GetString().Should().Be(value);
+
+        return new AndConstraint<JsonElementAssertions>(this);
     }
 
-    public void BeJsonObject() => Subject.ValueKind.Should().Be(JsonValueKind.Object);
+    public AndConstraint<JsonElementAssertions> BeJsonObject()
+    {
+        Subject.ValueKind.Should().Be(JsonValueKind.Object);
+
+        return new AndConstraint<JsonElementAssertions>(this);
+    }
+
+    public AndConstraint<JsonElementAssertions> BeJsonArray()
+    {
+        Subject.ValueKind.Should().Be(JsonValueKind.Array);
+
+        return new AndConstraint<JsonElementAssertions>(this);
+    }
 
     /// <summary>
     ///     Asserts that the subject represents an object containing the provided AS type.
     ///     String and array forms are supported.
     /// </summary>
     /// <param name="asType"></param>
-    public void HaveASType(string asType)
+    public AndConstraint<JsonElementAssertions> HaveASType(string asType)
     {
         BeJsonObject();
         HaveProperty("type");
@@ -76,6 +111,8 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
                 Assert.Fail($"Expected property \"type\" to be a string, array, or null, but it was {type.ValueKind}");
                 break;
         }
+
+        return new AndConstraint<JsonElementAssertions>(this);
     }
 }
 
