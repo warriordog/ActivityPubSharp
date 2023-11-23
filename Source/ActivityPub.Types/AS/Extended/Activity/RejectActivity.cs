@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor is rejecting the object.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class RejectActivity : ASTransitiveActivity, IASModel<RejectActivity, RejectActivityEntity, ASTransitiveActivity>
+public class RejectActivity : ASActivity, IASModel<RejectActivity, RejectActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Reject" types.

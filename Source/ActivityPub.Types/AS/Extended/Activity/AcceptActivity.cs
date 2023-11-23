@@ -9,7 +9,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor accepts the object.
 ///     The target property can be used in certain circumstances to indicate the context into which the object has been accepted.
 /// </summary>
-public class AcceptActivity : ASTransitiveActivity, IASModel<AcceptActivity, AcceptActivityEntity, ASTransitiveActivity>
+public class AcceptActivity : ASActivity, IASModel<AcceptActivity, AcceptActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Accept" types.

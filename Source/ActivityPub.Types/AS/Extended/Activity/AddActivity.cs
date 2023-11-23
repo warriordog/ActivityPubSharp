@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     If the target property is not explicitly specified, the target would need to be determined implicitly by context.
 ///     The origin can be used to identify the context from which the object originated.
 /// </summary>
-public class AddActivity : ASTargetedActivity, IASModel<AddActivity, AddActivityEntity, ASTargetedActivity>
+public class AddActivity : ASActivity, IASModel<AddActivity, AddActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Add" types.

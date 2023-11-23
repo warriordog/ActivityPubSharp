@@ -16,14 +16,12 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     private readonly IConversionOptions _conversionOptions;
-    private readonly ISubTypePivot _subTypePivot;
     private readonly INamelessEntityPivot _namelessEntityPivot;
     private readonly IAnonymousEntityPivot _anonymousEntityPivot;
     
-    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, ISubTypePivot subTypePivot, IAnonymousEntityPivot anonymousEntityPivot, INamelessEntityPivot namelessEntityPivot)
+    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, IAnonymousEntityPivot anonymousEntityPivot, INamelessEntityPivot namelessEntityPivot)
     {
         _asTypeInfoCache = asTypeInfoCache;
-        _subTypePivot = subTypePivot;
         _anonymousEntityPivot = anonymousEntityPivot;
         _namelessEntityPivot = namelessEntityPivot;
         _conversionOptions = conversionOptions.Value;
@@ -128,12 +126,8 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
         // Skip if the entity is already in the graph
         if (meta.TypeMap.AllEntities.ContainsKey(entityType))
             return;
-        
-        // We need to *also* convert any more-specific types, recursively
-        if (_subTypePivot.TryNarrowType(entityType, jsonElement, meta, out var narrowType))
-            ReadEntity(jsonElement, meta, narrowType);
 
-        // Use default conversion
+        // Convert the appropriate entity type
         var entity = (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
                      ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
 

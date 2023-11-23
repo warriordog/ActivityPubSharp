@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor is offering the object.
 ///     If specified, the target indicates the entity to which the object is being offered.
 /// </summary>
-public class OfferActivity : ASTransitiveActivity, IASModel<OfferActivity, OfferActivityEntity, ASTransitiveActivity>
+public class OfferActivity : ASActivity, IASModel<OfferActivity, OfferActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Offer" types.

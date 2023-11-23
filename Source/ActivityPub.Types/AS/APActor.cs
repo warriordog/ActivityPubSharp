@@ -188,8 +188,8 @@ public sealed class APActorEntity : ASEntity<APActor, APActorEntity>, IAnonymous
             return false;
 
         return
-            inputJson.HasProperty(nameof(Inbox)) &&
-            inputJson.HasProperty(nameof(Outbox));
+            inputJson.HasProperty("inbox") &&
+            inputJson.HasProperty("outbox");
     }
 }
 

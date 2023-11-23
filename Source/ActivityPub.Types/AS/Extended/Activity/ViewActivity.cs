@@ -9,7 +9,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// <summary>
 ///     Indicates that the actor has viewed the object.
 /// </summary>
-public class ViewActivity : ASTransitiveActivity, IASModel<ViewActivity, ViewActivityEntity, ASTransitiveActivity>
+public class ViewActivity : ASActivity, IASModel<ViewActivity, ViewActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "View" types.

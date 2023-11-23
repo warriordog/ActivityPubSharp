@@ -9,7 +9,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// <summary>
 ///     Indicates that the actor has created the object.
 /// </summary>
-public class CreateActivity : ASTransitiveActivity, IASModel<CreateActivity, CreateActivityEntity, ASTransitiveActivity>
+public class CreateActivity : ASActivity, IASModel<CreateActivity, CreateActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Create" types.

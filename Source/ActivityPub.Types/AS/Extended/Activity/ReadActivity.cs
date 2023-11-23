@@ -9,7 +9,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 /// <summary>
 ///     Indicates that the actor has read the object.
 /// </summary>
-public class ReadActivity : ASTransitiveActivity, IASModel<ReadActivity, ReadActivityEntity, ASTransitiveActivity>
+public class ReadActivity : ASActivity, IASModel<ReadActivity, ReadActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Read" types.

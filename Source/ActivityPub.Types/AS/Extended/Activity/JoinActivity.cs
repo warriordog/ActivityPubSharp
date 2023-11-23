@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor has joined the object.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class JoinActivity : ASTransitiveActivity, IASModel<JoinActivity, JoinActivityEntity, ASTransitiveActivity>
+public class JoinActivity : ASActivity, IASModel<JoinActivity, JoinActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Join" types.

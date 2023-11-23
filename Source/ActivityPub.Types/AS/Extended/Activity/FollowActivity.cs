@@ -11,7 +11,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Following is defined in the sense typically used within Social systems in which the actor is interested in any activity performed by or on the object.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class FollowActivity : ASTransitiveActivity, IASModel<FollowActivity, FollowActivityEntity, ASTransitiveActivity>
+public class FollowActivity : ASActivity, IASModel<FollowActivity, FollowActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Follow" types.

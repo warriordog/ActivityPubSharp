@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor has deleted the object.
 ///     If specified, the origin indicates the context from which the object was deleted.
 /// </summary>
-public class DeleteActivity : ASTransitiveActivity, IASModel<DeleteActivity, DeleteActivityEntity, ASTransitiveActivity>
+public class DeleteActivity : ASActivity, IASModel<DeleteActivity, DeleteActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Delete" types.

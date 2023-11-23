@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor likes, recommends or endorses the object.
 ///     The target and origin typically have no defined meaning.
 /// </summary>
-public class LikeActivity : ASTransitiveActivity, IASModel<LikeActivity, LikeActivityEntity, ASTransitiveActivity>
+public class LikeActivity : ASActivity, IASModel<LikeActivity, LikeActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Like" types.

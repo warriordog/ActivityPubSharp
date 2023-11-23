@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor is "flagging" the object.
 ///     Flagging is defined in the sense common to many social platforms as reporting content as being inappropriate for any number of reasons.
 /// </summary>
-public class FlagActivity : ASTransitiveActivity, IASModel<FlagActivity, FlagActivityEntity, ASTransitiveActivity>
+public class FlagActivity : ASActivity, IASModel<FlagActivity, FlagActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Flag" types.

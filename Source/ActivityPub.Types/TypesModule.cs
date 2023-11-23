@@ -27,7 +27,6 @@ public static class TypesModule
     /// </summary>
     public static void TryAddTypesModule(this IServiceCollection services)
     {
-        services.TryAddSingleton<ISubTypePivot, SubTypePivot>();
         services.TryAddSingleton<INamelessEntityPivot, NamelessEntityPivot>();
         services.TryAddSingleton<IAnonymousEntityPivot, AnonymousEntityPivot>();
         services.TryAddSingleton<IJsonLdSerializer, JsonLdSerializer>();

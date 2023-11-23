@@ -10,7 +10,7 @@ namespace ActivityPub.Types.AS.Extended.Activity;
 ///     Indicates that the actor is removing the object.
 ///     If specified, the origin indicates the context from which the object is being removed.
 /// </summary>
-public class RemoveActivity : ASTargetedActivity, IASModel<RemoveActivity, RemoveActivityEntity, ASTargetedActivity>
+public class RemoveActivity : ASActivity, IASModel<RemoveActivity, RemoveActivityEntity, ASActivity>
 {
     /// <summary>
     ///     ActivityStreams type name for "Remove" types.
