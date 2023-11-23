@@ -11,7 +11,7 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
     public MastodonInteropTests(JsonLdSerializerFixture fixture) : base(fixture) { }
 
     [Fact]
-    public void MastodonFollowActivityTest()
+    public void MastodonFollowActivityShould_ConvertCorrectly()
     {
         JsonUnderTest = """
                         {
@@ -38,7 +38,7 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
     }
     
     [Fact]
-    public void MastodonAcceptFollowActivityTest()
+    public void MastodonAcceptFollowActivity_ShouldConvertCorrectly()
     {
         JsonUnderTest = """
                         {
@@ -62,7 +62,7 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
     }
     
     [Fact(Skip = "ContentMap not deserializing")]
-    public void MastodonUpdateNoteActivityTest()
+    public void MastodonUpdateNoteActivity_ShouldConvertCorrectly()
     {
         JsonUnderTest = """
                         {
@@ -146,7 +146,7 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
     }
     
     [Fact]
-    public void MastodonActor()
+    public void MastodonActor_ShouldConvertCorrectly()
     {
         JsonUnderTest = """
                         {
