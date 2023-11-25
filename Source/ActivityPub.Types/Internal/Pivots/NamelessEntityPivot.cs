@@ -6,7 +6,7 @@ using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 using InternalUtils;
 
-namespace ActivityPub.Types.Internal;
+namespace ActivityPub.Types.Internal.Pivots;
 
 internal interface INamelessEntityPivot
 {
@@ -19,7 +19,7 @@ internal class NamelessEntityPivot : INamelessEntityPivot
     private readonly Func<Type, NamelessChecker> _createNamelessChecker =
         typeof(NamelessEntityPivot)
             .GetRequiredMethod(nameof(CreateNamelessChecker), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-            .CreateGenericPivot<NamelessChecker>();
+            .CreateGenericPivotFunc<NamelessChecker>();
 
     public bool ShouldConvert(Type entityType, IJsonLDContext jsonLDContext)
     {

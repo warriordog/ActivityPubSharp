@@ -17,7 +17,7 @@ namespace ActivityPub.Types.Util;
 ///     To avoid this, call GetOrDefault()/GetOrNull() or check HasValue first.
 /// </remarks>
 [JsonConverter(typeof(NaturalLanguageStringConverter))]
-public class NaturalLanguageString
+public sealed class NaturalLanguageString
 {
     /// <summary>
     ///     The language-agnostic value of this string.

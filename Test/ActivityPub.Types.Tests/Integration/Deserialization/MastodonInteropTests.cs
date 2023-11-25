@@ -61,7 +61,7 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
         nestedActivity!.Actor.Should().NotBeEmpty();
     }
     
-    [Fact(Skip = "ContentMap not deserializing")]
+    [Fact]
     public void MastodonUpdateNoteActivity_ShouldConvertCorrectly()
     {
         JsonUnderTest = """
@@ -132,15 +132,11 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
         activity.Object!.First().Value!.Is<ASObject>(out var note).Should().BeTrue();
         Assert.NotNull(note);
         note.Summary.Should().BeNull();
-        // The language maps seem not to be working. Or, they're not mapped correctly.
         note.Content!.DefaultValue.Should().Be("<p>Creating test data \ud83c\udd95</p>");
-        // Fails. But passes if I add and use a ContentMap property
-        note.Content!["es"].Should().Be("<p>Creando datos de prueba \ud83c\udd95</p>");
-        note.Content!["en"].Should().Be("<p>Creating test data \ud83c\udd95</p>");
-        // Fails no matter what. Maybe that's by design? But I would expect it to return null.
-        note.Content!["de"].Should().BeNull();
+        note.Content!.GetExactly("es").Should().Be("<p>Creando datos de prueba \ud83c\udd95</p>");
+        note.Content!.GetExactly("en").Should().Be("<p>Creating test data \ud83c\udd95</p>");
+        note.Content!.GetExactly("de").Should().BeNull();
         
-
         note.Replies.Should().BeEmpty();
         note.Replies!.Id.Should().Be("https://mastodon.example/users/john/statuses/9876/replies");
     }

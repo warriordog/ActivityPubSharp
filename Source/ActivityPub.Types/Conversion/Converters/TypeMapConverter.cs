@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
+using ActivityPub.Types.Internal.Pivots;
 using ActivityPub.Types.Util;
 using Microsoft.Extensions.Options;
 
@@ -18,12 +19,14 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
     private readonly IConversionOptions _conversionOptions;
     private readonly INamelessEntityPivot _namelessEntityPivot;
     private readonly IAnonymousEntityPivot _anonymousEntityPivot;
+    private readonly ICustomConvertedEntityPivot _customConvertedEntityPivot;
     
-    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, IAnonymousEntityPivot anonymousEntityPivot, INamelessEntityPivot namelessEntityPivot)
+    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, IAnonymousEntityPivot anonymousEntityPivot, INamelessEntityPivot namelessEntityPivot, ICustomConvertedEntityPivot customConvertedEntityPivot)
     {
         _asTypeInfoCache = asTypeInfoCache;
         _anonymousEntityPivot = anonymousEntityPivot;
         _namelessEntityPivot = namelessEntityPivot;
+        _customConvertedEntityPivot = customConvertedEntityPivot;
         _conversionOptions = conversionOptions.Value;
     }
 
@@ -127,10 +130,19 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
         if (meta.TypeMap.AllEntities.ContainsKey(entityType))
             return;
 
-        // Convert the appropriate entity type
-        var entity = (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
-                     ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
+        var entity =
+            // Use custom logic, if applicable
+            _customConvertedEntityPivot.ReadEntity(entityType, jsonElement, meta)
+        
+            // Fall back to native JSON conversion
+            ?? (ASEntity?)jsonElement.Deserialize(entityType, meta.JsonSerializerOptions)
+        
+            // Bail out if both fail
+            ?? throw new JsonException($"Failed to deserialize {entityType} - JsonElement.Deserialize returned null");
 
+        // Execute callback, if applicable
+        _customConvertedEntityPivot.PostReadEntity(entityType, jsonElement, meta, entity);
+        
         // Add it to the graph.
         meta.TypeMap.AddEntity(entity);
 
@@ -200,10 +212,18 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
         outputNode.WriteTo(writer, options);
     }
 
-    private static void WriteEntity(ASEntity entity, Type entityType, JsonObject outputNode, SerializationMetadata meta)
+    private void WriteEntity(ASEntity entity, Type entityType, JsonObject outputNode, SerializationMetadata meta)
     {
-        // Convert to an intermediate object
-        var element = JsonSerializer.SerializeToElement(entity, entityType, meta.JsonSerializerOptions);
+        // Convert to an intermediate object.
+        // This will contain the subset of fields that are owned by this entity.
+        var element = 
+            // Use custom converter, if applicable
+            _customConvertedEntityPivot.WriteEntity(entityType, entity, meta)
+            
+            // Fall back to native conversion
+            ?? JsonSerializer.SerializeToElement(entity, entityType, meta.JsonSerializerOptions);
+        
+        // Sanity check
         if (element.ValueKind != JsonValueKind.Object)
             throw new JsonException($"Failed to write {entityType} to object - serialization produced unsupported JSON type {element.ValueKind}");
 
@@ -213,6 +233,9 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
             var valueNode = property.Value.ToNode(meta.JsonNodeOptions);
             outputNode[property.Name] = valueNode;
         }
+        
+        // Execute callback, if applicable
+        _customConvertedEntityPivot.PostWriteEntity(entityType, entity, meta, element, outputNode);
     }
 
     private void WriteTypeMap(TypeMap typeMap, JsonObject outputNode, SerializationMetadata meta)

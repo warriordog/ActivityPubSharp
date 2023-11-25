@@ -2,9 +2,12 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
+using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.AS;
@@ -218,6 +221,9 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
     ///     By default, the value of content is HTML.
     ///     The <see cref="ASType.MediaType" /> property can be used in the object to indicate a different content type.
     /// </summary>
+    /// <remarks>
+    ///     In JSON, this property may be mapped to either or both of "content" and "contentMap".
+    /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-content" />
     public NaturalLanguageString? Content
     {
@@ -328,7 +334,7 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
 }
 
 /// <inheritdoc cref="ASObject" />
-public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>
+public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, ICustomConvertedEntity<ASObjectEntity>
 {
     /// <inheritdoc cref="ASObject.Attachment" />
     [JsonPropertyName("attachment")]
@@ -343,7 +349,7 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>
     public LinkableList<ASObject> BCC { get; set; } = new();
 
     /// <inheritdoc cref="ASObject.BTo" />
-    [JsonPropertyName("bto")] // this property is not in camelcase for some reason
+    [JsonPropertyName("bto")]
     public LinkableList<ASObject> BTo { get; set; } = new();
 
     /// <inheritdoc cref="ASObject.CC" />
@@ -391,7 +397,7 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>
     public List<ASLink> Url { get; set; } = new();
 
     /// <inheritdoc cref="ASObject.Content" />
-    [JsonPropertyName("content")]
+    [JsonPropertyName("contentMap")]
     public NaturalLanguageString? Content { get; set; }
 
     /// <inheritdoc cref="ASObject.Duration" />
@@ -429,4 +435,31 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>
     /// <inheritdoc cref="ASObject.Shares" />
     [JsonPropertyName("shares")]
     public Linkable<ASCollection>? Shares { get; set; }
+
+    static void ICustomConvertedEntity<ASObjectEntity>.PostReadEntity(JsonElement jsonElement, DeserializationMetadata meta, ASObjectEntity entity)
+    {
+        if (!jsonElement.TryGetProperty("content", out var contentProperty))
+            return;
+
+        var content = contentProperty.GetString();
+        if (content == null)
+            return;
+
+        entity.Content ??= new NaturalLanguageString();
+        entity.Content.DefaultValue = content;
+    }
+
+    static void ICustomConvertedEntity<ASObjectEntity>.PostWriteEntity(ASObjectEntity entity, SerializationMetadata meta, JsonElement entityJson, JsonObject outputJson)
+    {
+        if (entity.Content == null)
+            return;
+        
+        // Copy Content.DefaultValue to "content"
+        if (entity.Content.DefaultValue != null)
+            outputJson["content"] = JsonValue.Create(entity.Content.DefaultValue, meta.JsonNodeOptions);
+
+        // Remove "contentMap" if it's empty
+        if (!entity.Content.LanguageMap.Any())
+            outputJson.Remove("contentMap");
+    }
 }

@@ -6,7 +6,7 @@ using System.Text.Json;
 using ActivityPub.Types.Conversion.Overrides;
 using InternalUtils;
 
-namespace ActivityPub.Types.Internal;
+namespace ActivityPub.Types.Internal.Pivots;
 
 internal interface IAnonymousEntityPivot
 {
@@ -19,7 +19,7 @@ internal class AnonymousEntityPivot : IAnonymousEntityPivot
     private readonly Func<Type, AnonymousChecker> _createAnonymousChecker =
         typeof(AnonymousEntityPivot)
         .GetRequiredMethod(nameof(CreateAnonymousChecker), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-        .CreateGenericPivot<AnonymousChecker>();
+        .CreateGenericPivotFunc<AnonymousChecker>();
 
     public bool ShouldConvert(Type entityType, JsonElement jsonElement)
     {

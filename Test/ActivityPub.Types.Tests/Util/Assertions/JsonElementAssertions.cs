@@ -12,20 +12,23 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
 {
     public JsonElementAssertions(JsonElement value) : base(value) {}
 
-    public AndConstraint<JsonElementAssertions> HaveProperty(string name)
+    public AndConstraint<JsonElementAssertions> HaveProperty(string expectedName, JsonValueKind? expectedType = null)
     {
         BeJsonObject();
 
-        if (!Subject.TryGetProperty(name, out _))
-            Assert.Fail($"Expected object to contain property {name}, but it does not");
+        if (!Subject.TryGetProperty(expectedName, out var property))
+            Assert.Fail($"Expected object to contain property {expectedName}, but it does not");
+        
+        if (expectedType != null)
+            Assert.Equal(expectedType, property.ValueKind);
 
         return new AndConstraint<JsonElementAssertions>(this);
     }
 
-    public AndConstraint<JsonElementAssertions> HaveProperty(string name, Action<JsonElement> inspector)
+    public AndConstraint<JsonElementAssertions> HaveProperty(string expectedName, Action<JsonElement> inspector)
     {
-        HaveProperty(name);
-        var prop = Subject.GetProperty(name);
+        HaveProperty(expectedName);
+        var prop = Subject.GetProperty(expectedName);
         inspector(prop);
 
         return new AndConstraint<JsonElementAssertions>(this);
@@ -35,27 +38,28 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
     {
         BeJsonObject();
 
-        if (Subject.TryGetProperty(name, out _))
+        if (Subject.TryGetProperty(name, out var _))
             Assert.Fail($"Expected object to not contain property {name}, but it does");
 
         return new AndConstraint<JsonElementAssertions>(this);
     }
 
-    public AndConstraint<JsonElementAssertions> HaveStringProperty(string name, string value)
+    public AndConstraint<JsonElementAssertions> HaveStringProperty(string expectedName)
+        => HaveProperty(expectedName, JsonValueKind.String);
+
+    public AndConstraint<JsonElementAssertions> HaveStringProperty(string expectedName, string expectedValue)
     {
-        HaveProperty(name);
-        Subject.GetProperty(name).Should().BeJsonString(value);
+        HaveProperty(expectedName, JsonValueKind.String);
+        Assert.Equal(expectedValue, Subject.GetProperty(expectedName).GetString());
 
         return new AndConstraint<JsonElementAssertions>(this);
     }
 
-    public AndConstraint<JsonElementAssertions> HaveArrayProperty(string name)
-    {
-        HaveProperty(name);
-        Subject.GetProperty(name).ValueKind.Should().Be(JsonValueKind.Array);
+    public AndConstraint<JsonElementAssertions> HaveArrayProperty(string expectedName)
+        => HaveProperty(expectedName, JsonValueKind.Array);
 
-        return new AndConstraint<JsonElementAssertions>(this);
-    }
+    public AndConstraint<JsonElementAssertions> HaveObjectProperty(string expectedName)
+        => HaveProperty(expectedName, JsonValueKind.Object);
 
     public AndConstraint<JsonElementAssertions> BeJsonString()
     {

@@ -75,7 +75,7 @@ internal class ASTypeInfoCache : IASTypeInfoCache
         // I really hate doing this :sob:
         _createTypeMetadataFor = typeof(ASTypeInfoCache)
             .GetRequiredMethod(nameof(CreateModelMetaFor), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-            .CreateGenericPivot<ModelMeta>(this);
+            .CreateGenericPivotFunc<ModelMeta>(this);
 
     public void MapASTypesToEntities(IEnumerable<string> asTypes, out HashSet<Type> mappedEntities, out HashSet<string> unmappedTypes)
     {

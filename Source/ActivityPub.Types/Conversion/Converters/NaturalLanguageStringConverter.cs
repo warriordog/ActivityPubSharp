@@ -44,5 +44,17 @@ internal class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageStr
     }
 
     public override void Write(Utf8JsonWriter writer, NaturalLanguageString value, JsonSerializerOptions options)
-        => JsonSerializer.Serialize(writer, value.LanguageMap, options);
+    {
+        // If it has any language mappings, then we have to use object form
+        if (value.LanguageMap.Any())
+            JsonSerializer.Serialize(writer, value.LanguageMap, options);
+        
+        // Otherwise, we can use the default value
+        else if (value.DefaultValue != null)
+            writer.WriteStringValue(value.DefaultValue);
+        
+        // Fall back to null
+        else
+            writer.WriteNullValue();
+    }
 }

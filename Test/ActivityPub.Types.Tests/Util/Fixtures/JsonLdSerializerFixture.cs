@@ -5,6 +5,7 @@ using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
+using ActivityPub.Types.Internal.Pivots;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
@@ -31,7 +32,8 @@ public sealed class JsonLdSerializerFixture
         var conversionOptions = Options.Create(ConversionOptions);
         var namelessEntityPivot = new NamelessEntityPivot();
         var anonymousEntityPivot = new AnonymousEntityPivot();
-        var typeMapConverter = new TypeMapConverter(ASTypeInfoCache, conversionOptions, anonymousEntityPivot, namelessEntityPivot);
+        var customConvertedEntityPivot = new CustomConvertedEntityPivot();
+        var typeMapConverter = new TypeMapConverter(ASTypeInfoCache, conversionOptions, anonymousEntityPivot, namelessEntityPivot, customConvertedEntityPivot);
 
         var asTypeConverter = new ASTypeConverter();
         var linkableConverter = new LinkableConverter(ASTypeInfoCache);

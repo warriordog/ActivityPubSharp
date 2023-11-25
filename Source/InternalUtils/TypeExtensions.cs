@@ -3,7 +3,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Reflection.Emit;
 
 namespace InternalUtils;
 
@@ -164,46 +163,6 @@ internal static class TypeExtensions
         return null;
     }
 
-    // Based on https://stackoverflow.com/a/23433748
-    // More info - https://learn.microsoft.com/en-us/dotnet/api/system.reflection.emit.dynamicmethod?view=net-7.0
-    // More info - https://learn.microsoft.com/en-us/dotnet/api/system.reflection.emit.opcodes?view=net-7.0
-    internal static DynamicMethod CreateDynamicConstructor(this Type type, params Type[] paramTypes)
-    {
-        var dynamicConstructor = TryCreateDynamicConstructor(type, paramTypes);
-        if (dynamicConstructor == null)
-            throw new ArgumentException($"Can't create dynamic constructor: {type}({string.Join<Type>(", ", paramTypes)}) does not exist");
-
-        return dynamicConstructor;
-    }
-
-    /// <summary>
-    ///     Alternate version of CreateDynamicConstructor that safely handles abstract and non-constructable types.
-    /// </summary>
-    /// <returns>Returns false if the type cannot be constructed</returns>
-    internal static DynamicMethod? TryCreateDynamicConstructor(this Type type, params Type[] paramTypes)
-    {
-        if (paramTypes.Length > 4)
-            throw new ArgumentException("Can't create dynamic constructor: no more than 4 parameters can be provided");
-
-        var constructor = type.GetConstructor(paramTypes);
-        if (constructor == null)
-            return null;
-
-        var dynamicConstructor = new DynamicMethod($"DynamicConstructor_{paramTypes.Length}", type, paramTypes, true);
-        var il = dynamicConstructor.GetILGenerator();
-        if (paramTypes.Length > 0)
-            il.Emit(OpCodes.Ldarg_0);
-        if (paramTypes.Length > 1)
-            il.Emit(OpCodes.Ldarg_1);
-        if (paramTypes.Length > 2)
-            il.Emit(OpCodes.Ldarg_2);
-        if (paramTypes.Length > 3)
-            il.Emit(OpCodes.Ldarg_3);
-        il.Emit(OpCodes.Newobj, constructor);
-        il.Emit(OpCodes.Ret);
-        return dynamicConstructor;
-    }
-
     internal static MethodInfo GetRequiredMethod(this Type type, string methodName, BindingFlags bindingFlags = BindingFlags.Default)
     {
         var method = type.GetMethod(methodName, bindingFlags);
@@ -211,61 +170,6 @@ internal static class TypeExtensions
             throw new MissingMethodException(type.FullName, methodName);
 
         return method;
-    }
-
-    /// <summary>
-    ///     Creates a delegate that calls the provided method using a specified generic type.
-    ///     Additional generic overloads are automatically constructed as-needed, and cached for the lifetime of the delegate.
-    ///     An object can be provided to bind instance methods.
-    /// </summary>
-    /// <exception cref="ArgumentException">When "method" is static but "instance" is non-null</exception>
-    /// <exception cref="ArgumentException">When "method" is non-static but "instance" is null</exception>
-    internal static Func<Type, TResult> CreateGenericPivot<TResult>(this MethodInfo method, object? instance = null)
-    {
-        CheckMethodInstanceAlignment(method, instance);
-
-        var cache = new Dictionary<Type, Func<TResult>>();
-        return type =>
-        {
-            if (!cache.TryGetValue(type, out var genericDelegate))
-            {
-                genericDelegate = method
-                    .MakeGenericMethod(type)
-                    .CreateDelegate<Func<TResult>>(instance);
-                cache[type] = genericDelegate;
-            }
-
-            return genericDelegate();
-        };
-    }
-
-    /// <inheritdoc cref="CreateGenericPivot{TResult}"/>
-    internal static Func<Type, TArg, TResult> CreateGenericPivot<TArg, TResult>(this MethodInfo method, object? instance = null)
-    {
-        CheckMethodInstanceAlignment(method, instance);
-        
-        var cache = new Dictionary<Type, Func<TArg, TResult>>();
-        return (type, arg) =>
-        {
-            if (!cache.TryGetValue(type, out var genericDelegate))
-            {
-                genericDelegate = method
-                    .MakeGenericMethod(type)
-                    .CreateDelegate<Func<TArg, TResult>>(instance);
-                cache[type] = genericDelegate;
-            }
-
-            return genericDelegate(arg);
-        };
-    }
-    
-    private static void CheckMethodInstanceAlignment(MethodInfo method, object? instance)
-    {
-        if (method.IsStatic && instance != null)
-            throw new ArgumentException("instance must be null for static method", nameof(instance));
-
-        if (!method.IsStatic && instance == null)
-            throw new ArgumentException("instance must be provided for instance methods", nameof(instance));
     }
 
     internal static bool TryMakeGenericType(this Type type, [NotNullWhen(true)] out Type? genericType, params Type[] arguments)

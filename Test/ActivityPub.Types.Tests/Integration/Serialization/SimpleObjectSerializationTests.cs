@@ -79,10 +79,13 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Id = "https://example.com/actor/id"
             };
 
-            JsonUnderTest.Should().HaveStringProperty("inbox", "https://example.com/actor/inbox");
-            JsonUnderTest.Should().HaveStringProperty("outbox", "https://example.com/actor/outbox");
-            JsonUnderTest.GetProperty("image").Should().HaveASType("Image");
-            JsonUnderTest.Should().HaveStringProperty("id", "https://example.com/actor/id");
+            JsonUnderTest.Should()
+                .HaveStringProperty("inbox", "https://example.com/actor/inbox")
+                .And.HaveStringProperty("outbox", "https://example.com/actor/outbox")
+                .And.HaveStringProperty("id", "https://example.com/actor/id")
+                .And.HaveObjectProperty("image");
+            JsonUnderTest.GetProperty("image").Should()
+                .HaveASType("Image");
         }
     }
 
@@ -100,7 +103,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Audience = new LinkableList<ASObject> { new ASObject() },
                 BCC = new LinkableList<ASObject> { new ASObject() },
                 BTo = new LinkableList<ASObject> { new ASObject() },
-                CC = new LinkableList<ASObject> { new ASObject() },
+                CC = new LinkableList<ASObject> { new ASObject(), new ASObject() },
                 Context = "https://example.com/some/context", // this is the worst field name
                 Generator = new ASObject(),
                 Icon = new ImageObject(),
@@ -134,38 +137,38 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             };
 
             // From ASObject
-            JsonUnderTest.Should().HaveProperty("attachment");
-            JsonUnderTest.Should().HaveProperty("audience");
-            JsonUnderTest.Should().HaveProperty("bcc");
-            JsonUnderTest.Should().HaveProperty("bto");
-            JsonUnderTest.Should().HaveProperty("cc");
-            JsonUnderTest.Should().HaveProperty("context"); // I hate this property NAME IT SOMETHING ELSE >:(
-            JsonUnderTest.Should().HaveProperty("generator");
-            JsonUnderTest.Should().HaveProperty("icon");
-            JsonUnderTest.Should().HaveProperty("image");
-            JsonUnderTest.Should().HaveProperty("inReplyTo");
-            JsonUnderTest.Should().HaveProperty("location");
-            JsonUnderTest.Should().HaveProperty("replies");
-            JsonUnderTest.Should().HaveProperty("tag");
-            JsonUnderTest.Should().HaveProperty("to");
-            JsonUnderTest.Should().HaveProperty("url");
-            JsonUnderTest.Should().HaveProperty("content");
-            JsonUnderTest.Should().HaveProperty("duration");
-            JsonUnderTest.Should().HaveProperty("startTime");
-            JsonUnderTest.Should().HaveProperty("endTime");
-            JsonUnderTest.Should().HaveProperty("published");
-            JsonUnderTest.Should().HaveProperty("summary");
-            JsonUnderTest.Should().HaveProperty("updated");
-            JsonUnderTest.Should().HaveProperty("source");
-            JsonUnderTest.Should().HaveProperty("likes");
-            JsonUnderTest.Should().HaveProperty("shares");
+            JsonUnderTest.Should().HaveObjectProperty("attachment")
+                .And.HaveObjectProperty("audience")
+                .And.HaveObjectProperty("bcc")
+                .And.HaveObjectProperty("bto")
+                .And.HaveArrayProperty("cc")
+                .And.HaveStringProperty("context", "https://example.com/some/context")
+                .And.HaveObjectProperty("generator")
+                .And.HaveObjectProperty("icon")
+                .And.HaveObjectProperty("image")
+                .And.HaveObjectProperty("inReplyTo")
+                .And.HaveObjectProperty("location")
+                .And.HaveObjectProperty("replies")
+                .And.HaveObjectProperty("tag")
+                .And.HaveObjectProperty("to")
+                .And.HaveStringProperty("url", "https://example.com/")
+                .And.HaveStringProperty("content", "content")
+                .And.HaveStringProperty("duration", "PT5S")
+                .And.HaveStringProperty("startTime")
+                .And.HaveStringProperty("endTime")
+                .And.HaveStringProperty("published")
+                .And.HaveStringProperty("summary", "summary")
+                .And.HaveStringProperty("updated")
+                .And.HaveObjectProperty("source")
+                .And.HaveStringProperty("likes", "https://example.com/likes.collection")
+                .And.HaveStringProperty("shares", "https://example.com/shares.collection")
 
-            // From ASType
-            JsonUnderTest.Should().HaveProperty("id");
-            JsonUnderTest.Should().HaveProperty("attributedTo");
-            JsonUnderTest.Should().HaveProperty("preview");
-            JsonUnderTest.Should().HaveProperty("name");
-            JsonUnderTest.Should().HaveProperty("mediaType");
+                // From ASType
+                .And.HaveStringProperty("id", "https://example.com/some.uri")
+                .And.HaveObjectProperty("attributedTo")
+                .And.HaveObjectProperty("preview")
+                .And.HaveStringProperty("name", "name")
+                .And.HaveStringProperty("mediaType", "text/html");
         }
     }
 }
