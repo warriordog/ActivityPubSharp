@@ -133,12 +133,12 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
         Assert.NotNull(note);
         note.Summary.Should().BeNull();
         // The language maps seem not to be working. Or, they're not mapped correctly.
-        note.Content!.SingleString.Should().Be("<p>Creating test data \ud83c\udd95</p>");
+        note.Content!.DefaultValue.Should().Be("<p>Creating test data \ud83c\udd95</p>");
         // Fails. But passes if I add and use a ContentMap property
-        note.Content!.GetOrNull("es").Should().Be("<p>Creando datos de prueba \ud83c\udd95</p>");
-        note.Content!.GetOrNull("en").Should().Be("<p>Creating test data \ud83c\udd95</p>");
+        note.Content!["es"].Should().Be("<p>Creando datos de prueba \ud83c\udd95</p>");
+        note.Content!["en"].Should().Be("<p>Creating test data \ud83c\udd95</p>");
         // Fails no matter what. Maybe that's by design? But I would expect it to return null.
-        note.Content!.GetOrNull("de").Should().BeNull();
+        note.Content!["de"].Should().BeNull();
         
 
         note.Replies.Should().BeEmpty();

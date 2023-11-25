@@ -61,7 +61,7 @@ public class ComplexObjectSerializationTests : SerializationTests
         var note = new NoteObject
         {
             Id = "https://peer.example/actor/activities/1",
-            Content = new NaturalLanguageString("This is a note"),
+            Content = "This is a note",
         };
         var collection = new ASCollection
         {

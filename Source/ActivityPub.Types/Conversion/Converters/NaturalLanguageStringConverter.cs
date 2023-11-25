@@ -26,13 +26,16 @@ internal class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageStr
             case JsonTokenType.String:
             {
                 var str = reader.GetString()!;
-                return new NaturalLanguageString(str);
+                return new NaturalLanguageString()
+                {
+                    DefaultValue = str
+                };
             }
 
             case JsonTokenType.StartObject:
             {
-                var langStrings = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options)!;
-                return new NaturalLanguageString(langStrings);
+                var languageTags = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options)!;
+                return NaturalLanguageString.FromLanguageMap(languageTags);
             }
 
             default:
@@ -41,10 +44,5 @@ internal class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageStr
     }
 
     public override void Write(Utf8JsonWriter writer, NaturalLanguageString value, JsonSerializerOptions options)
-    {
-        if (value.SingleString != null)
-            writer.WriteStringValue(value.SingleString);
-        else
-            JsonSerializer.Serialize(writer, value.LanguageMap, options);
-    }
+        => JsonSerializer.Serialize(writer, value.LanguageMap, options);
 }

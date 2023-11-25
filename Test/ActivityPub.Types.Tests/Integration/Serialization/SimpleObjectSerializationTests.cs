@@ -114,12 +114,12 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Tag = new LinkableList<ASObject> { new ASObject() },
                 To = new LinkableList<ASObject> { new ASObject() },
                 Url = new List<ASLink> { "https://example.com" },
-                Content = new NaturalLanguageString("content"),
+                Content = "content",
                 Duration = "PT5S",
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
                 Published = DateTime.Now,
-                Summary = new NaturalLanguageString("summary"),
+                Summary = "summary",
                 Updated = DateTime.Now,
                 Source = new ASObject(),
                 Likes = "https://example.com/likes.collection",
@@ -129,7 +129,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 Id = "https://example.com/some.uri",
                 AttributedTo = new LinkableList<ASObject> { new ASObject() },
                 Preview = new ASObject(),
-                Name = new NaturalLanguageString("name"),
+                Name = "name",
                 MediaType = "text/html"
             };
 

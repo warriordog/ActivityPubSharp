@@ -1,6 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Conversion.Converters;
 
@@ -18,215 +19,199 @@ namespace ActivityPub.Types.Util;
 [JsonConverter(typeof(NaturalLanguageStringConverter))]
 public class NaturalLanguageString
 {
-    private readonly Dictionary<string, string> _languageMap;
-
     /// <summary>
-    ///     Create a string from a single non-mapped value.
+    ///     The language-agnostic value of this string.
+    ///     Will be used as a fallback if the requested language is not available, or if no user preference is available.
     /// </summary>
-    /// <param name="singleString">Value of the string</param>
-    public NaturalLanguageString(string? singleString)
+    public string? DefaultValue
     {
-        SingleString = singleString;
-        _languageMap = new Dictionary<string, string>();
+        get => _rootNode.Value;
+        set => _rootNode.Value = value;
     }
+    private readonly LanguageNode _rootNode = new();
 
     /// <summary>
-    ///     Create a string from a language map.
+    ///     A map of BCP47 Language-Tags that represents this object.
+    ///     <see cref="DefaultValue"/> is <em>not</em> included.
     /// </summary>
-    /// <remarks>
-    ///     Keys are language identifiers, values are the value of the string in that language.
-    /// </remarks>
-    /// <param name="languageMap">Language/value pairs to populate</param>
-    public NaturalLanguageString(Dictionary<string, string> languageMap) => _languageMap = languageMap;
-
-    /// <summary>
-    ///     The language-indifferent value of this string.
-    ///     Will be null if there are any language mappings.
-    /// </summary>
-    /// <seealso cref="LanguageMap" />
-    public string? SingleString { get; private set; }
-
-    /// <summary>
-    ///     The language-specific values of this string.
-    ///     Will be empty if there is an indifferent string value.
-    /// </summary>
-    /// <seealso cref="SingleString" />
     public IReadOnlyDictionary<string, string> LanguageMap => _languageMap;
-
+    private readonly Dictionary<string, string> _languageMap = new();
+    
     /// <summary>
-    ///     True if this NaturalLanguageString has at least one value.
+    ///     Constructs a NaturalLanguageString from a map of BCP47 Language-Tags.
     /// </summary>
-    public bool HasValue => SingleString != null || _languageMap.Any();
-
-    /// <summary>
-    ///     Gets or sets the content of the string.
-    ///     Provide a string to access the mapping for that language, or pass null to access the non-mapped value.
-    /// </summary>
-    /// <param name="language">Language to access, or null to use the non-mapped value</param>
-    public string? this[string? language]
+    public static NaturalLanguageString FromLanguageMap(IReadOnlyDictionary<string, string> languageMap)
     {
-        get
+        var langString = new NaturalLanguageString();
+        foreach (var (key, value) in languageMap)
         {
-            if (language == null)
-                return SingleString;
-            if (LanguageMap.TryGetValue(language, out var str))
-                return str;
-            return null;
+            var language = key.Split("-");
+            langString[language] = value;
         }
+        return langString;
+    }
+    
+    /// <summary>
+    ///     Gets or sets the value of a string for a given language.
+    /// </summary>
+    /// <seealso cref="Get" />
+    /// <seealso cref="Set" />
+    public string? this[params string[] language]
+    {
+        get => Get(language);
         set
         {
-            if (language == null)
-                Set(value);
+            if (value != null)
+                Set(value, language);
             else
-                Set(language, value);
+                Remove(language);
         }
     }
 
     /// <summary>
-    ///     Gets a value of the string.
-    ///     Will attempt to return a value in preferredLanguage, if provided.
+    ///     Sets the value of the string for a given language.
+    ///     If no language tags are specified, then sets the value of <see cref="DefaultValue" /> instead.
     /// </summary>
     /// <remarks>
-    ///     1st priority - unmapped string value
-    ///     2nd priority - language matching the value of preferredLanguage
-    ///     3rd priority - any mapped language
-    ///     fallback - throws InvalidOperationException
+    ///     The value must be provided <em>first</em> due to the use of <see langword="params" />.
     /// </remarks>
-    /// <param name="preferredLanguage">If not null, then attempt to return the value in the provided language.</param>
-    /// <exception cref="InvalidOperationException">Throws InvalidOperationException if there are no defined values.</exception>
-    /// <returns>Returns the best-compatible string</returns>
-    public string Get(string? preferredLanguage = null)
+    /// <seealso cref="Remove"/>
+    public void Set(string value, params string[] language)
     {
-        if (SingleString != null)
-            return SingleString;
+        var node = CreateNode(language);
+        node.Value = value;
 
-        if (preferredLanguage != null && _languageMap.TryGetValue(preferredLanguage, out var preferredString))
-            return preferredString;
+        var languageKey = string.Join('-', language);
+        _languageMap[languageKey] = value;
+    }
 
-        return _languageMap.First().Value;
+
+    /// <summary>
+    ///     Gets the value of the string for a given language.
+    ///     If no language tags are specified, then returns the value of <see cref="DefaultValue" /> instead.
+    /// </summary>
+    /// <seealso cref="GetExactly" />
+    public string? Get(params string[] language)
+    {
+        var node = FindNode(language);
+        return node?.Value;
     }
 
     /// <summary>
-    ///     Gets a value of the string.
-    ///     Will attempt return a value in one of preferredLanguages, if provided.
-    ///     A language value will be selected by the order of preferredLanguages.
+    ///     Gets the value of the string for a given language.
+    ///     This version will not inherit from language roots or <see cref="DefaultValue"/>.
     /// </summary>
-    /// <remarks>
-    ///     1st priority - unmapped string value
-    ///     2nd priority - language matching the value of one of preferredLanguages
-    ///     3rd priority - any mapped language
-    ///     fallback - throws InvalidOperationException
-    /// </remarks>
-    /// <param name="preferredLanguages">List of languages to prioritize</param>
-    /// <exception cref="InvalidOperationException">Throws InvalidOperationException if there are no defined values.</exception>
-    /// <returns>Returns the best-compatible string</returns>
-    public string Get(params string[] preferredLanguages)
+    /// <seealso cref="Get" />
+    public string? GetExactly(params string[] language)
     {
-        if (SingleString != null)
-            return SingleString;
-
-        foreach (var preferredLanguage in preferredLanguages)
-            if (_languageMap.TryGetValue(preferredLanguage, out var preferredString))
-                return preferredString;
-
-        return _languageMap.First().Value;
+        var node = FindNode(language, exactMatch: true);
+        return node?.Value;
+    }    
+    
+    /// <summary>
+    ///     Checks if a value exists for the target language, or one of it's base categories.
+    ///     This method does <em>not</em> consider <see cref="DefaultValue" />.
+    /// </summary>
+    /// <seealso cref="HasExactly"/>
+    public bool Has(params string[] language)
+    {
+        var node = FindNode(language);
+        return node?.Value != null;
     }
 
     /// <summary>
-    ///     Gets a value of the string, or returns a provided default if no match can be found.
-    ///     Will attempt to return a value in preferredLanguage, if provided.
+    ///     Checks if a value exists for the target language and all subtags.
+    ///     This version will not inherit from language roots or <see cref="DefaultValue"/>.
     /// </summary>
-    /// <remarks>
-    ///     1st priority - unmapped string value
-    ///     2nd priority - language matching the value of preferredLanguage
-    ///     3rd priority - any mapped language
-    ///     fallback - returns the value of def
-    /// </remarks>
-    /// <param name="def">Default to return in case no match is found.</param>
-    /// <param name="preferredLanguage">If not null, then attempt to return the value in the provided language.</param>
-    /// <returns>Returns the best-compatible string</returns>
-    public string GetOrDefault(string def, string? preferredLanguage = null) => HasValue ? Get(preferredLanguage) : def;
-
-    /// <summary>
-    ///     Gets a value of the string, or returns a provided default if no match can be found.
-    ///     Will attempt return a value in one of preferredLanguages, if provided.
-    ///     A language value will be selected by the order of preferredLanguages.
-    /// </summary>
-    /// <remarks>
-    ///     1st priority - unmapped string value
-    ///     2nd priority - language matching the value of one of preferredLanguages
-    ///     3rd priority - any mapped language
-    ///     fallback - returns the value of def
-    /// </remarks>
-    /// <param name="def">Default to return in case no match is found.</param>
-    /// <param name="preferredLanguages">List of languages to prioritize</param>
-    /// <returns>Returns the best-compatible string</returns>
-    public string GetOrDefault(string def, params string[] preferredLanguages) => HasValue ? Get(preferredLanguages) : def;
-
-    /// <summary>
-    ///     Gets a value of the string.
-    ///     Will attempt to return a value in preferredLanguage, if provided.
-    ///     Returns null if there are no values.
-    /// </summary>
-    /// <remarks>
-    ///     1st priority - unmapped string value
-    ///     2nd priority - language matching the value of preferredLanguage
-    ///     3rd priority - any mapped language
-    ///     fallback - null
-    /// </remarks>
-    /// <param name="preferredLanguage">If not null, then attempt to return the value in the provided language.</param>
-    /// <returns>Returns the best-compatible string</returns>
-    public string? GetOrNull(string? preferredLanguage = null) => HasValue ? Get(preferredLanguage) : null;
-
-    /// <summary>
-    ///     Gets a value of the string.
-    ///     Will attempt return a value in one of preferredLanguages, if provided.
-    ///     A language value will be selected by the order of preferredLanguages.
-    ///     Returns null if there are no values.
-    /// </summary>
-    /// <remarks>
-    ///     1st priority - unmapped string value
-    ///     2nd priority - language matching the value of one of preferredLanguages
-    ///     3rd priority - any mapped language
-    ///     fallback - null
-    /// </remarks>
-    /// <param name="preferredLanguages">List of languages to prioritize</param>
-    /// <returns>Returns the best-compatible string</returns>
-    public string? GetOrNull(params string[] preferredLanguages) => HasValue ? Get(preferredLanguages) : null;
-
-    /// <summary>
-    ///     Sets the string to single non-mapped value.
-    ///     All language mappings will be removed.
-    /// </summary>
-    /// <param name="value">New content of the string. Can be null.</param>
-    public void Set(string? value)
+    /// <seealso cref="Has"/>
+    public bool HasExactly(params string[] language)
     {
-        SingleString = value;
-        _languageMap.Clear();
+        var node = FindNode(language, exactMatch: true);
+        return node?.Value != null;
     }
 
     /// <summary>
-    ///     Sets the mapping for a particular language.
-    ///     If value is null, then the mapping is deleted.
-    ///     This implicitly removes any non-mapped string that may be set.
-    /// </summary>
-    /// <param name="language">Language to map</param>
-    /// <param name="value">Content of the string in the provided language</param>
-    public void Set(string language, string? value)
-    {
-        SingleString = null;
-        if (value != null)
-            _languageMap[language] = value;
-        else
-            _languageMap.Remove(language);
-    }
-
-    /// <summary>
-    ///     Removes the mapping for a specific language
+    ///     Removes the mapping for a specific language.
+    ///     This will not inherit from language roots or <see cref="DefaultValue"/>.
     /// </summary>
     /// <param name="language">Language to unmap</param>
-    public void Remove(string language)
+    public void Remove(params string[] language)
     {
-        _languageMap.Remove(language);
+        var node = FindNode(language, exactMatch: true);
+        if (node != null)
+            node.Value = null;
+
+        var languageKey = string.Join('-', language);
+        _languageMap.Remove(languageKey);
+    }
+
+    /// <summary>
+    ///     Constructs a NaturalLanguageString from a native .NET string.
+    ///     The provided string will be mapped to <see cref="DefaultValue"/>.
+    /// </summary>
+    public static implicit operator NaturalLanguageString(string defaultValue) => new()
+    {
+        DefaultValue = defaultValue
+    };
+
+    private LanguageNode CreateNode(string[] language)
+    {
+        var node = _rootNode;
+        foreach (var tag in language)
+        {
+            if (!node.TryGetSubTagNode(tag, out var nextNode))
+            {
+                nextNode = new LanguageNode();
+                node.AddSubTagNode(tag, nextNode);
+            }
+
+            node = nextNode;
+        }
+
+        return node;
+    }
+    
+    private LanguageNode? FindNode(string[] language, bool exactMatch = false)
+    {
+        var node = _rootNode;
+        foreach (var tag in language)
+        {
+            if (node.TryGetSubTagNode(tag, out var nextNode))
+            {
+                node = nextNode;
+                continue;
+            }
+            
+            // If we can't go further, then we need to fail if we reach the end of the chain.
+            if (exactMatch)
+                return null;
+
+            // Soft (non-exact) matching is allowed to bail out early
+            break;
+        }
+
+        return node;
+    }
+
+    private sealed class LanguageNode
+    {
+        public string? Value { get; set; }
+
+        private Dictionary<string, LanguageNode>? _subTags;
+
+        public bool TryGetSubTagNode(string subTag, [NotNullWhen(true)] out LanguageNode? node)
+        {
+            if (_subTags != null)
+                return _subTags.TryGetValue(subTag, out node);
+            
+            node = null;
+            return false;
+        }
+
+        public void AddSubTagNode(string subTag, LanguageNode node)
+        {
+            _subTags ??= new Dictionary<string, LanguageNode>();
+            _subTags.Add(subTag, node);
+        }
     }
 }

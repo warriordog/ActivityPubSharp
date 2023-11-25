@@ -86,7 +86,7 @@ Most exist for DX only, although a few are needed for type-model accuracy or ser
 * [`JsonLDTerm`](Util/JsonLDTerm.cs) - encapsulates the `object | IRI` typing used in JSON-LD term definitions. Does not parse or enforce IRI correctness - its just a `string`.
 * [`Linkable<T>`](Util/Linkable.cs) - encapsulates the `Range: Link | T` construction used in ActivityStreams.
 * [`LinkableList<T>`](Util/LinkableList.cs) - encapsulates the `Range: (Link | T)[]` construction used in ActivityStreams, as well as the extra cursed `Link | T | (Link | T)[]` variant.
-* [`NaturalLanguageString`](Util/NaturalLanguageString.cs) - supports language-tag mapped strings. The current implementation is subpar and will be replaced in [#12](https://github.com/warriordog/ActivityPubSharp/issues/12).
+* [`NaturalLanguageString`](Util/NaturalLanguageString.cs) - models BCP47 language-tag mapped strings.
 
 ## Collections
 
