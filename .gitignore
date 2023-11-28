@@ -7,3 +7,6 @@ obj/
 /_ReSharper.Caches/
 riderModule.iml
 *.DotSettings.user
+
+# Private resources
+/Tool/nuget-publish.ps1

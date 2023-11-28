@@ -6,7 +6,23 @@
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Version>0.1.0-snapshot.0</Version>
+        <PackRelease>true</PackRelease>
+        <Authors>acomputerdog</Authors>
+        <Description>ActivityPubSharp is a toolkit of modular packages that support the use of ActivityPub in .NET applications. This package contains core utilities, services, and configuration for all ActivityPub use cases.</Description>
+        <Copyright>2023 Hazel Koehler</Copyright>
+        <PackageProjectUrl>https://github.com/warriordog/ActivityPubSharp</PackageProjectUrl>
+        <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/warriordog/ActivityPubSharp.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <PackageTags>ActivityPub ActivityPubSharp APSharp ActivityStream JSON-LD Fediverse Mastodon</PackageTags>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="readme.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\ActivityPub.Types\ActivityPub.Types.csproj"/>
