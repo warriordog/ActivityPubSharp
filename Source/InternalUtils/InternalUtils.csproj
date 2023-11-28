@@ -6,6 +6,8 @@
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IsPackable>false</IsPackable>
+        <Version>0.1.0-snapshot.0</Version>
     </PropertyGroup>
 
 </Project>
