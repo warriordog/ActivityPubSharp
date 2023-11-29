@@ -1,13 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <!-- https://github.com/dotnet/sdk/issues/6572#issuecomment-299183988 -->
+        <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+        <Version>0.1.0</Version>
+        <Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <IsPackable>false</IsPackable>
-        <Version>0.1.0-snapshot.0</Version>
     </PropertyGroup>
 
 </Project>
