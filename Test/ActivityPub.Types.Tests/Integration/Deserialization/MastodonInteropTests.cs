@@ -1,6 +1,7 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Diagnostics.CodeAnalysis;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Tests.Util.Fixtures;
 
@@ -62,6 +63,7 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
     }
     
     [Fact]
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public void MastodonUpdateNoteActivity_ShouldConvertCorrectly()
     {
         JsonUnderTest = """
@@ -142,6 +144,7 @@ public class MastodonInteropTests : DeserializationTests<ASObject>
     }
     
     [Fact]
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public void MastodonActor_ShouldConvertCorrectly()
     {
         JsonUnderTest = """

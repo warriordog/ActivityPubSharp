@@ -120,7 +120,7 @@ public sealed class NaturalLanguageString
     }
 
     /// <summary>
-    ///     Checks if a value exists for the target language and all subtags.
+    ///     Checks if a value exists for the target language and all sub-tags.
     ///     This version will not inherit from language roots or <see cref="DefaultValue"/>.
     /// </summary>
     /// <seealso cref="Has"/>
