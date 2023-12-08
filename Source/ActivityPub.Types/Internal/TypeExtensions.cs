@@ -4,7 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace InternalUtils;
+namespace ActivityPub.Types.Internal;
 
 /// <summary>
 ///     Internal utilities for working with .NET types reflectively

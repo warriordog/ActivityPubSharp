@@ -4,7 +4,6 @@
 using System.Reflection;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
-using InternalUtils;
 
 namespace ActivityPub.Types.Internal.Pivots;
 

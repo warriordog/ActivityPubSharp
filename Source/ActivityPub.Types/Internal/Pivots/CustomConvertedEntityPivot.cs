@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using ActivityPub.Types.Conversion.Overrides;
-using InternalUtils;
 
 namespace ActivityPub.Types.Internal.Pivots;
 
