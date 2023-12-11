@@ -8,7 +8,6 @@ using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
-using InternalUtils;
 
 namespace ActivityPub.Types;
 

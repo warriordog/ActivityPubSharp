@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
-using InternalUtils;
 
 namespace ActivityPub.Types.Internal;
 

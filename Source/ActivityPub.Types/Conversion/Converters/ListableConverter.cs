@@ -3,7 +3,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using InternalUtils;
+using ActivityPub.Types.Internal;
 
 namespace ActivityPub.Types.Conversion.Converters;
 

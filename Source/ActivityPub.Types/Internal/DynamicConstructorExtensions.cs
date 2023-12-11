@@ -1,6 +1,6 @@
 using System.Reflection.Emit;
 
-namespace InternalUtils;
+namespace ActivityPub.Types.Internal;
 
 internal static class DynamicConstructorExtensions
 { 

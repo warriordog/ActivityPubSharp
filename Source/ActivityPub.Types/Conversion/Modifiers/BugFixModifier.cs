@@ -3,7 +3,7 @@
 
 using System.Text.Json.Serialization.Metadata;
 using ActivityPub.Types.AS;
-using InternalUtils;
+using ActivityPub.Types.Internal;
 
 namespace ActivityPub.Types.Conversion.Modifiers;
 

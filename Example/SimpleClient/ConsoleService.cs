@@ -6,8 +6,8 @@ using System.Text.Json.Serialization;
 using ActivityPub.Client;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion;
+using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
-using InternalUtils;
 using Microsoft.Extensions.Hosting;
 
 namespace SimpleClient;
