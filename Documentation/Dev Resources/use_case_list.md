@@ -1,7 +1,7 @@
 
 # List of Use Cases
 
-![Labeled boxes showing the categories and names of all use cases.](use_case_list.drawio.png)
+![Labeled boxes showing the categories and names of all use cases.](../images/use_case_list.drawio.png)
 
 ## High-level use cases:
 
