@@ -32,7 +32,7 @@ jobs:
         dotnet-version: 7.x
 
     - run: dotnet tool update -g docfx
-    - run: docfx <docfx-project-path>/docfx.json
+    - run: docfx Documentation/docfx.json
 
     - name: Setup Pages
       uses: actions/configure-pages@v3
