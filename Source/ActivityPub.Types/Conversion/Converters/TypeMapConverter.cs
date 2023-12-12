@@ -105,7 +105,7 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
         // Nameless entities must be checked for every input JSON.
         // Any that match are converted like normal entities, but skipping the usual AS type lookup.
         foreach (var entityType in _asTypeInfoCache.NamelessEntityTypes)
-            if (_namelessEntityPivot.ShouldConvert(entityType, meta.LDContext))
+            if (_namelessEntityPivot.ShouldConvert(entityType, meta))
                 ReadEntity(jsonElement, meta, entityType);
     }
     
@@ -114,13 +114,13 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
         // Anonymous entities must be checked for every input JSON.
         // Any that match are converted like normal entities, but skipping the usual AS type / context lookup.
         foreach (var entityType in _asTypeInfoCache.AnonymousEntityTypes)
-            if (_anonymousEntityPivot.ShouldConvert(entityType, jsonElement))
+            if (_anonymousEntityPivot.ShouldConvert(entityType, jsonElement, meta))
                 ReadEntity(jsonElement, meta, entityType);
         
         // Registered anonymous entity selectors must also run for every input.
         // They can each identify any number of anonymous entities.
         foreach (var selector in _conversionOptions.AnonymousEntitySelectors)
-            foreach (var entityType in selector.SelectAnonymousEntities(jsonElement))
+            foreach (var entityType in selector.SelectAnonymousEntities(jsonElement, meta))
                 ReadEntity(jsonElement, meta, entityType);
     }
 

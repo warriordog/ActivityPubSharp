@@ -89,8 +89,8 @@ public abstract class ASTypeInfoCacheTests
 
 public class FakeTypeWithInvalidInterfaces : ASType, IAnonymousEntity, INamelessEntity
 {
-    public static bool ShouldConvertFrom(JsonElement inputJson) => throw new NotSupportedException();
-    public static bool ShouldConvertFrom(IJsonLDContext jsonLDContext) => throw new NotSupportedException();
+    public static bool ShouldConvertFrom(JsonElement inputJson, DeserializationMetadata meta) => throw new NotSupportedException();
+    public static bool ShouldConvertFrom(IJsonLDContext jsonLDContext, DeserializationMetadata meta) => throw new NotSupportedException();
 }
 
 public class FakeTypeForASTypeInfoCacheTests : ASLink, IASModel<FakeTypeForASTypeInfoCacheTests, FakeTypeForASTypeInfoCacheTestsEntity, ASLink>

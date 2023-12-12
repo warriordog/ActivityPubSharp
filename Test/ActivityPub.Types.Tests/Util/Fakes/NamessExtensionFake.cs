@@ -64,6 +64,6 @@ public sealed class NamelessExtensionFakeEntity : ASEntity<NamelessExtensionFake
     public string ExtendedString { get; set; } = "";
     public int ExtendedInt { get; set; }
 
-    public static bool ShouldConvertFrom(IJsonLDContext jsonLDContext)
+    public static bool ShouldConvertFrom(IJsonLDContext jsonLDContext, DeserializationMetadata meta)
         => jsonLDContext.Contains(NamelessExtensionFake.NamelessExtensionContext);
 }

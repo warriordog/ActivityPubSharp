@@ -10,7 +10,7 @@ public class AnonymousEntitySelectorFake : IAnonymousEntitySelector
 {
     public Dictionary<string, Type> PropertyNameMapping { get; set; } = new();
 
-    public IEnumerable<Type> SelectAnonymousEntities(JsonElement inputJson)
+    public IEnumerable<Type> SelectAnonymousEntities(JsonElement inputJson, DeserializationMetadata meta)
     {
         if (inputJson.ValueKind != JsonValueKind.Object)
             yield break;

@@ -17,5 +17,6 @@ public interface IAnonymousEntitySelector
     ///     Checks a JSON message to identify all anonymous entities within it.
     /// </summary>
     /// <param name="inputJson">JSON message that is being converted. May not be an object.</param>
-    public IEnumerable<Type> SelectAnonymousEntities(JsonElement inputJson);
+    /// <param name="meta">Metadata that has already been parsed from the JSON.</param>
+    public IEnumerable<Type> SelectAnonymousEntities(JsonElement inputJson, DeserializationMetadata meta);
 }

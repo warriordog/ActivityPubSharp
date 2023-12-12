@@ -17,5 +17,6 @@ public interface IAnonymousEntity
     ///     Checks if this entity should be deserialized from the given JSON message.
     /// </summary>
     /// <param name="inputJson">JSON message that is being converted. May not be an object.</param>
-    public static abstract bool ShouldConvertFrom(JsonElement inputJson);
+    /// <param name="meta">Metadata that has already been parsed from the JSON.</param>
+    public static abstract bool ShouldConvertFrom(JsonElement inputJson, DeserializationMetadata meta);
 }

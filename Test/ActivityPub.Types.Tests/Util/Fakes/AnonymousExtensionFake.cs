@@ -52,7 +52,7 @@ public sealed class AnonymousExtensionFakeEntity : ASEntity<AnonymousExtensionFa
     public string ExtendedString { get; set; } = "";
     public int ExtendedInt { get; set; }
 
-    public static bool ShouldConvertFrom(JsonElement inputJson)
+    public static bool ShouldConvertFrom(JsonElement inputJson, DeserializationMetadata meta)
     {
         if (inputJson.ValueKind != JsonValueKind.Object)
             return false;

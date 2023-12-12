@@ -182,7 +182,7 @@ public sealed class APActorEntity : ASEntity<APActor, APActorEntity>, IAnonymous
     public Linkable<ActorEndpoints>? Endpoints { get; set; }
 
     /// <inheritdoc />
-    public static bool ShouldConvertFrom(JsonElement inputJson)
+    public static bool ShouldConvertFrom(JsonElement inputJson, DeserializationMetadata meta)
     {
         if (inputJson.ValueKind != JsonValueKind.Object)
             return false;

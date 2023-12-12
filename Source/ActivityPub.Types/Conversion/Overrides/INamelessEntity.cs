@@ -15,5 +15,7 @@ public interface INamelessEntity
     /// <summary>
     ///     Checks if this entity should be included by the given JSON-LD context.
     /// </summary>
-    public static abstract bool ShouldConvertFrom(IJsonLDContext jsonLDContext);
+    /// <param name="jsonLDContext">JSON-LD context that describes the JSON message.</param>
+    /// <param name="meta">Metadata that has already been parsed from the JSON.</param>
+    public static abstract bool ShouldConvertFrom(IJsonLDContext jsonLDContext, DeserializationMetadata meta);
 }

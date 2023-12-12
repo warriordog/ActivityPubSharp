@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Internal.Pivots;
 
 internal interface INamelessEntityPivot
 {
-    bool ShouldConvert(Type entityType, IJsonLDContext jsonLDContext);
+    bool ShouldConvert(Type entityType, DeserializationMetadata meta);
 }
 
 internal class NamelessEntityPivot : INamelessEntityPivot
@@ -20,10 +20,10 @@ internal class NamelessEntityPivot : INamelessEntityPivot
             .GetRequiredMethod(nameof(CreateNamelessChecker), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
             .CreateGenericPivotFunc<NamelessChecker>();
 
-    public bool ShouldConvert(Type entityType, IJsonLDContext jsonLDContext)
+    public bool ShouldConvert(Type entityType, DeserializationMetadata meta)
     {
         var checker = GetNamelessChecker(entityType);
-        return checker.ShouldConvert(jsonLDContext);
+        return checker.ShouldConvert(meta);
     }
     
     private NamelessChecker GetNamelessChecker(Type entityType)
@@ -43,13 +43,13 @@ internal class NamelessEntityPivot : INamelessEntityPivot
     
     private abstract class NamelessChecker
     {
-        public abstract bool ShouldConvert(IJsonLDContext jsonLDContext);
+        public abstract bool ShouldConvert(DeserializationMetadata meta);
     }
 
     private class NamelessChecker<T> : NamelessChecker
         where T : INamelessEntity
     {
-        public override bool ShouldConvert(IJsonLDContext jsonLDContext)
-            => T.ShouldConvertFrom(jsonLDContext);
+        public override bool ShouldConvert(DeserializationMetadata meta)
+            => T.ShouldConvertFrom(meta.LDContext, meta);
     }
 }

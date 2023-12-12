@@ -2,14 +2,24 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Types.AS;
+using ActivityPub.Types.Conversion;
+using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal.Pivots;
 using ActivityPub.Types.Tests.Util.Fakes;
+using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Internal;
 
 public abstract class AnonymousEntityPivotTests
 {
     private AnonymousEntityPivot PivotUnderTest { get; } = new();
+
+    private DeserializationMetadata StubDeserializationMetadata { get; } = new()
+    {
+        TypeMap = new TypeMap(),
+        JsonSerializerOptions = JsonSerializerOptions.Default,
+        LDContext = new JsonLDContext()
+    };
     
     public class ShouldConvertShould : AnonymousEntityPivotTests
     {
@@ -18,14 +28,14 @@ public abstract class AnonymousEntityPivotTests
         {
             Assert.ThrowsAny<Exception>(() =>
             {
-                PivotUnderTest.ShouldConvert(typeof(ASType), new JsonElement());
+                PivotUnderTest.ShouldConvert(typeof(ASType), new JsonElement(), StubDeserializationMetadata);
             });
         }
         
         [Fact]
         public void ReturnFalse_WhenMethodReturnsFalse()
         {
-            var result = PivotUnderTest.ShouldConvert(typeof(AnonymousExtensionFakeEntity), new JsonElement());
+            var result = PivotUnderTest.ShouldConvert(typeof(AnonymousExtensionFakeEntity), new JsonElement(), StubDeserializationMetadata);
             result.Should().BeFalse();
         }
         
@@ -34,7 +44,7 @@ public abstract class AnonymousEntityPivotTests
         {
             const string Json = """{"ExtendedString":"value"}""";
             var jsonElement = JsonSerializer.Deserialize<JsonElement>(Json);
-            var result = PivotUnderTest.ShouldConvert(typeof(AnonymousExtensionFakeEntity), jsonElement);
+            var result = PivotUnderTest.ShouldConvert(typeof(AnonymousExtensionFakeEntity), jsonElement, StubDeserializationMetadata);
             result.Should().BeTrue();
         }
     }

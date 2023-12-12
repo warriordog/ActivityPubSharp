@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Internal.Pivots;
 
 internal interface IAnonymousEntityPivot
 {
-    bool ShouldConvert(Type entityType, JsonElement jsonElement);
+    bool ShouldConvert(Type entityType, JsonElement jsonElement, DeserializationMetadata meta);
 }
 
 internal class AnonymousEntityPivot : IAnonymousEntityPivot
@@ -20,10 +20,10 @@ internal class AnonymousEntityPivot : IAnonymousEntityPivot
         .GetRequiredMethod(nameof(CreateAnonymousChecker), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
         .CreateGenericPivotFunc<AnonymousChecker>();
 
-    public bool ShouldConvert(Type entityType, JsonElement jsonElement)
+    public bool ShouldConvert(Type entityType, JsonElement jsonElement, DeserializationMetadata meta)
     {
         var checker = GetAnonymousChecker(entityType);
-        return checker.ShouldConvert(jsonElement);
+        return checker.ShouldConvert(jsonElement, meta);
     }
     
     private AnonymousChecker GetAnonymousChecker(Type entityType)
@@ -43,13 +43,13 @@ internal class AnonymousEntityPivot : IAnonymousEntityPivot
     
     private abstract class AnonymousChecker
     {
-        public abstract bool ShouldConvert(JsonElement jsonElement);
+        public abstract bool ShouldConvert(JsonElement jsonElement, DeserializationMetadata meta);
     }
 
     private class AnonymousChecker<T> : AnonymousChecker
         where T : IAnonymousEntity
     {
-        public override bool ShouldConvert(JsonElement jsonElement)
-            => T.ShouldConvertFrom(jsonElement);
+        public override bool ShouldConvert(JsonElement jsonElement, DeserializationMetadata meta)
+            => T.ShouldConvertFrom(jsonElement, meta);
     }
 }
