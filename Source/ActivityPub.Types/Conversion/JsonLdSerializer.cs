@@ -41,13 +41,9 @@ public interface IJsonLdSerializer
 public class JsonLdSerializer : IJsonLdSerializer
 {
     /// <summary>
+    ///     Constructs a new instance of JsonLdSerializer from the provided services.
+    ///     This is meant to be called implicitly by a DI container, but can be used directly for testing or advanced use cases.
     /// </summary>
-    /// <param name="serializerOptions"></param>
-    /// <param name="typeMapConverter"></param>
-    /// <param name="asTypeConverter"></param>
-    /// <param name="linkableConverter"></param>
-    /// <param name="listableConverter"></param>
-    /// <param name="listableReadOnlyConverter"></param>
     [SuppressMessage("ReSharper", "SuggestBaseTypeForParameterInConstructor")]
     public JsonLdSerializer
     (
