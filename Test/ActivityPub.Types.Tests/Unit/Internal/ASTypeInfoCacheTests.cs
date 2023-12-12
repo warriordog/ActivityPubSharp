@@ -3,8 +3,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 using ActivityPub.Types.AS;
+using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Conversion.Overrides;
-using ActivityPub.Types.Internal;
 using ActivityPub.Types.Tests.Util.Fakes;
 using ActivityPub.Types.Util;
 

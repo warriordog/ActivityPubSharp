@@ -14,16 +14,20 @@ namespace ActivityPub.Types.Conversion.Converters;
 /// <summary>
 ///     Converts types that can be either <see cref="ASLink" /> or some other type.
 /// </summary>
-internal class LinkableConverter : JsonConverterFactory
+public class LinkableConverter : JsonConverterFactory
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
+
+    /// <inheritdoc />
     public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
 
     // We only convert Linkable<T>
+    /// <inheritdoc />
     public override bool CanConvert(Type type) =>
         type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Linkable<>);
 
     // Pivot the type into correct instance
+    /// <inheritdoc />
     public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)
     {
         var valueType = type.GetGenericArguments()[0];

@@ -1,4 +1,4 @@
-﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Reflection;
@@ -7,18 +7,13 @@ using ActivityPub.Types.Conversion.Overrides;
 
 namespace ActivityPub.Types.Internal.Pivots;
 
-internal interface IAnonymousEntityPivot
-{
-    bool ShouldConvert(Type entityType, JsonElement jsonElement, DeserializationMetadata meta);
-}
-
-internal class AnonymousEntityPivot : IAnonymousEntityPivot
+internal class AnonymousEntityPivot
 {
     private readonly Dictionary<Type, AnonymousChecker> _anonymousCheckerCache = new();
     private readonly Func<Type, AnonymousChecker> _createAnonymousChecker =
         typeof(AnonymousEntityPivot)
-        .GetRequiredMethod(nameof(CreateAnonymousChecker), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-        .CreateGenericPivotFunc<AnonymousChecker>();
+            .GetRequiredMethod(nameof(CreateAnonymousChecker), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+            .CreateGenericPivotFunc<AnonymousChecker>();
 
     public bool ShouldConvert(Type entityType, JsonElement jsonElement, DeserializationMetadata meta)
     {

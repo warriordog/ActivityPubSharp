@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Internal;
-using ActivityPub.Types.Internal.Pivots;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -28,9 +27,6 @@ public static class TypesModule
     /// </summary>
     public static void TryAddTypesModule(this IServiceCollection services)
     {
-        services.TryAddSingleton<INamelessEntityPivot, NamelessEntityPivot>();
-        services.TryAddSingleton<IAnonymousEntityPivot, AnonymousEntityPivot>();
-        services.TryAddSingleton<ICustomConvertedEntityPivot, CustomConvertedEntityPivot>();
         services.TryAddSingleton<IJsonLdSerializer, JsonLdSerializer>();
         
         services.TryAddSingleton<IASTypeInfoCache>(

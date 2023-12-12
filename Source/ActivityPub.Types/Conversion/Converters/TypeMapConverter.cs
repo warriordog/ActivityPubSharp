@@ -9,27 +9,29 @@ using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Internal.Pivots;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-internal class TypeMapConverter : JsonConverter<TypeMap>
+/// <inheritdoc />
+public class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     private readonly IConversionOptions _conversionOptions;
-    private readonly INamelessEntityPivot _namelessEntityPivot;
-    private readonly IAnonymousEntityPivot _anonymousEntityPivot;
-    private readonly ICustomConvertedEntityPivot _customConvertedEntityPivot;
-    
-    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, IAnonymousEntityPivot anonymousEntityPivot, INamelessEntityPivot namelessEntityPivot, ICustomConvertedEntityPivot customConvertedEntityPivot)
+    private readonly NamelessEntityPivot _namelessEntityPivot = new();
+    private readonly AnonymousEntityPivot _anonymousEntityPivot = new();
+    private readonly CustomConvertedEntityPivot _customConvertedEntityPivot = new();
+
+    /// <inheritdoc />
+    [UsedImplicitly]
+    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions)
     {
         _asTypeInfoCache = asTypeInfoCache;
-        _anonymousEntityPivot = anonymousEntityPivot;
-        _namelessEntityPivot = namelessEntityPivot;
-        _customConvertedEntityPivot = customConvertedEntityPivot;
         _conversionOptions = conversionOptions.Value;
     }
 
+    /// <inheritdoc />
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Read input into temporary object
@@ -180,6 +182,7 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
                ?? throw new JsonException("Can't convert TypeMap - \"@context\" is null");
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, TypeMap typeMap, JsonSerializerOptions options)
     {
         // Construct meta

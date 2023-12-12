@@ -132,3 +132,10 @@ See the [ActivityStreams documentation](https://www.w3.org/TR/activitystreams-co
 |------------------------------------------------------------------|-----------------------------|----------------------------------------------------------------------------|
 | [JsonLdSerializerOptions](Conversion/JsonLdSerializerOptions.cs) | N/A - not mapped by default | Options for the default [JsonLdSerializer](Conversion/JsonLdSerializer.cs) |
 | [ConversionOptions](Conversion/Overrides/ConversionOptions.cs)   | N/A - not mapped by default | General JSON / JSON-LD conversion options                                  |
+
+## Available Services
+
+| Service                                               | Implementation                                          | Description                                                           |
+|-------------------------------------------------------|---------------------------------------------------------|-----------------------------------------------------------------------|
+| [`IJsonLdSerializer`](Conversion/JsonLdSerializer.cs) | [`JsonLdSerializer.cs`](Conversion/JsonLdSerializer.cs) | Parses and serializes ActivityStreams messages from JSON or JSON-LD.  |
+| [`IASTypeInfoCache`](Conversion/ASTypeInfoCache.cs)   | [`ASTypeInfoCache`](Conversion/ASTypeInfoCache.cs)      | Indexes metadata related to AS / AP types defined in the application. |

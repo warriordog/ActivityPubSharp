@@ -8,16 +8,7 @@ using ActivityPub.Types.Conversion.Overrides;
 
 namespace ActivityPub.Types.Internal.Pivots;
 
-internal interface ICustomConvertedEntityPivot
-{
-    public ASEntity? ReadEntity(Type entityType, JsonElement jsonElement, DeserializationMetadata meta);
-    public void PostReadEntity(Type entityType, JsonElement jsonElement, DeserializationMetadata meta, ASEntity entity);
-
-    public JsonElement? WriteEntity(Type entityType, ASEntity entity, SerializationMetadata meta);
-    public void PostWriteEntity(Type entityType, ASEntity entity, SerializationMetadata meta, JsonElement entityJson, JsonObject outputJson);
-}
-
-internal class CustomConvertedEntityPivot : ICustomConvertedEntityPivot
+internal class CustomConvertedEntityPivot
 {
     private readonly Dictionary<Type, bool> _knownCustomConverters = new();
     

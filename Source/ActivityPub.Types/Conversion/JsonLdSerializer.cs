@@ -40,8 +40,12 @@ public interface IJsonLdSerializer
 /// </summary>
 public class JsonLdSerializer : IJsonLdSerializer
 {
+    /// <summary>
+    ///     Constructs a new instance of JsonLdSerializer from the provided services.
+    ///     This is meant to be called implicitly by a DI container, but can be used directly for testing or advanced use cases.
+    /// </summary>
     [SuppressMessage("ReSharper", "SuggestBaseTypeForParameterInConstructor")]
-    internal JsonLdSerializer
+    public JsonLdSerializer
     (
         IOptions<JsonLdSerializerOptions> serializerOptions,
         TypeMapConverter typeMapConverter,
@@ -66,11 +70,18 @@ public class JsonLdSerializer : IJsonLdSerializer
             }
         };
 
+    /// <inheritdoc />
     public JsonSerializerOptions SerializerOptions { get; }
 
+    /// <inheritdoc />
     public T? Deserialize<T>(string json) => JsonSerializer.Deserialize<T>(json, SerializerOptions);
+
+    /// <inheritdoc />
     public object? Deserialize(string json, Type type) => JsonSerializer.Deserialize(json, type, SerializerOptions);
 
+    /// <inheritdoc />
     public string Serialize<T>(T? value) => JsonSerializer.Serialize(value, SerializerOptions);
+
+    /// <inheritdoc />
     public JsonElement SerializeToElement<T>(T? value) => JsonSerializer.SerializeToElement(value, SerializerOptions);
 }

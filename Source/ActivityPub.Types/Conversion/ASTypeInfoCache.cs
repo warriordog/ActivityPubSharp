@@ -5,13 +5,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
+using ActivityPub.Types.Internal;
 
-namespace ActivityPub.Types.Internal;
+namespace ActivityPub.Types.Conversion;
 
 /// <summary>
 ///     Extracts and stores metadata for ActivityStreams types within the application.
 /// </summary>
-internal interface IASTypeInfoCache
+public interface IASTypeInfoCache
 {
     /// <summary>
     ///     Finds the .NET type(s) that implement a set of AS types.
@@ -22,46 +23,52 @@ internal interface IASTypeInfoCache
     /// <param name="mappedEntities">All known entities that represent the types.</param>
     /// <param name="unmappedTypes">Any AS types that did not map to an entity.</param>
     /// <returns>Set of all located types</returns>
-    internal void MapASTypesToEntities(IEnumerable<string> asTypes, out HashSet<Type> mappedEntities, out HashSet<string> unmappedTypes);
+    public void MapASTypesToEntities(IEnumerable<string> asTypes, out HashSet<Type> mappedEntities, out HashSet<string> unmappedTypes);
 
     /// <summary>
     ///     Gets the .NET type that implements a specified AS type.
     ///     Returns true on success or false on failure, following the TryGet pattern.
     /// </summary>
-    bool TryGetModelType(string asType, [NotNullWhen(true)] out Type? modelType);
+    public bool TryGetModelType(string asType, [NotNullWhen(true)] out Type? modelType);
     
     /// <summary>
     ///     All known types that implement <see cref="IAnonymousEntity"/>.
     /// </summary>
-    internal IEnumerable<Type> AnonymousEntityTypes { get; }
+    public IEnumerable<Type> AnonymousEntityTypes { get; }
 
     /// <summary>
     ///     All known types that implement <see cref="INamelessEntity"/>.
     /// </summary>
-    internal IEnumerable<Type> NamelessEntityTypes { get; }
+    public IEnumerable<Type> NamelessEntityTypes { get; }
     
     /// <summary>
     ///     Find and load all ActivityStreams types in a particular assembly.
     /// </summary>
     /// <param name="assembly">Assembly to load</param>
-    void RegisterAssembly(Assembly assembly);
+    public void RegisterAssembly(Assembly assembly);
 
     /// <summary>
     ///     Find and load all ActivityStreams types in all loaded assemblies.
     /// </summary>
-    void RegisterAllAssemblies();
+    public void RegisterAllAssemblies();
 }
 
-internal class ASTypeInfoCache : IASTypeInfoCache
+/// <summary>
+///     Default implementation of <see cref="IASTypeInfoCache"/>.
+///     At startup, uses reflection to index all loaded types.
+/// </summary>
+public class ASTypeInfoCache : IASTypeInfoCache
 {
     private readonly HashSet<Assembly> _registeredAssemblies = new();
     
     private readonly Dictionary<Type, ModelMeta> _typeMetaMap = new();
     private readonly Dictionary<string, ModelMeta> _nameMetaMap = new();
 
+    /// <inheritdoc />
     public IEnumerable<Type> AnonymousEntityTypes => _anonymousEntityTypes;
     private readonly HashSet<Type> _anonymousEntityTypes = new();
 
+    /// <inheritdoc />
     public IEnumerable<Type> NamelessEntityTypes => _namelessEntityTypes;
     private readonly HashSet<Type> _namelessEntityTypes = new();
 
@@ -76,6 +83,7 @@ internal class ASTypeInfoCache : IASTypeInfoCache
             .GetRequiredMethod(nameof(CreateModelMetaFor), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
             .CreateGenericPivotFunc<ModelMeta>(this);
 
+    /// <inheritdoc />
     public void MapASTypesToEntities(IEnumerable<string> asTypes, out HashSet<Type> mappedEntities, out HashSet<string> unmappedTypes)
     {
         mappedEntities = new HashSet<Type>();
@@ -93,6 +101,7 @@ internal class ASTypeInfoCache : IASTypeInfoCache
         }
     }
 
+    /// <inheritdoc />
     public bool TryGetModelType(string asType, [NotNullWhen(true)] out Type? modelType)
     {
         if (_nameMetaMap.TryGetValue(asType, out var meta))
@@ -105,12 +114,14 @@ internal class ASTypeInfoCache : IASTypeInfoCache
         return false;
     }
 
+    /// <inheritdoc />
     public void RegisterAllAssemblies()
     {
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             RegisterAssembly(assembly);
     }
 
+    /// <inheritdoc />
     public void RegisterAssembly(Assembly assembly)
     {
         // Make sure we only check each assembly once.

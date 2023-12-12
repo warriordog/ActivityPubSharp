@@ -1,18 +1,12 @@
-﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Reflection;
 using ActivityPub.Types.Conversion.Overrides;
-using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Internal.Pivots;
 
-internal interface INamelessEntityPivot
-{
-    bool ShouldConvert(Type entityType, DeserializationMetadata meta);
-}
-
-internal class NamelessEntityPivot : INamelessEntityPivot
+internal class NamelessEntityPivot
 {
     private readonly Dictionary<Type, NamelessChecker> _namelessCheckerCache = new();
     private readonly Func<Type, NamelessChecker> _createNamelessChecker =
