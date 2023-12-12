@@ -35,7 +35,10 @@ public interface IJsonLdSerializer
     public JsonElement SerializeToElement<T>(T? value);
 }
 
-internal class JsonLdSerializer : IJsonLdSerializer
+/// <summary>
+///     Default implementation of <see cref="IJsonLdSerializer"/>.
+/// </summary>
+public class JsonLdSerializer : IJsonLdSerializer
 {
     [SuppressMessage("ReSharper", "SuggestBaseTypeForParameterInConstructor")]
     internal JsonLdSerializer
