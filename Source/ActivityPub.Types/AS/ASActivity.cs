@@ -66,7 +66,7 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     ///     Identifies one or more objects used (or to be used) in the completion of an Activity.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-instrument" />
-    public LinkableList<ASObject>? Instrument
+    public LinkableList<ASObject> Instrument
     {
         get => Entity.Instrument;
         set => Entity.Instrument = value;
@@ -77,7 +77,7 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     ///     For instance, in the activity "John added a movie to his wishlist", the object of the activity is the movie added.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-object" />
-    public LinkableList<ASObject>? Object
+    public LinkableList<ASObject> Object
     {
         get => Entity.Object;
         set => Entity.Object = value;
@@ -89,7 +89,7 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     ///     For instance, in the activity "John moved an item to List B from List A", the origin of the activity is "List A".
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-origin" />
-    public LinkableList<ASObject>? Origin
+    public LinkableList<ASObject> Origin
     {
         get => Entity.Origin;
         set => Entity.Origin = value;
@@ -100,7 +100,7 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     ///     For instance, if a particular action results in the creation of a new resource, the result property can be used to describe that new resource.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-result" />
-    public LinkableList<ASObject>? Result
+    public LinkableList<ASObject> Result
     {
         get => Entity.Result;
         set => Entity.Result = value;
@@ -114,7 +114,7 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-target" />
     /// <seealso href="https://www.w3.org/TR/activitypub/#client-addressing" />
-    public LinkableList<ASObject>? Target
+    public LinkableList<ASObject> Target
     {
         get => Entity.Target;
         set => Entity.Target = value;
@@ -130,21 +130,21 @@ public sealed class ASActivityEntity : ASEntity<ASActivity, ASActivityEntity>
 
     /// <inheritdoc cref="ASActivity.Instrument" />
     [JsonPropertyName("instrument")]
-    public LinkableList<ASObject>? Instrument { get; set; }
+    public LinkableList<ASObject> Instrument { get; set; } = new();
     
     /// <inheritdoc cref="ASActivity.Object" />
     [JsonPropertyName("object")]
-    public LinkableList<ASObject>? Object { get; set; }
+    public LinkableList<ASObject> Object { get; set; } = new();
 
     /// <inheritdoc cref="ASActivity.Origin" />
     [JsonPropertyName("origin")]
-    public LinkableList<ASObject>? Origin { get; set; }
+    public LinkableList<ASObject> Origin { get; set; } = new();
 
     /// <inheritdoc cref="ASActivity.Result" />
     [JsonPropertyName("result")]
-    public LinkableList<ASObject>? Result { get; set; }
+    public LinkableList<ASObject> Result { get; set; } = new();
     
     /// <inheritdoc cref="ASActivity.Target" />
     [JsonPropertyName("target")]
-    public LinkableList<ASObject>? Target { get; set; }
+    public LinkableList<ASObject> Target { get; set; } = new();
 }
