@@ -7,14 +7,11 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using ActivityPub.Types.Conversion.Overrides;
-using ActivityPub.Types.Conversion.Pivots;
 using ActivityPub.Types.Internal;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-public partial class TypeMapConverter
-{
-    internal class CustomConvertedEntityPivot : ICustomConvertedEntityPivot
+internal class CustomConvertedEntityPivot
 {
     private readonly Dictionary<Type, bool> _knownCustomConverters = new();
     
@@ -129,6 +126,4 @@ public partial class TypeMapConverter
     private static void PostWriteEntity<TEntity>(ASEntity entity, SerializationMetadata meta, JsonElement entityJson, JsonObject outputJson)
         where TEntity : ASEntity, ICustomConvertedEntity<TEntity>
         => TEntity.PostWriteEntity((TEntity)entity, meta, entityJson, outputJson);
-}
-
 }

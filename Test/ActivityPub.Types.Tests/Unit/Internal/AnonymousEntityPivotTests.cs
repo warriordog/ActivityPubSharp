@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Tests.Unit.Internal;
 
 public abstract class AnonymousEntityPivotTests
 {
-    private TypeMapConverter.AnonymousEntityPivot PivotUnderTest { get; } = new();
+    private AnonymousEntityPivot PivotUnderTest { get; } = new();
 
     private DeserializationMetadata StubDeserializationMetadata { get; } = new()
     {
