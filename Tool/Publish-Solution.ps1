@@ -39,4 +39,4 @@ Write-Output "";
     -NugetKey $NugetKey `
     -BuildConfig $BuildConfig `
     -Snapshot:$Snapshot `
-    $packageNames;
+    -PackageNames $packageNames;
