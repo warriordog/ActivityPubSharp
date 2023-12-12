@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
+using ActivityPub.Types.Internal.Pivots;
 using ActivityPub.Types.Util;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
