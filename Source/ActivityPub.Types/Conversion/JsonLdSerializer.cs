@@ -40,8 +40,16 @@ public interface IJsonLdSerializer
 /// </summary>
 public class JsonLdSerializer : IJsonLdSerializer
 {
+    /// <summary>
+    /// </summary>
+    /// <param name="serializerOptions"></param>
+    /// <param name="typeMapConverter"></param>
+    /// <param name="asTypeConverter"></param>
+    /// <param name="linkableConverter"></param>
+    /// <param name="listableConverter"></param>
+    /// <param name="listableReadOnlyConverter"></param>
     [SuppressMessage("ReSharper", "SuggestBaseTypeForParameterInConstructor")]
-    internal JsonLdSerializer
+    public JsonLdSerializer
     (
         IOptions<JsonLdSerializerOptions> serializerOptions,
         TypeMapConverter typeMapConverter,
@@ -66,11 +74,18 @@ public class JsonLdSerializer : IJsonLdSerializer
             }
         };
 
+    /// <inheritdoc />
     public JsonSerializerOptions SerializerOptions { get; }
 
+    /// <inheritdoc />
     public T? Deserialize<T>(string json) => JsonSerializer.Deserialize<T>(json, SerializerOptions);
+
+    /// <inheritdoc />
     public object? Deserialize(string json, Type type) => JsonSerializer.Deserialize(json, type, SerializerOptions);
 
+    /// <inheritdoc />
     public string Serialize<T>(T? value) => JsonSerializer.Serialize(value, SerializerOptions);
+
+    /// <inheritdoc />
     public JsonElement SerializeToElement<T>(T? value) => JsonSerializer.SerializeToElement(value, SerializerOptions);
 }

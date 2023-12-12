@@ -7,13 +7,16 @@ using ActivityPub.Types.AS;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-internal class ASTypeConverter : JsonConverterFactory
+/// <inheritdoc />
+public class ASTypeConverter : JsonConverterFactory
 {
     private readonly Type _asTypeType = typeof(ASType);
 
 
+    /// <inheritdoc />
     public override bool CanConvert(Type typeToConvert) => typeToConvert.IsAssignableTo(_asTypeType);
 
+    /// <inheritdoc />
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
         // Create an instance of the generic converter

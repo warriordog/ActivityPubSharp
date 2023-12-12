@@ -1,23 +1,20 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+// ReSharper disable CheckNamespace
+
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using ActivityPub.Types.Conversion.Overrides;
+using ActivityPub.Types.Conversion.Pivots;
+using ActivityPub.Types.Internal;
 
-namespace ActivityPub.Types.Internal.Pivots;
+namespace ActivityPub.Types.Conversion.Converters;
 
-internal interface ICustomConvertedEntityPivot
+public partial class TypeMapConverter
 {
-    public ASEntity? ReadEntity(Type entityType, JsonElement jsonElement, DeserializationMetadata meta);
-    public void PostReadEntity(Type entityType, JsonElement jsonElement, DeserializationMetadata meta, ASEntity entity);
-
-    public JsonElement? WriteEntity(Type entityType, ASEntity entity, SerializationMetadata meta);
-    public void PostWriteEntity(Type entityType, ASEntity entity, SerializationMetadata meta, JsonElement entityJson, JsonObject outputJson);
-}
-
-internal class CustomConvertedEntityPivot : ICustomConvertedEntityPivot
+    internal class CustomConvertedEntityPivot : ICustomConvertedEntityPivot
 {
     private readonly Dictionary<Type, bool> _knownCustomConverters = new();
     
@@ -132,4 +129,6 @@ internal class CustomConvertedEntityPivot : ICustomConvertedEntityPivot
     private static void PostWriteEntity<TEntity>(ASEntity entity, SerializationMetadata meta, JsonElement entityJson, JsonObject outputJson)
         where TEntity : ASEntity, ICustomConvertedEntity<TEntity>
         => TEntity.PostWriteEntity((TEntity)entity, meta, entityJson, outputJson);
+}
+
 }

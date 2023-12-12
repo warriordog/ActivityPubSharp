@@ -6,21 +6,35 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
 using ActivityPub.Types.Conversion.Overrides;
+using ActivityPub.Types.Conversion.Pivots;
 using ActivityPub.Types.Internal;
-using ActivityPub.Types.Internal.Pivots;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-internal class TypeMapConverter : JsonConverter<TypeMap>
+/// <inheritdoc />
+public partial class TypeMapConverter : JsonConverter<TypeMap>
 {
     private readonly IASTypeInfoCache _asTypeInfoCache;
     private readonly IConversionOptions _conversionOptions;
     private readonly INamelessEntityPivot _namelessEntityPivot;
     private readonly IAnonymousEntityPivot _anonymousEntityPivot;
     private readonly ICustomConvertedEntityPivot _customConvertedEntityPivot;
-    
+
+    /// <inheritdoc />
+    [UsedImplicitly]
+    public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions)
+    {
+        _asTypeInfoCache = asTypeInfoCache;
+        _anonymousEntityPivot = new AnonymousEntityPivot();
+        _namelessEntityPivot = new NamelessEntityPivot();
+        _customConvertedEntityPivot = new CustomConvertedEntityPivot();
+        _conversionOptions = conversionOptions.Value;
+    }
+
+    /// <inheritdoc />
     public TypeMapConverter(IASTypeInfoCache asTypeInfoCache, IOptions<ConversionOptions> conversionOptions, IAnonymousEntityPivot anonymousEntityPivot, INamelessEntityPivot namelessEntityPivot, ICustomConvertedEntityPivot customConvertedEntityPivot)
     {
         _asTypeInfoCache = asTypeInfoCache;
@@ -30,6 +44,7 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
         _conversionOptions = conversionOptions.Value;
     }
 
+    /// <inheritdoc />
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Read input into temporary object
@@ -180,6 +195,7 @@ internal class TypeMapConverter : JsonConverter<TypeMap>
                ?? throw new JsonException("Can't convert TypeMap - \"@context\" is null");
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, TypeMap typeMap, JsonSerializerOptions options)
     {
         // Construct meta

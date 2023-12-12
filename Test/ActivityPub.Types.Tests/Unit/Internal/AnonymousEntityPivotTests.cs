@@ -2,9 +2,8 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using ActivityPub.Types.AS;
-using ActivityPub.Types.Conversion;
+using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Conversion.Overrides;
-using ActivityPub.Types.Internal.Pivots;
 using ActivityPub.Types.Tests.Util.Fakes;
 using ActivityPub.Types.Util;
 
@@ -12,7 +11,7 @@ namespace ActivityPub.Types.Tests.Unit.Internal;
 
 public abstract class AnonymousEntityPivotTests
 {
-    private AnonymousEntityPivot PivotUnderTest { get; } = new();
+    private TypeMapConverter.AnonymousEntityPivot PivotUnderTest { get; } = new();
 
     private DeserializationMetadata StubDeserializationMetadata { get; } = new()
     {

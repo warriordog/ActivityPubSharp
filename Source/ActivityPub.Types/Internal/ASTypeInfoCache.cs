@@ -11,7 +11,7 @@ namespace ActivityPub.Types.Internal;
 /// <summary>
 ///     Extracts and stores metadata for ActivityStreams types within the application.
 /// </summary>
-internal interface IASTypeInfoCache
+public interface IASTypeInfoCache
 {
     /// <summary>
     ///     Finds the .NET type(s) that implement a set of AS types.

@@ -11,8 +11,9 @@ namespace ActivityPub.Types.Conversion.Converters;
 ///     Converts types that can be a list of elements, or a single elements.
 ///     Essentially: T | T[]
 /// </summary>
-internal class ListableReadOnlyConverter : JsonConverterFactory
+public class ListableReadOnlyConverter : JsonConverterFactory
 {
+    /// <inheritdoc />
     public override bool CanConvert(Type type) =>
         // We only convert concrete types deriving from ICollection<T>
         type.IsAssignableToGenericType(typeof(IReadOnlyCollection<>))
@@ -23,6 +24,7 @@ internal class ListableReadOnlyConverter : JsonConverterFactory
         && !type.IsAssignableToGenericType(typeof(IReadOnlyDictionary<,>));
 
     // Pivot the type into correct converter
+    /// <inheritdoc />
     public override JsonConverter? CreateConverter(Type collectionType, JsonSerializerOptions options)
     {
         var itemType = collectionType.GetGenericArgumentsFor(typeof(IReadOnlyCollection<>))[0];
