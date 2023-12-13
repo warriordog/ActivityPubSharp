@@ -43,8 +43,12 @@ if ($Snapshot)
 Write-Output "## [publish-package] Purge old NuGet builds";
 foreach ($packageName in $PackageNames)
 {
-    $oldNugets = Get-ChildItem -Path "Source\$packageName\bin\$buildConfig" -Include "*.nupkg" -Recurse;
-    Remove-Item $oldNugets;
+    $buildDir = "Source\$packageName\bin\$buildConfig";
+    if (Test-Path -Path $buildDir)
+    {
+        $oldNugets = Get-ChildItem -Path $buildDir -Include "*.nupkg" -Recurse;
+        Remove-Item $oldNugets;
+    }
 }
 
 Write-Output "";
