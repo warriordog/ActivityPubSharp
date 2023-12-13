@@ -9,7 +9,7 @@ namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
 ///     Converts types that can be a list of elements, or a single elements.
-///     Essentially: T | T[]
+///     Essentially: <code>T | T[]</code>
 /// </summary>
 public class ListableConverter : JsonConverterFactory
 {

@@ -40,32 +40,32 @@ public sealed class Linkable<T>
     }
 
     /// <summary>
-    ///     True if this Linkable has a link reference
+    ///     <see langword="true"/> if this Linkable has a link reference
     /// </summary>
     [MemberNotNullWhen(true, nameof(Link))]
     [MemberNotNullWhen(false, nameof(Value))]
     public bool HasLink { get; }
 
     /// <summary>
-    ///     The link reference, or null if this linkable has an object.
+    ///     The link reference, or <see langword="null"/> if this linkable has an object.
     /// </summary>
     public ASLink? Link { get; }
 
     /// <summary>
-    ///     True if this Linkable has a value object
+    ///     <see langword="true"/> if this Linkable has a value object
     /// </summary>
     [MemberNotNullWhen(true, nameof(Value))]
     [MemberNotNullWhen(false, nameof(Link))]
     public bool HasValue { get; }
 
     /// <summary>
-    ///     The value object, or null if this Linkable has a link reference
+    ///     The value object, or <see langword="this"/> if this Linkable has a link reference
     /// </summary>
     public T? Value { get; }
 
     /// <summary>
-    ///     If this Linkable has a link, then returns true and assigns it to "link".
-    ///     Otherwise, returns false.
+    ///     If this Linkable has a link, then returns <see langword="true"/> and assigns it to "link".
+    ///     Otherwise, returns <see langword="false"/>.
     /// </summary>
     public bool TryGetLink([NotNullWhen(true)] out ASLink? link)
     {
@@ -80,8 +80,8 @@ public sealed class Linkable<T>
     }
 
     /// <summary>
-    ///     If this Linkable has a value, then returns true and assigns it to "value".
-    ///     Otherwise, returns false.
+    ///     If this Linkable has a value, then returns <see langword="true"/> and assigns it to "value".
+    ///     Otherwise, returns <see langword="false"/>.
     /// </summary>
     public bool TryGetValue([NotNullWhen(true)] out T? value)
     {
@@ -129,12 +129,12 @@ public sealed class Linkable<T>
     public static implicit operator Linkable<T>(T value) => new(value);
     
     /// <summary>
-    ///     Converts this Linkable to its reference link, or null if it has a value object
+    ///     Converts this <see cref="Linkable{T}"/> to its reference link, or <see langword="null"/> if it has a value object
     /// </summary>
     public static implicit operator ASLink?(Linkable<T>? linkable) => linkable?.Link;
     
     /// <summary>
-    ///     Converts this Linkable to its value object, or null if it has a reference link
+    ///     Converts this <see cref="Linkable{T}"/> to its value object, or <see langword="null"/> if it has a reference link
     /// </summary>
     public static implicit operator T?(Linkable<T>? linkable) => linkable == null ? default : linkable.Value;
 }

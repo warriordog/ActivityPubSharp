@@ -8,7 +8,7 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-///     Converts language-tagged strings
+///     Converts language-tagged strings to/from JSON
 /// </summary>
 internal class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageString>
 {

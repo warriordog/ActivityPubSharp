@@ -15,10 +15,10 @@ internal static class TypeExtensions
     ///     Determines if a concrete type can be assigned to an open generic type.
     ///     Based on https://stackoverflow.com/a/1075059/
     /// </summary>
-    /// <exception cref="ArgumentException">If genericType is not an open generic type</exception>
+    /// <exception cref="ArgumentException">If <code>genericType</code> is not an open generic type</exception>
     /// <param name="concreteType">Real, concrete type</param>
     /// <param name="genericType">Open generic type</param>
-    /// <returns>True if concreteType can be assigned to genericType, false otherwise</returns>
+    /// <returns><see langword="true"/> if concreteType can be assigned to <code>genericType</code>, <see langword="false"/> otherwise</returns>
     internal static bool IsAssignableToGenericType(this Type concreteType, Type genericType)
     {
         if (!genericType.IsGenericType)
@@ -45,16 +45,18 @@ internal static class TypeExtensions
     ///     Given a specific concrete type that derives from some generic type, returns the actual types used to fill the generic.
     /// </summary>
     /// <remarks>
-    ///     concreteType must be assignable to genericType, but this check is skipped for performance.
+    ///     <code>concreteType</code> must be assignable to <code>genericType</code>, but this check is skipped for performance.
     ///     An exception will be thrown if the types are incompatible.
     ///     To avoid this, first call <see cref="IsAssignableToGenericType" />.
     /// </remarks>
     /// <example>
-    ///     // Returns [ System.String ]
-    ///     GetGenericArgumentsFor(typeof(List&lt;string>), typeof(ICollection&lt;string>))
+    ///     <code>  
+    ///         // Returns [ System.String ]
+    ///         GetGenericArgumentsFor(typeof(List&lt;string>), typeof(ICollection&lt;string>))
+    ///     </code>
     /// </example>
-    /// <exception cref="ArgumentException">If concreteType does not derive from genericType</exception>
-    /// <exception cref="ArgumentException">If genericType is not an open generic type</exception>
+    /// <exception cref="ArgumentException">If <code>concreteType</code> does not derive from <code>genericType</code></exception>
+    /// <exception cref="ArgumentException">If <code>genericType</code> is not an open generic type</exception>
     /// <param name="concreteType">Concrete type to extract generics from</param>
     /// <param name="genericType">Generic type containing slots to fill</param>
     /// <returns>Returns an array containing the actual type of each generic slot</returns>
@@ -95,15 +97,15 @@ internal static class TypeExtensions
 
     /// <summary>
     ///     Attempts to find the concrete type parameters used to fill a generic type.
-    ///     Returns false/null if the types are incompatible.
+    ///     Returns <see langword="false"/> and <see langword="null"/> if the types are incompatible.
     /// </summary>
     /// <remarks>
     ///     This is inefficient, but its avoids potential exceptions from <see cref="GetGenericArgumentsFor" /> when the conversion fails.
     /// </remarks>
-    /// <param name="concreteType">Concrete type that extends from genericType</param>
+    /// <param name="concreteType">Concrete type that extends from <code>genericType</code></param>
     /// <param name="genericType">Open generic type</param>
-    /// <param name="arguments">Array of types used to fill genericType's slots in concreteType</param>
-    /// <returns>return true if parameters were found, false otherwise</returns>
+    /// <param name="arguments">Array of types used to fill <code>genericType's</code> slots in <code>concreteType</code></param>
+    /// <returns>return <see langword="true"/> if parameters were found, <see langword="false"/> otherwise</returns>
     /// <seealso cref="GetGenericArgumentsFor" />
     /// <seealso cref="IsAssignableToGenericType" />
     internal static bool TryGetGenericArgumentsFor(this Type concreteType, Type genericType, [NotNullWhen(true)] out Type[]? arguments)

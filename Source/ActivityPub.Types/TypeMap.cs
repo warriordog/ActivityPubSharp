@@ -69,7 +69,7 @@ public class TypeMap
     public Dictionary<string, JsonElement>? UnmappedProperties { internal get; set; }
 
     /// <summary>
-    ///     Checks if the object contains a particular type entity.
+    ///     Checks if the object contains a particular entity type.
     /// </summary>
     public bool IsEntity<TEntity>()
         where TEntity : ASEntity
@@ -79,8 +79,8 @@ public class TypeMap
     ///     Checks if the object contains a particular type entity.
     ///     If so, then the instance of that type is extracted and returned.
     /// </summary>
-    /// <seealso cref="IsEntity{T}()" />
-    /// <seealso cref="AsEntity{T}" />
+    /// <seealso cref="IsEntity{TEntity}()" />
+    /// <seealso cref="AsEntity{TEntity}" />
     public bool IsEntity<TEntity>([NotNullWhen(true)] out TEntity? instance)
         where TEntity : ASEntity
     {
@@ -95,14 +95,14 @@ public class TypeMap
     }
 
     /// <summary>
-    ///     Gets an entity representing the object as type T.
+    ///     Gets an entity representing the object as entity type <code>TEntity</code>.
     /// </summary>
     /// <remarks>
     ///     This function will not extend the object to include a new type.
-    ///     To safely convert to an instance that *might* be present, use Is().
+    ///     To safely convert to an instance that *might* be present, use <see cref="IsEntity{TEntity}(out TEntity)"/>.
     /// </remarks>
-    /// <seealso cref="IsEntity{T}(out T)" />
-    /// <throws cref="InvalidCastException">If the object is not of type T</throws>
+    /// <seealso cref="IsEntity{TEntity}(out TEntity)" />
+    /// <throws cref="InvalidCastException">If the object is not of type <code>TEntity</code></throws>
     public TEntity AsEntity<TEntity>()
         where TEntity : ASEntity
     {
@@ -113,7 +113,7 @@ public class TypeMap
     }
 
     /// <summary>
-    ///     Checks if the graph contains a particular model.
+    ///     Checks if the graph contains a particular model type.
     /// </summary>
     /// <seealso cref="IsModel{TModel}(out TModel)" />
     /// <seealso cref="AsModel{TModel}()" />
@@ -135,7 +135,7 @@ public class TypeMap
     }
 
     /// <summary>
-    ///     Checks if the graph contains a particular model.
+    ///     Checks if the graph contains a particular model type.
     ///     If so, then the instance of that model is extracted and returned.
     /// </summary>
     /// <seealso cref="IsModel{TModel}()"/>
@@ -166,11 +166,11 @@ public class TypeMap
     }
 
     /// <summary>
-    ///     Gets an object representing the graph as model type T.
+    ///     Gets an object representing the graph as model type <code>TModel</code>.
     /// </summary>
     /// <remarks>
     ///     This function will not extend the object to include a new type.
-    ///     To safely convert to an instance that *might* be present, use Is().
+    ///     To safely convert to an instance that *might* be present, use <see cref="IsModel{TModel}(out TModel)"/>.
     /// </remarks>
     /// <seealso cref="IsModel{TModel}()"/>
     /// <seealso cref="IsModel{TModel}(out TModel)" />
@@ -253,16 +253,16 @@ public class TypeMap
     ///         For example, imagine that there is an empty TypeMap called "map".
     ///         The following calls are made:
     ///         <ul>
-    ///             <li>map.AddEntity(new ASTypeEntity())</li>
-    ///             <li>map.AddEntity(new ASActivityEntity())</li>
-    ///             <li>map.AsModel&lt;ASActivity&gt;()</li>
+    ///             <li><code>map.AddEntity(new ASTypeEntity())</code></li>
+    ///             <li><code>map.AddEntity(new ASActivityEntity())</code></li>
+    ///             <li><code>map.AsModel&lt;ASActivity&gt;()</code></li>
     ///         </ul>
     ///         The last call will throw an <see cref="InvalidCastException"/> stating that the graph cannot be represented as <see cref="ASObjectEntity"/>.
     ///         This can be extremely hard to diagnose because <see cref="ASObjectEntity"/> does not even appear in the visible code.
     ///     </para>
     ///     <para>
     ///         The <see cref="Extend{TEntity}()"/> function, however, avoids this with an included dependency check.
-    ///         The second call to <see cref="AddEntity"/> will fail with a descriptive error message indicating that "Object" is missing from the graph.
+    ///         The second call to <see cref="AddEntity"/> will fail with a descriptive error message indicating that <code>Object</code> is missing from the graph.
     ///         While still somewhat confusing, this method will additionally <b>fail fast</b> before the graph can even enter an invalid state.
     ///         This ensures that errors are caught quickly and before they can spread to corrupt the application state.
     ///     </para>

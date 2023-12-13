@@ -14,7 +14,7 @@ public interface ICustomConvertedEntity<TEntity>
 {
     /// <summary>
     ///     Converts the entity from a JSON message.
-    ///     Return null to bypass and trigger built-in default logic.
+    ///     Return <see langword="null"/> to bypass and trigger built-in default logic.
     /// </summary>
     public static virtual TEntity? ReadEntity(JsonElement jsonElement, DeserializationMetadata meta) => null;
     
@@ -25,7 +25,7 @@ public interface ICustomConvertedEntity<TEntity>
     
     /// <summary>
     ///     Converts the entity into a JSON message.
-    ///     Return null to bypass and trigger built-in default logic.
+    ///     Return <see langword="null"/> to bypass and trigger built-in default logic.
     /// </summary>
     public static virtual JsonElement? WriteEntity(TEntity entity, SerializationMetadata meta) => null;
     

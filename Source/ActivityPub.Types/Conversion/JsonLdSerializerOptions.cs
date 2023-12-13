@@ -15,7 +15,7 @@ public class JsonLdSerializerOptions
     ///     These act as a base layer, and required changes will be automatically overlaid by the library. 
     /// </summary>
     /// <remarks>
-    ///     The default value is "new(JsonSerializerOptions.Default)" to allow application code to modify it in a services.Configure() callback.
+    ///     The default value is <code>new(JsonSerializerOptions.Default)</code> to allow application code to modify it in a <code>services.Configure()</code> callback.
     /// </remarks>
     public JsonSerializerOptions DefaultJsonSerializerOptions { get; set; } = new(JsonSerializerOptions.Default);
 }

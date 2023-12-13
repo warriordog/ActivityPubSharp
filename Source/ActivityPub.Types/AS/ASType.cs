@@ -57,7 +57,7 @@ public class ASType : IASModel<ASType, ASTypeEntity>
     public TypeMap TypeMap { get; }
 
     /// <summary>
-    ///     Provides the globally unique identifier for an Object or Link.
+    ///     Provides the globally unique identifier for an <code>Object</code> or <code>Link</code>.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-id" />
     public string? Id

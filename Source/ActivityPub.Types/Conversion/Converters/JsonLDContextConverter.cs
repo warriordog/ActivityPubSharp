@@ -8,7 +8,7 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-///     Custom converter for the JSON-LD "@context" property.
+///     Custom converter for the JSON-LD <code>@context</code> property.
 /// </summary>
 /// <remarks>
 ///     We need THREE FUCKING CONVERTERS for a minimum-viable implementation!

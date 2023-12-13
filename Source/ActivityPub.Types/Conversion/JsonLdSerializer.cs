@@ -41,7 +41,7 @@ public interface IJsonLdSerializer
 public class JsonLdSerializer : IJsonLdSerializer
 {
     /// <summary>
-    ///     Constructs a new instance of JsonLdSerializer from the provided services.
+    ///     Constructs a new instance of <see cref="JsonLdSerializer"/> from the provided services.
     ///     This is meant to be called implicitly by a DI container, but can be used directly for testing or advanced use cases.
     /// </summary>
     [SuppressMessage("ReSharper", "SuggestBaseTypeForParameterInConstructor")]

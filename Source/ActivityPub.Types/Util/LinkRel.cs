@@ -36,12 +36,12 @@ public record LinkRel
     public string Value { get; }
 
     /// <summary>
-    ///     Converts a LinkRel to its string value
+    ///     Converts a <see cref="LinkRel"/> to its string value
     /// </summary>
     public static implicit operator string(LinkRel linkRel) => linkRel.Value;
     
     /// <summary>
-    ///     Parses a raw string into LinkRel
+    ///     Parses a raw string into <see cref="LinkRel"/>
     /// </summary>
     public static implicit operator LinkRel(string str) => new(str);
 }

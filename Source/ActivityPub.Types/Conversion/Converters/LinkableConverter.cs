@@ -20,18 +20,19 @@ public class LinkableConverter : JsonConverterFactory
 
     /// <inheritdoc />
     public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
-
-    // We only convert Linkable<T>
+    
     /// <inheritdoc />
     public override bool CanConvert(Type type) =>
+        // We only convert Linkable<T>
         type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Linkable<>);
 
-    // Pivot the type into correct instance
     /// <inheritdoc />
     public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)
     {
         var valueType = type.GetGenericArguments()[0];
         var converterType = typeof(LinkableConverter<>).MakeGenericType(valueType);
+        
+        // Pivot the type into correct instance
         return (JsonConverter)Activator.CreateInstance(
             converterType,
             BindingFlags.Instance | BindingFlags.Public,

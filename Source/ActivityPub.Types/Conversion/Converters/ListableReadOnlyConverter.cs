@@ -7,10 +7,7 @@ using ActivityPub.Types.Internal;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-/// <summary>
-///     Converts types that can be a list of elements, or a single elements.
-///     Essentially: T | T[]
-/// </summary>
+/// <inheritdoc cref="ListableConverter"/>
 public class ListableReadOnlyConverter : JsonConverterFactory
 {
     /// <inheritdoc />

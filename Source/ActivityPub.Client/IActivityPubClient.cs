@@ -31,12 +31,12 @@ public interface IActivityPubClient : IDisposable
 
     /// <summary>
     ///     Retrieves and validates an ActivityPub object.
-    ///     Links are automatically followed, up to maxRecursion layers of recursion.
+    ///     Links are automatically followed, up to <code>maxRecursion</code> layers of recursion.
     /// </summary>
     /// <param name="uri">URI to the object</param>
     /// <param name="maxRecursion">Maximum depth to recurse while populating the returned object. Defaults to <see cref="DefaultGetRecursion" />.</param>
     /// <param name="cancellationToken">Optional cancellation token</param>
-    /// <typeparam name="T">Type of object to return. The actual returned object may be a subclass of T.</typeparam>
+    /// <typeparam name="T">Type of object to return. The actual returned object may be a subclass of <code>T</code>.</typeparam>
     /// <returns>Returns the object</returns>
     public Task<T> Get<T>(Uri uri, int? maxRecursion = null, CancellationToken cancellationToken = default)
         where T : ASType;
@@ -49,7 +49,7 @@ public interface IActivityPubClient : IDisposable
     /// <param name="linkable">Linkable to resolve</param>
     /// <param name="maxRecursion">Maximum depth to recurse while populating the returned object. <see cref="DefaultResolveRecursion" />.</param>
     /// <param name="cancellationToken">Optional cancellation token</param>
-    /// <typeparam name="T">Type of object to return. The actual returned object may be a subclass of T.</typeparam>
+    /// <typeparam name="T">Type of object to return. The actual returned object may be a subclass of <code>T</code>.</typeparam>
     /// <returns>Returns the object</returns>
     public Task<T> Resolve<T>(Linkable<T> linkable, int? maxRecursion = null, CancellationToken cancellationToken = default)
         where T : ASObject;
@@ -61,7 +61,7 @@ public interface IActivityPubClient : IDisposable
     /// <param name="linkables">List of linkables to resolve</param>
     /// <param name="maxRecursion">Maximum depth to recurse while populating the returned objects. <see cref="DefaultResolveRecursion" />.</param>
     /// <param name="cancellationToken">Optional cancellation token</param>
-    /// <typeparam name="T">Type of objects to return. The actual returned objects may be subclasses of T.</typeparam>
+    /// <typeparam name="T">Type of objects to return. The actual returned objects may be subclasses of <code>T</code>.</typeparam>
     /// <returns>Returns a list of resolved objects.</returns>
     public Task<List<T>> Resolve<T>(LinkableList<T> linkables, int? maxRecursion = null, CancellationToken cancellationToken = default)
         where T : ASObject;

@@ -6,7 +6,7 @@ using ActivityPub.Types.Internal;
 namespace ActivityPub.Types.Conversion.Modifiers;
 
 /// <summary>
-///     Contract modifier that configures System.Text.Json to ignore empty collections from the JSON output.
+///     Contract modifier that configures <a href="https://www.nuget.org/packages/System.Text.Json/">System.Text.Json</a> to ignore empty collections from the JSON output.
 /// </summary>
 public static class IgnoreEmptyCollectionsModifier
 {

@@ -21,18 +21,18 @@ public interface IJsonLDContext : IReadOnlySet<JsonLDContextObject>
 }
 
 /// <summary>
-///     Mutable implementation of IJsonLDContext.
+///     Mutable implementation of <see cref="IJsonLDContext"/>.
 /// </summary>
 [JsonConverter(typeof(JsonLDContextConverter))]
 public class JsonLDContext : HashSet<JsonLDContextObject>, IJsonLDContext
 {
     /// <summary>
-    ///     Constructs an empty JsonLDContext.
+    ///     Constructs an empty <see cref="JsonLDContext"/>.
     /// </summary>
     public JsonLDContext() {}
 
     /// <summary>
-    ///     Constructs a JsonLDContext from a collection of context objects
+    ///     Constructs a <see cref="JsonLDContext"/> from a collection of context objects
     /// </summary>
     /// <param name="objects">Objects to form the whole context</param>
     public JsonLDContext(IEnumerable<JsonLDContextObject> objects) : base(objects) {}

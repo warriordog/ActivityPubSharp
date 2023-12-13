@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace ActivityPub.Client;
 
 /// <summary>
-///     Dependency injection for the ActivityPub.Client module
+///     Dependency injection for the <code>ActivityPub.Client</code> package
 /// </summary>
 public static class ClientModule
 {

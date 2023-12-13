@@ -43,7 +43,7 @@ public record JsonLDContextObject
     public bool IsExternal => ExternalLink != null;
 
     /// <summary>
-    ///     If true, then this context is embedded directly in an object and all terms are available.
+    ///     If <see langword="true"/>, then this context is embedded directly in an object and all terms are available.
     /// </summary>
     [MemberNotNullWhen(false, nameof(ExternalLink))]
     [MemberNotNullWhen(true, nameof(Terms))]

@@ -94,14 +94,14 @@ internal class CustomConvertedEntityPivot
 
 
     /// <summary>
-    ///     Calls <see cref="ICustomConvertedEntity{TEntity}.ReadEntity"/> for a given type of TEntity.
+    ///     Calls <see cref="ICustomConvertedEntity{TEntity}.ReadEntity"/> for a given type of <code>TEntity</code>.
     /// </summary>
     private static TEntity? ReadEntity<TEntity>(JsonElement jsonElement, DeserializationMetadata meta)
         where TEntity : ASEntity, ICustomConvertedEntity<TEntity>
         => TEntity.ReadEntity(jsonElement, meta);
 
     /// <summary>
-    ///     Calls <see cref="ICustomConvertedEntity{TEntity}.PostReadEntity"/> for a given type of TEntity.
+    ///     Calls <see cref="ICustomConvertedEntity{TEntity}.PostReadEntity"/> for a given type of <code>TEntity</code>.
     ///     Parameter types are relaxed to simplify generic binding.
     /// </summary>
     private static void PostReadEntity<TEntity>(JsonElement jsonElement, DeserializationMetadata meta, ASEntity entity)
@@ -109,7 +109,7 @@ internal class CustomConvertedEntityPivot
         => TEntity.PostReadEntity(jsonElement, meta, (TEntity)entity);
 
     /// <summary>
-    ///     Calls <see cref="ICustomConvertedEntity{TEntity}.WriteEntity"/> for a given type of TEntity.
+    ///     Calls <see cref="ICustomConvertedEntity{TEntity}.WriteEntity"/> for a given type of <code>TEntity</code>.
     ///     Parameter types are relaxed to simplify generic binding.
     /// </summary>
     private static JsonElement? WriteEntity<TEntity>(ASEntity entity, SerializationMetadata meta)
@@ -117,7 +117,7 @@ internal class CustomConvertedEntityPivot
         => TEntity.WriteEntity((TEntity)entity, meta);
 
     /// <summary>
-    ///     Calls <see cref="ICustomConvertedEntity{TEntity}.PostWriteEntity"/> for a given type of TEntity.
+    ///     Calls <see cref="ICustomConvertedEntity{TEntity}.PostWriteEntity"/> for a given type of <code>TEntity</code>.
     ///     Parameter types are relaxed to simplify generic binding.
     /// </summary>
     private static void PostWriteEntity<TEntity>(ASEntity entity, SerializationMetadata meta, JsonElement entityJson, JsonObject outputJson)

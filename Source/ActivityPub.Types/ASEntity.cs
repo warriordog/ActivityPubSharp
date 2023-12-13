@@ -42,7 +42,7 @@ public abstract class ASEntity
 
     /// <summary>
     ///     True if the object's current state can only be represented by the object form.
-    ///     Objects that extend <see cref="ASLink"/> MUST return true if any properties are populated, other than HRef!
+    ///     Objects that extend <see cref="ASLink"/> MUST return true if any properties are populated, other than <see cref="ASLink.HRef"/>!
     /// </summary>
     [JsonIgnore]
     public virtual bool RequiresObjectForm => true;
@@ -57,7 +57,7 @@ public abstract class ASEntity
 
 /// <inheritdoc />
 /// <typeparam name="TModel">Type of the model associated with this entity. Will set the value of <see cref="ASTypeName"/> and <see cref="BaseTypeName"/>.</typeparam>
-/// <typeparam name="TEntity">Type of entity. Should be set to the type of "this"</typeparam>
+/// <typeparam name="TEntity">Type of entity. Should be set to the type of <see langword="this"/></typeparam>
 public abstract class ASEntity<TModel, TEntity> : ASEntity
     where TModel : ASType, IASModel<TModel, TEntity>
     where TEntity : ASEntity<TModel, TEntity>

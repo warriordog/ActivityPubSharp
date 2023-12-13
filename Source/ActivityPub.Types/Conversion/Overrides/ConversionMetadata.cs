@@ -20,7 +20,7 @@ public class ConversionMetadata
     public required JsonSerializerOptions JsonSerializerOptions { get; init; }
 
     /// <summary>
-    ///     TypeMap of the object being converted.
+    ///     <see cref="TypeMap"/> of the object being converted.
     /// </summary>
     public required TypeMap TypeMap { get; init; }
 }

@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace ActivityPub.Common;
 
 /// <summary>
-///     Dependency Injection for ActivityPub.Common
+///     Dependency Injection for <code>ActivityPub.Common</code> package.
 /// </summary>
 public static class CommonModule
 {

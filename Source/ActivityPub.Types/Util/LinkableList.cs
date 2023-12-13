@@ -6,7 +6,7 @@ using ActivityPub.Types.AS;
 namespace ActivityPub.Types.Util;
 
 /// <summary>
-///     Synthetic type to represent a list of T or Links to T
+///     Synthetic type to represent a list of <code>T</code> or Links to <code>T</code>
 /// </summary>
 public class LinkableList<T> : List<Linkable<T>>
 {

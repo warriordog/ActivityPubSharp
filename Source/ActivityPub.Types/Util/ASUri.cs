@@ -14,12 +14,12 @@ namespace ActivityPub.Types.Util;
 public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
 {
     /// <summary>
-    ///     Constructs an ASUri by wrapping an existing native Uri.
+    ///     Constructs an <see cref="ASUri"/> by wrapping an existing native <see cref="Uri"/>.
     /// </summary>
     public ASUri(Uri uri) => Uri = uri;
     
     /// <summary>
-    ///     Constructs an ASUri by parsing a string.
+    ///     Constructs an <see cref="ASUri"/> by parsing a string.
     /// </summary>
     /// <param name="uri"></param>
     public ASUri(string uri) => Uri = new Uri(uri);
@@ -60,37 +60,37 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
     }
 
     /// <summary>
-    ///     Compares two ASUri objects for equality.
+    ///     Compares two <see cref="ASUri"/> objects for equality.
     /// </summary>
     public static bool operator ==(ASUri? left, ASUri? right) => AreEqual(left, right);
 
     /// <summary>
-    ///     Compares two ASUri objects for equality.
+    ///     Compares two <see cref="ASUri"/> objects for equality.
     /// </summary>
     public static bool operator !=(ASUri? left, ASUri? right) => !AreEqual(left, right);
     
     /// <summary>
-    ///     Compares an ASUri against a native Uri.
+    ///     Compares an <see cref="ASUri"/> against a native <see cref="Uri"/>.
     /// </summary>
     public static bool operator ==(ASUri? left, Uri? right) => AreEqual(left, right);
     
     /// <summary>
-    ///     Compares an ASUri against a native Uri.
+    ///     Compares an <see cref="ASUri"/> against a native <see cref="Uri"/>.
     /// </summary>
     public static bool operator !=(ASUri? left, Uri? right) => !AreEqual(left, right);
 
     /// <summary>
-    ///     Compares an ASUri against a string.
+    ///     Compares an <see cref="ASUri"/> against a <see cref="string"/>.
     /// </summary>
     public static bool operator ==(ASUri? left, string? right) => AreEqual(left, right);
     
     /// <summary>
-    ///     Compares an ASUri against a string.
+    ///     Compares an <see cref="ASUri"/> against a <see cref="string"/>.
     /// </summary>
     public static bool operator !=(ASUri? left, string? right) => !AreEqual(left, right);
     
     /// <summary>
-    ///     Compares two ASUri objects for equality.
+    ///     Compares two <see cref="ASUri"/> objects for equality.
     /// </summary>
     public static bool AreEqual(ASUri? left, ASUri? right)
     {
@@ -105,7 +105,7 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
     }
     
     /// <summary>
-    ///     Compares an ASUri against a native Uri.
+    ///     Compares an <see cref="ASUri"/> against a native <see cref="Uri"/>.
     /// </summary>
     public static bool AreEqual(ASUri? left, Uri? right)
     {
@@ -118,7 +118,7 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
     }
     
     /// <summary>
-    ///     Compares an ASUri against a string.
+    ///     Compares an <see cref="ASUri"/> against a <see cref="string"/>.
     /// </summary>
     public static bool AreEqual(ASUri? left, string? right)
     {
@@ -132,22 +132,22 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
         return left.Uri.Equals(right);
     }
     /// <summary>
-    ///     Parses an ASUri from a string
+    ///     Parses an <see cref="ASUri"/> from a <see cref="string"/>
     /// </summary>
     public static implicit operator string(ASUri asUri) => asUri.ToString();
 
     /// <summary>
-    ///     Converts this ASUri to its string value
+    ///     Converts this <see cref="ASUri"/> to its <see cref="string"/> value
     /// </summary>
     public static implicit operator ASUri(string str) => new(str);
 
     /// <summary>
-    ///     Converts a native Uri into a an ASUri
+    ///     Converts a native <see cref="Uri"/> into a an <see cref="ASUri"/>
     /// </summary>
     public static implicit operator ASUri(Uri uri) => new(uri);
     
     /// <summary>
-    ///     Converts an ASUri into a native Uri
+    ///     Converts an <see cref="ASUri"/> into a native <see cref="Uri"/>
     /// </summary>
     public static implicit operator Uri(ASUri asUri) => asUri.Uri;
 }

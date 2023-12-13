@@ -5,12 +5,12 @@ namespace ActivityPub.Types.Internal;
 internal static class GenericPivotExtensions
 {
     /// <summary>
-    ///     Creates a delegate that calls the provided method using a specified generic type.
+    ///     Creates a <see langword="delegate"/> that calls the provided method using a specified generic type.
     ///     Additional generic overloads are automatically constructed as-needed, and cached for the lifetime of the delegate.
     ///     An object can be provided to bind instance methods.
     /// </summary>
-    /// <exception cref="ArgumentException">When "method" is static but "instance" is non-null</exception>
-    /// <exception cref="ArgumentException">When "method" is non-static but "instance" is null</exception>
+    /// <exception cref="ArgumentException">When <code>method</code> is <see langword="static"/> but <code>instance</code> is not <see langword="null"/></exception>
+    /// <exception cref="ArgumentException">When <code>method</code> is not <see langword="static"/> but <code>instance</code> is <see langword="null"/></exception>
     internal static Func<Type, TResult> CreateGenericPivotFunc<TResult>(this MethodInfo method, object? instance = null)
     {
         CheckMethodInstanceAlignment(method, instance);

@@ -8,14 +8,8 @@ using ActivityPub.Types.Conversion.Converters;
 namespace ActivityPub.Types.Util;
 
 /// <summary>
-///     A string that can be represented as either a single value or as a map from language tag to value.
+///     A string that can have multiple representations in different languages.
 /// </summary>
-/// <remarks>
-///     SingleString will be set to null whenever any language mappings are added.
-///     It is possible for a NaturalLanguageString to have no value.
-///     In this case, Get() will throw an exception.
-///     To avoid this, call GetOrDefault()/GetOrNull() or check HasValue first.
-/// </remarks>
 [JsonConverter(typeof(NaturalLanguageStringConverter))]
 public sealed class NaturalLanguageString
 {
@@ -146,7 +140,7 @@ public sealed class NaturalLanguageString
     }
 
     /// <summary>
-    ///     Constructs a NaturalLanguageString from a native .NET string.
+    ///     Constructs a <see cref="NaturalLanguageString"/> from a native .NET string.
     ///     The provided string will be mapped to <see cref="DefaultValue"/>.
     /// </summary>
     public static implicit operator NaturalLanguageString(string defaultValue) => new()

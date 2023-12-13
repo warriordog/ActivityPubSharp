@@ -8,7 +8,7 @@ using ActivityPub.Types.Internal;
 namespace ActivityPub.Types.Conversion.Modifiers;
 
 /// <summary>
-///     Custom type modifier to work around bugs in System.Text.Json.
+///     Custom type modifier to work around bugs in <a href="https://www.nuget.org/packages/System.Text.Json/">System.Text.Json</a>.
 /// </summary>
 public static class BugFixModifier
 {

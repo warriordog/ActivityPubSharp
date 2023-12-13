@@ -73,7 +73,7 @@ public class ASTypeInfoCache : IASTypeInfoCache
     private readonly HashSet<Type> _namelessEntityTypes = new();
 
     /// <summary>
-    ///     Calls <see cref="CreateModelMetaFor{TModel}"/> with a specified value for T.
+    ///     Calls <see cref="CreateModelMetaFor{TModel}"/> with a specified value for <code>TModel</code>.
     /// </summary>
     private readonly Func<Type, ModelMeta> _createTypeMetadataFor;
 
