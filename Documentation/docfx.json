@@ -9,7 +9,8 @@
           ]
         }
       ],
-      "dest": "obj/api"
+      "dest": "obj/api",
+      "includePrivateMembers": true
     }
   ],
   "build": {
