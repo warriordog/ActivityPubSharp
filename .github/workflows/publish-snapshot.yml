@@ -1,4 +1,4 @@
-name: .NET
+name: Publish Snapshot to NuGet
 
 # ONLY push, not PRs.
 # ONLY main, not release branch.
@@ -19,6 +19,6 @@ jobs:
         dotnet-version: '0.7.x'
     - name: Publish Snapshot to NuGet
       env:
-        NugetKey: ${{ secrets.NugetKey }}
+        NugetKey: ${{ secrets.NUGETKEY }}
       shell: pwsh
       run: ./Tool/Publish-Solution.ps1 -Snapshot -NugetKey "$env:NugetKey"
