@@ -50,7 +50,7 @@ foreach ($packageName in $PackageNames)
 Write-Output "";
 Write-Output "## [publish-package] Build and pack selected packages";
 & dotnet restore /p:VersionSuffix=$versionSuffix
-& dotnet clean --configuration $BuildConfig --version-suffix $versionSuffix;
+& dotnet clean --configuration $BuildConfig;
 & dotnet build --configuration $BuildConfig --version-suffix $versionSuffix;
 & dotnet pack --configuration $BuildConfig --version-suffix $versionSuffix;
 
