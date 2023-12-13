@@ -1,0 +1,24 @@
+name: .NET
+
+# ONLY push, not PRs.
+# ONLY main, not release branch.
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  publish-snapshot:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '0.7.x'
+    - name: Publish Snapshot to NuGet
+      env:
+        NugetKey: ${{ secrets.NugetKey }}
+      shell: pwsh
+      run: ./Tool/Publish-Solution.ps1 -Snapshot -NugetKey "$env:NugetKey"
