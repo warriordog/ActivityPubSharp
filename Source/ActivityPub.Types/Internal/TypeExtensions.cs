@@ -118,51 +118,6 @@ internal static class TypeExtensions
         return false;
     }
 
-    /// <summary>
-    ///     Checks whether the provided type is an open generic type, as opposed to closed generic or non-generic.
-    /// </summary>
-    /// <param name="type">Type to check</param>
-    /// <returns>Returns true if open generic, closed otherwise.</returns>
-    internal static bool IsOpenGeneric(this Type type) => type is { IsGenericType: true, IsConstructedGenericType: false };
-
-    /// <summary>
-    ///     Given an open generic type, returns a new type that is the result of filling all open slots with the constraint.
-    /// </summary>
-    /// <remarks>
-    ///     This is a naive implementation and may not be 100% accurate.
-    /// </remarks>
-    /// <param name="genericType">Type to populate. Must be an open generic type.</param>
-    internal static Type GetDefaultGenericArguments(this Type genericType)
-    {
-        if (!genericType.IsOpenGeneric())
-            throw new ArgumentException($"{genericType} is not an open generic type", nameof(genericType));
-
-        var genericSlots = genericType.GetGenericArguments();
-        for (var i = 0; i < genericSlots.Length; i++)
-            genericSlots[i] = genericSlots[i].GetGenericParameterConstraints()[0];
-
-        return genericType.MakeGenericType(genericSlots);
-    }
-
-    /// <summary>
-    ///     Gets the default value for a specified type.
-    ///     Runtime equivalent to calling default(T).
-    /// </summary>
-    /// <remarks>
-    ///     Based on https://stackoverflow.com/a/3195792
-    /// </remarks>
-    /// <param name="type">Type of value</param>
-    /// <returns>Returns the default value of the type</returns>
-    internal static object? GetDefaultValue(this Type type)
-    {
-        // The only case where it matters are non-nullable value types
-        if (type.IsValueType && Nullable.GetUnderlyingType(type) == null)
-            return Activator.CreateInstance(type);
-
-        // For everything else, the correct value is just null
-        return null;
-    }
-
     internal static MethodInfo GetRequiredMethod(this Type type, string methodName, BindingFlags bindingFlags = BindingFlags.Default)
     {
         var method = type.GetMethod(methodName, bindingFlags);
