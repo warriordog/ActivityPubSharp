@@ -4,16 +4,12 @@
 using System.Runtime.CompilerServices;
 using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Conversion.Converters;
-using ActivityPub.Types.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 [assembly: InternalsVisibleTo("ActivityPub.Types.Tests")]
-
 [assembly: InternalsVisibleTo("ActivityPub.Common")]
-[assembly: InternalsVisibleTo("ActivityPub.Client")]
-[assembly: InternalsVisibleTo("ActivityPub.Server")]
-[assembly: InternalsVisibleTo("ActivityPub.Federation")]
+[assembly: InternalsVisibleTo("SimpleClient")]
 
 namespace ActivityPub.Types;
 
