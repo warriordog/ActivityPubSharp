@@ -21,4 +21,5 @@ jobs:
       env:
         NugetKey: ${{ secrets.NUGETKEY }}
       shell: pwsh
-      run: powershell ./Tool/Publish-Solution.ps1 -Snapshot -NugetKey "$env:NugetKey"
+      run: |
+        .\Tool\Publish-Solution.ps1 -Snapshot -NugetKey "$env:NugetKey"
