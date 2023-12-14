@@ -17,27 +17,17 @@ public class DislikeActivity : ASActivity, IASModel<DislikeActivity, DislikeActi
     public const string DislikeType = "Dislike";
     static string IASModel<DislikeActivity>.ASTypeName => DislikeType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public DislikeActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public DislikeActivity() => Entity = TypeMap.Extend<DislikeActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public DislikeActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<DislikeActivityEntity>();
+    /// <inheritdoc />
+    public DislikeActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<DislikeActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public DislikeActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public DislikeActivity(TypeMap typeMap, DislikeActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<DislikeActivityEntity>();

@@ -31,22 +31,24 @@ public abstract class APActorTests
         }
 
         [Fact]
-        public void NoOpWhenWrappingAnotherActor()
+        public void ThrowWhenWrappingAnotherActor()
         {
             var person = new PersonActor()
             {
                 Inbox = "https://example.com/inbox",
                 Outbox = "https://example.com/outbox"
             };
-            var actor = new APActor(person)
+
+            Assert.Throws<InvalidOperationException>(() =>
             {
-                Inbox = person.Inbox,
-                Outbox = person.Outbox
-            };
-
-            person.Inbox = "https://example.com/changed";
-
-            actor.Inbox.Should().Be(person.Inbox);
+                // Make sure that it doesn't get optimized away
+                var actor = new APActor(person)
+                {
+                    Inbox = person.Inbox,
+                    Outbox = person.Outbox
+                };
+                actor.Should().NotBeNull();
+            });
         }
     }
 }

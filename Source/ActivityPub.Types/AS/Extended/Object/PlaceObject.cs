@@ -17,27 +17,17 @@ public class PlaceObject : ASObject, IASModel<PlaceObject, PlaceObjectEntity, AS
     public const string PlaceType = "Place";
     static string IASModel<PlaceObject>.ASTypeName => PlaceType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public PlaceObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public PlaceObject() => Entity = TypeMap.Extend<PlaceObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public PlaceObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<PlaceObjectEntity>();
+    /// <inheritdoc />
+    public PlaceObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<PlaceObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public PlaceObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public PlaceObject(TypeMap typeMap, PlaceObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<PlaceObjectEntity>();

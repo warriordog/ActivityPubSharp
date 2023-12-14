@@ -17,27 +17,17 @@ public class NamelessExtensionFake : ASObject, IASModel<NamelessExtensionFake, N
         NamelessExtensionContext
     };
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public NamelessExtensionFake() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public NamelessExtensionFake() => Entity = TypeMap.Extend<NamelessExtensionFakeEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public NamelessExtensionFake(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<NamelessExtensionFakeEntity>();
+    /// <inheritdoc />
+    public NamelessExtensionFake(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<NamelessExtensionFakeEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public NamelessExtensionFake(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public NamelessExtensionFake(TypeMap typeMap, NamelessExtensionFakeEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<NamelessExtensionFakeEntity>();

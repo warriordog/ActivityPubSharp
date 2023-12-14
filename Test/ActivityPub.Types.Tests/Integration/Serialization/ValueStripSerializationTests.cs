@@ -121,27 +121,17 @@ public class FakeObjectWithSpecialNullability : ASObject, IASModel<FakeObjectWit
     public const string FakeObjectWithSpecialNullabilityType = "FakeObjectWithSpecialNullability";
     static string IASModel<FakeObjectWithSpecialNullability>.ASTypeName => FakeObjectWithSpecialNullabilityType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public FakeObjectWithSpecialNullability() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public FakeObjectWithSpecialNullability() => Entity = TypeMap.Extend<FakeObjectWithSpecialNullabilityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public FakeObjectWithSpecialNullability(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<FakeObjectWithSpecialNullabilityEntity>();
+    /// <inheritdoc />
+    public FakeObjectWithSpecialNullability(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<FakeObjectWithSpecialNullabilityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public FakeObjectWithSpecialNullability(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public FakeObjectWithSpecialNullability(TypeMap typeMap, FakeObjectWithSpecialNullabilityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<FakeObjectWithSpecialNullabilityEntity>();

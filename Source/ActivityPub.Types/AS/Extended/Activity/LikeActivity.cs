@@ -18,27 +18,17 @@ public class LikeActivity : ASActivity, IASModel<LikeActivity, LikeActivityEntit
     public const string LikeType = "Like";
     static string IASModel<LikeActivity>.ASTypeName => LikeType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public LikeActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public LikeActivity() => Entity = TypeMap.Extend<LikeActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public LikeActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<LikeActivityEntity>();
+    /// <inheritdoc />
+    public LikeActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<LikeActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public LikeActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public LikeActivity(TypeMap typeMap, LikeActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<LikeActivityEntity>();

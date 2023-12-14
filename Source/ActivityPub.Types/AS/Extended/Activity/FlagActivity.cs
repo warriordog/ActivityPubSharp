@@ -18,27 +18,17 @@ public class FlagActivity : ASActivity, IASModel<FlagActivity, FlagActivityEntit
     public const string FlagType = "Flag";
     static string IASModel<FlagActivity>.ASTypeName => FlagType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public FlagActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public FlagActivity() => Entity = TypeMap.Extend<FlagActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public FlagActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<FlagActivityEntity>();
+    /// <inheritdoc />
+    public FlagActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<FlagActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public FlagActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public FlagActivity(TypeMap typeMap, FlagActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<FlagActivityEntity>();

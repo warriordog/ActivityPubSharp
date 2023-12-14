@@ -17,27 +17,17 @@ public class OrganizationActor : APActor, IASModel<OrganizationActor, Organizati
     public const string OrganizationType = "Organization";
     static string IASModel<OrganizationActor>.ASTypeName => OrganizationType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public OrganizationActor() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public OrganizationActor() => Entity = TypeMap.Extend<OrganizationActorEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public OrganizationActor(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<OrganizationActorEntity>();
+    /// <inheritdoc />
+    public OrganizationActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<OrganizationActorEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public OrganizationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public OrganizationActor(TypeMap typeMap, OrganizationActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<OrganizationActorEntity>();

@@ -17,27 +17,17 @@ public class PageObject : DocumentObject, IASModel<PageObject, PageObjectEntity,
     public const string PageType = "Page";
     static string IASModel<PageObject>.ASTypeName => PageType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public PageObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public PageObject() => Entity = TypeMap.Extend<PageObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public PageObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<PageObjectEntity>();
+    /// <inheritdoc />
+    public PageObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<PageObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public PageObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public PageObject(TypeMap typeMap, PageObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<PageObjectEntity>();

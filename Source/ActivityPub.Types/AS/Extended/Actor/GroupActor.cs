@@ -17,27 +17,17 @@ public class GroupActor : APActor, IASModel<GroupActor, GroupActorEntity, APActo
     public const string GroupType = "Group";
     static string IASModel<GroupActor>.ASTypeName => GroupType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public GroupActor() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public GroupActor() => Entity = TypeMap.Extend<GroupActorEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public GroupActor(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<GroupActorEntity>();
+    /// <inheritdoc />
+    public GroupActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<GroupActorEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public GroupActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public GroupActor(TypeMap typeMap, GroupActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<GroupActorEntity>();

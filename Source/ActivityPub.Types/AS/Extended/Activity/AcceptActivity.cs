@@ -17,27 +17,17 @@ public class AcceptActivity : ASActivity, IASModel<AcceptActivity, AcceptActivit
     public const string AcceptType = "Accept";
     static string IASModel<AcceptActivity>.ASTypeName => AcceptType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public AcceptActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public AcceptActivity() => Entity = TypeMap.Extend<AcceptActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public AcceptActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<AcceptActivityEntity>();
+    /// <inheritdoc />
+    public AcceptActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<AcceptActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public AcceptActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public AcceptActivity(TypeMap typeMap, AcceptActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<AcceptActivityEntity>();

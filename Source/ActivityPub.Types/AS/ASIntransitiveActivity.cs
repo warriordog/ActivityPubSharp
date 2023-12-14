@@ -19,27 +19,17 @@ public class ASIntransitiveActivity : ASActivity, IASModel<ASIntransitiveActivit
     public const string IntransitiveActivityType = "IntransitiveActivity";
     static string IASModel<ASIntransitiveActivity>.ASTypeName => IntransitiveActivityType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ASIntransitiveActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ASIntransitiveActivity() => Entity = TypeMap.Extend<ASIntransitiveActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ASIntransitiveActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ASIntransitiveActivityEntity>();
+    /// <inheritdoc />
+    public ASIntransitiveActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ASIntransitiveActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ASIntransitiveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ASIntransitiveActivity(TypeMap typeMap, ASIntransitiveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASIntransitiveActivityEntity>();

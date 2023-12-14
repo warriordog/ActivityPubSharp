@@ -19,27 +19,17 @@ public class UpdateActivity : ASActivity, IASModel<UpdateActivity, UpdateActivit
     public const string UpdateType = "Update";
     static string IASModel<UpdateActivity>.ASTypeName => UpdateType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public UpdateActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public UpdateActivity() => Entity = TypeMap.Extend<UpdateActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public UpdateActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<UpdateActivityEntity>();
+    /// <inheritdoc />
+    public UpdateActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<UpdateActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public UpdateActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public UpdateActivity(TypeMap typeMap, UpdateActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<UpdateActivityEntity>();

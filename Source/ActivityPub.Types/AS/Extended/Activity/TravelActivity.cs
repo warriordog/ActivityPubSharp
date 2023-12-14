@@ -19,27 +19,17 @@ public class TravelActivity : ASIntransitiveActivity, IASModel<TravelActivity, T
     public const string TravelType = "Travel";
     static string IASModel<TravelActivity>.ASTypeName => TravelType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public TravelActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public TravelActivity() => Entity = TypeMap.Extend<TravelActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public TravelActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<TravelActivityEntity>();
+    /// <inheritdoc />
+    public TravelActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<TravelActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public TravelActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public TravelActivity(TypeMap typeMap, TravelActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<TravelActivityEntity>();

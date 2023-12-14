@@ -19,27 +19,17 @@ public class RelationshipObject : ASObject, IASModel<RelationshipObject, Relatio
     public const string RelationshipType = "Relationship";
     static string IASModel<RelationshipObject>.ASTypeName => RelationshipType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public RelationshipObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public RelationshipObject() => Entity = TypeMap.Extend<RelationshipObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public RelationshipObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<RelationshipObjectEntity>();
+    /// <inheritdoc />
+    public RelationshipObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<RelationshipObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public RelationshipObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public RelationshipObject(TypeMap typeMap, RelationshipObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<RelationshipObjectEntity>();

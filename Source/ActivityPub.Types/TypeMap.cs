@@ -102,7 +102,7 @@ public class TypeMap
     ///     To safely convert to an instance that *might* be present, use <see cref="IsEntity{TEntity}(out TEntity)"/>.
     /// </remarks>
     /// <seealso cref="IsEntity{TEntity}(out TEntity)" />
-    /// <throws cref="InvalidCastException">If the object is not of type <code>TEntity</code></throws>
+    /// <exception cref="InvalidCastException">If the object is not of type <code>TEntity</code></exception>
     public TEntity AsEntity<TEntity>()
         where TEntity : ASEntity
     {
@@ -174,7 +174,7 @@ public class TypeMap
     /// </remarks>
     /// <seealso cref="IsModel{TModel}()"/>
     /// <seealso cref="IsModel{TModel}(out TModel)" />
-    /// <throws cref="InvalidCastException">If the graph cannot be represented by the type</throws>
+    /// <exception cref="InvalidCastException">If the graph cannot be represented by the type</exception>
     public TObject AsModel<TObject>()
         where TObject : ASType, IASModel<TObject>
     {
@@ -185,17 +185,37 @@ public class TypeMap
     }
 
     /// <summary>
-    ///     Extends the TypeGraph to include a new entity.
-    ///     The entity must have a parameterless constructor.
-    ///     If the entity already exists in the graph, then the existing instance is re-used.
-    ///     Throws an exception if the entity would have unmet dependencies.
+    ///     Projects the type graph into a specific type of entity.
+    ///     If <code>extendGraph</code> is <see langword="true"/>, then a new instance is constructed and linked to the graph.
+    ///     Otherwise, an existing instance is returned.
     /// </summary>
     /// <remarks>
     ///     This function cannot accomodate entities with required members.
     ///     Instead, <see cref="Extend{TEntity}(TEntity)"/> must be used.
     /// </remarks>
+    /// <exception cref="InvalidOperationException">If <code>extendGraph</code> is <see langword="true"/> and the entity type already exists in the graph</exception>
+    /// <exception cref="InvalidOperationException">If <code>extendGraph</code> is <see langword="true"/> and the entity requires another entity that is missing from the graph</exception>
+    /// <exception cref="InvalidCastException">If <code>extendGraph</code> is <see langword="false"/> and the object is not of type <code>TEntity</code></exception>
+    /// <seealso cref="Extend{TEntity}()"/>
+    /// <seealso cref="AsEntity{TEntity}"/>
+    public TEntity ProjectTo<TEntity>(bool extendGraph)
+        where TEntity : ASEntity, new() 
+        => extendGraph
+            ? Extend<TEntity>()
+            : AsEntity<TEntity>();
+
+    /// <summary>
+    ///     Extends the TypeGraph to include a new entity.
+    ///     The entity must have a parameterless constructor.
+    ///     Throws an exception if the entity would be a duplicate or have unmet dependencies.
+    /// </summary>
+    /// <remarks>
+    ///     This function cannot accomodate entities with required members.
+    ///     Instead, <see cref="Extend{TEntity}(TEntity)"/> must be used.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">If the entity type already exists in the graph</exception>
     /// <exception cref="InvalidOperationException">If the entity requires another entity that is missing from the graph</exception>
-    /// <seealso cref="Extend{TEntity}(TEntity)"/>
+    /// <see cref="Extend{TEntity}(TEntity)"/>
     /// <seealso cref="AddEntity"/>
     /// <seealso cref="TryAddEntity"/>
     public TEntity Extend<TEntity>()
@@ -204,18 +224,21 @@ public class TypeMap
     
     /// <summary>
     ///     Extends the TypeGraph to include a new entity.
-    ///     If the entity already exists in the graph, then the existing instance is re-used.
-    ///     Throws an exception if the entity would have unmet dependencies.
+    ///     Throws an exception if the entity would be a duplicate or have unmet dependencies.
     /// </summary>
+    /// <param name="entity"></param>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">If the entity type already exists in the graph</exception>
     /// <exception cref="InvalidOperationException">If the entity requires another entity that is missing from the graph</exception>
-    /// <seealso cref="Extend{TEntity}()"/>
+    /// <see cref="Extend{TEntity}()"/>
     /// <seealso cref="AddEntity"/>
     /// <seealso cref="TryAddEntity"/>
     public TEntity Extend<TEntity>(TEntity entity)
         where TEntity : ASEntity
     {
-        if (IsEntity<TEntity>(out var existingEntity))
-            return existingEntity;
+        if (IsEntity<TEntity>())
+            throw new InvalidOperationException($"Cannot extend the graph with entity {typeof(TEntity)}: that type already exists in the graph");
         
         // Check dependencies - this is a workaround to avoid the risk case described in TryAdd().
         if (entity.BaseTypeName != null && !AllASTypes.Contains(entity.BaseTypeName))
@@ -228,7 +251,7 @@ public class TypeMap
     /// <summary>
     ///     Like <see cref="TryAddEntity"/>, but throws if a conflicting entity already exists in the map.
     /// </summary>
-    /// <throws cref="InvalidOperationException">If an object of this type already exists in the graph</throws>
+    /// <exception cref="InvalidOperationException">If an object of this type already exists in the graph</exception>
     internal void AddEntity(ASEntity instance)
     {
         if (!TryAddEntity(instance))

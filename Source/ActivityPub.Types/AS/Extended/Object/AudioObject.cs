@@ -17,27 +17,17 @@ public class AudioObject : DocumentObject, IASModel<AudioObject, AudioObjectEnti
     public const string AudioType = "Audio";
     static string IASModel<AudioObject>.ASTypeName => AudioType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public AudioObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public AudioObject() => Entity = TypeMap.Extend<AudioObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public AudioObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<AudioObjectEntity>();
+    /// <inheritdoc />
+    public AudioObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<AudioObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public AudioObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public AudioObject(TypeMap typeMap, AudioObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<AudioObjectEntity>();

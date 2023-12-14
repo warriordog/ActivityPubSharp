@@ -17,27 +17,17 @@ public class ApplicationActor : APActor, IASModel<ApplicationActor, ApplicationA
     public const string ApplicationType = "Application";
     static string IASModel<ApplicationActor>.ASTypeName => ApplicationType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ApplicationActor() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ApplicationActor() => Entity = TypeMap.Extend<ApplicationActorEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ApplicationActor(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ApplicationActorEntity>();
+    /// <inheritdoc />
+    public ApplicationActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ApplicationActorEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ApplicationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ApplicationActor(TypeMap typeMap, ApplicationActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ApplicationActorEntity>();

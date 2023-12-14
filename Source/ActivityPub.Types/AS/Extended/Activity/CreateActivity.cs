@@ -17,27 +17,17 @@ public class CreateActivity : ASActivity, IASModel<CreateActivity, CreateActivit
     public const string CreateType = "Create";
     static string IASModel<CreateActivity>.ASTypeName => CreateType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public CreateActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public CreateActivity() => Entity = TypeMap.Extend<CreateActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public CreateActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<CreateActivityEntity>();
+    /// <inheritdoc />
+    public CreateActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<CreateActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public CreateActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public CreateActivity(TypeMap typeMap, CreateActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<CreateActivityEntity>();

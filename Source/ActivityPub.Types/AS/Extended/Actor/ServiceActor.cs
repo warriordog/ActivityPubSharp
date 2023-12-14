@@ -17,27 +17,17 @@ public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, 
     public const string ServiceType = "Service";
     static string IASModel<ServiceActor>.ASTypeName => ServiceType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ServiceActor() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ServiceActor() => Entity = TypeMap.Extend<ServiceActorEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ServiceActor(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ServiceActorEntity>();
+    /// <inheritdoc />
+    public ServiceActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ServiceActorEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ServiceActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ServiceActor(TypeMap typeMap, ServiceActorEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ServiceActorEntity>();

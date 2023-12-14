@@ -101,27 +101,17 @@ public class FakeTypeForASTypeInfoCacheTests : ASLink, IASModel<FakeTypeForASTyp
     public const string FakeTypeForASTypeInfoCacheTestsType = "FakeTypeForASTypeInfoCacheTests";
     static string IASModel<FakeTypeForASTypeInfoCacheTests>.ASTypeName => FakeTypeForASTypeInfoCacheTestsType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public FakeTypeForASTypeInfoCacheTests() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public FakeTypeForASTypeInfoCacheTests() => Entity = TypeMap.Extend<FakeTypeForASTypeInfoCacheTestsEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public FakeTypeForASTypeInfoCacheTests(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<FakeTypeForASTypeInfoCacheTestsEntity>();
+    /// <inheritdoc />
+    public FakeTypeForASTypeInfoCacheTests(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<FakeTypeForASTypeInfoCacheTestsEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public FakeTypeForASTypeInfoCacheTests(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public FakeTypeForASTypeInfoCacheTests(TypeMap typeMap, FakeTypeForASTypeInfoCacheTestsEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<FakeTypeForASTypeInfoCacheTestsEntity>();

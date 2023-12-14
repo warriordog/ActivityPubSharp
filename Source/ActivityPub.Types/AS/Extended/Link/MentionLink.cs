@@ -17,27 +17,17 @@ public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLi
     public const string MentionType = "Mention";
     static string IASModel<MentionLink>.ASTypeName => MentionType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public MentionLink() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public MentionLink() => Entity = TypeMap.Extend<MentionLinkEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public MentionLink(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<MentionLinkEntity>();
+    /// <inheritdoc />
+    public MentionLink(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<MentionLinkEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public MentionLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public MentionLink(TypeMap typeMap, MentionLinkEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<MentionLinkEntity>();

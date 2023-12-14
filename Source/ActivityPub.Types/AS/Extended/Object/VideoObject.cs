@@ -17,27 +17,17 @@ public class VideoObject : DocumentObject, IASModel<VideoObject, VideoObjectEnti
     public const string VideoType = "Video";
     static string IASModel<VideoObject>.ASTypeName => VideoType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public VideoObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public VideoObject() => Entity = TypeMap.Extend<VideoObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public VideoObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<VideoObjectEntity>();
+    /// <inheritdoc />
+    public VideoObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<VideoObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public VideoObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public VideoObject(TypeMap typeMap, VideoObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<VideoObjectEntity>();

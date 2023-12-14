@@ -17,27 +17,17 @@ public class ReadActivity : ASActivity, IASModel<ReadActivity, ReadActivityEntit
     public const string ReadType = "Read";
     static string IASModel<ReadActivity>.ASTypeName => ReadType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ReadActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ReadActivity() => Entity = TypeMap.Extend<ReadActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ReadActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ReadActivityEntity>();
+    /// <inheritdoc />
+    public ReadActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ReadActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ReadActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ReadActivity(TypeMap typeMap, ReadActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ReadActivityEntity>();

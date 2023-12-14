@@ -68,26 +68,22 @@ public abstract class ASTypeTests
     private class StubASType : ASType, IASModel<StubASType, StubASTypeEntity, ASType>
     {
         /// <summary>
-    ///     ActivityStreams type name for "Stub" types.
-    /// </summary>
-    public const string StubType = "Stub";
+        ///     ActivityStreams type name for "Stub" types.
+        /// </summary>
+        public const string StubType = "Stub";
         static string IASModel<StubASType>.ASTypeName => StubType;
+        
+        /// <inheritdoc />
+        public StubASType() => Entity = TypeMap.Extend<StubASTypeEntity>();
 
-        /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public StubASType() : this(new TypeMap()) {}
+        /// <inheritdoc />
+        public StubASType(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+            => Entity = TypeMap.ProjectTo<StubASTypeEntity>(isExtending);
 
-        /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public StubASType(TypeMap typeMap) : base(typeMap)
-        {
-            Entity = new StubASTypeEntity();
-            TypeMap.AddEntity(Entity);
-        }
+        /// <inheritdoc />
+        public StubASType(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
+        /// <inheritdoc />
         [SetsRequiredMembers]
         public StubASType(TypeMap typeMap, StubASTypeEntity? entity) : base(typeMap, null)
             => Entity = entity ?? typeMap.AsEntity<StubASTypeEntity>();
