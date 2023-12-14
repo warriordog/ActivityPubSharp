@@ -187,15 +187,15 @@ public class TypeMap
     /// <summary>
     ///     Extends the TypeGraph to include a new entity.
     ///     The entity must have a parameterless constructor.
-    ///     Throws an exception if the entity would be a duplicate or have unmet dependencies.
+    ///     If the entity already exists in the graph, then the existing instance is re-used.
+    ///     Throws an exception if the entity would have unmet dependencies.
     /// </summary>
     /// <remarks>
     ///     This function cannot accomodate entities with required members.
     ///     Instead, <see cref="Extend{TEntity}(TEntity)"/> must be used.
     /// </remarks>
-    /// <exception cref="InvalidOperationException">If the entity type already exists in the graph</exception>
     /// <exception cref="InvalidOperationException">If the entity requires another entity that is missing from the graph</exception>
-    /// <see cref="Extend{TEntity}(TEntity)"/>
+    /// <seealso cref="Extend{TEntity}(TEntity)"/>
     /// <seealso cref="AddEntity"/>
     /// <seealso cref="TryAddEntity"/>
     public TEntity Extend<TEntity>()
@@ -204,21 +204,18 @@ public class TypeMap
     
     /// <summary>
     ///     Extends the TypeGraph to include a new entity.
-    ///     Throws an exception if the entity would be a duplicate or have unmet dependencies.
+    ///     If the entity already exists in the graph, then the existing instance is re-used.
+    ///     Throws an exception if the entity would have unmet dependencies.
     /// </summary>
-    /// <param name="entity"></param>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException">If the entity type already exists in the graph</exception>
     /// <exception cref="InvalidOperationException">If the entity requires another entity that is missing from the graph</exception>
-    /// <see cref="Extend{TEntity}()"/>
+    /// <seealso cref="Extend{TEntity}()"/>
     /// <seealso cref="AddEntity"/>
     /// <seealso cref="TryAddEntity"/>
     public TEntity Extend<TEntity>(TEntity entity)
         where TEntity : ASEntity
     {
-        if (IsEntity<TEntity>())
-            throw new InvalidOperationException($"Cannot extend the graph with entity {typeof(TEntity)}: that type already exists in the graph");
+        if (IsEntity<TEntity>(out var existingEntity))
+            return existingEntity;
         
         // Check dependencies - this is a workaround to avoid the risk case described in TryAdd().
         if (entity.BaseTypeName != null && !AllASTypes.Contains(entity.BaseTypeName))
