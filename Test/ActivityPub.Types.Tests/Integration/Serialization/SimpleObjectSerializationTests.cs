@@ -170,5 +170,17 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 .And.HaveStringProperty("name", "name")
                 .And.HaveStringProperty("mediaType", "text/html");
         }
+
+        public class UntypedObjectShould : SimpleObjectSerializationTests
+        {
+            [Fact]
+            public void NotIncludeTypeProperty()
+            {
+                ObjectUnderTest = new ASType();
+                JsonUnderTest.Should().NotHaveProperty("type");
+            }
+            
+            public UntypedObjectShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+        }
     }
 }
