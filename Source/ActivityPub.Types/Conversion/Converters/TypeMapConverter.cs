@@ -32,6 +32,13 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     }
 
     /// <inheritdoc />
+    public TypeMapConverter()
+    {
+        _asTypeInfoCache = ASTypeInfoCache.Instance;
+        _conversionOptions = new ConversionOptions();
+    }
+
+    /// <inheritdoc />
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Read input into temporary object
