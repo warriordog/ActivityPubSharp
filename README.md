@@ -1,5 +1,8 @@
 ﻿# ActivityPubSharp - C# implementation of ActivityPub
 
+[![Build Status](https://github.com/warriordog/ActivityPubSharp/actions/workflows/build-dotnet.yml/badge.svg)](https://github.com/warriordog/ActivityPubSharp/actions/workflows/build-dotnet.yml)
+[![NuGet Snapshot](https://github.com/warriordog/ActivityPubSharp/actions/workflows/publish-snapshot.yml/badge.svg)](https://github.com/warriordog/ActivityPubSharp/actions/workflows/publish-snapshot.yml)
+
 ❗❗ **Please note - this project is incomplete and not ready for production use.
 The information here describes the design and technical goals of ActivityPubSharp, not the currently implemented functionality.
 Please see [the issues tracker](https://github.com/warriordog/ActivityPubSharp/issues) for detailed status.**
