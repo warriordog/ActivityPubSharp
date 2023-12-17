@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Collection;
 
@@ -23,6 +24,7 @@ public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity,
     /// <summary>
     ///     ActivityStreams type name for "Collection" types.
     /// </summary>
+    [PublicAPI]
     public const string CollectionType = "Collection";
     static string IASModel<ASCollection>.ASTypeName => CollectionType;
 

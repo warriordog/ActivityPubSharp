@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class LeaveActivity : ASActivity, IASModel<LeaveActivity, LeaveActivityEn
     /// <summary>
     ///     ActivityStreams type name for "Leave" types.
     /// </summary>
+    [PublicAPI]
     public const string LeaveType = "Leave";
     static string IASModel<LeaveActivity>.ASTypeName => LeaveType;
 

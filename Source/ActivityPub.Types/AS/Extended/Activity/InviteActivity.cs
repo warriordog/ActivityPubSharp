@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -14,6 +15,7 @@ public class InviteActivity : OfferActivity, IASModel<InviteActivity, InviteActi
     /// <summary>
     ///     ActivityStreams type name for "Invite" types.
     /// </summary>
+    [PublicAPI]
     public const string InviteType = "Invite";
     static string IASModel<InviteActivity>.ASTypeName => InviteType;
 

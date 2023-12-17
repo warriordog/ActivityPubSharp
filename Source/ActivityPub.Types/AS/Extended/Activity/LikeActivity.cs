@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class LikeActivity : ASActivity, IASModel<LikeActivity, LikeActivityEntit
     /// <summary>
     ///     ActivityStreams type name for "Like" types.
     /// </summary>
+    [PublicAPI]
     public const string LikeType = "Like";
     static string IASModel<LikeActivity>.ASTypeName => LikeType;
 

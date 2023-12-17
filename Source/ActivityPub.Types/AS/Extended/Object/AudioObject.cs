@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class AudioObject : DocumentObject, IASModel<AudioObject, AudioObjectEnti
     /// <summary>
     ///     ActivityStreams type name for "Audio" types.
     /// </summary>
+    [PublicAPI]
     public const string AudioType = "Audio";
     static string IASModel<AudioObject>.ASTypeName => AudioType;
 

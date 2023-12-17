@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -14,6 +15,7 @@ public class CreateActivity : ASActivity, IASModel<CreateActivity, CreateActivit
     /// <summary>
     ///     ActivityStreams type name for "Create" types.
     /// </summary>
+    [PublicAPI]
     public const string CreateType = "Create";
     static string IASModel<CreateActivity>.ASTypeName => CreateType;
 

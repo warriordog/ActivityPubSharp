@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class EventObject : ASObject, IASModel<EventObject, EventObjectEntity, AS
     /// <summary>
     ///     ActivityStreams type name for "Event" types.
     /// </summary>
+    [PublicAPI]
     public const string EventType = "Event";
     static string IASModel<EventObject>.ASTypeName => EventType;
 

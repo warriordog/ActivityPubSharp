@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class VideoObject : DocumentObject, IASModel<VideoObject, VideoObjectEnti
     /// <summary>
     ///     ActivityStreams type name for "Video" types.
     /// </summary>
+    [PublicAPI]
     public const string VideoType = "Video";
     static string IASModel<VideoObject>.ASTypeName => VideoType;
 

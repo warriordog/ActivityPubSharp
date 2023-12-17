@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Collection;
 
@@ -20,6 +21,7 @@ public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASColle
     /// <summary>
     ///     ActivityStreams type name for "CollectionPage" types.
     /// </summary>
+    [PublicAPI]
     public const string CollectionPageType = "CollectionPage";
     static string IASModel<ASCollectionPage>.ASTypeName => CollectionPageType;
 

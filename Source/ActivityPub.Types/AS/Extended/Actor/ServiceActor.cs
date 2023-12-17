@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Actor;
 
@@ -14,6 +15,7 @@ public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, 
     /// <summary>
     ///     ActivityStreams type name for "Service" types.
     /// </summary>
+    [PublicAPI]
     public const string ServiceType = "Service";
     static string IASModel<ServiceActor>.ASTypeName => ServiceType;
 

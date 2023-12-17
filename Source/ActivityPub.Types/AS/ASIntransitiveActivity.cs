@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS;
 
@@ -16,6 +17,7 @@ public class ASIntransitiveActivity : ASActivity, IASModel<ASIntransitiveActivit
     /// <summary>
     ///     ActivityStreams type name for "IntransitiveActivity" types.
     /// </summary>
+    [PublicAPI]
     public const string IntransitiveActivityType = "IntransitiveActivity";
     static string IASModel<ASIntransitiveActivity>.ASTypeName => IntransitiveActivityType;
 

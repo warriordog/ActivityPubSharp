@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -14,6 +15,7 @@ public class ViewActivity : ASActivity, IASModel<ViewActivity, ViewActivityEntit
     /// <summary>
     ///     ActivityStreams type name for "View" types.
     /// </summary>
+    [PublicAPI]
     public const string ViewType = "View";
     static string IASModel<ViewActivity>.ASTypeName => ViewType;
 

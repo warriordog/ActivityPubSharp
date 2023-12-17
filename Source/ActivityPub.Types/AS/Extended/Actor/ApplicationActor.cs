@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Actor;
 
@@ -14,6 +15,7 @@ public class ApplicationActor : APActor, IASModel<ApplicationActor, ApplicationA
     /// <summary>
     ///     ActivityStreams type name for "Application" types.
     /// </summary>
+    [PublicAPI]
     public const string ApplicationType = "Application";
     static string IASModel<ApplicationActor>.ASTypeName => ApplicationType;
 

@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -18,6 +19,7 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
     /// <summary>
     ///     ActivityStreams type name for "Question" types.
     /// </summary>
+    [PublicAPI]
     public const string QuestionType = "Question";
     static string IASModel<QuestionActivity>.ASTypeName => QuestionType;
 

@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -17,6 +18,7 @@ public class BlockActivity : IgnoreActivity, IASModel<BlockActivity, BlockActivi
     /// <summary>
     ///     ActivityStreams type name for "Block" types.
     /// </summary>
+    [PublicAPI]
     public const string BlockType = "Block";
     static string IASModel<BlockActivity>.ASTypeName => BlockType;
 

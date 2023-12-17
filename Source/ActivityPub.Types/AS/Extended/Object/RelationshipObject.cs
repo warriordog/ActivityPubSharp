@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -16,6 +17,7 @@ public class RelationshipObject : ASObject, IASModel<RelationshipObject, Relatio
     /// <summary>
     ///     ActivityStreams type name for "Relationship" types.
     /// </summary>
+    [PublicAPI]
     public const string RelationshipType = "Relationship";
     static string IASModel<RelationshipObject>.ASTypeName => RelationshipType;
 

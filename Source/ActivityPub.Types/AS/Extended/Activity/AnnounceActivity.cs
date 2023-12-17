@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class AnnounceActivity : ASActivity, IASModel<AnnounceActivity, AnnounceA
     /// <summary>
     ///     ActivityStreams type name for "Announce" types.
     /// </summary>
+    [PublicAPI]
     public const string AnnounceType = "Announce";
     static string IASModel<AnnounceActivity>.ASTypeName => AnnounceType;
 

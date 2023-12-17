@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class DeleteActivity : ASActivity, IASModel<DeleteActivity, DeleteActivit
     /// <summary>
     ///     ActivityStreams type name for "Delete" types.
     /// </summary>
+    [PublicAPI]
     public const string DeleteType = "Delete";
     static string IASModel<DeleteActivity>.ASTypeName => DeleteType;
 

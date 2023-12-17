@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -14,6 +15,7 @@ public class DislikeActivity : ASActivity, IASModel<DislikeActivity, DislikeActi
     /// <summary>
     ///     ActivityStreams type name for "Dislike" types.
     /// </summary>
+    [PublicAPI]
     public const string DislikeType = "Dislike";
     static string IASModel<DislikeActivity>.ASTypeName => DislikeType;
 

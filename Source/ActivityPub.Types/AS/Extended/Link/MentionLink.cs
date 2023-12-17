@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Link;
 
@@ -14,6 +15,7 @@ public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLi
     /// <summary>
     ///     ActivityStreams type name for "Mention" types.
     /// </summary>
+    [PublicAPI]
     public const string MentionType = "Mention";
     static string IASModel<MentionLink>.ASTypeName => MentionType;
 

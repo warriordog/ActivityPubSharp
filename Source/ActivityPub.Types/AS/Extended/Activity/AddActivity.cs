@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class AddActivity : ASActivity, IASModel<AddActivity, AddActivityEntity, 
     /// <summary>
     ///     ActivityStreams type name for "Add" types.
     /// </summary>
+    [PublicAPI]
     public const string AddType = "Add";
     static string IASModel<AddActivity>.ASTypeName => AddType;
 

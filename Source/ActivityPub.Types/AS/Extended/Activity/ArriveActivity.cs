@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -16,6 +17,7 @@ public class ArriveActivity : ASIntransitiveActivity, IASModel<ArriveActivity, A
     /// <summary>
     ///     ActivityStreams type name for "Arrive" types.
     /// </summary>
+    [PublicAPI]
     public const string ArriveType = "Arrive";
     static string IASModel<ArriveActivity>.ASTypeName => ArriveType;
 

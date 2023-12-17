@@ -2,6 +2,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -14,6 +15,7 @@ public class AcceptActivity : ASActivity, IASModel<AcceptActivity, AcceptActivit
     /// <summary>
     ///     ActivityStreams type name for "Accept" types.
     /// </summary>
+    [PublicAPI]
     public const string AcceptType = "Accept";
     static string IASModel<AcceptActivity>.ASTypeName => AcceptType;
 

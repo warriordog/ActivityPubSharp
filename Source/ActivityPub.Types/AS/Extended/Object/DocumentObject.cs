@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class DocumentObject : ASObject, IASModel<DocumentObject, DocumentObjectE
     /// <summary>
     ///     ActivityStreams type name for "Document" types.
     /// </summary>
+    [PublicAPI]
     public const string DocumentType = "Document";
     static string IASModel<DocumentObject>.ASTypeName => DocumentType;
 

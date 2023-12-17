@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class ArticleObject : ASObject, IASModel<ArticleObject, ArticleObjectEnti
     /// <summary>
     ///     ActivityStreams type name for "Article" types.
     /// </summary>
+    [PublicAPI]
     public const string ArticleType = "Article";
     static string IASModel<ArticleObject>.ASTypeName => ArticleType;
 

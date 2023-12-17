@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS;
 
@@ -18,6 +19,7 @@ public class ASActivity : ASObject, IASModel<ASActivity, ASActivityEntity, ASObj
     /// <summary>
     ///     ActivityStreams type name for "Activity" types.
     /// </summary>
+    [PublicAPI]
     public const string ActivityType = "Activity";
     static string IASModel<ASActivity>.ASTypeName => ActivityType;
 

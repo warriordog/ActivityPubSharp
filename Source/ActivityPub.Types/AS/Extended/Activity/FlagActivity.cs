@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class FlagActivity : ASActivity, IASModel<FlagActivity, FlagActivityEntit
     /// <summary>
     ///     ActivityStreams type name for "Flag" types.
     /// </summary>
+    [PublicAPI]
     public const string FlagType = "Flag";
     static string IASModel<FlagActivity>.ASTypeName => FlagType;
 

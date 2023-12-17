@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Collection;
 
@@ -23,6 +24,7 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     /// <summary>
     ///     ActivityStreams type name for "OrderedCollection" types.
     /// </summary>
+    [PublicAPI]
     public const string OrderedCollectionType = "OrderedCollection";
     static string IASModel<ASOrderedCollection>.ASTypeName => OrderedCollectionType;
 

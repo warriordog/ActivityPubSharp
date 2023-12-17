@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class NoteObject : ASObject, IASModel<NoteObject, NoteObjectEntity, ASObj
     /// <summary>
     ///     ActivityStreams type name for "Note" types.
     /// </summary>
+    [PublicAPI]
     public const string NoteType = "Note";
     static string IASModel<NoteObject>.ASTypeName => NoteType;
 

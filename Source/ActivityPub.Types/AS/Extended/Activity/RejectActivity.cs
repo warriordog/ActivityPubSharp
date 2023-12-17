@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class RejectActivity : ASActivity, IASModel<RejectActivity, RejectActivit
     /// <summary>
     ///     ActivityStreams type name for "Reject" types.
     /// </summary>
+    [PublicAPI]
     public const string RejectType = "Reject";
     static string IASModel<RejectActivity>.ASTypeName => RejectType;
 

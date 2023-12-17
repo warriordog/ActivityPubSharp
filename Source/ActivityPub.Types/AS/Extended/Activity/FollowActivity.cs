@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -16,6 +17,7 @@ public class FollowActivity : ASActivity, IASModel<FollowActivity, FollowActivit
     /// <summary>
     ///     ActivityStreams type name for "Follow" types.
     /// </summary>
+    [PublicAPI]
     public const string FollowType = "Follow";
     static string IASModel<FollowActivity>.ASTypeName => FollowType;
 

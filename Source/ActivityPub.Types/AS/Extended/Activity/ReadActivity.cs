@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -14,6 +15,7 @@ public class ReadActivity : ASActivity, IASModel<ReadActivity, ReadActivityEntit
     /// <summary>
     ///     ActivityStreams type name for "Read" types.
     /// </summary>
+    [PublicAPI]
     public const string ReadType = "Read";
     static string IASModel<ReadActivity>.ASTypeName => ReadType;
 

@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class RemoveActivity : ASActivity, IASModel<RemoveActivity, RemoveActivit
     /// <summary>
     ///     ActivityStreams type name for "Remove" types.
     /// </summary>
+    [PublicAPI]
     public const string RemoveType = "Remove";
     static string IASModel<RemoveActivity>.ASTypeName => RemoveType;
 

@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -14,6 +15,7 @@ public class IgnoreActivity : ASActivity, IASModel<IgnoreActivity, IgnoreActivit
     /// <summary>
     ///     ActivityStreams type name for "Ignore" types.
     /// </summary>
+    [PublicAPI]
     public const string IgnoreType = "Ignore";
     static string IASModel<IgnoreActivity>.ASTypeName => IgnoreType;
 

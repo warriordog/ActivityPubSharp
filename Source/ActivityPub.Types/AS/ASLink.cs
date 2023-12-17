@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS;
 
@@ -20,6 +21,7 @@ public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
     /// <summary>
     ///     ActivityStreams type name for "Link" types.
     /// </summary>
+    [PublicAPI]
     public const string LinkType = "Link";
     static string IASModel<ASLink>.ASTypeName => LinkType;
 

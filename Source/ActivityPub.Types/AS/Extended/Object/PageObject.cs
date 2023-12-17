@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class PageObject : DocumentObject, IASModel<PageObject, PageObjectEntity,
     /// <summary>
     ///     ActivityStreams type name for "Page" types.
     /// </summary>
+    [PublicAPI]
     public const string PageType = "Page";
     static string IASModel<PageObject>.ASTypeName => PageType;
 

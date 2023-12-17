@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -16,6 +17,7 @@ public class UpdateActivity : ASActivity, IASModel<UpdateActivity, UpdateActivit
     /// <summary>
     ///     ActivityStreams type name for "Update" types.
     /// </summary>
+    [PublicAPI]
     public const string UpdateType = "Update";
     static string IASModel<UpdateActivity>.ASTypeName => UpdateType;
 

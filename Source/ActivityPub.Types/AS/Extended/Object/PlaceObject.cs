@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class PlaceObject : ASObject, IASModel<PlaceObject, PlaceObjectEntity, AS
     /// <summary>
     ///     ActivityStreams type name for "Place" types.
     /// </summary>
+    [PublicAPI]
     public const string PlaceType = "Place";
     static string IASModel<PlaceObject>.ASTypeName => PlaceType;
 

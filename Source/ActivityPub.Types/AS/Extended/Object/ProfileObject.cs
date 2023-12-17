@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -15,6 +16,7 @@ public class ProfileObject : ASObject, IASModel<ProfileObject, ProfileObjectEnti
     /// <summary>
     ///     ActivityStreams type name for "Profile" types.
     /// </summary>
+    [PublicAPI]
     public const string ProfileType = "Profile";
     static string IASModel<ProfileObject>.ASTypeName => ProfileType;
 

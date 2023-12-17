@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Object;
 
@@ -14,6 +15,7 @@ public class ImageObject : DocumentObject, IASModel<ImageObject, ImageObjectEnti
     /// <summary>
     ///     ActivityStreams type name for "Image" types.
     /// </summary>
+    [PublicAPI]
     public const string ImageType = "Image";
     static string IASModel<ImageObject>.ASTypeName => ImageType;
 

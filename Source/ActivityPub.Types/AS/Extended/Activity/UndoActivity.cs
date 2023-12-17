@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -16,6 +17,7 @@ public class UndoActivity : ASActivity, IASModel<UndoActivity, UndoActivityEntit
     /// <summary>
     ///     ActivityStreams type name for "Undo" types.
     /// </summary>
+    [PublicAPI]
     public const string UndoType = "Undo";
     static string IASModel<UndoActivity>.ASTypeName => UndoType;
 

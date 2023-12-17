@@ -9,6 +9,7 @@ using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS;
 
@@ -22,6 +23,7 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
     /// <summary>
     ///     ActivityStreams type name for "Object" types.
     /// </summary>
+    [PublicAPI]
     public const string ObjectType = "Object";
     static string IASModel<ASObject>.ASTypeName => ObjectType;
 

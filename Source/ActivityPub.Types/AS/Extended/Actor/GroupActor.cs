@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Actor;
 
@@ -14,6 +15,7 @@ public class GroupActor : APActor, IASModel<GroupActor, GroupActorEntity, APActo
     /// <summary>
     ///     ActivityStreams type name for "Group" types.
     /// </summary>
+    [PublicAPI]
     public const string GroupType = "Group";
     static string IASModel<GroupActor>.ASTypeName => GroupType;
 

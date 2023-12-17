@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Actor;
 
@@ -14,6 +15,7 @@ public class OrganizationActor : APActor, IASModel<OrganizationActor, Organizati
     /// <summary>
     ///     ActivityStreams type name for "Organization" types.
     /// </summary>
+    [PublicAPI]
     public const string OrganizationType = "Organization";
     static string IASModel<OrganizationActor>.ASTypeName => OrganizationType;
 

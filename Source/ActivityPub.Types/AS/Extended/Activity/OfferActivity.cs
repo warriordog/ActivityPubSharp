@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class OfferActivity : ASActivity, IASModel<OfferActivity, OfferActivityEn
     /// <summary>
     ///     ActivityStreams type name for "Offer" types.
     /// </summary>
+    [PublicAPI]
     public const string OfferType = "Offer";
     static string IASModel<OfferActivity>.ASTypeName => OfferType;
 

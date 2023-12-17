@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Activity;
 
@@ -15,6 +16,7 @@ public class JoinActivity : ASActivity, IASModel<JoinActivity, JoinActivityEntit
     /// <summary>
     ///     ActivityStreams type name for "Join" types.
     /// </summary>
+    [PublicAPI]
     public const string JoinType = "Join";
     static string IASModel<JoinActivity>.ASTypeName => JoinType;
 

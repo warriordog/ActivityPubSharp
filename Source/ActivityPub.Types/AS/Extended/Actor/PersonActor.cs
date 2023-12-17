@@ -3,6 +3,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS.Extended.Actor;
 
@@ -14,6 +15,7 @@ public class PersonActor : APActor, IASModel<PersonActor, PersonActorEntity, APA
     /// <summary>
     ///     ActivityStreams type name for "Person" types.
     /// </summary>
+    [PublicAPI]
     public const string PersonType = "Person";
     static string IASModel<PersonActor>.ASTypeName => PersonType;
 
