@@ -21,27 +21,17 @@ namespace ActivityPub.Types.AS;
 /// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects" />
 public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
 {
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public APActor() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public APActor() => Entity = TypeMap.Extend<APActorEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public APActor(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<APActorEntity>();
+    /// <inheritdoc />
+    public APActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<APActorEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public APActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public APActor(TypeMap typeMap, APActorEntity? entity) : base(typeMap, null)
     {

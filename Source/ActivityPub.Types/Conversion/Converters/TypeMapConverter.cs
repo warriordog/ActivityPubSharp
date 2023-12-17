@@ -251,10 +251,12 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private void WriteTypeMap(TypeMap typeMap, JsonObject outputNode, SerializationMetadata meta)
     {
         // "type" - AS / AP types. Can be string or array.
-        outputNode["type"] = JsonSerializer.SerializeToNode(typeMap.ASTypes, meta.JsonSerializerOptions);
+        if (typeMap.ASTypes.Count > 0)
+            outputNode["type"] = JsonSerializer.SerializeToNode(typeMap.ASTypes, meta.JsonSerializerOptions);
 
         // "@context" - JSON-LD context. Can be string, array, or object.
-        outputNode["@context"] = JsonSerializer.SerializeToNode(typeMap.LDContext, meta.JsonSerializerOptions);
+        if (typeMap.LDContext.Count > 0)
+            outputNode["@context"] = JsonSerializer.SerializeToNode(typeMap.LDContext, meta.JsonSerializerOptions);
 
         // Unmapped (overflow) JSON properties
         if (typeMap.UnmappedProperties != null)

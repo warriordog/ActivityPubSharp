@@ -17,27 +17,17 @@ public class ImageObject : DocumentObject, IASModel<ImageObject, ImageObjectEnti
     public const string ImageType = "Image";
     static string IASModel<ImageObject>.ASTypeName => ImageType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ImageObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ImageObject() => Entity = TypeMap.Extend<ImageObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ImageObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ImageObjectEntity>();
+    /// <inheritdoc />
+    public ImageObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ImageObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ImageObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ImageObject(TypeMap typeMap, ImageObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ImageObjectEntity>();

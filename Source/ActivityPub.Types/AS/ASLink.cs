@@ -23,27 +23,17 @@ public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
     public const string LinkType = "Link";
     static string IASModel<ASLink>.ASTypeName => LinkType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ASLink() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ASLink() => Entity = TypeMap.Extend<ASLinkEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ASLink(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ASLinkEntity>();
+    /// <inheritdoc />
+    public ASLink(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ASLinkEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ASLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ASLink(TypeMap typeMap, ASLinkEntity? entity) : base(typeMap, null)
     {

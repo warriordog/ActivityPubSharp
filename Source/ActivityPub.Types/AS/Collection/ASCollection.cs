@@ -26,27 +26,17 @@ public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity,
     public const string CollectionType = "Collection";
     static string IASModel<ASCollection>.ASTypeName => CollectionType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ASCollection() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ASCollection() => Entity = TypeMap.Extend<ASCollectionEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ASCollection(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ASCollectionEntity>();
-
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
+    public ASCollection(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ASCollectionEntity>(isExtending);
+    
+    /// <inheritdoc />
     public ASCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ASCollection(TypeMap typeMap, ASCollectionEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASCollectionEntity>();

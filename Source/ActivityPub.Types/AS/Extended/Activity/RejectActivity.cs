@@ -18,27 +18,17 @@ public class RejectActivity : ASActivity, IASModel<RejectActivity, RejectActivit
     public const string RejectType = "Reject";
     static string IASModel<RejectActivity>.ASTypeName => RejectType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public RejectActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public RejectActivity() => Entity = TypeMap.Extend<RejectActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public RejectActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<RejectActivityEntity>();
+    /// <inheritdoc />
+    public RejectActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<RejectActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public RejectActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public RejectActivity(TypeMap typeMap, RejectActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<RejectActivityEntity>();

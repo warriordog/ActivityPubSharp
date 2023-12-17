@@ -18,27 +18,17 @@ public class MoveActivity : ASActivity, IASModel<MoveActivity, MoveActivityEntit
     public const string MoveType = "Move";
     static string IASModel<MoveActivity>.ASTypeName => MoveType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public MoveActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public MoveActivity() => Entity = TypeMap.Extend<MoveActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public MoveActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<MoveActivityEntity>();
+    /// <inheritdoc />
+    public MoveActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<MoveActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public MoveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public MoveActivity(TypeMap typeMap, MoveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<MoveActivityEntity>();

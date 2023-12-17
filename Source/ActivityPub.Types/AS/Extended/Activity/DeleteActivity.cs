@@ -18,27 +18,17 @@ public class DeleteActivity : ASActivity, IASModel<DeleteActivity, DeleteActivit
     public const string DeleteType = "Delete";
     static string IASModel<DeleteActivity>.ASTypeName => DeleteType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public DeleteActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public DeleteActivity() => Entity = TypeMap.Extend<DeleteActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public DeleteActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<DeleteActivityEntity>();
+    /// <inheritdoc />
+    public DeleteActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<DeleteActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public DeleteActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public DeleteActivity(TypeMap typeMap, DeleteActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<DeleteActivityEntity>();

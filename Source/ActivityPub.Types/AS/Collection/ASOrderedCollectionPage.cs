@@ -23,27 +23,17 @@ public class ASOrderedCollectionPage : ASOrderedCollection, IASModel<ASOrderedCo
     public const string OrderedCollectionPageType = "OrderedCollectionPage";
     static string IASModel<ASOrderedCollectionPage>.ASTypeName => OrderedCollectionPageType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ASOrderedCollectionPage() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ASOrderedCollectionPage() => Entity = TypeMap.Extend<ASOrderedCollectionPageEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ASOrderedCollectionPage(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ASOrderedCollectionPageEntity>();
+    /// <inheritdoc />
+    public ASOrderedCollectionPage(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ASOrderedCollectionPageEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ASOrderedCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ASOrderedCollectionPage(TypeMap typeMap, ASOrderedCollectionPageEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASOrderedCollectionPageEntity>();

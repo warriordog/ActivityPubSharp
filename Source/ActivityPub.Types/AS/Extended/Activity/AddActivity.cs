@@ -18,27 +18,17 @@ public class AddActivity : ASActivity, IASModel<AddActivity, AddActivityEntity, 
     public const string AddType = "Add";
     static string IASModel<AddActivity>.ASTypeName => AddType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public AddActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public AddActivity() => Entity = TypeMap.Extend<AddActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public AddActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<AddActivityEntity>();
+    /// <inheritdoc />
+    public AddActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<AddActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public AddActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public AddActivity(TypeMap typeMap, AddActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<AddActivityEntity>();

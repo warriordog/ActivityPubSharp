@@ -25,17 +25,12 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
     public const string ObjectType = "Object";
     static string IASModel<ASObject>.ASTypeName => ObjectType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ASObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ASObject() => Entity = TypeMap.Extend<ASObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ASObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ASObjectEntity>();
+    /// <inheritdoc />
+    public ASObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ASObjectEntity>(isExtending);
 
     /// <summary>
     ///     Constructs a new instance and extends an existing type graph from a provided model.
@@ -43,9 +38,7 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
     /// <seealso cref="TypeMap.Extend{TEntity}()" />
     public ASObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ASObject(TypeMap typeMap, ASObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASObjectEntity>();

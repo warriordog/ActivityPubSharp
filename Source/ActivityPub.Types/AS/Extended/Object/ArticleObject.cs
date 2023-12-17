@@ -17,27 +17,17 @@ public class ArticleObject : ASObject, IASModel<ArticleObject, ArticleObjectEnti
     public const string ArticleType = "Article";
     static string IASModel<ArticleObject>.ASTypeName => ArticleType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ArticleObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ArticleObject() => Entity = TypeMap.Extend<ArticleObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ArticleObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ArticleObjectEntity>();
+    /// <inheritdoc />
+    public ArticleObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ArticleObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ArticleObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ArticleObject(TypeMap typeMap, ArticleObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ArticleObjectEntity>();

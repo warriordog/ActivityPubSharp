@@ -18,27 +18,17 @@ public class TombstoneObject : ASObject, IASModel<TombstoneObject, TombstoneObje
     public const string TombstoneType = "Tombstone";
     static string IASModel<TombstoneObject>.ASTypeName => TombstoneType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public TombstoneObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public TombstoneObject() => Entity = TypeMap.Extend<TombstoneObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public TombstoneObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<TombstoneObjectEntity>();
+    /// <inheritdoc />
+    public TombstoneObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<TombstoneObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public TombstoneObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public TombstoneObject(TypeMap typeMap, TombstoneObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<TombstoneObjectEntity>();

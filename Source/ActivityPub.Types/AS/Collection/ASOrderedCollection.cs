@@ -26,27 +26,17 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     public const string OrderedCollectionType = "OrderedCollection";
     static string IASModel<ASOrderedCollection>.ASTypeName => OrderedCollectionType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ASOrderedCollection() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ASOrderedCollection() => Entity = TypeMap.Extend<ASOrderedCollectionEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ASOrderedCollection(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ASOrderedCollectionEntity>();
+    /// <inheritdoc />
+    public ASOrderedCollection(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ASOrderedCollectionEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ASOrderedCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ASOrderedCollection(TypeMap typeMap, ASOrderedCollectionEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASOrderedCollectionEntity>();

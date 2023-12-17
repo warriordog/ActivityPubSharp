@@ -17,27 +17,17 @@ public class NoteObject : ASObject, IASModel<NoteObject, NoteObjectEntity, ASObj
     public const string NoteType = "Note";
     static string IASModel<NoteObject>.ASTypeName => NoteType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public NoteObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public NoteObject() => Entity = TypeMap.Extend<NoteObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public NoteObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<NoteObjectEntity>();
+    /// <inheritdoc />
+    public NoteObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<NoteObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public NoteObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public NoteObject(TypeMap typeMap, NoteObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<NoteObjectEntity>();

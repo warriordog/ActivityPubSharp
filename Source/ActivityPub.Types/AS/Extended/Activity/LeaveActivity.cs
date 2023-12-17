@@ -18,27 +18,17 @@ public class LeaveActivity : ASActivity, IASModel<LeaveActivity, LeaveActivityEn
     public const string LeaveType = "Leave";
     static string IASModel<LeaveActivity>.ASTypeName => LeaveType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public LeaveActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public LeaveActivity() => Entity = TypeMap.Extend<LeaveActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public LeaveActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<LeaveActivityEntity>();
+    /// <inheritdoc />
+    public LeaveActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<LeaveActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public LeaveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public LeaveActivity(TypeMap typeMap, LeaveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<LeaveActivityEntity>();

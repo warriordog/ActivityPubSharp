@@ -19,27 +19,17 @@ public class ArriveActivity : ASIntransitiveActivity, IASModel<ArriveActivity, A
     public const string ArriveType = "Arrive";
     static string IASModel<ArriveActivity>.ASTypeName => ArriveType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ArriveActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ArriveActivity() => Entity = TypeMap.Extend<ArriveActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ArriveActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ArriveActivityEntity>();
+    /// <inheritdoc />
+    public ArriveActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ArriveActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ArriveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ArriveActivity(TypeMap typeMap, ArriveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ArriveActivityEntity>();

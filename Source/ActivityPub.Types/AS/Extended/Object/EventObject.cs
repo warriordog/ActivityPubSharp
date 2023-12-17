@@ -17,27 +17,17 @@ public class EventObject : ASObject, IASModel<EventObject, EventObjectEntity, AS
     public const string EventType = "Event";
     static string IASModel<EventObject>.ASTypeName => EventType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public EventObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public EventObject() => Entity = TypeMap.Extend<EventObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public EventObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<EventObjectEntity>();
+    /// <inheritdoc />
+    public EventObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<EventObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public EventObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public EventObject(TypeMap typeMap, EventObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<EventObjectEntity>();

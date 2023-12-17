@@ -19,27 +19,17 @@ public class FollowActivity : ASActivity, IASModel<FollowActivity, FollowActivit
     public const string FollowType = "Follow";
     static string IASModel<FollowActivity>.ASTypeName => FollowType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public FollowActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public FollowActivity() => Entity = TypeMap.Extend<FollowActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public FollowActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<FollowActivityEntity>();
+    /// <inheritdoc />
+    public FollowActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<FollowActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public FollowActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public FollowActivity(TypeMap typeMap, FollowActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<FollowActivityEntity>();

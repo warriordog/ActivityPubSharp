@@ -18,27 +18,17 @@ public class ProfileObject : ASObject, IASModel<ProfileObject, ProfileObjectEnti
     public const string ProfileType = "Profile";
     static string IASModel<ProfileObject>.ASTypeName => ProfileType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ProfileObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ProfileObject() => Entity = TypeMap.Extend<ProfileObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ProfileObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ProfileObjectEntity>();
+    /// <inheritdoc />
+    public ProfileObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ProfileObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ProfileObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ProfileObject(TypeMap typeMap, ProfileObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ProfileObjectEntity>();

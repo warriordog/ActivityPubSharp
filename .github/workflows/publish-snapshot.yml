@@ -1,4 +1,4 @@
-name: Publish Snapshot to NuGet
+name: NuGet Snapshot
 
 # ONLY push, not PRs.
 # ONLY main, not release branch.

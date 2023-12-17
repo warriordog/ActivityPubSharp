@@ -24,16 +24,27 @@ public class ASType : IASModel<ASType, ASTypeEntity>
     /// <summary>
     ///     Constructs a new instance and attaches it to a new, empty type graph.
     /// </summary>
-    public ASType() : this(new TypeMap()) {}
-    
+    public ASType()
+    {
+        TypeMap = new TypeMap();
+        Entity = TypeMap.Extend<ASTypeEntity>();
+    }
+
     /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
+    ///     Constructs a new instance from an existing type graph.
+    ///     The existing graph is either extended or wrapped, depending on the value of <code>isExtending</code>
     /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ASType(TypeMap typeMap)
+    /// <remarks>
+    ///     All overrides MUST call this using <code>base(typeMap, false)</code>
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">If <code>extendGraph</code> is <see langword="true"/> and the entity type already exists in the graph</exception>
+    /// <exception cref="InvalidOperationException">If <code>extendGraph</code> is <see langword="true"/> and the entity requires another entity that is missing from the graph</exception>
+    /// <exception cref="InvalidCastException">If <code>extendGraph</code> is <see langword="false"/> and the object is not of type <code>TEntity</code></exception>
+    /// <seealso cref="TypeMap.ProjectTo{TEntity}(bool)" />
+    public ASType(TypeMap typeMap, bool isExtending = true)
     {
         TypeMap = typeMap;
-        Entity = TypeMap.Extend<ASTypeEntity>();
+        Entity = TypeMap.ProjectTo<ASTypeEntity>(isExtending);
     }
 
     /// <summary>

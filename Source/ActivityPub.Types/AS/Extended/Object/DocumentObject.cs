@@ -17,27 +17,17 @@ public class DocumentObject : ASObject, IASModel<DocumentObject, DocumentObjectE
     public const string DocumentType = "Document";
     static string IASModel<DocumentObject>.ASTypeName => DocumentType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public DocumentObject() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public DocumentObject() => Entity = TypeMap.Extend<DocumentObjectEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public DocumentObject(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<DocumentObjectEntity>();
+    /// <inheritdoc />
+    public DocumentObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<DocumentObjectEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public DocumentObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public DocumentObject(TypeMap typeMap, DocumentObjectEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<DocumentObjectEntity>();

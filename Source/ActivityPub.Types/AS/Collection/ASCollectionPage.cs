@@ -23,27 +23,17 @@ public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASColle
     public const string CollectionPageType = "CollectionPage";
     static string IASModel<ASCollectionPage>.ASTypeName => CollectionPageType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public ASCollectionPage() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public ASCollectionPage() => Entity = TypeMap.Extend<ASCollectionPageEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public ASCollectionPage(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<ASCollectionPageEntity>();
+    /// <inheritdoc />
+    public ASCollectionPage(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<ASCollectionPageEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public ASCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public ASCollectionPage(TypeMap typeMap, ASCollectionPageEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<ASCollectionPageEntity>();

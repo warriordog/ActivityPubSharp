@@ -18,27 +18,17 @@ public class RemoveActivity : ASActivity, IASModel<RemoveActivity, RemoveActivit
     public const string RemoveType = "Remove";
     static string IASModel<RemoveActivity>.ASTypeName => RemoveType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public RemoveActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public RemoveActivity() => Entity = TypeMap.Extend<RemoveActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public RemoveActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<RemoveActivityEntity>();
+    /// <inheritdoc />
+    public RemoveActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<RemoveActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public RemoveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public RemoveActivity(TypeMap typeMap, RemoveActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<RemoveActivityEntity>();

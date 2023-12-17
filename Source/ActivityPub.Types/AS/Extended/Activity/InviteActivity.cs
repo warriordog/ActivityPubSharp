@@ -17,27 +17,17 @@ public class InviteActivity : OfferActivity, IASModel<InviteActivity, InviteActi
     public const string InviteType = "Invite";
     static string IASModel<InviteActivity>.ASTypeName => InviteType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public InviteActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public InviteActivity() => Entity = TypeMap.Extend<InviteActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public InviteActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<InviteActivityEntity>();
+    /// <inheritdoc />
+    public InviteActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<InviteActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public InviteActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public InviteActivity(TypeMap typeMap, InviteActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<InviteActivityEntity>();

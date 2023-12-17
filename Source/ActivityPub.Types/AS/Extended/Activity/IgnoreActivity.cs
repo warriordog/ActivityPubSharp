@@ -17,27 +17,17 @@ public class IgnoreActivity : ASActivity, IASModel<IgnoreActivity, IgnoreActivit
     public const string IgnoreType = "Ignore";
     static string IASModel<IgnoreActivity>.ASTypeName => IgnoreType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public IgnoreActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public IgnoreActivity() => Entity = TypeMap.Extend<IgnoreActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public IgnoreActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<IgnoreActivityEntity>();
+    /// <inheritdoc />
+    public IgnoreActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<IgnoreActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public IgnoreActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public IgnoreActivity(TypeMap typeMap, IgnoreActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<IgnoreActivityEntity>();

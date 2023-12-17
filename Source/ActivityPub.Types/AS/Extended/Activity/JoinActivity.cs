@@ -18,27 +18,17 @@ public class JoinActivity : ASActivity, IASModel<JoinActivity, JoinActivityEntit
     public const string JoinType = "Join";
     static string IASModel<JoinActivity>.ASTypeName => JoinType;
 
-    /// <summary>
-    ///     Constructs a new instance and attaches it to a new, empty type graph.
-    /// </summary>
-    public JoinActivity() : this(new TypeMap()) {}
+    /// <inheritdoc />
+    public JoinActivity() => Entity = TypeMap.Extend<JoinActivityEntity>();
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
-    public JoinActivity(TypeMap typeMap) : base(typeMap)
-        => Entity = TypeMap.Extend<JoinActivityEntity>();
+    /// <inheritdoc />
+    public JoinActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
+        => Entity = TypeMap.ProjectTo<JoinActivityEntity>(isExtending);
 
-    /// <summary>
-    ///     Constructs a new instance and extends an existing type graph from a provided model.
-    /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <inheritdoc />
     public JoinActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
-    /// <summary>
-    ///     Constructs a new instance using entities from an existing type graph.
-    /// </summary>
+    /// <inheritdoc />
     [SetsRequiredMembers]
     public JoinActivity(TypeMap typeMap, JoinActivityEntity? entity) : base(typeMap, null)
         => Entity = entity ?? typeMap.AsEntity<JoinActivityEntity>();
