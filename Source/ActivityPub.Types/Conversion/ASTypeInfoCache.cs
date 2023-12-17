@@ -59,6 +59,12 @@ public interface IASTypeInfoCache
 /// </summary>
 public class ASTypeInfoCache : IASTypeInfoCache
 {
+    private static readonly Lazy<ASTypeInfoCache> Lazy = new(() =>
+    {
+        var cache = new ASTypeInfoCache();
+        cache.RegisterAllAssemblies();
+        return cache;
+    });
     private readonly HashSet<Assembly> _registeredAssemblies = new();
     
     private readonly Dictionary<Type, ModelMeta> _typeMetaMap = new();
@@ -70,6 +76,11 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
     /// <inheritdoc />
     public IEnumerable<Type> NamelessEntityTypes => _namelessEntityTypes;
+
+    /// <summary>
+    /// A global static instance of ASTypeInfoCache
+    /// </summary>
+    public static ASTypeInfoCache Instance => Lazy.Value;
     private readonly HashSet<Type> _namelessEntityTypes = new();
 
     /// <summary>
@@ -142,6 +153,8 @@ public class ASTypeInfoCache : IASTypeInfoCache
 
         // Skip if it's not an AS type
         if (!type.IsAssignableTo(typeof(ASType)))
+            // Also register IAnonymousEntitySelectors?
+            // Now that I look at it, I'm not sure it makes sense for those to come from IOptions, anyway
             return;
 
         // Skip if it's not a model
