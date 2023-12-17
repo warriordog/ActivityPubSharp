@@ -9,6 +9,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# Cancel duplicate / older jobs
+concurrency:
+  group: CI-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     strategy:
