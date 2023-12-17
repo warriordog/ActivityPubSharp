@@ -12,6 +12,7 @@ namespace ActivityPub.Types.Conversion;
 /// <summary>
 ///     Extracts and stores metadata for ActivityStreams types within the application.
 /// </summary>
+[Obsolete("ASTypeInfoCache will be removed in a future update")]
 public interface IASTypeInfoCache
 {
     /// <summary>
@@ -57,6 +58,7 @@ public interface IASTypeInfoCache
 ///     Default implementation of <see cref="IASTypeInfoCache"/>.
 ///     At startup, uses reflection to index all loaded types.
 /// </summary>
+[Obsolete("ASTypeInfoCache will be removed in a future update")]
 public class ASTypeInfoCache : IASTypeInfoCache
 {
     private static readonly Lazy<ASTypeInfoCache> Lazy = new(() =>
