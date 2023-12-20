@@ -60,7 +60,7 @@ There is, however, [an example package](Example) available with reference code.
 ## Technical Details
 
 ### Requirements
-* .NET 7 (newer should work, but is untested)
+* .NET 7 or newer
 * Any supported platform - no native code is used
 
 ### Design Goals
