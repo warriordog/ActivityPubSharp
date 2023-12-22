@@ -119,7 +119,7 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     /// <summary>
     ///     In a paged Collection, gets the first populated entity.
     /// </summary>
-    public Linkable<ASOrderedCollectionPage>? FirstPopulated => IsPaged ? Current ?? First ?? Last : null;
+    public Linkable<ASOrderedCollectionPage>? FirstPopulated => Current ?? First ?? Last;
 
     /// <summary>
     ///     True if this collection instance contains items, false otherwise.
