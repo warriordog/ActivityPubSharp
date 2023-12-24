@@ -8,6 +8,7 @@ using System.Text.Json.Serialization.Metadata;
 using ActivityPub.Types.Conversion.Converters;
 using ActivityPub.Types.Conversion.Modifiers;
 using Microsoft.Extensions.Options;
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
 
 namespace ActivityPub.Types.Conversion;
 
@@ -24,9 +25,21 @@ public interface IJsonLdSerializer
 
     /// <inheritdoc cref="JsonSerializer.Deserialize{T}(string, JsonSerializerOptions)" />
     public T? Deserialize<T>(string json);
+    
+    /// <inheritdoc cref="JsonSerializer.Deserialize{T}(Stream, JsonSerializerOptions)" />
+    public T? Deserialize<T>(Stream json);
+
+    /// <inheritdoc cref="JsonSerializer.DeserializeAsync{T}(Stream, JsonSerializerOptions)" />
+    public ValueTask<T?> DeserializeAsync<T>(Stream json);
 
     /// <inheritdoc cref="JsonSerializer.Deserialize(string, Type, JsonSerializerOptions)" />
     public object? Deserialize(string json, Type type);
+
+    /// <inheritdoc cref="JsonSerializer.Deserialize(Stream, Type, JsonSerializerOptions)" />
+    public object? Deserialize(Stream json, Type type);
+    
+    /// <inheritdoc cref="JsonSerializer.DeserializeAsync(Stream, JsonSerializerOptions)" />
+    public ValueTask<object?> DeserializeAsync(Stream json, Type type);
 
     /// <inheritdoc cref="JsonSerializer.Serialize{T}(T, JsonSerializerOptions)" />
     public string Serialize<T>(T? value);
@@ -77,7 +90,19 @@ public class JsonLdSerializer : IJsonLdSerializer
     public T? Deserialize<T>(string json) => JsonSerializer.Deserialize<T>(json, SerializerOptions);
 
     /// <inheritdoc />
+    public T? Deserialize<T>(Stream json) => JsonSerializer.Deserialize<T>(json, SerializerOptions);
+    
+    /// <inheritdoc />
+    public ValueTask<T?> DeserializeAsync<T>(Stream json) => JsonSerializer.DeserializeAsync<T>(json, SerializerOptions);
+
+    /// <inheritdoc />
     public object? Deserialize(string json, Type type) => JsonSerializer.Deserialize(json, type, SerializerOptions);
+    
+    /// <inheritdoc />
+    public object? Deserialize(Stream json, Type type) => JsonSerializer.Deserialize(json, type, SerializerOptions);
+
+    /// <inheritdoc />
+    public ValueTask<object?> DeserializeAsync(Stream json, Type type) => JsonSerializer.DeserializeAsync(json, type);
 
     /// <inheritdoc />
     public string Serialize<T>(T? value) => JsonSerializer.Serialize(value, SerializerOptions);
