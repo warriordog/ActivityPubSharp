@@ -113,7 +113,13 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     /// <summary>
     ///     True if this is a paged collection, false otherwise.
     /// </summary>
+    [MemberNotNullWhen(true, nameof(FirstPopulated))]
     public bool IsPaged => Current != null || First != null || Last != null;
+
+    /// <summary>
+    ///     In a paged Collection, gets the first populated entity.
+    /// </summary>
+    public Linkable<ASOrderedCollectionPage>? FirstPopulated => Current ?? First ?? Last;
 
     /// <summary>
     ///     True if this collection instance contains items, false otherwise.
