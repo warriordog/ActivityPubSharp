@@ -102,7 +102,7 @@ public class JsonLdSerializer : IJsonLdSerializer
     public object? Deserialize(Stream json, Type type) => JsonSerializer.Deserialize(json, type, SerializerOptions);
 
     /// <inheritdoc />
-    public ValueTask<object?> DeserializeAsync(Stream json, Type type) => JsonSerializer.DeserializeAsync(json, type);
+    public ValueTask<object?> DeserializeAsync(Stream json, Type type) => JsonSerializer.DeserializeAsync(json, type, SerializerOptions);
 
     /// <inheritdoc />
     public string Serialize<T>(T? value) => JsonSerializer.Serialize(value, SerializerOptions);
