@@ -20,11 +20,11 @@ public class ViewActivity : ASActivity, IASModel<ViewActivity, ViewActivityEntit
     static string IASModel<ViewActivity>.ASTypeName => ViewType;
 
     /// <inheritdoc />
-    public ViewActivity() => Entity = TypeMap.Extend<ViewActivityEntity>();
+    public ViewActivity() => Entity = TypeMap.Extend<ViewActivity, ViewActivityEntity>();
 
     /// <inheritdoc />
     public ViewActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ViewActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ViewActivity, ViewActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public ViewActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class ViewActivity : ASActivity, IASModel<ViewActivity, ViewActivityEntit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ViewActivity(TypeMap typeMap, ViewActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ViewActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ViewActivity, ViewActivityEntity>();
 
     static ViewActivity IASModel<ViewActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

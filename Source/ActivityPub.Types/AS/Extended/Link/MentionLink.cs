@@ -20,11 +20,11 @@ public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLi
     static string IASModel<MentionLink>.ASTypeName => MentionType;
 
     /// <inheritdoc />
-    public MentionLink() => Entity = TypeMap.Extend<MentionLinkEntity>();
+    public MentionLink() => Entity = TypeMap.Extend<MentionLink, MentionLinkEntity>();
 
     /// <inheritdoc />
     public MentionLink(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<MentionLinkEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<MentionLink, MentionLinkEntity>(isExtending);
 
     /// <inheritdoc />
     public MentionLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLi
     /// <inheritdoc />
     [SetsRequiredMembers]
     public MentionLink(TypeMap typeMap, MentionLinkEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<MentionLinkEntity>();
+        => Entity = entity ?? typeMap.AsEntity<MentionLink, MentionLinkEntity>();
 
     static MentionLink IASModel<MentionLink>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

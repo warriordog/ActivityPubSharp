@@ -22,11 +22,11 @@ public class ArriveActivity : ASIntransitiveActivity, IASModel<ArriveActivity, A
     static string IASModel<ArriveActivity>.ASTypeName => ArriveType;
 
     /// <inheritdoc />
-    public ArriveActivity() => Entity = TypeMap.Extend<ArriveActivityEntity>();
+    public ArriveActivity() => Entity = TypeMap.Extend<ArriveActivity, ArriveActivityEntity>();
 
     /// <inheritdoc />
     public ArriveActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ArriveActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ArriveActivity, ArriveActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public ArriveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -34,7 +34,7 @@ public class ArriveActivity : ASIntransitiveActivity, IASModel<ArriveActivity, A
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ArriveActivity(TypeMap typeMap, ArriveActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ArriveActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ArriveActivity, ArriveActivityEntity>();
 
     static ArriveActivity IASModel<ArriveActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

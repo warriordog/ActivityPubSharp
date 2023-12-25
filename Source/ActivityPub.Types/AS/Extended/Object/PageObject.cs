@@ -20,11 +20,11 @@ public class PageObject : DocumentObject, IASModel<PageObject, PageObjectEntity,
     static string IASModel<PageObject>.ASTypeName => PageType;
 
     /// <inheritdoc />
-    public PageObject() => Entity = TypeMap.Extend<PageObjectEntity>();
+    public PageObject() => Entity = TypeMap.Extend<PageObject, PageObjectEntity>();
 
     /// <inheritdoc />
     public PageObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<PageObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<PageObject, PageObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public PageObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class PageObject : DocumentObject, IASModel<PageObject, PageObjectEntity,
     /// <inheritdoc />
     [SetsRequiredMembers]
     public PageObject(TypeMap typeMap, PageObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<PageObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<PageObject, PageObjectEntity>();
 
     static PageObject IASModel<PageObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

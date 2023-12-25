@@ -22,11 +22,11 @@ public class ASIntransitiveActivity : ASActivity, IASModel<ASIntransitiveActivit
     static string IASModel<ASIntransitiveActivity>.ASTypeName => IntransitiveActivityType;
 
     /// <inheritdoc />
-    public ASIntransitiveActivity() => Entity = TypeMap.Extend<ASIntransitiveActivityEntity>();
+    public ASIntransitiveActivity() => Entity = TypeMap.Extend<ASIntransitiveActivity, ASIntransitiveActivityEntity>();
 
     /// <inheritdoc />
     public ASIntransitiveActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ASIntransitiveActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ASIntransitiveActivity, ASIntransitiveActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public ASIntransitiveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -34,7 +34,7 @@ public class ASIntransitiveActivity : ASActivity, IASModel<ASIntransitiveActivit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ASIntransitiveActivity(TypeMap typeMap, ASIntransitiveActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ASIntransitiveActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ASIntransitiveActivity, ASIntransitiveActivityEntity>();
 
     static ASIntransitiveActivity IASModel<ASIntransitiveActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

@@ -1,12 +1,9 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
-using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Conversion.Converters;
@@ -16,11 +13,6 @@ namespace ActivityPub.Types.Conversion.Converters;
 /// </summary>
 public class LinkableConverter : JsonConverterFactory
 {
-    private readonly IASTypeInfoCache _asTypeInfoCache;
-
-    /// <inheritdoc />
-    public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
-    
     /// <inheritdoc />
     public override bool CanConvert(Type type) =>
         // We only convert Linkable<T>
@@ -33,21 +25,13 @@ public class LinkableConverter : JsonConverterFactory
         var converterType = typeof(LinkableConverter<>).MakeGenericType(valueType);
         
         // Pivot the type into correct instance
-        return (JsonConverter)Activator.CreateInstance(
-            converterType,
-            BindingFlags.Instance | BindingFlags.Public,
-            null,
-            new object[] { _asTypeInfoCache },
-            null
-        )!;
+        return (JsonConverter)Activator.CreateInstance(converterType)!;
     }
 }
 
 internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
+    where T : ASType, IASModel<T>
 {
-    private readonly IASTypeInfoCache _asTypeInfoCache;
-    public LinkableConverter(IASTypeInfoCache asTypeInfoCache) => _asTypeInfoCache = asTypeInfoCache;
-
     public override Linkable<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -55,30 +39,18 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
 
         // Parse into abstract form
         var jsonElement = JsonElement.ParseValue(ref reader);
+        var typeMap = jsonElement.Deserialize<TypeMap>(options)
+            ?? throw new JsonException($"Failed to parse {typeToConvert} - deserialize returned null");
 
         // If it's a string, then it's a link
-        if (jsonElement.ValueKind == JsonValueKind.String)
-        {
-            var link = jsonElement.Deserialize<ASLink>(options);
-            if (link == null)
-                throw new JsonException($"Failed to parse {typeToConvert} - Could not construct link object of type {typeof(ASLink)}");
+        if (typeMap.IsModel<ASLink>(out var link))
             return new Linkable<T>(link);
-        }
-
-        // If it's an object of type ASLink, then it's still a link
-        if (TryGetLinkType(jsonElement, out var linkType))
-        {
-            var link = (ASLink?)jsonElement.Deserialize(linkType, options);
-            if (link == null)
-                throw new JsonException($"Failed to parse {typeToConvert} - Could not construct link object of type {linkType}");
-            return new Linkable<T>(link);
-        }
 
         // Anything else is the payload data
-        var obj = jsonElement.Deserialize<T>(options);
-        if (obj == null)
-            throw new JsonException($"Failed to parse {typeToConvert} - Could not construct value object");
-        return new Linkable<T>(obj);
+        if (typeMap.IsModel<T>(out var obj))
+            return new Linkable<T>(obj);
+
+        throw new JsonException($"Failed to parse {typeToConvert} - input cannot be projected to that type");
     }
 
     public override void Write(Utf8JsonWriter writer, Linkable<T> linkable, JsonSerializerOptions options)
@@ -91,21 +63,5 @@ internal class LinkableConverter<T> : JsonConverter<Linkable<T>>
             JsonSerializer.Serialize(writer, value, options);
         else
             throw new ArgumentException($"{typeof(Linkable<T>)} is invalid - it has neither a link nor a value");
-    }
-
-    private bool TryGetLinkType(JsonElement element, [NotNullWhen(true)] out Type? linkType)
-    {
-        linkType = null;
-
-        // Firstly, it must have a decodable AS type name
-        if (!element.TryGetASType(out var asType))
-            return false;
-
-        // Second, that name must map to a known model type
-        if (!_asTypeInfoCache.TryGetModelType(asType, out linkType))
-            return false;
-
-        // Finally, the model must be a link
-        return linkType.IsAssignableTo(typeof(ASLink));
     }
 }

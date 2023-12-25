@@ -24,11 +24,11 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
     static string IASModel<QuestionActivity>.ASTypeName => QuestionType;
 
     /// <inheritdoc />
-    public QuestionActivity() => Entity = TypeMap.Extend<QuestionActivityEntity>();
+    public QuestionActivity() => Entity = TypeMap.Extend<QuestionActivity, QuestionActivityEntity>();
 
     /// <inheritdoc />
     public QuestionActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<QuestionActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<QuestionActivity, QuestionActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public QuestionActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -36,7 +36,7 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public QuestionActivity(TypeMap typeMap, QuestionActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<QuestionActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<QuestionActivity, QuestionActivityEntity>();
 
     static QuestionActivity IASModel<QuestionActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

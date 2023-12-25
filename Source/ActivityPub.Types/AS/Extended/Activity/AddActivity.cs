@@ -21,11 +21,11 @@ public class AddActivity : ASActivity, IASModel<AddActivity, AddActivityEntity, 
     static string IASModel<AddActivity>.ASTypeName => AddType;
 
     /// <inheritdoc />
-    public AddActivity() => Entity = TypeMap.Extend<AddActivityEntity>();
+    public AddActivity() => Entity = TypeMap.Extend<AddActivity, AddActivityEntity>();
 
     /// <inheritdoc />
     public AddActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<AddActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<AddActivity, AddActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public AddActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -33,7 +33,7 @@ public class AddActivity : ASActivity, IASModel<AddActivity, AddActivityEntity, 
     /// <inheritdoc />
     [SetsRequiredMembers]
     public AddActivity(TypeMap typeMap, AddActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<AddActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<AddActivity, AddActivityEntity>();
 
     static AddActivity IASModel<AddActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

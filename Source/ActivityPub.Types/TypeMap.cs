@@ -27,17 +27,40 @@ public class TypeMap
     // Cache of entity classes that have been added to this type graph.
     private readonly Dictionary<Type, ASEntity> _entityCache = new();
 
+    // Optional JSON wrapper to source missing data.
+    private readonly ITypeGraphReader? _sourceJson;
+
     /// <summary>
     ///     Constructs a new, empty type graph initialized with the ActivityStreams context.
     /// </summary>
-    public TypeMap() : this(JsonLDContext.CreateASContext()) {}
+    public TypeMap() => _ldContext = JsonLDContext.CreateASContext();
+    
+    /// <summary>
+    ///     Constructs a TypeMap from a JSON message
+    /// </summary>
+    internal TypeMap(ITypeGraphReader sourceJson)
+    {
+        _sourceJson = sourceJson;
+        _ldContext = sourceJson.GetASContext();
+        _asTypes.AddRange(sourceJson.GetASTypes());
+    }
 
     /// <summary>
-    ///     Constructs a TypeMap with a pre-populated JSON-LD context.
+    ///     Constructs an empty TypeMap from pre-constructed context.
+    ///     The caller is responsible for populating any associated entities. 
     /// </summary>
-    /// <param name="ldContext"></param>
+    /// <remarks>
+    ///     This constructor is required to convert links in string-form.
+    ///     That specific case is not supported by <see cref="TypeGraphReader"/>. 
+    /// </remarks>
+    internal TypeMap(JsonLDContext ldContext, IEnumerable<string> asTypes)
+    {
+        _ldContext = ldContext;
+        _asTypes.AddRange(asTypes);
+    }
+    
+    /// <inheritdoc cref="TypeMap(JsonLDContext, IEnumerable{string})"/>
     internal TypeMap(JsonLDContext ldContext) => _ldContext = ldContext;
-
 
     /// <inheritdoc cref="CompositeASType.Types"/>
     /// <seealso cref="AllASTypes"/>
@@ -71,45 +94,56 @@ public class TypeMap
     /// <summary>
     ///     Checks if the object contains a particular entity type.
     /// </summary>
-    public bool IsEntity<TEntity>()
-        where TEntity : ASEntity
-        => _entityCache.ContainsKey(typeof(TEntity));
-
+    public bool IsEntity<TModel, TEntity>()
+        where TModel : ASType, IASModel<TModel, TEntity>
+        where TEntity : ASEntity<TModel, TEntity>, new() 
+        => IsEntity<TModel, TEntity>(out _);
+    
     /// <summary>
     ///     Checks if the object contains a particular type entity.
     ///     If so, then the instance of that type is extracted and returned.
     /// </summary>
-    /// <seealso cref="IsEntity{TEntity}()" />
-    /// <seealso cref="AsEntity{TEntity}" />
-    public bool IsEntity<TEntity>([NotNullWhen(true)] out TEntity? instance)
-        where TEntity : ASEntity
+    /// <seealso cref="IsEntity{TModel, TEntity}()" />
+    /// <seealso cref="AsEntity{TModel, TEntity}" />
+    public bool IsEntity<TModel, TEntity>([NotNullWhen(true)] out TEntity? instance)
+        where TModel : ASType, IASModel<TModel, TEntity>
+        where TEntity : ASEntity<TModel, TEntity>, new() 
     {
+        // 1. See if the entity is already in the type
         if (_entityCache.TryGetValue(typeof(TEntity), out var instanceT))
         {
             instance = (TEntity)instanceT;
             return true;
         }
-
+    
+        // 2. See if we can construct the entity from JSON
+        if (_sourceJson != null && _sourceJson.TryReadEntity<TModel, TEntity>(this, out instance))
+        {
+            AddEntity(instance);
+            return true;
+        }
+    
         instance = null;
         return false;
     }
-
+    
     /// <summary>
     ///     Gets an entity representing the object as entity type <code>TEntity</code>.
     /// </summary>
     /// <remarks>
     ///     This function will not extend the object to include a new type.
-    ///     To safely convert to an instance that *might* be present, use <see cref="IsEntity{TEntity}(out TEntity)"/>.
+    ///     To safely convert to an instance that *might* be present, use <see cref="IsEntity{TModel, TEntity}(out TEntity)"/>.
     /// </remarks>
-    /// <seealso cref="IsEntity{TEntity}(out TEntity)" />
+    /// <seealso cref="IsEntity{TModel, TEntity}(out TEntity)" />
     /// <exception cref="InvalidCastException">If the object is not of type <code>TEntity</code></exception>
-    public TEntity AsEntity<TEntity>()
-        where TEntity : ASEntity
+    public TEntity AsEntity<TModel, TEntity>()
+        where TModel : ASType, IASModel<TModel, TEntity>
+        where TEntity : ASEntity<TModel, TEntity>, new() 
     {
-        var type = typeof(TEntity);
-        if (!_entityCache.TryGetValue(type, out var instance))
-            throw new InvalidCastException($"Can't represent the graph as entity {typeof(TEntity)}");
-        return (TEntity)instance;
+        if (IsEntity<TModel, TEntity>(out var entity))
+            return entity;
+        
+        throw new InvalidCastException($"Can't represent the graph as entity {typeof(TEntity)}");
     }
 
     /// <summary>
@@ -119,20 +153,7 @@ public class TypeMap
     /// <seealso cref="AsModel{TModel}()" />
     public bool IsModel<TModel>()
         where TModel : ASType, IASModel<TModel>
-    {
-        var type = typeof(TModel);
-
-        // Already cached -> yes
-        if (_modelCache.ContainsKey(type))
-            return true;
-
-        // Can create it (entity is in the graph) -> yes
-        if (_entityCache.ContainsKey(TModel.EntityType))
-            return true;
-
-        // Otherwise -> no
-        return false;
-    }
+        => IsModel<TModel>(out _);
 
     /// <summary>
     ///     Checks if the graph contains a particular model type.
@@ -159,6 +180,15 @@ public class TypeMap
             _modelCache[type] = instance;
             return true;
         }
+        
+        // Fallback can create it (entity is NOT in the graph) -> yes
+        if (_sourceJson != null && _sourceJson.TryReadEntity<TModel>(this, out var entity))
+        {
+            AddEntity(entity);
+            instance = TModel.FromGraph(this);
+            _modelCache[type] = instance;
+            return true;
+        }
 
         // Otherwise -> no
         instance = null;
@@ -175,13 +205,13 @@ public class TypeMap
     /// <seealso cref="IsModel{TModel}()"/>
     /// <seealso cref="IsModel{TModel}(out TModel)" />
     /// <exception cref="InvalidCastException">If the graph cannot be represented by the type</exception>
-    public TObject AsModel<TObject>()
-        where TObject : ASType, IASModel<TObject>
+    public TModel AsModel<TModel>()
+        where TModel : ASType, IASModel<TModel>
     {
-        if (IsModel<TObject>(out var instance))
+        if (IsModel<TModel>(out var instance))
             return instance;
 
-        throw new InvalidCastException($"Can't represent the graph as type {typeof(TObject)}");
+        throw new InvalidCastException($"Can't represent the graph as type {typeof(TModel)}");
     }
 
     /// <summary>
@@ -191,18 +221,19 @@ public class TypeMap
     /// </summary>
     /// <remarks>
     ///     This function cannot accomodate entities with required members.
-    ///     Instead, <see cref="Extend{TEntity}(TEntity)"/> must be used.
+    ///     Instead, <see cref="Extend{TModel, TEntity}(TEntity)"/> must be used.
     /// </remarks>
     /// <exception cref="InvalidOperationException">If <code>extendGraph</code> is <see langword="true"/> and the entity type already exists in the graph</exception>
     /// <exception cref="InvalidOperationException">If <code>extendGraph</code> is <see langword="true"/> and the entity requires another entity that is missing from the graph</exception>
     /// <exception cref="InvalidCastException">If <code>extendGraph</code> is <see langword="false"/> and the object is not of type <code>TEntity</code></exception>
-    /// <seealso cref="Extend{TEntity}()"/>
-    /// <seealso cref="AsEntity{TEntity}"/>
-    public TEntity ProjectTo<TEntity>(bool extendGraph)
-        where TEntity : ASEntity, new() 
+    /// <seealso cref="Extend{TModel, TEntity}()"/>
+    /// <seealso cref="AsEntity{TModel, TEntity}"/>
+    public TEntity ProjectTo<TModel, TEntity>(bool extendGraph)
+        where TModel : ASType, IASModel<TModel, TEntity>
+        where TEntity : ASEntity<TModel, TEntity>, new() 
         => extendGraph
-            ? Extend<TEntity>()
-            : AsEntity<TEntity>();
+            ? Extend<TModel, TEntity>()
+            : AsEntity<TModel, TEntity>();
 
     /// <summary>
     ///     Extends the TypeGraph to include a new entity.
@@ -211,33 +242,32 @@ public class TypeMap
     /// </summary>
     /// <remarks>
     ///     This function cannot accomodate entities with required members.
-    ///     Instead, <see cref="Extend{TEntity}(TEntity)"/> must be used.
+    ///     Instead, <see cref="Extend{TModel, TEntity}(TEntity)"/> must be used.
     /// </remarks>
     /// <exception cref="InvalidOperationException">If the entity type already exists in the graph</exception>
     /// <exception cref="InvalidOperationException">If the entity requires another entity that is missing from the graph</exception>
-    /// <see cref="Extend{TEntity}(TEntity)"/>
+    /// <see cref="Extend{TModel, TEntity}(TEntity)"/>
     /// <seealso cref="AddEntity"/>
     /// <seealso cref="TryAddEntity"/>
-    public TEntity Extend<TEntity>()
-        where TEntity : ASEntity, new()
-        => Extend(new TEntity());
+    public TEntity Extend<TModel, TEntity>()
+        where TModel : ASType, IASModel<TModel, TEntity>
+        where TEntity : ASEntity<TModel, TEntity>, new() 
+        => Extend<TModel, TEntity>(new TEntity());
     
     /// <summary>
     ///     Extends the TypeGraph to include a new entity.
     ///     Throws an exception if the entity would be a duplicate or have unmet dependencies.
     /// </summary>
-    /// <param name="entity"></param>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
     /// <exception cref="InvalidOperationException">If the entity type already exists in the graph</exception>
     /// <exception cref="InvalidOperationException">If the entity requires another entity that is missing from the graph</exception>
-    /// <see cref="Extend{TEntity}()"/>
+    /// <see cref="Extend{TModel, TEntity}()"/>
     /// <seealso cref="AddEntity"/>
     /// <seealso cref="TryAddEntity"/>
-    public TEntity Extend<TEntity>(TEntity entity)
-        where TEntity : ASEntity
+    public TEntity Extend<TModel, TEntity>(TEntity entity)
+        where TModel : ASType, IASModel<TModel, TEntity>
+        where TEntity : ASEntity<TModel, TEntity>, new() 
     {
-        if (IsEntity<TEntity>())
+        if (IsEntity<TModel, TEntity>())
             throw new InvalidOperationException($"Cannot extend the graph with entity {typeof(TEntity)}: that type already exists in the graph");
         
         // Check dependencies - this is a workaround to avoid the risk case described in TryAdd().
@@ -261,7 +291,7 @@ public class TypeMap
     /// <summary>
     ///     Adds a new typed instance to the graph.
     ///     Metadata such as AS types and JSON-LD context is automatically updated.
-    ///     User code should not call this method; use <see cref="Extend{TEntity}()"/> instead.
+    ///     User code should not call this method; use <see cref="Extend{TModel, TEntity}()"/> instead.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -281,22 +311,21 @@ public class TypeMap
     ///         This can be extremely hard to diagnose because <see cref="ASObjectEntity"/> does not even appear in the visible code.
     ///     </para>
     ///     <para>
-    ///         The <see cref="Extend{TEntity}()"/> function, however, avoids this with an included dependency check.
+    ///         The <see cref="Extend{TModel, TEntity}()"/> function, however, avoids this with an included dependency check.
     ///         The second call to <see cref="AddEntity"/> will fail with a descriptive error message indicating that <code>Object</code> is missing from the graph.
     ///         While still somewhat confusing, this method will additionally <b>fail fast</b> before the graph can even enter an invalid state.
     ///         This ensures that errors are caught quickly and before they can spread to corrupt the application state.
     ///     </para>
     /// </remarks>
     /// <returns>true if the type was added, false if it was already in the type map</returns>
-    /// <seealso cref="Extend{TEntity}()"/>
+    /// <seealso cref="Extend{TModel, TEntity}()"/>
     internal bool TryAddEntity(ASEntity entity)
     {
         var type = entity.GetType();
-        if (_entityCache.ContainsKey(type))
-            return false;
-
+        
         // Map the instance
-        _entityCache[type] = entity;
+        if (!_entityCache.TryAdd(type, entity))
+            return false;
 
         // Map the AS type
         if (entity.ASTypeName != null)
@@ -330,10 +359,4 @@ public class TypeMap
                 .ToList()
                 .ForEach(k => UnmappedProperties.Remove(k));
     }
-
-    /// <summary>
-    ///     Records an ActivityStreams type name as being present in the type graph, but not mapped to any known implementation class.
-    ///     Duplicates will be ignored.
-    /// </summary>
-    internal void AddUnmappedType(string asTypeName) => _asTypes.Add(asTypeName);
 }

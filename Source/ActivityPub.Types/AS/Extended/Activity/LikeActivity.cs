@@ -21,11 +21,11 @@ public class LikeActivity : ASActivity, IASModel<LikeActivity, LikeActivityEntit
     static string IASModel<LikeActivity>.ASTypeName => LikeType;
 
     /// <inheritdoc />
-    public LikeActivity() => Entity = TypeMap.Extend<LikeActivityEntity>();
+    public LikeActivity() => Entity = TypeMap.Extend<LikeActivity, LikeActivityEntity>();
 
     /// <inheritdoc />
     public LikeActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<LikeActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<LikeActivity, LikeActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public LikeActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -33,7 +33,7 @@ public class LikeActivity : ASActivity, IASModel<LikeActivity, LikeActivityEntit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public LikeActivity(TypeMap typeMap, LikeActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<LikeActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<LikeActivity, LikeActivityEntity>();
 
     static LikeActivity IASModel<LikeActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

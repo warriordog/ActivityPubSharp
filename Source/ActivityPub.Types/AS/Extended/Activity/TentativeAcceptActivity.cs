@@ -20,11 +20,11 @@ public class TentativeAcceptActivity : AcceptActivity, IASModel<TentativeAcceptA
     static string IASModel<TentativeAcceptActivity>.ASTypeName => TentativeAcceptType;
 
     /// <inheritdoc />
-    public TentativeAcceptActivity() => Entity = TypeMap.Extend<TentativeAcceptActivityEntity>();
+    public TentativeAcceptActivity() => Entity = TypeMap.Extend<TentativeAcceptActivity, TentativeAcceptActivityEntity>();
 
     /// <inheritdoc />
     public TentativeAcceptActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<TentativeAcceptActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<TentativeAcceptActivity, TentativeAcceptActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public TentativeAcceptActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class TentativeAcceptActivity : AcceptActivity, IASModel<TentativeAcceptA
     /// <inheritdoc />
     [SetsRequiredMembers]
     public TentativeAcceptActivity(TypeMap typeMap, TentativeAcceptActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<TentativeAcceptActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<TentativeAcceptActivity, TentativeAcceptActivityEntity>();
 
     static TentativeAcceptActivity IASModel<TentativeAcceptActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

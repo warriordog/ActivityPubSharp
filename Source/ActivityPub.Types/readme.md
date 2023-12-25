@@ -68,12 +68,9 @@ However, it will be necessary if implementing a new extension or handling some r
 
 ### Entity Mapping
 
-APSharp includes a 4-step process to determine which entities should be constructed from an incoming JSON message.
-All entities detected by at least one test will be converted and parsed.
-1. Map values of the `type` property to registered AS type names.
-2. Try all entities that implement [`INamelessEntity`](Conversion/Overrides/INamelessEntity.cs).
-3. Try all entities that implement [`IAnonymousEntity`](Conversion/Overrides/IAnonymousEntity.cs).
-4. Try all configured [`IAnonymousEntitySelector`](Conversion/Overrides/IAnonymousEntitySelector.cs) instances.
+By default, APSharp checks the `@context` and `type` properties to determine whether an object can be projected to a given model or entity.
+Entities without a type will be converted purely based on the context.
+This logic can be altered by overriding `IASModel.ShouldConvertFrom` and performing additional checks.
 
 ## Utility Types
 
@@ -138,4 +135,3 @@ See the [ActivityStreams documentation](https://www.w3.org/TR/activitystreams-co
 | Service                                               | Implementation                                          | Description                                                           |
 |-------------------------------------------------------|---------------------------------------------------------|-----------------------------------------------------------------------|
 | [`IJsonLdSerializer`](Conversion/JsonLdSerializer.cs) | [`JsonLdSerializer.cs`](Conversion/JsonLdSerializer.cs) | Parses and serializes ActivityStreams messages from JSON or JSON-LD.  |
-| [`IASTypeInfoCache`](Conversion/ASTypeInfoCache.cs)   | [`ASTypeInfoCache`](Conversion/ASTypeInfoCache.cs)      | Indexes metadata related to AS / AP types defined in the application. |

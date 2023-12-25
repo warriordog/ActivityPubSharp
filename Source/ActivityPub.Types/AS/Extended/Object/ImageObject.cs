@@ -20,11 +20,11 @@ public class ImageObject : DocumentObject, IASModel<ImageObject, ImageObjectEnti
     static string IASModel<ImageObject>.ASTypeName => ImageType;
 
     /// <inheritdoc />
-    public ImageObject() => Entity = TypeMap.Extend<ImageObjectEntity>();
+    public ImageObject() => Entity = TypeMap.Extend<ImageObject, ImageObjectEntity>();
 
     /// <inheritdoc />
     public ImageObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ImageObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ImageObject, ImageObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public ImageObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class ImageObject : DocumentObject, IASModel<ImageObject, ImageObjectEnti
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ImageObject(TypeMap typeMap, ImageObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ImageObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ImageObject, ImageObjectEntity>();
 
     static ImageObject IASModel<ImageObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

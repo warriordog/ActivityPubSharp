@@ -29,11 +29,11 @@ public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity,
     static string IASModel<ASCollection>.ASTypeName => CollectionType;
 
     /// <inheritdoc />
-    public ASCollection() => Entity = TypeMap.Extend<ASCollectionEntity>();
+    public ASCollection() => Entity = TypeMap.Extend<ASCollection, ASCollectionEntity>();
 
     /// <inheritdoc />
     public ASCollection(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ASCollectionEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ASCollection, ASCollectionEntity>(isExtending);
     
     /// <inheritdoc />
     public ASCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -41,7 +41,7 @@ public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity,
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ASCollection(TypeMap typeMap, ASCollectionEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ASCollectionEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ASCollection, ASCollectionEntity>();
 
     static ASCollection IASModel<ASCollection>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 
