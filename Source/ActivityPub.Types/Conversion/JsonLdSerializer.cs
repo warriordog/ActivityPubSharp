@@ -37,10 +37,10 @@ public interface IJsonLdSerializer
     
 
     /// <inheritdoc cref="JsonSerializer.DeserializeAsync{T}(Stream, JsonSerializerOptions, CancellationToken)" />
-    public ValueTask<T?> DeserializeAsync<T>(Stream json);
+    public ValueTask<T?> DeserializeAsync<T>(Stream json, CancellationToken cancellationToken = default);
     
     /// <inheritdoc cref="JsonSerializer.DeserializeAsync(Stream, Type, JsonSerializerOptions, CancellationToken)" />
-    public ValueTask<object?> DeserializeAsync(Stream json, Type type);
+    public ValueTask<object?> DeserializeAsync(Stream json, Type type, CancellationToken cancellationToken = default);
 
     
     /// <inheritdoc cref="JsonSerializer.Serialize{T}(T, JsonSerializerOptions)" />
@@ -104,10 +104,12 @@ public class JsonLdSerializer : IJsonLdSerializer
     
     
     /// <inheritdoc />
-    public ValueTask<T?> DeserializeAsync<T>(Stream json) => JsonSerializer.DeserializeAsync<T>(json, SerializerOptions);
+    public ValueTask<T?> DeserializeAsync<T>(Stream json, CancellationToken cancellationToken = default)
+        => JsonSerializer.DeserializeAsync<T>(json, SerializerOptions, cancellationToken);
     
     /// <inheritdoc />
-    public ValueTask<object?> DeserializeAsync(Stream json, Type type) => JsonSerializer.DeserializeAsync(json, type, SerializerOptions);
+    public ValueTask<object?> DeserializeAsync(Stream json, Type type, CancellationToken cancellationToken = default)
+        => JsonSerializer.DeserializeAsync(json, type, SerializerOptions, cancellationToken);
 
     
     /// <inheritdoc />
