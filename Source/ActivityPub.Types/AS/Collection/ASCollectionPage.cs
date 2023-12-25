@@ -26,11 +26,11 @@ public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASColle
     static string IASModel<ASCollectionPage>.ASTypeName => CollectionPageType;
 
     /// <inheritdoc />
-    public ASCollectionPage() => Entity = TypeMap.Extend<ASCollectionPageEntity>();
+    public ASCollectionPage() => Entity = TypeMap.Extend<ASCollectionPage, ASCollectionPageEntity>();
 
     /// <inheritdoc />
     public ASCollectionPage(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ASCollectionPageEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ASCollectionPage, ASCollectionPageEntity>(isExtending);
 
     /// <inheritdoc />
     public ASCollectionPage(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -38,7 +38,7 @@ public class ASCollectionPage : ASCollection, IASModel<ASCollectionPage, ASColle
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ASCollectionPage(TypeMap typeMap, ASCollectionPageEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ASCollectionPageEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ASCollectionPage, ASCollectionPageEntity>();
 
     static ASCollectionPage IASModel<ASCollectionPage>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

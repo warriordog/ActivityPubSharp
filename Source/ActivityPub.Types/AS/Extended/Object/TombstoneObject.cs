@@ -21,11 +21,11 @@ public class TombstoneObject : ASObject, IASModel<TombstoneObject, TombstoneObje
     static string IASModel<TombstoneObject>.ASTypeName => TombstoneType;
 
     /// <inheritdoc />
-    public TombstoneObject() => Entity = TypeMap.Extend<TombstoneObjectEntity>();
+    public TombstoneObject() => Entity = TypeMap.Extend<TombstoneObject, TombstoneObjectEntity>();
 
     /// <inheritdoc />
     public TombstoneObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<TombstoneObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<TombstoneObject, TombstoneObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public TombstoneObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -33,7 +33,7 @@ public class TombstoneObject : ASObject, IASModel<TombstoneObject, TombstoneObje
     /// <inheritdoc />
     [SetsRequiredMembers]
     public TombstoneObject(TypeMap typeMap, TombstoneObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<TombstoneObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<TombstoneObject, TombstoneObjectEntity>();
 
     static TombstoneObject IASModel<TombstoneObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

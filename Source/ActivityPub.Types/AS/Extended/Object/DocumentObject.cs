@@ -20,11 +20,11 @@ public class DocumentObject : ASObject, IASModel<DocumentObject, DocumentObjectE
     static string IASModel<DocumentObject>.ASTypeName => DocumentType;
 
     /// <inheritdoc />
-    public DocumentObject() => Entity = TypeMap.Extend<DocumentObjectEntity>();
+    public DocumentObject() => Entity = TypeMap.Extend<DocumentObject, DocumentObjectEntity>();
 
     /// <inheritdoc />
     public DocumentObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<DocumentObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<DocumentObject, DocumentObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public DocumentObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class DocumentObject : ASObject, IASModel<DocumentObject, DocumentObjectE
     /// <inheritdoc />
     [SetsRequiredMembers]
     public DocumentObject(TypeMap typeMap, DocumentObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<DocumentObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<DocumentObject, DocumentObjectEntity>();
 
     static DocumentObject IASModel<DocumentObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

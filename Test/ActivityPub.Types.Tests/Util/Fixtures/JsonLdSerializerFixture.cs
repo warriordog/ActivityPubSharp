@@ -3,8 +3,6 @@
 
 using ActivityPub.Types.Conversion;
 using ActivityPub.Types.Conversion.Converters;
-using ActivityPub.Types.Conversion.Overrides;
-using ActivityPub.Types.Internal;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
@@ -21,25 +19,18 @@ public sealed class JsonLdSerializerFixture
 {
     public JsonLdSerializerFixture()
     {
-        ASTypeInfoCache = new ASTypeInfoCache();
-        ASTypeInfoCache.RegisterAllAssemblies();
-
         JsonLdSerializerOptions = new JsonLdSerializerOptions();
         var serializerOptions = Options.Create(JsonLdSerializerOptions);
 
-        ConversionOptions = new ConversionOptions();
-        var conversionOptions = Options.Create(ConversionOptions);
-        var typeMapConverter = new TypeMapConverter(ASTypeInfoCache, conversionOptions);
+        var typeMapConverter = new TypeMapConverter();
 
         var asTypeConverter = new ASTypeConverter();
-        var linkableConverter = new LinkableConverter(ASTypeInfoCache);
+        var linkableConverter = new LinkableConverter();
         var listableConverter = new ListableConverter();
         var listableReadOnlyConverter = new ListableReadOnlyConverter();
         JsonLdSerializer = new JsonLdSerializer(serializerOptions, typeMapConverter, asTypeConverter, linkableConverter, listableConverter, listableReadOnlyConverter);
     }
 
-    internal IASTypeInfoCache ASTypeInfoCache { get; }
     internal IJsonLdSerializer JsonLdSerializer { get; }
     internal JsonLdSerializerOptions JsonLdSerializerOptions { get; }
-    internal ConversionOptions ConversionOptions { get; }
 }

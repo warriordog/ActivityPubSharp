@@ -11,6 +11,7 @@ namespace ActivityPub.Types.Util;
 /// </summary>
 /// <typeparam name="T">Type of element</typeparam>
 public sealed class Linkable<T>
+    where T : ASType
 {
     /// <summary>
     ///     Creates a Linkable from a reference link

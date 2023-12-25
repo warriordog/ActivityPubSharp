@@ -45,23 +45,6 @@ public abstract class ExtensionDeserializationTests : DeserializationTests<ASObj
             ObjectUnderTest.As<AnonymousExtensionFake>().ExtendedString.Should().Be("Hello, world!");
             ObjectUnderTest.As<AnonymousExtensionFake>().ExtendedInt.Should().Be(123);
         }
-
-        [Fact]
-        public void Convert_FromEntitySelector()
-        {
-            SerializerFixture.ConversionOptions.AnonymousEntitySelectors.Add
-            (
-                new AnonymousEntitySelectorFake
-                {
-                    PropertyNameMapping =
-                    {
-                        [nameof(ASActivity.Actor)] = typeof(ASActivityEntity)
-                    }
-                }    
-            );
-            JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object","Actor":{}}""";
-            ObjectUnderTest.Is<ASActivity>().Should().BeTrue();
-        }
         
         public AnonymousExtensionsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }

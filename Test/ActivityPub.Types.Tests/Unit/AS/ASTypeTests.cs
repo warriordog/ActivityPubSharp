@@ -74,11 +74,11 @@ public abstract class ASTypeTests
         static string IASModel<StubASType>.ASTypeName => StubType;
         
         /// <inheritdoc />
-        public StubASType() => Entity = TypeMap.Extend<StubASTypeEntity>();
+        public StubASType() => Entity = TypeMap.Extend<StubASType, StubASTypeEntity>();
 
         /// <inheritdoc />
         public StubASType(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-            => Entity = TypeMap.ProjectTo<StubASTypeEntity>(isExtending);
+            => Entity = TypeMap.ProjectTo<StubASType, StubASTypeEntity>(isExtending);
 
         /// <inheritdoc />
         public StubASType(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -86,7 +86,7 @@ public abstract class ASTypeTests
         /// <inheritdoc />
         [SetsRequiredMembers]
         public StubASType(TypeMap typeMap, StubASTypeEntity? entity) : base(typeMap, null)
-            => Entity = entity ?? typeMap.AsEntity<StubASTypeEntity>();
+            => Entity = entity ?? typeMap.AsEntity<StubASType, StubASTypeEntity>();
 
         static StubASType IASModel<StubASType>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

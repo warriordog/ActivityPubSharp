@@ -20,11 +20,11 @@ public class GroupActor : APActor, IASModel<GroupActor, GroupActorEntity, APActo
     static string IASModel<GroupActor>.ASTypeName => GroupType;
 
     /// <inheritdoc />
-    public GroupActor() => Entity = TypeMap.Extend<GroupActorEntity>();
+    public GroupActor() => Entity = TypeMap.Extend<GroupActor, GroupActorEntity>();
 
     /// <inheritdoc />
     public GroupActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<GroupActorEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<GroupActor, GroupActorEntity>(isExtending);
 
     /// <inheritdoc />
     public GroupActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class GroupActor : APActor, IASModel<GroupActor, GroupActorEntity, APActo
     /// <inheritdoc />
     [SetsRequiredMembers]
     public GroupActor(TypeMap typeMap, GroupActorEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<GroupActorEntity>();
+        => Entity = entity ?? typeMap.AsEntity<GroupActor, GroupActorEntity>();
 
     static GroupActor IASModel<GroupActor>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

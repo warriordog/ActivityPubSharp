@@ -1,9 +1,12 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS;
+using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
+using JetBrains.Annotations;
 
 namespace ActivityPub.Types;
 
@@ -39,6 +42,23 @@ public interface IASModel<out TModel>
     ///     The provided <see cref="TypeMap"/> instance is guaranteed to include an instance of type <see cref="EntityType"/>.
     /// </summary>
     public static abstract TModel FromGraph(TypeMap typeMap);
+
+    /// <summary>
+    ///     Overrides the native type-matching logic.
+    ///     This will be called when an object is being converted to check if it contains this type.
+    ///     Return <see langword="true"/> to forcibly parse the type, <see langword="true"/> to block parsing, or <see langword="null"/> to resume native logic.
+    /// </summary>
+    /// <param name="inputJson">JSON message that is being converted. May not be an object.</param>
+    /// <param name="typeMap">Type graph that may contain the object. Contains the JSON-LD context and other metadata.</param>
+    [PublicAPI]
+    public static virtual bool? ShouldConvertFrom(JsonElement inputJson, TypeMap typeMap) => null;
+    
+    /// <summary>
+    ///     AS name of all types that derive from this one.
+    /// </summary>
+    /// <seealso cref="ASNameTree"/>
+    internal static virtual HashSet<string>? DerivedTypeNames => ASNameTree.GetDerivedTypesFor(TModel.ASTypeName);
+    static IASModel() => ASNameTree.Add(TModel.ASTypeName, TModel.BaseTypeName);
 }
 
 /// <summary>

@@ -45,4 +45,9 @@ public class JsonLDContext : HashSet<JsonLDContextObject>, IJsonLDContext
     {
         JsonLDContextObject.ActivityStreams
     };
+    
+    /// <summary>
+    ///     Creates a shallow copy of this Json-LD context.
+    /// </summary>
+    public JsonLDContext Clone() => new(this);
 }

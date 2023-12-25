@@ -20,11 +20,11 @@ public class ArticleObject : ASObject, IASModel<ArticleObject, ArticleObjectEnti
     static string IASModel<ArticleObject>.ASTypeName => ArticleType;
 
     /// <inheritdoc />
-    public ArticleObject() => Entity = TypeMap.Extend<ArticleObjectEntity>();
+    public ArticleObject() => Entity = TypeMap.Extend<ArticleObject, ArticleObjectEntity>();
 
     /// <inheritdoc />
     public ArticleObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ArticleObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ArticleObject, ArticleObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public ArticleObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class ArticleObject : ASObject, IASModel<ArticleObject, ArticleObjectEnti
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ArticleObject(TypeMap typeMap, ArticleObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ArticleObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ArticleObject, ArticleObjectEntity>();
 
     static ArticleObject IASModel<ArticleObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

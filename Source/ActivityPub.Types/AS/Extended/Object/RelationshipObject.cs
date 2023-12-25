@@ -22,11 +22,11 @@ public class RelationshipObject : ASObject, IASModel<RelationshipObject, Relatio
     static string IASModel<RelationshipObject>.ASTypeName => RelationshipType;
 
     /// <inheritdoc />
-    public RelationshipObject() => Entity = TypeMap.Extend<RelationshipObjectEntity>();
+    public RelationshipObject() => Entity = TypeMap.Extend<RelationshipObject, RelationshipObjectEntity>();
 
     /// <inheritdoc />
     public RelationshipObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<RelationshipObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<RelationshipObject, RelationshipObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public RelationshipObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -34,7 +34,7 @@ public class RelationshipObject : ASObject, IASModel<RelationshipObject, Relatio
     /// <inheritdoc />
     [SetsRequiredMembers]
     public RelationshipObject(TypeMap typeMap, RelationshipObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<RelationshipObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<RelationshipObject, RelationshipObjectEntity>();
 
     static RelationshipObject IASModel<RelationshipObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

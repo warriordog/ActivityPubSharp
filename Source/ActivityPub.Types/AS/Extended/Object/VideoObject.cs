@@ -20,11 +20,11 @@ public class VideoObject : DocumentObject, IASModel<VideoObject, VideoObjectEnti
     static string IASModel<VideoObject>.ASTypeName => VideoType;
 
     /// <inheritdoc />
-    public VideoObject() => Entity = TypeMap.Extend<VideoObjectEntity>();
+    public VideoObject() => Entity = TypeMap.Extend<VideoObject, VideoObjectEntity>();
 
     /// <inheritdoc />
     public VideoObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<VideoObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<VideoObject, VideoObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public VideoObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class VideoObject : DocumentObject, IASModel<VideoObject, VideoObjectEnti
     /// <inheritdoc />
     [SetsRequiredMembers]
     public VideoObject(TypeMap typeMap, VideoObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<VideoObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<VideoObject, VideoObjectEntity>();
 
     static VideoObject IASModel<VideoObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

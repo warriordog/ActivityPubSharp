@@ -20,11 +20,11 @@ public class IgnoreActivity : ASActivity, IASModel<IgnoreActivity, IgnoreActivit
     static string IASModel<IgnoreActivity>.ASTypeName => IgnoreType;
 
     /// <inheritdoc />
-    public IgnoreActivity() => Entity = TypeMap.Extend<IgnoreActivityEntity>();
+    public IgnoreActivity() => Entity = TypeMap.Extend<IgnoreActivity, IgnoreActivityEntity>();
 
     /// <inheritdoc />
     public IgnoreActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<IgnoreActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<IgnoreActivity, IgnoreActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public IgnoreActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class IgnoreActivity : ASActivity, IASModel<IgnoreActivity, IgnoreActivit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public IgnoreActivity(TypeMap typeMap, IgnoreActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<IgnoreActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<IgnoreActivity, IgnoreActivityEntity>();
 
     static IgnoreActivity IASModel<IgnoreActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

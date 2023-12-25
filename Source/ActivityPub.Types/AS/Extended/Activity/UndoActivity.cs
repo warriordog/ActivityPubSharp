@@ -22,11 +22,11 @@ public class UndoActivity : ASActivity, IASModel<UndoActivity, UndoActivityEntit
     static string IASModel<UndoActivity>.ASTypeName => UndoType;
 
     /// <inheritdoc />
-    public UndoActivity() => Entity = TypeMap.Extend<UndoActivityEntity>();
+    public UndoActivity() => Entity = TypeMap.Extend<UndoActivity, UndoActivityEntity>();
 
     /// <inheritdoc />
     public UndoActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<UndoActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<UndoActivity, UndoActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public UndoActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -34,7 +34,7 @@ public class UndoActivity : ASActivity, IASModel<UndoActivity, UndoActivityEntit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public UndoActivity(TypeMap typeMap, UndoActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<UndoActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<UndoActivity, UndoActivityEntity>();
 
     static UndoActivity IASModel<UndoActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

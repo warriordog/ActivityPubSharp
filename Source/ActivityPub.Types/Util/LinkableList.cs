@@ -9,6 +9,7 @@ namespace ActivityPub.Types.Util;
 ///     Synthetic type to represent a list of <code>T</code> or Links to <code>T</code>
 /// </summary>
 public class LinkableList<T> : List<Linkable<T>>
+    where T : ASType
 {
     /// <inheritdoc />
     public LinkableList() {}

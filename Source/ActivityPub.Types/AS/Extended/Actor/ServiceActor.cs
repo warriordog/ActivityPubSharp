@@ -20,11 +20,11 @@ public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, 
     static string IASModel<ServiceActor>.ASTypeName => ServiceType;
 
     /// <inheritdoc />
-    public ServiceActor() => Entity = TypeMap.Extend<ServiceActorEntity>();
+    public ServiceActor() => Entity = TypeMap.Extend<ServiceActor, ServiceActorEntity>();
 
     /// <inheritdoc />
     public ServiceActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ServiceActorEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ServiceActor, ServiceActorEntity>(isExtending);
 
     /// <inheritdoc />
     public ServiceActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, 
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ServiceActor(TypeMap typeMap, ServiceActorEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ServiceActorEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ServiceActor, ServiceActorEntity>();
 
     static ServiceActor IASModel<ServiceActor>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

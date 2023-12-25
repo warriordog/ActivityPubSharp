@@ -21,11 +21,11 @@ public class RemoveActivity : ASActivity, IASModel<RemoveActivity, RemoveActivit
     static string IASModel<RemoveActivity>.ASTypeName => RemoveType;
 
     /// <inheritdoc />
-    public RemoveActivity() => Entity = TypeMap.Extend<RemoveActivityEntity>();
+    public RemoveActivity() => Entity = TypeMap.Extend<RemoveActivity, RemoveActivityEntity>();
 
     /// <inheritdoc />
     public RemoveActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<RemoveActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<RemoveActivity, RemoveActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public RemoveActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -33,7 +33,7 @@ public class RemoveActivity : ASActivity, IASModel<RemoveActivity, RemoveActivit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public RemoveActivity(TypeMap typeMap, RemoveActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<RemoveActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<RemoveActivity, RemoveActivityEntity>();
 
     static RemoveActivity IASModel<RemoveActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

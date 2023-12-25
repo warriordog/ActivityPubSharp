@@ -20,11 +20,11 @@ public class OrganizationActor : APActor, IASModel<OrganizationActor, Organizati
     static string IASModel<OrganizationActor>.ASTypeName => OrganizationType;
 
     /// <inheritdoc />
-    public OrganizationActor() => Entity = TypeMap.Extend<OrganizationActorEntity>();
+    public OrganizationActor() => Entity = TypeMap.Extend<OrganizationActor, OrganizationActorEntity>();
 
     /// <inheritdoc />
     public OrganizationActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<OrganizationActorEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<OrganizationActor, OrganizationActorEntity>(isExtending);
 
     /// <inheritdoc />
     public OrganizationActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class OrganizationActor : APActor, IASModel<OrganizationActor, Organizati
     /// <inheritdoc />
     [SetsRequiredMembers]
     public OrganizationActor(TypeMap typeMap, OrganizationActorEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<OrganizationActorEntity>();
+        => Entity = entity ?? typeMap.AsEntity<OrganizationActor, OrganizationActorEntity>();
 
     static OrganizationActor IASModel<OrganizationActor>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

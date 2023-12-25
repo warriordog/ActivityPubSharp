@@ -26,11 +26,11 @@ public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
     static string IASModel<ASLink>.ASTypeName => LinkType;
 
     /// <inheritdoc />
-    public ASLink() => Entity = TypeMap.Extend<ASLinkEntity>();
+    public ASLink() => Entity = TypeMap.Extend<ASLink, ASLinkEntity>();
 
     /// <inheritdoc />
     public ASLink(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ASLinkEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ASLink, ASLinkEntity>(isExtending);
 
     /// <inheritdoc />
     public ASLink(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -39,7 +39,7 @@ public class ASLink : ASType, IASModel<ASLink, ASLinkEntity, ASType>
     [SetsRequiredMembers]
     public ASLink(TypeMap typeMap, ASLinkEntity? entity) : base(typeMap, null)
     {
-        Entity = entity ?? typeMap.AsEntity<ASLinkEntity>();
+        Entity = entity ?? typeMap.AsEntity<ASLink, ASLinkEntity>();
         HRef = Entity.HRef ?? throw new ArgumentException($"The provided entity is invalid - required {nameof(ASLinkEntity.HRef)} property is missing");
     }
 
