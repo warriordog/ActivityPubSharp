@@ -10,21 +10,21 @@ public abstract class ASTypeTests
 {
     private ASType ObjectUnderTest { get; } = new StubASType();
 
-    public class JsonLdContextsShould : ASTypeTests
+    public class JsonLdContextShould : ASTypeTests
     {
         [Fact]
         public void ContainASContext_ByDefault()
         {
-            ObjectUnderTest.TypeMap.LDContext.Should().Contain("https://www.w3.org/ns/activitystreams");
+            ObjectUnderTest.JsonLDContext.Should().Contain("https://www.w3.org/ns/activitystreams");
         }
     }
 
-    public class TypesShould : ASTypeTests
+    public class TypeShould : ASTypeTests
     {
         [Fact]
         public void ContainTypeName_ByDefault()
         {
-            ObjectUnderTest.TypeMap.ASTypes.Should().Contain(StubASType.StubType);
+            ObjectUnderTest.Type.Should().Contain(StubASType.StubType);
         }
     }
 

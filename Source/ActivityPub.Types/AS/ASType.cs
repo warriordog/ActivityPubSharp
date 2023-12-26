@@ -2,7 +2,6 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Util;
 using JetBrains.Annotations;
@@ -68,6 +67,12 @@ public class ASType : IASModel<ASType, ASTypeEntity>
     /// </summary>
     public TypeMap TypeMap { get; }
 
+    /// <inheritdoc cref="TypeMap.ASTypes"/>
+    public IReadOnlySet<string> Type => TypeMap.ASTypes;
+
+    /// <inheritdoc cref="TypeMap.LDContext"/>
+    public IJsonLDContext JsonLDContext => TypeMap.LDContext;
+    
     /// <summary>
     ///     Provides the globally unique identifier for an <code>Object</code> or <code>Link</code>.
     /// </summary>
