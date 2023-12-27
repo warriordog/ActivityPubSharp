@@ -35,7 +35,7 @@ param (
 $versionSuffix = "";
 if ($Snapshot)
 {
-    $timestamp = Get-Date -Format "yyyy-MM-dd.HH-mm-ss.fff";
+    $timestamp = Get-Date -Format "yyyy-MM-dd.HH-mm-ss";
     $versionSuffix = "snapshot.$timestamp";
 }
 
