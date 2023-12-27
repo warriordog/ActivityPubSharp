@@ -6,7 +6,6 @@ using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Activity;
 using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
-using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
@@ -28,13 +27,13 @@ public class ComplexObjectSerializationTests : SerializationTests
         var follow = new FollowActivity
         {
             Id = "https://peer.example/actor/activities/1",
-            Object = new LinkableList<ASObject> { follower },
-            Target = new LinkableList<ASObject> { target },
+            Object = [follower],
+            Target = [target],
         };
         ObjectUnderTest = new AcceptActivity
         {
-            Actor = new LinkableList<ASObject> { target },
-            Object = new LinkableList<ASObject> { (ASObject)follow },
+            Actor = [target],
+            Object = [follow],
         };
         
         // Accept
@@ -66,18 +65,18 @@ public class ComplexObjectSerializationTests : SerializationTests
         var collection = new ASCollection
         {
             Id = "https://home.example/actor/collections/1",
-            Items = new LinkableList<ASObject>(new ASLink[]
-            {
-                new(){HRef = "https://home.example/item/whatever"},
-                new(){HRef = "https://home.example/item/whatever-2"}
-            }),
+            Items =
+            [
+                "https://home.example/item/whatever",
+                "https://home.example/item/whatever-2"
+            ],
             TotalItems = 2
         };
         ObjectUnderTest = new AddActivity
         {
-            Actor = new LinkableList<ASObject> { actor },
-            Object = new LinkableList<ASObject> { note },
-            Target = new LinkableList<ASObject> { collection }
+            Actor = [actor],
+            Object = [note],
+            Target = [collection]
         };
         
         JsonUnderTest.Should()

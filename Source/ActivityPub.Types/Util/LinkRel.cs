@@ -16,7 +16,7 @@ public record LinkRel
 {
     // Characters that cannot appear within a link relation.
     // Values are: "space" ( ), "tab" (\t), "line feed" (\n), "carriage return" (\r), and "comma" (,)
-    private static readonly char[] IllegalChars = { '\u0020', '\u0009', '\u000A', '\u000C', '\u000D', '\u002C' };
+    private static readonly char[] IllegalChars = ['\u0020', '\u0009', '\u000A', '\u000C', '\u000D', '\u002C'];
 
     /// <summary>
     ///     Constructs a LinkRel from a raw input

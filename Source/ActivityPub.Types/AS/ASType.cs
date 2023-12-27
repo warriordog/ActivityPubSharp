@@ -184,7 +184,7 @@ public sealed class ASTypeEntity : ASEntity<ASType, ASTypeEntity>
 
     /// <inheritdoc cref="ASType.AttributedTo" />
     [JsonPropertyName("attributedTo")]
-    public LinkableList<ASObject> AttributedTo { get; set; } = new();
+    public LinkableList<ASObject> AttributedTo { get; set; } = [];
 
     /// <inheritdoc cref="ASType.Preview" />
     [JsonPropertyName("preview")]

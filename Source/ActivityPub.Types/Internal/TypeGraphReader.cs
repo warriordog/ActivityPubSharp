@@ -118,10 +118,7 @@ internal class TypeGraphReader : ITypeGraphReader
     {
         // An object without the types field is just "object"
         if (!element.TryGetProperty("type", out var typeProp))
-            return new HashSet<string>
-            {
-                ASObject.ObjectType
-            };
+            return [ASObject.ObjectType];
         
         // Everything thing else must be converted
         var types = typeProp.Deserialize<HashSet<string>>(options) 

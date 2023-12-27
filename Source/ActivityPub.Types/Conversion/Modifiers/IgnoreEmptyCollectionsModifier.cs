@@ -67,7 +67,7 @@ public static class IgnoreEmptyCollectionsModifier
 
         method
             .MakeGenericMethod(itemType, prop.PropertyType)
-            .Invoke(null, new object[] { prop })
+            .Invoke(null, [prop])
             ;
     }
 
@@ -91,7 +91,7 @@ public static class IgnoreEmptyCollectionsModifier
 
         method
             .MakeGenericMethod(itemType, prop.PropertyType)
-            .Invoke(null, new object[] { prop });
+            .Invoke(null, [prop]);
     }
 
     private static void BindReadOnlyCollectionOf<TItem, TCollection>(JsonPropertyInfo prop)

@@ -118,25 +118,25 @@ public sealed class ASActivityEntity : ASEntity<ASActivity, ASActivityEntity>
 {
     /// <inheritdoc cref="ASActivity.Actor" />
     [JsonPropertyName("actor")]
-    public LinkableList<ASObject> Actor { get; set; } = new();
+    public LinkableList<ASObject> Actor { get; set; } = [];
 
     /// <inheritdoc cref="ASActivity.Instrument" />
     [JsonPropertyName("instrument")]
-    public LinkableList<ASObject> Instrument { get; set; } = new();
+    public LinkableList<ASObject> Instrument { get; set; } = [];
     
     /// <inheritdoc cref="ASActivity.Object" />
     [JsonPropertyName("object")]
-    public LinkableList<ASObject> Object { get; set; } = new();
+    public LinkableList<ASObject> Object { get; set; } = [];
 
     /// <inheritdoc cref="ASActivity.Origin" />
     [JsonPropertyName("origin")]
-    public LinkableList<ASObject> Origin { get; set; } = new();
+    public LinkableList<ASObject> Origin { get; set; } = [];
 
     /// <inheritdoc cref="ASActivity.Result" />
     [JsonPropertyName("result")]
-    public LinkableList<ASObject> Result { get; set; } = new();
+    public LinkableList<ASObject> Result { get; set; } = [];
     
     /// <inheritdoc cref="ASActivity.Target" />
     [JsonPropertyName("target")]
-    public LinkableList<ASObject> Target { get; set; } = new();
+    public LinkableList<ASObject> Target { get; set; } = [];
 }

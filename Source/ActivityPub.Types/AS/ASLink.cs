@@ -155,7 +155,7 @@ public sealed class ASLinkEntity : ASEntity<ASLink, ASLinkEntity>
 
     /// <inheritdoc cref="ASLink.Rel" />
     [JsonPropertyName("rel")]
-    public HashSet<LinkRel> Rel { get; set; } = new();
+    public HashSet<LinkRel> Rel { get; set; } = [];
 
     /// <inheritdoc />
     public override bool RequiresObjectForm => HRefLang != null || Width != null || Height != null || Rel.Count != 0;

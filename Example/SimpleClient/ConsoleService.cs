@@ -292,7 +292,7 @@ public class ConsoleService : BackgroundService
                          .GetMethod(nameof(ResolveValueOfLinkableOf), BindingFlags.NonPublic | BindingFlags.Instance)
                          ?.MakeGenericMethod(valueType)
                      ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableOf<{valueType}>(Linkable<{valueType}>, CancellationToken)");
-        return await (Task<object?>)method.Invoke(this, new[] { value, stoppingToken })!;
+        return await (Task<object?>)method.Invoke(this, [value, stoppingToken])!;
     }
 
     private async Task<object?> ResolveValueOfLinkableOf<T>(Linkable<T> value, CancellationToken stoppingToken)
@@ -308,7 +308,7 @@ public class ConsoleService : BackgroundService
                          .GetMethod(nameof(ResolveValueOfLinkableListOf), BindingFlags.NonPublic | BindingFlags.Instance)
                          ?.MakeGenericMethod(valueType)
                      ?? throw new MissingMethodException($"Missing method ResolveValueOfLinkableListOf<{valueType}>(LinkableList<{valueType}>, CancellationToken)");
-        return await (Task<object?>)method.Invoke(this, new[] { value, stoppingToken })!;
+        return await (Task<object?>)method.Invoke(this, [value, stoppingToken])!;
     }
 
     private async Task<object?> ResolveValueOfLinkableListOf<T>(LinkableList<T> value, CancellationToken stoppingToken)

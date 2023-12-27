@@ -59,7 +59,7 @@ public abstract class CollectionSerializationTests : SerializationTests
             };
             ObjectUnderTest = new ASActivity
             {
-                Target = new LinkableList<ASObject> { collection }
+                Target = [collection]
             };
             JsonUnderTest.Should().BeJsonObject().And.HaveProperty("target");
             JsonUnderTest.GetProperty("target").Should().BeJsonObject();
@@ -118,7 +118,7 @@ public abstract class CollectionSerializationTests : SerializationTests
             };
             ObjectUnderTest = new ASActivity
             {
-                Target = new LinkableList<ASObject> { collection }
+                Target = [collection]
             };
             JsonUnderTest.Should().BeJsonObject().And.HaveProperty("target");
             JsonUnderTest.GetProperty("target").Should().BeJsonObject();
@@ -177,7 +177,7 @@ public abstract class CollectionSerializationTests : SerializationTests
             };
             ObjectUnderTest = new ASActivity
             {
-                Target = new LinkableList<ASObject> { collection }
+                Target = [collection]
             };
             JsonUnderTest.Should().BeJsonObject().And.HaveProperty("target");
             JsonUnderTest.GetProperty("target").Should().BeJsonObject();
@@ -236,7 +236,7 @@ public abstract class CollectionSerializationTests : SerializationTests
             };
             ObjectUnderTest = new ASActivity
             {
-                Target = new LinkableList<ASObject> { collection }
+                Target = [collection]
             };
             JsonUnderTest.Should().BeJsonObject().And.HaveProperty("target");
             JsonUnderTest.GetProperty("target").Should().BeJsonObject();
