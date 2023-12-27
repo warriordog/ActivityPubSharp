@@ -124,7 +124,7 @@ public class ConsoleService : BackgroundService
 
     private async Task HandlePop(CancellationToken stoppingToken)
     {
-        if (!_focus.Any())
+        if (_focus.Count == 0)
         {
             await Console.Out.WriteLineAsync("Can't go back - no objects are in focus");
             return;

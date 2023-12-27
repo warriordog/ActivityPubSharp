@@ -128,7 +128,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private static bool TryWriteAsLink(Utf8JsonWriter writer, TypeMap typeMap)
     {
         // If there are any unmapped properties, then bail
-        if (typeMap.UnmappedProperties?.Any() == true)
+        if (typeMap.UnmappedProperties is { Count: > 0 })
             return false;
 
         // If there is any data in any link entities, then bail
