@@ -18,22 +18,22 @@ public class ComplexObjectSerializationTests(JsonLdSerializerFixture fixture)
     {
         var follower = new ASLink
         {
-            HRef = "https://peer.example/actor",
+            HRef = "https://peer.example/actor"
         };
         var target = new ASLink
         {
-            HRef = "https://home.example/actor",
+            HRef = "https://home.example/actor"
         };
         var follow = new FollowActivity
         {
             Id = "https://peer.example/actor/activities/1",
             Object = [follower],
-            Target = [target],
+            Target = [target]
         };
         ObjectUnderTest = new AcceptActivity
         {
             Actor = [target],
-            Object = [follow],
+            Object = [follow]
         };
         
         // Accept
@@ -55,12 +55,12 @@ public class ComplexObjectSerializationTests(JsonLdSerializerFixture fixture)
     {
         var actor = new ASLink
         {
-            HRef = "https://home.example/actor",
+            HRef = "https://home.example/actor"
         };
         var note = new NoteObject
         {
             Id = "https://peer.example/actor/activities/1",
-            Content = "This is a note",
+            Content = "This is a note"
         };
         var collection = new ASCollection
         {

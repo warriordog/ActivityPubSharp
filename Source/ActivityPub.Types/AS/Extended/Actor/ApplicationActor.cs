@@ -40,4 +40,4 @@ public class ApplicationActor : APActor, IASModel<ApplicationActor, ApplicationA
 }
 
 /// <inheritdoc cref="ApplicationActor" />
-public sealed class ApplicationActorEntity : ASEntity<ApplicationActor, ApplicationActorEntity> {}
+public sealed class ApplicationActorEntity : ASEntity<ApplicationActor, ApplicationActorEntity>;

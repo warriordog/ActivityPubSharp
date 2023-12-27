@@ -41,4 +41,4 @@ public class PageObject : DocumentObject, IASModel<PageObject, PageObjectEntity,
 }
 
 /// <inheritdoc cref="PageObject" />
-public sealed class PageObjectEntity : ASEntity<PageObject, PageObjectEntity> {}
+public sealed class PageObjectEntity : ASEntity<PageObject, PageObjectEntity>;

@@ -33,7 +33,7 @@ public class MastodonInteropTests(JsonLdSerializerFixture fixture)
         activity!.Actor.Should().NotBeEmpty();
         activity.Object.Should().NotBeEmpty();
         
-        activity.Object!.First().Value!.Is<ASActivity>(out var nestedActivity).Should().BeTrue();
+        activity.Object.First().Value!.Is<ASActivity>(out var nestedActivity).Should().BeTrue();
         nestedActivity!.Actor.Should().NotBeEmpty();
         nestedActivity.Object.Should().NotBeEmpty();
     }
@@ -58,7 +58,7 @@ public class MastodonInteropTests(JsonLdSerializerFixture fixture)
         activity!.Actor.Should().NotBeEmpty();
         activity.Object.Should().NotBeEmpty();
         
-        activity.Object!.First().Value!.Is<ASActivity>(out var nestedActivity).Should().BeTrue();
+        activity.Object.First().Value!.Is<ASActivity>(out var nestedActivity).Should().BeTrue();
         nestedActivity!.Actor.Should().NotBeEmpty();
     }
     
@@ -131,7 +131,7 @@ public class MastodonInteropTests(JsonLdSerializerFixture fixture)
         ObjectUnderTest.Is<ASActivity>(out var activity).Should().BeTrue();
         activity!.Object.Should().NotBeEmpty();
         
-        activity.Object!.First().Value!.Is<ASObject>(out var note).Should().BeTrue();
+        activity.Object.First().Value!.Is<ASObject>(out var note).Should().BeTrue();
         Assert.NotNull(note);
         note.Summary.Should().BeNull();
         note.Content!.DefaultValue.Should().Be("<p>Creating test data \ud83c\udd95</p>");

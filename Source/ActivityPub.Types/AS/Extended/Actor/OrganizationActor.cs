@@ -41,4 +41,4 @@ public class OrganizationActor : APActor, IASModel<OrganizationActor, Organizati
 }
 
 /// <inheritdoc cref="OrganizationActor" />
-public sealed class OrganizationActorEntity : ASEntity<OrganizationActor, OrganizationActorEntity> {}
+public sealed class OrganizationActorEntity : ASEntity<OrganizationActor, OrganizationActorEntity>;

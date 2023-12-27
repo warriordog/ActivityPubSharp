@@ -49,14 +49,13 @@ public class ASUri : IEquatable<ASUri>, IEquatable<Uri>, IEquatable<string>
         if (ReferenceEquals(this, obj))
             return true;
 
-        if (obj is ASUri asUri)
-            return Equals(asUri);
-        if (obj is Uri uri)
-            return Equals(uri);
-        if (obj is string str)
-            return Equals(str);
-
-        return false;
+        return obj switch
+        {
+            ASUri asUri => Equals(asUri),
+            Uri uri => Equals(uri),
+            string str => Equals(str),
+            _ => false
+        };
     }
 
     /// <summary>

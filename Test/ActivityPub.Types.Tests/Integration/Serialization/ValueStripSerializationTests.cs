@@ -7,7 +7,6 @@ using ActivityPub.Types.AS;
 using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
-using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 

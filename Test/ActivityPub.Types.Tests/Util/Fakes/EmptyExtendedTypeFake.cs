@@ -9,8 +9,9 @@ namespace ActivityPub.Types.Tests.Util.Fakes;
 
 public class EmptyExtendedTypeFake : ASType, IASModel<EmptyExtendedTypeFake, EmptyExtendedTypeFakeEntity, ASType>
 {
-    public static JsonLDContextObject ExtendedContext { get; } = "https://example.com/context";
-    public static IJsonLDContext DefiningContext { get; } = new JsonLDContext()
+    public static JsonLDContextObject ExtendedContext => "https://example.com/context";
+
+    public static IJsonLDContext DefiningContext { get; } = new JsonLDContext
     {
         JsonLDContextObject.ActivityStreams,
         ExtendedContext
@@ -36,4 +37,4 @@ public class EmptyExtendedTypeFake : ASType, IASModel<EmptyExtendedTypeFake, Emp
     private EmptyExtendedTypeFakeEntity Entity { get; }
 }
 
-public sealed class EmptyExtendedTypeFakeEntity : ASEntity<EmptyExtendedTypeFake, EmptyExtendedTypeFakeEntity> {}
+public sealed class EmptyExtendedTypeFakeEntity : ASEntity<EmptyExtendedTypeFake, EmptyExtendedTypeFakeEntity>;

@@ -41,4 +41,4 @@ public class VideoObject : DocumentObject, IASModel<VideoObject, VideoObjectEnti
 }
 
 /// <inheritdoc cref="VideoObject" />
-public sealed class VideoObjectEntity : ASEntity<VideoObject, VideoObjectEntity> {}
+public sealed class VideoObjectEntity : ASEntity<VideoObject, VideoObjectEntity>;

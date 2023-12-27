@@ -42,4 +42,4 @@ public class ArriveActivity : ASIntransitiveActivity, IASModel<ArriveActivity, A
 }
 
 /// <inheritdoc cref="ArriveActivity" />
-public sealed class ArriveActivityEntity : ASEntity<ArriveActivity, ArriveActivityEntity> {}
+public sealed class ArriveActivityEntity : ASEntity<ArriveActivity, ArriveActivityEntity>;

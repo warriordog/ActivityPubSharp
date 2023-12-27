@@ -41,4 +41,4 @@ public class JoinActivity : ASActivity, IASModel<JoinActivity, JoinActivityEntit
 }
 
 /// <inheritdoc cref="JoinActivity" />
-public sealed class JoinActivityEntity : ASEntity<JoinActivity, JoinActivityEntity> {}
+public sealed class JoinActivityEntity : ASEntity<JoinActivity, JoinActivityEntity>;

@@ -26,7 +26,7 @@ internal class NaturalLanguageStringConverter : JsonConverter<NaturalLanguageStr
             case JsonTokenType.String:
             {
                 var str = reader.GetString()!;
-                return new NaturalLanguageString()
+                return new NaturalLanguageString
                 {
                     DefaultValue = str
                 };

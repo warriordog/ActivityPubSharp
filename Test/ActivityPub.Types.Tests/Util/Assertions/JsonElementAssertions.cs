@@ -38,7 +38,7 @@ public class JsonElementAssertions(JsonElement value)
     {
         BeJsonObject();
 
-        if (Subject.TryGetProperty(name, out var _))
+        if (Subject.TryGetProperty(name, out _))
             Assert.Fail($"Expected object to not contain property {name}, but it does");
 
         return new AndConstraint<JsonElementAssertions>(this);

@@ -41,4 +41,4 @@ public class LeaveActivity : ASActivity, IASModel<LeaveActivity, LeaveActivityEn
 }
 
 /// <inheritdoc cref="LeaveActivity" />
-public sealed class LeaveActivityEntity : ASEntity<LeaveActivity, LeaveActivityEntity> {}
+public sealed class LeaveActivityEntity : ASEntity<LeaveActivity, LeaveActivityEntity>;

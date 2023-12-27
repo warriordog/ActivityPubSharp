@@ -41,4 +41,4 @@ public class NoteObject : ASObject, IASModel<NoteObject, NoteObjectEntity, ASObj
 }
 
 /// <inheritdoc cref="NoteObject" />
-public sealed class NoteObjectEntity : ASEntity<NoteObject, NoteObjectEntity> {}
+public sealed class NoteObjectEntity : ASEntity<NoteObject, NoteObjectEntity>;

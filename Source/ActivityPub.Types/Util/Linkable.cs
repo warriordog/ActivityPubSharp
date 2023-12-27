@@ -137,5 +137,5 @@ public sealed class Linkable<T>
     /// <summary>
     ///     Converts this <see cref="Linkable{T}"/> to its value object, or <see langword="null"/> if it has a reference link
     /// </summary>
-    public static implicit operator T?(Linkable<T>? linkable) => linkable == null ? default : linkable.Value;
+    public static implicit operator T?(Linkable<T>? linkable) => linkable?.Value;
 }

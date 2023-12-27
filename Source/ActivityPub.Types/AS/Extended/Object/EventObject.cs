@@ -41,4 +41,4 @@ public class EventObject : ASObject, IASModel<EventObject, EventObjectEntity, AS
 }
 
 /// <inheritdoc cref="EventObject" />
-public sealed class EventObjectEntity : ASEntity<EventObject, EventObjectEntity> {}
+public sealed class EventObjectEntity : ASEntity<EventObject, EventObjectEntity>;

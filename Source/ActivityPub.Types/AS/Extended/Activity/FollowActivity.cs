@@ -42,4 +42,4 @@ public class FollowActivity : ASActivity, IASModel<FollowActivity, FollowActivit
 }
 
 /// <inheritdoc cref="FollowActivity" />
-public sealed class FollowActivityEntity : ASEntity<FollowActivity, FollowActivityEntity> {}
+public sealed class FollowActivityEntity : ASEntity<FollowActivity, FollowActivityEntity>;

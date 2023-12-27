@@ -43,4 +43,4 @@ public class BlockActivity : IgnoreActivity, IASModel<BlockActivity, BlockActivi
 }
 
 /// <inheritdoc cref="BlockActivity" />
-public sealed class BlockActivityEntity : ASEntity<BlockActivity, BlockActivityEntity> {}
+public sealed class BlockActivityEntity : ASEntity<BlockActivity, BlockActivityEntity>;

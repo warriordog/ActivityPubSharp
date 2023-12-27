@@ -41,4 +41,4 @@ public class PersonActor : APActor, IASModel<PersonActor, PersonActorEntity, APA
 }
 
 /// <inheritdoc cref="PersonActor" />
-public sealed class PersonActorEntity : ASEntity<PersonActor, PersonActorEntity> {}
+public sealed class PersonActorEntity : ASEntity<PersonActor, PersonActorEntity>;

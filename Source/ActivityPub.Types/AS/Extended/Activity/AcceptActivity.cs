@@ -40,4 +40,4 @@ public class AcceptActivity : ASActivity, IASModel<AcceptActivity, AcceptActivit
 }
 
 /// <inheritdoc cref="AcceptActivity" />
-public sealed class AcceptActivityEntity : ASEntity<AcceptActivity, AcceptActivityEntity> {}
+public sealed class AcceptActivityEntity : ASEntity<AcceptActivity, AcceptActivityEntity>;

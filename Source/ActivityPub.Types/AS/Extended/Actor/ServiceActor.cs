@@ -41,4 +41,4 @@ public class ServiceActor : APActor, IASModel<ServiceActor, ServiceActorEntity, 
 }
 
 /// <inheritdoc cref="ServiceActor" />
-public sealed class ServiceActorEntity : ASEntity<ServiceActor, ServiceActorEntity> {}
+public sealed class ServiceActorEntity : ASEntity<ServiceActor, ServiceActorEntity>;
