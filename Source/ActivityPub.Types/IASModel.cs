@@ -57,6 +57,7 @@ public interface IASModel<out TModel>
     ///     AS name of all types that derive from this one.
     /// </summary>
     /// <seealso cref="ASNameTree"/>
+    [JsonIgnore]
     internal static virtual HashSet<string>? DerivedTypeNames => ASNameTree.GetDerivedTypesFor(TModel.ASTypeName);
     static IASModel() => ASNameTree.Add(TModel.ASTypeName, TModel.BaseTypeName);
 }
@@ -71,6 +72,7 @@ public interface IASModel<out TModel, out TEntity> : IASModel<TModel>
     where TModel : ASType, IASModel<TModel, TEntity>
     where TEntity : ASEntity<TModel, TEntity>
 {
+    [JsonIgnore]
     static Type IASModel<TModel>.EntityType { get; } = typeof(TEntity);
 }
 
@@ -87,5 +89,6 @@ public interface IASModel<out TModel, out TEntity, out TBaseModel> : IASModel<TM
     where TEntity : ASEntity<TModel, TEntity>
     where TBaseModel : ASType, IASModel<TBaseModel>
 {
+    [JsonIgnore]
     static string? IASModel<TModel>.BaseTypeName => TBaseModel.ASTypeName ?? TBaseModel.BaseTypeName;
 }

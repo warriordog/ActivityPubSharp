@@ -26,6 +26,7 @@ public abstract class ASEntity
     /// <summary>
     ///     JSON-LD context(s) that define this entity.
     /// </summary>
+    [JsonIgnore]
     public virtual IJsonLDContext DefiningContext => IJsonLDContext.ActivityStreams;
     
     /// <summary>
@@ -63,11 +64,14 @@ public abstract class ASEntity<TModel, TEntity> : ASEntity
     where TEntity : ASEntity<TModel, TEntity>
 {
     /// <inheritdoc />
+    [JsonIgnore]
     public sealed override string? ASTypeName => TModel.ASTypeName;
 
     /// <inheritdoc />
+    [JsonIgnore]
     public sealed override string? BaseTypeName => TModel.BaseTypeName;
 
     /// <inheritdoc />
+    [JsonIgnore]
     public sealed override IJsonLDContext DefiningContext => TModel.DefiningContext;
 }

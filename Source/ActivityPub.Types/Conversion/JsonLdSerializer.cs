@@ -158,7 +158,8 @@ public class JsonLdSerializer : IJsonLdSerializer
         ListableConverter listableConverter,
         ListableReadOnlyConverter listableReadOnlyConverter
     )
-        => SerializerOptions = new JsonSerializerOptions(serializerOptions.Value.DefaultJsonSerializerOptions)
+    {
+        SerializerOptions = new JsonSerializerOptions(serializerOptions.Value.DefaultJsonSerializerOptions)
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             TypeInfoResolver = new DefaultJsonTypeInfoResolver()
@@ -173,6 +174,8 @@ public class JsonLdSerializer : IJsonLdSerializer
                 listableReadOnlyConverter
             }
         };
+        SerializerOptions.MakeReadOnly();
+    }
 
     /// <inheritdoc />
     public JsonSerializerOptions SerializerOptions { get; }
