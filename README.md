@@ -60,10 +60,10 @@ There is, however, [an example package](Example) available with reference code.
 ## Technical Details
 
 ### Requirements
-* .NET 7 or newer
+* .NET 8 or newer
 * Any supported platform - no native code is used
 
 ### Design Goals
 * Minimal dependencies - software supply chain risks are an underappreciated threat. ActivityPubSharp keeps minimal dependencies to reduce the supply chain footprint.
-* Modern .NET - ActivityPubSharp has set .NET 7 as the minimum supported version. This unfortunately excludes some projects, but is critical for System.Text.Json support.
+* Modern .NET - ActivityPubSharp has set .NET 8 as the minimum supported version. This unfortunately excludes some projects, but is critical for System.Text.Json support.
 * Ergonomic and Conventional APIs - mid/high level APIs should feel and function like typical .NET APIs. An important goal (and difficult challenge) of this project is abstracting ActivityPub's dynamic nature to better fit with C#'s strongly-typed model.

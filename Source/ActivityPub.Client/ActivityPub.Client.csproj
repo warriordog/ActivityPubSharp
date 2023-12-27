@@ -5,10 +5,11 @@
         <VersionSuffix>$(VersionSuffix)</VersionSuffix>
         <Version>0.1.0</Version>
         <Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
