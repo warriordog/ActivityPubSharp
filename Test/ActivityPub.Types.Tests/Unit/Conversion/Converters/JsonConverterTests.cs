@@ -3,15 +3,22 @@
 
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 
 namespace ActivityPub.Types.Tests.Unit.Conversion.Converters;
 
-internal abstract class JsonConverterTests<T, TConverter>
+public abstract class JsonConverterTests<T, TConverter>
     where TConverter : JsonConverter<T>
 {
     protected abstract TConverter ConverterUnderTest { get; set; }
     protected JsonSerializerOptions JsonSerializerOptions { get; set; } = JsonSerializerOptions.Default;
 
+    protected T? Read(string json)
+    {
+        var bytes = Encoding.UTF8.GetBytes(json).AsSpan();
+        return Read(bytes);
+    }
+    
     // Useful: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/use-utf8jsonreader
     protected T? Read(ReadOnlySpan<byte> json)
     {

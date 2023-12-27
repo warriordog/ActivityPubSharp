@@ -78,6 +78,19 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
         get => Entity.Options;
         set => Entity.Options = value;
     }
+
+    /// <summary>
+    ///     Indicates that a question has been closed, and answers are no longer accepted.
+    /// </summary>
+    /// <remarks>
+    ///     We don't support the Object or Link forms, because what would that even mean??
+    /// </remarks>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed" />
+    public FlagWithTimestamp? Closed
+    {
+        get => Entity.Closed;
+        set => Entity.Closed = value;
+    }
 }
 
 /// <inheritdoc cref="QuestionActivity" />
@@ -105,6 +118,10 @@ public sealed class QuestionActivityEntity : ASEntity<QuestionActivity, Question
     [JsonIgnore]
     public bool AllowMultiple { get; set; }
 
+    /// <inheritdoc cref="QuestionActivity.Closed" />
+    [JsonPropertyName("closed")]
+    public FlagWithTimestamp? Closed { get; set; }
+    
     void IJsonOnDeserialized.OnDeserialized()
     {
         AllowMultiple = false;
