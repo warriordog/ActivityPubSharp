@@ -8,7 +8,7 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-///     Custom converter for the JSON-LD <code>@context</code> property.
+///     Custom JSON converter for the JSON-LD <code>@context</code> property.
 /// </summary>
 /// <remarks>
 ///     We need THREE FUCKING CONVERTERS for a minimum-viable implementation!
@@ -16,8 +16,9 @@ namespace ActivityPub.Types.Conversion.Converters;
 /// <seealso cref="JsonLDTermConverter" />
 /// <seealso cref="JsonLDContextObjectConverter" />
 /// <seealso href="https://www.w3.org/TR/json-ld11/#the-context" />
-internal class JsonLDContextConverter : JsonConverter<JsonLDContext>
+public class JsonLDContextConverter : JsonConverter<JsonLDContext>
 {
+    /// <inheritdoc />
     public override JsonLDContext? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         switch (reader.TokenType)
@@ -61,6 +62,7 @@ internal class JsonLDContextConverter : JsonConverter<JsonLDContext>
         return context;
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, JsonLDContext value, JsonSerializerOptions options)
     {
         if (value.Count == 1)

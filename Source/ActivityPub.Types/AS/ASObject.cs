@@ -2,12 +2,9 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
-using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Util;
 using JetBrains.Annotations;
 
@@ -28,22 +25,22 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
     static string IASModel<ASObject>.ASTypeName => ObjectType;
 
     /// <inheritdoc />
-    public ASObject() => Entity = TypeMap.Extend<ASObjectEntity>();
+    public ASObject() => Entity = TypeMap.Extend<ASObject, ASObjectEntity>();
 
     /// <inheritdoc />
     public ASObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ASObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ASObject, ASObjectEntity>(isExtending);
 
     /// <summary>
     ///     Constructs a new instance and extends an existing type graph from a provided model.
     /// </summary>
-    /// <seealso cref="TypeMap.Extend{TEntity}()" />
+    /// <seealso cref="TypeMap.Extend{TModel, TEntity}()" />
     public ASObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
 
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ASObject(TypeMap typeMap, ASObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ASObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ASObject, ASObjectEntity>();
 
     static ASObject IASModel<ASObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 
@@ -222,8 +219,8 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-content" />
     public NaturalLanguageString? Content
     {
-        get => Entity.Content;
-        set => Entity.Content = value;
+        get => Entity.ContentMap;
+        set => Entity.ContentMap = value;
     }
 
     /// <summary>
@@ -329,7 +326,7 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
 }
 
 /// <inheritdoc cref="ASObject" />
-public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, ICustomConvertedEntity<ASObjectEntity>
+public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, IJsonOnDeserialized, IJsonOnSerializing
 {
     /// <inheritdoc cref="ASObject.Attachment" />
     [JsonPropertyName("attachment")]
@@ -393,7 +390,11 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, ICustom
 
     /// <inheritdoc cref="ASObject.Content" />
     [JsonPropertyName("contentMap")]
-    public NaturalLanguageString? Content { get; set; }
+    public NaturalLanguageString? ContentMap { get; set; }
+
+    /// <inheritdoc cref="ASObject.Content" />
+    [JsonPropertyName("content")]
+    public string? Content { get; set; }
 
     /// <inheritdoc cref="ASObject.Duration" />
     [JsonPropertyName("duration")]
@@ -430,31 +431,25 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, ICustom
     /// <inheritdoc cref="ASObject.Shares" />
     [JsonPropertyName("shares")]
     public Linkable<ASCollection>? Shares { get; set; }
-
-    static void ICustomConvertedEntity<ASObjectEntity>.PostReadEntity(JsonElement jsonElement, DeserializationMetadata meta, ASObjectEntity entity)
+    
+    // Sync up "content" and "contentMap" properties
+    void IJsonOnDeserialized.OnDeserialized()
     {
-        if (!jsonElement.TryGetProperty("content", out var contentProperty))
+        if (Content == null)
             return;
 
-        var content = contentProperty.GetString();
-        if (content == null)
-            return;
-
-        entity.Content ??= new NaturalLanguageString();
-        entity.Content.DefaultValue = content;
+        if (ContentMap == null)
+            ContentMap = Content;
+        else
+            ContentMap.DefaultValue = Content;
     }
-
-    static void ICustomConvertedEntity<ASObjectEntity>.PostWriteEntity(ASObjectEntity entity, SerializationMetadata meta, JsonElement entityJson, JsonObject outputJson)
+    
+    // Sync up "content" and "contentMap" properties
+    void IJsonOnSerializing.OnSerializing()
     {
-        if (entity.Content == null)
-            return;
-        
-        // Copy Content.DefaultValue to "content"
-        if (entity.Content.DefaultValue != null)
-            outputJson["content"] = JsonValue.Create(entity.Content.DefaultValue, meta.JsonNodeOptions);
+        Content = ContentMap?.DefaultValue;
 
-        // Remove "contentMap" if it's empty
-        if (!entity.Content.LanguageMap.Any())
-            outputJson.Remove("contentMap");
+        if (ContentMap?.HasLanguages == false)
+            ContentMap = null;
     }
 }

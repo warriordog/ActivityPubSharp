@@ -6,7 +6,7 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Conversion.Converters;
 
-internal class LinkRelConverterTests : JsonConverterTests<LinkRel, LinkRelConverter>
+public class LinkRelConverterTests : JsonConverterTests<LinkRel, LinkRelConverter>
 {
     protected override LinkRelConverter ConverterUnderTest { get; set; } = new();
 

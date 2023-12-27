@@ -8,12 +8,13 @@ using ActivityPub.Types.Util;
 namespace ActivityPub.Types.Conversion.Converters;
 
 /// <summary>
-///     JSON converter for <see cref="JsonLDTerm" />.
+///     Custom JSON converter for <see cref="JsonLDTerm" />.
 /// </summary>
 /// <seealso cref="JsonLDContextObjectConverter" />
 /// <seealso cref="JsonLDContextConverter" />
-internal class JsonLDTermConverter : JsonConverter<JsonLDTerm>
+public class JsonLDTermConverter : JsonConverter<JsonLDTerm>
 {
+    /// <inheritdoc />
     public override JsonLDTerm? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         switch (reader.TokenType)
@@ -35,6 +36,7 @@ internal class JsonLDTermConverter : JsonConverter<JsonLDTerm>
         }
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, JsonLDTerm value, JsonSerializerOptions options)
     {
         // We can only get the non-expanded (string) form here

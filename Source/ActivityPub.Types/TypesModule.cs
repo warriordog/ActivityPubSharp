@@ -25,15 +25,6 @@ public static class TypesModule
     {
         services.TryAddSingleton<IJsonLdSerializer, JsonLdSerializer>();
         
-        services.TryAddSingleton<IASTypeInfoCache>(
-            _ =>
-            {
-                var cache = new ASTypeInfoCache();
-                cache.RegisterAllAssemblies();
-                return cache;
-            }
-        );
-        
         services.AddSingleton<TypeMapConverter>();
         services.AddSingleton<ASTypeConverter>();
         services.AddSingleton<LinkableConverter>();

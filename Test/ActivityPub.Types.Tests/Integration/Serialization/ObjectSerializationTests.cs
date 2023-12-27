@@ -61,6 +61,7 @@ public abstract class ObjectSerializationTests : SerializationTests
             };
 
             JsonUnderTest.Should().HaveStringProperty("content", "default");
+            JsonUnderTest.Should().NotHaveProperty("contentMap");
         }
 
         [Fact]

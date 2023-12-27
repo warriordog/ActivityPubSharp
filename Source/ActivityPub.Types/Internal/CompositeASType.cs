@@ -35,9 +35,8 @@ internal class CompositeASType
     public void Add(string type, string? replacedType = null)
     {
         // Add it to the superset.
-        // This doubles as a duplicate check to avoid extra set operations.
-        if (!_allASTypes.Add(type))
-            return;
+        // This may happen repeatedly as a type graph is hydrated.
+        _allASTypes.Add(type);
         
         // Replace the base type
         if (replacedType != null)
@@ -49,5 +48,17 @@ internal class CompositeASType
         // Add the new type, if it's not flattened away
         if (!_replacedASTypes.Contains(type))
             _flatASTypes.Add(type);
+    }
+    
+    /// <summary>
+    ///     Adds a collection of type names.
+    ///     These are assumed to to not shadow anything, but may be shadowed by existing types.
+    /// </summary>
+    public void AddRange(IEnumerable<string> asTypes)
+    {
+        foreach (var asType in asTypes)
+        {
+            Add(asType);
+        }
     }
 }

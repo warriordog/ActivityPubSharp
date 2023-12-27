@@ -20,11 +20,11 @@ public class TentativeRejectActivity : RejectActivity, IASModel<TentativeRejectA
     static string IASModel<TentativeRejectActivity>.ASTypeName => TentativeRejectType;
 
     /// <inheritdoc />
-    public TentativeRejectActivity() => Entity = TypeMap.Extend<TentativeRejectActivityEntity>();
+    public TentativeRejectActivity() => Entity = TypeMap.Extend<TentativeRejectActivity, TentativeRejectActivityEntity>();
 
     /// <inheritdoc />
     public TentativeRejectActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<TentativeRejectActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<TentativeRejectActivity, TentativeRejectActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public TentativeRejectActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class TentativeRejectActivity : RejectActivity, IASModel<TentativeRejectA
     /// <inheritdoc />
     [SetsRequiredMembers]
     public TentativeRejectActivity(TypeMap typeMap, TentativeRejectActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<TentativeRejectActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<TentativeRejectActivity, TentativeRejectActivityEntity>();
 
     static TentativeRejectActivity IASModel<TentativeRejectActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

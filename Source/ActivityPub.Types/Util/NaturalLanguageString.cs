@@ -32,6 +32,12 @@ public sealed class NaturalLanguageString
     private readonly Dictionary<string, string> _languageMap = new();
     
     /// <summary>
+    ///     <see langword="true"/> if this string contains any language-tagged values.
+    ///     <see cref="DefaultValue"/> is ignored.
+    /// </summary>
+    public bool HasLanguages => _languageMap.Any();
+    
+    /// <summary>
     ///     Constructs a NaturalLanguageString from a map of BCP47 Language-Tags.
     /// </summary>
     public static NaturalLanguageString FromLanguageMap(IReadOnlyDictionary<string, string> languageMap)

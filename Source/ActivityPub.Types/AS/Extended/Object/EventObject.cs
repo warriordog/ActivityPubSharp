@@ -20,11 +20,11 @@ public class EventObject : ASObject, IASModel<EventObject, EventObjectEntity, AS
     static string IASModel<EventObject>.ASTypeName => EventType;
 
     /// <inheritdoc />
-    public EventObject() => Entity = TypeMap.Extend<EventObjectEntity>();
+    public EventObject() => Entity = TypeMap.Extend<EventObject, EventObjectEntity>();
 
     /// <inheritdoc />
     public EventObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<EventObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<EventObject, EventObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public EventObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class EventObject : ASObject, IASModel<EventObject, EventObjectEntity, AS
     /// <inheritdoc />
     [SetsRequiredMembers]
     public EventObject(TypeMap typeMap, EventObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<EventObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<EventObject, EventObjectEntity>();
 
     static EventObject IASModel<EventObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

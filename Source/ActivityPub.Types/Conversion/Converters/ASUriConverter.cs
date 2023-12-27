@@ -8,8 +8,12 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-internal class ASUriConverter : JsonConverter<ASUri>
+/// <summary>
+///     Custom JSON converter for <see cref="ASUri"/>.
+/// </summary>
+public class ASUriConverter : JsonConverter<ASUri>
 {
+    /// <inheritdoc />
     public override ASUri Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Read the URI in string format
@@ -21,6 +25,7 @@ internal class ASUriConverter : JsonConverter<ASUri>
     }
 
     // Nice and simple
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, ASUri value, JsonSerializerOptions options)
     {
         var uriString = value.ToString();

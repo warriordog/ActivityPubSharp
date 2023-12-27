@@ -24,11 +24,11 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
     static string IASModel<QuestionActivity>.ASTypeName => QuestionType;
 
     /// <inheritdoc />
-    public QuestionActivity() => Entity = TypeMap.Extend<QuestionActivityEntity>();
+    public QuestionActivity() => Entity = TypeMap.Extend<QuestionActivity, QuestionActivityEntity>();
 
     /// <inheritdoc />
     public QuestionActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<QuestionActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<QuestionActivity, QuestionActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public QuestionActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -36,49 +36,47 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public QuestionActivity(TypeMap typeMap, QuestionActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<QuestionActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<QuestionActivity, QuestionActivityEntity>();
 
     static QuestionActivity IASModel<QuestionActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 
     private QuestionActivityEntity Entity { get; }
 
     /// <summary>
-    ///     Identifies an exclusive option for a Question.
-    ///     Use of oneOf implies that the Question can have only a single answer.
-    ///     To indicate that a Question can have multiple answers, use anyOf.
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-oneOf" />
-    public LinkableList<ASObject>? OneOf
-    {
-        get => Entity.OneOf;
-        set => Entity.OneOf = value;
-    }
-
-    /// <summary>
-    ///     Identifies an inclusive option for a Question.
-    ///     Use of anyOf implies that the Question can have multiple answers.
-    ///     To indicate that a Question can have only one answer, use oneOf.
-    /// </summary>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyof" />
-    public LinkableList<ASObject>? AnyOf
-    {
-        get => Entity.AnyOf;
-        set => Entity.AnyOf = value;
-    }
-
-    /// <summary>
-    ///     Contains the time at which a question was closed.
+    ///     Indicates whether this question accepts multiple responses.
+    ///     If <see langword="true"/>, then multiple options can be selected.
+    ///     If <see langword="false"/> (default), then only one option may be selected.
     /// </summary>
     /// <remarks>
-    ///     * Won't always be set - can be null even if <see cref="Closed" /> is true.
-    ///     * We don't support the Object or Link forms, because what would that even mean??
-    ///     * May possibly be in the future? Spec does not specify.
+    ///     <para>
+    ///         This is a synthetic field implemented to simplify parts of the Question schema.
+    ///         It does not exist in the ActivityStreams specification.
+    ///     </para>
+    ///     <para>
+    ///         This field controls how the question is serialized.
+    ///         If <see langword="true"/>, then <see cref="Options"/> will map to "anyOf".
+    ///         Otherwise, it maps to "oneOf".
+    ///     </para>
     /// </remarks>
-    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed" />
-    public DateTime? ClosedAt
+    public bool AllowMultiple
     {
-        get => Entity.ClosedAt;
-        set => Entity.ClosedAt = value;
+        get => Entity.AllowMultiple;
+        set => Entity.AllowMultiple = value;
+    }
+    
+    /// <summary>
+    ///     The list of options for this Question.
+    /// </summary>
+    /// <remarks>
+    ///     This is a semi-synthetic property.
+    ///     It does not exist in the ActivityStreams specification, but encapsulates the usage of both "oneOf" and "anyOf".
+    /// </remarks>
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-oneOf" />
+    /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-anyof" />
+    public LinkableList<ASObject>? Options
+    {
+        get => Entity.Options;
+        set => Entity.Options = value;
     }
 
     /// <summary>
@@ -88,7 +86,7 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
     ///     We don't support the Object or Link forms, because what would that even mean??
     /// </remarks>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-closed" />
-    public bool? Closed
+    public FlagWithTimestamp? Closed
     {
         get => Entity.Closed;
         set => Entity.Closed = value;
@@ -96,42 +94,64 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
 }
 
 /// <inheritdoc cref="QuestionActivity" />
-public sealed class QuestionActivityEntity : ASEntity<QuestionActivity, QuestionActivityEntity>
+public sealed class QuestionActivityEntity : ASEntity<QuestionActivity, QuestionActivityEntity>, IJsonOnDeserialized, IJsonOnSerializing
 {
-    private bool? _closed;
-    private DateTime? _closedAt;
-
-    /// <inheritdoc cref="QuestionActivity.OneOf" />
+    /// <summary>
+    ///     Use <see cref="Options"/> instead.
+    ///     This internal property exists only for serialization purposes.
+    /// </summary>
     [JsonPropertyName("oneOf")]
     public LinkableList<ASObject>? OneOf { get; set; }
 
-    /// <inheritdoc cref="QuestionActivity.AnyOf" />
+    /// <summary>
+    ///     Use <see cref="Options"/> instead.
+    ///     This internal property exists only for serialization purposes.
+    /// </summary>
     [JsonPropertyName("anyOf")]
     public LinkableList<ASObject>? AnyOf { get; set; }
 
-    /// <inheritdoc cref="QuestionActivity.ClosedAt" />
-    [JsonPropertyName("closed")]
-    public DateTime? ClosedAt
-    {
-        get => _closedAt;
-        set
-        {
-            _closedAt = value;
-            if (_closedAt == null)
-                _closed = null;
-        }
-    }
+    /// <inheritdoc cref="QuestionActivity.Options" />
+    [JsonIgnore]
+    public LinkableList<ASObject>? Options { get; set; }
+    
+    /// <inheritdoc cref="QuestionActivity.AllowMultiple" />
+    [JsonIgnore]
+    public bool AllowMultiple { get; set; }
 
     /// <inheritdoc cref="QuestionActivity.Closed" />
     [JsonPropertyName("closed")]
-    public bool? Closed
+    public FlagWithTimestamp? Closed { get; set; }
+    
+    void IJsonOnDeserialized.OnDeserialized()
     {
-        get => _closed ?? _closedAt != null;
-        set
+        AllowMultiple = false;
+        
+        if (AnyOf != null)
         {
-            _closed = value;
-            if (value != true)
-                _closedAt = null;
+            AllowMultiple = true;
+            
+            Options = AnyOf;
+            AnyOf = null;
         }
+
+        if (OneOf != null)
+        {
+            if (Options == null)
+                Options = OneOf;
+            else
+                Options.AddRange(OneOf);
+
+            OneOf = null;
+        }
+    }
+    void IJsonOnSerializing.OnSerializing()
+    {
+        OneOf = null;
+        AnyOf = null;
+        
+        if (AllowMultiple)
+            AnyOf = Options;
+        else
+            OneOf = Options;
     }
 }

@@ -29,11 +29,11 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     static string IASModel<ASOrderedCollection>.ASTypeName => OrderedCollectionType;
 
     /// <inheritdoc />
-    public ASOrderedCollection() => Entity = TypeMap.Extend<ASOrderedCollectionEntity>();
+    public ASOrderedCollection() => Entity = TypeMap.Extend<ASOrderedCollection, ASOrderedCollectionEntity>();
 
     /// <inheritdoc />
     public ASOrderedCollection(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ASOrderedCollectionEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ASOrderedCollection, ASOrderedCollectionEntity>(isExtending);
 
     /// <inheritdoc />
     public ASOrderedCollection(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -41,7 +41,7 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ASOrderedCollection(TypeMap typeMap, ASOrderedCollectionEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ASOrderedCollectionEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ASOrderedCollection, ASOrderedCollectionEntity>();
 
     static ASOrderedCollection IASModel<ASOrderedCollection>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 
@@ -113,7 +113,13 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     /// <summary>
     ///     True if this is a paged collection, false otherwise.
     /// </summary>
+    [MemberNotNullWhen(true, nameof(FirstPopulated))]
     public bool IsPaged => Current != null || First != null || Last != null;
+
+    /// <summary>
+    ///     In a paged Collection, gets the first populated entity.
+    /// </summary>
+    public Linkable<ASOrderedCollectionPage>? FirstPopulated => Current ?? First ?? Last;
 
     /// <summary>
     ///     True if this collection instance contains items, false otherwise.

@@ -7,8 +7,12 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-internal class LinkRelConverter : JsonConverter<LinkRel>
+/// <summary>
+///     Custom JSON converter for <see cref="LinkRel"/>.
+/// </summary>
+public class LinkRelConverter : JsonConverter<LinkRel>
 {
+    /// <inheritdoc />
     public override LinkRel? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType switch
     {
         JsonTokenType.Null => null,
@@ -16,5 +20,7 @@ internal class LinkRelConverter : JsonConverter<LinkRel>
         var badType => throw new JsonException($"Cannot parse LinkRel from {badType}")
     };
 
-    public override void Write(Utf8JsonWriter writer, LinkRel value, JsonSerializerOptions options) => writer.WriteStringValue(value.Value);
+    /// <inheritdoc />
+    public override void Write(Utf8JsonWriter writer, LinkRel value, JsonSerializerOptions options)
+        => writer.WriteStringValue(value.Value);
 }

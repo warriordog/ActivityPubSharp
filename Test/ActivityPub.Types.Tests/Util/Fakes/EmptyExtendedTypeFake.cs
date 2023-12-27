@@ -17,11 +17,11 @@ public class EmptyExtendedTypeFake : ASType, IASModel<EmptyExtendedTypeFake, Emp
     };
 
     /// <inheritdoc />
-    public EmptyExtendedTypeFake() => Entity = TypeMap.Extend<EmptyExtendedTypeFakeEntity>();
+    public EmptyExtendedTypeFake() => Entity = TypeMap.Extend<EmptyExtendedTypeFake, EmptyExtendedTypeFakeEntity>();
 
     /// <inheritdoc />
     public EmptyExtendedTypeFake(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<EmptyExtendedTypeFakeEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<EmptyExtendedTypeFake, EmptyExtendedTypeFakeEntity>(isExtending);
 
     /// <inheritdoc />
     public EmptyExtendedTypeFake(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -29,7 +29,7 @@ public class EmptyExtendedTypeFake : ASType, IASModel<EmptyExtendedTypeFake, Emp
     /// <inheritdoc />
     [SetsRequiredMembers]
     public EmptyExtendedTypeFake(TypeMap typeMap, EmptyExtendedTypeFakeEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<EmptyExtendedTypeFakeEntity>();
+        => Entity = entity ?? typeMap.AsEntity<EmptyExtendedTypeFake, EmptyExtendedTypeFakeEntity>();
 
     static EmptyExtendedTypeFake IASModel<EmptyExtendedTypeFake>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

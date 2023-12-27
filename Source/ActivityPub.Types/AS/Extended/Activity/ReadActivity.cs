@@ -20,11 +20,11 @@ public class ReadActivity : ASActivity, IASModel<ReadActivity, ReadActivityEntit
     static string IASModel<ReadActivity>.ASTypeName => ReadType;
 
     /// <inheritdoc />
-    public ReadActivity() => Entity = TypeMap.Extend<ReadActivityEntity>();
+    public ReadActivity() => Entity = TypeMap.Extend<ReadActivity, ReadActivityEntity>();
 
     /// <inheritdoc />
     public ReadActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<ReadActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<ReadActivity, ReadActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public ReadActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class ReadActivity : ASActivity, IASModel<ReadActivity, ReadActivityEntit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public ReadActivity(TypeMap typeMap, ReadActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<ReadActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<ReadActivity, ReadActivityEntity>();
 
     static ReadActivity IASModel<ReadActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

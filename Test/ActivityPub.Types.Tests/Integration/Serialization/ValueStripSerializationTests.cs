@@ -122,11 +122,11 @@ public class FakeObjectWithSpecialNullability : ASObject, IASModel<FakeObjectWit
     static string IASModel<FakeObjectWithSpecialNullability>.ASTypeName => FakeObjectWithSpecialNullabilityType;
 
     /// <inheritdoc />
-    public FakeObjectWithSpecialNullability() => Entity = TypeMap.Extend<FakeObjectWithSpecialNullabilityEntity>();
+    public FakeObjectWithSpecialNullability() => Entity = TypeMap.Extend<FakeObjectWithSpecialNullability, FakeObjectWithSpecialNullabilityEntity>();
 
     /// <inheritdoc />
     public FakeObjectWithSpecialNullability(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<FakeObjectWithSpecialNullabilityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<FakeObjectWithSpecialNullability, FakeObjectWithSpecialNullabilityEntity>(isExtending);
 
     /// <inheritdoc />
     public FakeObjectWithSpecialNullability(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -134,7 +134,7 @@ public class FakeObjectWithSpecialNullability : ASObject, IASModel<FakeObjectWit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public FakeObjectWithSpecialNullability(TypeMap typeMap, FakeObjectWithSpecialNullabilityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<FakeObjectWithSpecialNullabilityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<FakeObjectWithSpecialNullability, FakeObjectWithSpecialNullabilityEntity>();
 
     static FakeObjectWithSpecialNullability IASModel<FakeObjectWithSpecialNullability>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

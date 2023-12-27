@@ -21,11 +21,11 @@ public class JoinActivity : ASActivity, IASModel<JoinActivity, JoinActivityEntit
     static string IASModel<JoinActivity>.ASTypeName => JoinType;
 
     /// <inheritdoc />
-    public JoinActivity() => Entity = TypeMap.Extend<JoinActivityEntity>();
+    public JoinActivity() => Entity = TypeMap.Extend<JoinActivity, JoinActivityEntity>();
 
     /// <inheritdoc />
     public JoinActivity(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<JoinActivityEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<JoinActivity, JoinActivityEntity>(isExtending);
 
     /// <inheritdoc />
     public JoinActivity(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -33,7 +33,7 @@ public class JoinActivity : ASActivity, IASModel<JoinActivity, JoinActivityEntit
     /// <inheritdoc />
     [SetsRequiredMembers]
     public JoinActivity(TypeMap typeMap, JoinActivityEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<JoinActivityEntity>();
+        => Entity = entity ?? typeMap.AsEntity<JoinActivity, JoinActivityEntity>();
 
     static JoinActivity IASModel<JoinActivity>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

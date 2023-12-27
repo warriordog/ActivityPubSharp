@@ -4,10 +4,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ActivityPub.Types.Conversion.Overrides;
 using ActivityPub.Types.Internal;
 using ActivityPub.Types.Util;
-using JetBrains.Annotations;
 
 namespace ActivityPub.Types.AS;
 
@@ -22,11 +20,11 @@ namespace ActivityPub.Types.AS;
 public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
 {
     /// <inheritdoc />
-    public APActor() => Entity = TypeMap.Extend<APActorEntity>();
+    public APActor() => Entity = TypeMap.Extend<APActor, APActorEntity>();
 
     /// <inheritdoc />
     public APActor(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<APActorEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<APActor, APActorEntity>(isExtending);
 
     /// <inheritdoc />
     public APActor(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -35,7 +33,7 @@ public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
     [SetsRequiredMembers]
     public APActor(TypeMap typeMap, APActorEntity? entity) : base(typeMap, null)
     {
-        Entity = entity ?? typeMap.AsEntity<APActorEntity>();
+        Entity = entity ?? typeMap.AsEntity<APActor, APActorEntity>();
         Inbox = Entity.Inbox ?? throw new ArgumentException($"The provided entity is invalid - required {nameof(APActorEntity.Inbox)} property is missing");
         Outbox = Entity.Outbox ?? throw new ArgumentException($"The provided entity is invalid - required {nameof(APActorEntity.Outbox)} property is missing");
     }
@@ -129,15 +127,26 @@ public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
     /// <remarks>
     ///     This should technically be a Linkable{ActorEndpoints}, but ActorEndpoints does not extend ASType
     /// </remarks>
-    public Linkable<ActorEndpoints>? Endpoints
+    public Linkable<APActorEndpoints>? Endpoints
     {
         get => Entity.Endpoints;
         set => Entity.Endpoints = value;
     }
+    
+    /// <inheritdoc />
+    static bool? IASModel<APActor>.ShouldConvertFrom(JsonElement inputJson, TypeMap typeMap)
+    {
+        if (inputJson.ValueKind != JsonValueKind.Object)
+            return false;
+
+        return
+            inputJson.HasProperty("inbox") &&
+            inputJson.HasProperty("outbox");
+    }
 }
 
 /// <inheritdoc cref="APActor" />
-public sealed class APActorEntity : ASEntity<APActor, APActorEntity>, IAnonymousEntity
+public sealed class APActorEntity : ASEntity<APActor, APActorEntity>
 {
     /// <inheritdoc cref="APActor.Inbox" />
     [JsonPropertyName("inbox")]
@@ -169,63 +178,5 @@ public sealed class APActorEntity : ASEntity<APActor, APActorEntity>, IAnonymous
 
     /// <inheritdoc cref="APActor.Endpoints" />
     [JsonPropertyName("endpoints")]
-    public Linkable<ActorEndpoints>? Endpoints { get; set; }
-
-    /// <inheritdoc />
-    public static bool ShouldConvertFrom(JsonElement inputJson, DeserializationMetadata meta)
-    {
-        if (inputJson.ValueKind != JsonValueKind.Object)
-            return false;
-
-        return
-            inputJson.HasProperty("inbox") &&
-            inputJson.HasProperty("outbox");
-    }
-}
-
-/// <summary>
-///     A json object which maps additional (typically server/domain-wide) endpoints which may be useful for an actor.
-/// </summary>
-/// <seealso href="https://www.w3.org/TR/activitypub/#actor-objects" />
-[UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature, ImplicitUseTargetFlags.WithMembers)]
-public class ActorEndpoints
-{
-    /// <summary>
-    ///     Endpoint URI so this actor's clients may access remote ActivityStreams objects which require authentication to access.
-    ///     To use this endpoint, the client posts an x-www-form-urlencoded id parameter with the value being the id of the requested ActivityStreams object.
-    /// </summary>
-    [JsonPropertyName("proxyUrl")]
-    public ASLink? ProxyUrl { get; set; }
-
-    /// <summary>
-    ///     If OAuth 2.0 bearer tokens [RFC6749] [RFC6750] are being used for authenticating client to server interactions, this endpoint specifies a URI at which a browser-authenticated user may obtain a new authorization grant.
-    /// </summary>
-    [JsonPropertyName("oauthAuthorizationEndpoint")]
-    public ASLink? OAuthAuthorizationEndpoint { get; set; }
-
-    /// <summary>
-    ///     If OAuth 2.0 bearer tokens [RFC6749] [RFC6750] are being used for authenticating client to server interactions, this endpoint specifies a URI at which a client may acquire an access token.
-    /// </summary>
-    [JsonPropertyName("oauthTokenEndpoint")]
-    public ASLink? OAuthTokenEndpoint { get; set; }
-
-    /// <summary>
-    ///     If Linked Data Signatures and HTTP Signatures are being used for authentication and authorization, this endpoint specifies a URI at which browser-authenticated users may authorize a client's public key for client to server interactions.
-    /// </summary>
-    [JsonPropertyName("provideClientKey")]
-    public ASLink? ProvideClientKey { get; set; }
-
-    /// <summary>
-    ///     If Linked Data Signatures and HTTP Signatures are being used for authentication and authorization, this endpoint specifies a URI at which a client key may be signed by the actor's key for a time window to act on behalf of the actor in interacting with foreign servers.
-    /// </summary>
-    [JsonPropertyName("signClientKey")]
-    public ASLink? SignClientKey { get; set; }
-
-    /// <summary>
-    ///     An optional endpoint used for wide delivery of publicly addressed activities and activities sent to followers.
-    ///     SharedInbox endpoints SHOULD also be publicly readable OrderedCollection objects containing objects addressed to the Public special collection.
-    ///     Reading from the sharedInbox endpoint MUST NOT present objects which are not addressed to the Public endpoint.
-    /// </summary>
-    [JsonPropertyName("sharedInbox")]
-    public ASLink? SharedInbox { get; set; }
+    public Linkable<APActorEndpoints>? Endpoints { get; set; }
 }

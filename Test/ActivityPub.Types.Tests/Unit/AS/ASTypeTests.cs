@@ -10,21 +10,21 @@ public abstract class ASTypeTests
 {
     private ASType ObjectUnderTest { get; } = new StubASType();
 
-    public class JsonLdContextsShould : ASTypeTests
+    public class JsonLdContextShould : ASTypeTests
     {
         [Fact]
         public void ContainASContext_ByDefault()
         {
-            ObjectUnderTest.TypeMap.LDContext.Should().Contain("https://www.w3.org/ns/activitystreams");
+            ObjectUnderTest.JsonLDContext.Should().Contain("https://www.w3.org/ns/activitystreams");
         }
     }
 
-    public class TypesShould : ASTypeTests
+    public class TypeShould : ASTypeTests
     {
         [Fact]
         public void ContainTypeName_ByDefault()
         {
-            ObjectUnderTest.TypeMap.ASTypes.Should().Contain(StubASType.StubType);
+            ObjectUnderTest.Type.Should().Contain(StubASType.StubType);
         }
     }
 
@@ -74,11 +74,11 @@ public abstract class ASTypeTests
         static string IASModel<StubASType>.ASTypeName => StubType;
         
         /// <inheritdoc />
-        public StubASType() => Entity = TypeMap.Extend<StubASTypeEntity>();
+        public StubASType() => Entity = TypeMap.Extend<StubASType, StubASTypeEntity>();
 
         /// <inheritdoc />
         public StubASType(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-            => Entity = TypeMap.ProjectTo<StubASTypeEntity>(isExtending);
+            => Entity = TypeMap.ProjectTo<StubASType, StubASTypeEntity>(isExtending);
 
         /// <inheritdoc />
         public StubASType(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -86,7 +86,7 @@ public abstract class ASTypeTests
         /// <inheritdoc />
         [SetsRequiredMembers]
         public StubASType(TypeMap typeMap, StubASTypeEntity? entity) : base(typeMap, null)
-            => Entity = entity ?? typeMap.AsEntity<StubASTypeEntity>();
+            => Entity = entity ?? typeMap.AsEntity<StubASType, StubASTypeEntity>();
 
         static StubASType IASModel<StubASType>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 

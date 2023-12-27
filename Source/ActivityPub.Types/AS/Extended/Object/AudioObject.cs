@@ -20,11 +20,11 @@ public class AudioObject : DocumentObject, IASModel<AudioObject, AudioObjectEnti
     static string IASModel<AudioObject>.ASTypeName => AudioType;
 
     /// <inheritdoc />
-    public AudioObject() => Entity = TypeMap.Extend<AudioObjectEntity>();
+    public AudioObject() => Entity = TypeMap.Extend<AudioObject, AudioObjectEntity>();
 
     /// <inheritdoc />
     public AudioObject(TypeMap typeMap, bool isExtending = true) : base(typeMap, false)
-        => Entity = TypeMap.ProjectTo<AudioObjectEntity>(isExtending);
+        => Entity = TypeMap.ProjectTo<AudioObject, AudioObjectEntity>(isExtending);
 
     /// <inheritdoc />
     public AudioObject(ASType existingGraph) : this(existingGraph.TypeMap) {}
@@ -32,7 +32,7 @@ public class AudioObject : DocumentObject, IASModel<AudioObject, AudioObjectEnti
     /// <inheritdoc />
     [SetsRequiredMembers]
     public AudioObject(TypeMap typeMap, AudioObjectEntity? entity) : base(typeMap, null)
-        => Entity = entity ?? typeMap.AsEntity<AudioObjectEntity>();
+        => Entity = entity ?? typeMap.AsEntity<AudioObject, AudioObjectEntity>();
 
     static AudioObject IASModel<AudioObject>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 
