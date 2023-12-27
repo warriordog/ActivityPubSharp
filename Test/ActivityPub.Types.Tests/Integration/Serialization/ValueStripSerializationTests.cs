@@ -11,9 +11,9 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public class ValueStripSerializationTests : SerializationTests
+public class ValueStripSerializationTests(JsonLdSerializerFixture fixture)
+    : SerializationTests(fixture)
 {
-    public ValueStripSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
     public void NullObjectsShould_BeStrippedFromOutput()

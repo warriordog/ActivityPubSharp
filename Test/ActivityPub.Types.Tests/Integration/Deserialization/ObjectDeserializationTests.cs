@@ -6,9 +6,11 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public abstract class ObjectDeserializationTests : DeserializationTests<ASObject>
+public abstract class ObjectDeserializationTests(JsonLdSerializerFixture fixture)
+    : DeserializationTests<ASObject>(fixture)
 {
-    public class ContentPropertyShould : ObjectDeserializationTests
+    public class ContentPropertyShould(JsonLdSerializerFixture fixture)
+        : ObjectDeserializationTests(fixture)
     {
         [Fact]
         public void ReadFromContentMapJson()
@@ -50,8 +52,6 @@ public abstract class ObjectDeserializationTests : DeserializationTests<ASObject
             ObjectUnderTest.Content!.DefaultValue.Should().Be("default");
         }
 
-        public ContentPropertyShould(JsonLdSerializerFixture fixture) : base(fixture) {}
     }
-    
-    protected ObjectDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
 }

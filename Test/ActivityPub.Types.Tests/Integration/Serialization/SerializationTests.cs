@@ -7,17 +7,12 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public abstract class SerializationTests : IClassFixture<JsonLdSerializerFixture>
+public abstract class SerializationTests(JsonLdSerializerFixture fixture)
+    : IClassFixture<JsonLdSerializerFixture>
 {
-    private Lazy<JsonElement> _jsonUnderTest;
+    private Lazy<JsonElement> _jsonUnderTest = new(() => throw new ApplicationException("Test error: please set ObjectUnderTest before calling JsonUnderTest"));
 
-    protected SerializationTests(JsonLdSerializerFixture fixture)
-    {
-        JsonLdSerializer = fixture.JsonLdSerializer;
-        _jsonUnderTest = new Lazy<JsonElement>(() => throw new ApplicationException("Test error: please set ObjectUnderTest before calling JsonUnderTest"));
-    }
-
-    protected IJsonLdSerializer JsonLdSerializer { get; }
+    protected IJsonLdSerializer JsonLdSerializer { get; } = fixture.JsonLdSerializer;
 
     // This is cached for performance
     protected JsonElement JsonUnderTest => _jsonUnderTest.Value;

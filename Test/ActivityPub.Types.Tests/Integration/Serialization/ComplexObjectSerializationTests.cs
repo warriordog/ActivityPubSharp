@@ -9,9 +9,9 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public class ComplexObjectSerializationTests : SerializationTests
+public class ComplexObjectSerializationTests(JsonLdSerializerFixture fixture)
+    : SerializationTests(fixture)
 {
-    public ComplexObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
     public void AcceptFollowWithObject_ShouldSerializeCorrectly()

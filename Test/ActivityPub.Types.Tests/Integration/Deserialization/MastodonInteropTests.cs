@@ -7,9 +7,9 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Deserialization;
 
-public class MastodonInteropTests : DeserializationTests<ASObject>
+public class MastodonInteropTests(JsonLdSerializerFixture fixture)
+    : DeserializationTests<ASObject>(fixture)
 {
-    public MastodonInteropTests(JsonLdSerializerFixture fixture) : base(fixture) { }
 
     [Fact]
     public void MastodonFollowActivityShould_ConvertCorrectly()

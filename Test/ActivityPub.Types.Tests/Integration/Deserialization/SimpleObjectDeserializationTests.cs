@@ -12,9 +12,9 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
 {
     private SimpleObjectDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) => JsonUnderTest = """{"@context":"https://www.w3.org/ns/activitystreams","type":"Object"}""";
 
-    public class EmptyObject : SimpleObjectDeserializationTests
+    public class EmptyObject(JsonLdSerializerFixture fixture)
+        : SimpleObjectDeserializationTests(fixture)
     {
-        public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void ShouldIncludeContext()
@@ -29,9 +29,9 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         }
     }
 
-    public class Subclass : SimpleObjectDeserializationTests
+    public class Subclass(JsonLdSerializerFixture fixture)
+        : SimpleObjectDeserializationTests(fixture)
     {
-        public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void ShouldDeserializeToCorrectType()
@@ -65,9 +65,9 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         }
     }
 
-    public class ObjectWithUrl : SimpleObjectDeserializationTests
+    public class ObjectWithUrl(JsonLdSerializerFixture fixture)
+        : SimpleObjectDeserializationTests(fixture)
     {
-        public ObjectWithUrl(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void ShouldDeserializeUrlList()
@@ -86,9 +86,9 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
         }
     }
 
-    public class FullObject : SimpleObjectDeserializationTests
+    public class FullObject(JsonLdSerializerFixture fixture)
+        : SimpleObjectDeserializationTests(fixture)
     {
-        public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void ShouldIncludeAllProperties()

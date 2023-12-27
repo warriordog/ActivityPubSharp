@@ -11,9 +11,9 @@ public abstract class UnknownObjectDeserializationTests : DeserializationTests<A
 {
     private UnknownObjectDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
-    public class ObjectWithKnownAndUnknownTypeShould : UnknownObjectDeserializationTests
+    public class ObjectWithKnownAndUnknownTypeShould(JsonLdSerializerFixture fixture)
+        : UnknownObjectDeserializationTests(fixture)
     {
-        public ObjectWithKnownAndUnknownTypeShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void DeserializeToKnownType()
@@ -23,9 +23,9 @@ public abstract class UnknownObjectDeserializationTests : DeserializationTests<A
         }
     }
 
-    public class ObjectWithOnlyUnknownTypeShould : UnknownObjectDeserializationTests
+    public class ObjectWithOnlyUnknownTypeShould(JsonLdSerializerFixture fixture)
+        : UnknownObjectDeserializationTests(fixture)
     {
-        public ObjectWithOnlyUnknownTypeShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact] // Note: this behavior is temporary and will change once we support extensions.
         public void DeserializeToObject()
@@ -35,9 +35,9 @@ public abstract class UnknownObjectDeserializationTests : DeserializationTests<A
         }
     }
 
-    public class ObjectWithUnknownPropertiesShould : UnknownObjectDeserializationTests
+    public class ObjectWithUnknownPropertiesShould(JsonLdSerializerFixture fixture)
+        : UnknownObjectDeserializationTests(fixture)
     {
-        public ObjectWithUnknownPropertiesShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void DeserializeKnownProperties()

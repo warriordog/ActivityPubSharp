@@ -8,9 +8,9 @@ namespace ActivityPub.Types.Tests.Util.Assertions;
 /// <summary>
 ///     Special assertions for <see cref="JsonElement" />
 /// </summary>
-public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAssertions>
+public class JsonElementAssertions(JsonElement value)
+    : ObjectAssertions<JsonElement, JsonElementAssertions>(value)
 {
-    public JsonElementAssertions(JsonElement value) : base(value) {}
 
     public AndConstraint<JsonElementAssertions> HaveProperty(string expectedName, JsonValueKind? expectedType = null)
     {

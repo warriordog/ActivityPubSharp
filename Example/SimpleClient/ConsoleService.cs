@@ -12,21 +12,12 @@ using Microsoft.Extensions.Hosting;
 
 namespace SimpleClient;
 
-public class ConsoleService : BackgroundService
+public class ConsoleService(IActivityPubClient apClient, IHostApplicationLifetime hostLifetime, IJsonLdSerializer jsonLdSerializer)
+    : BackgroundService
 {
-    private readonly IActivityPubClient _apClient;
     private readonly Stack<object?> _focus = new();
-    private readonly IHostApplicationLifetime _hostLifetime;
-    private readonly IJsonLdSerializer _jsonLdSerializer;
 
     private bool _isRunning = true;
-
-    public ConsoleService(IActivityPubClient apClient, IHostApplicationLifetime hostLifetime, IJsonLdSerializer jsonLdSerializer)
-    {
-        _apClient = apClient;
-        _hostLifetime = hostLifetime;
-        _jsonLdSerializer = jsonLdSerializer;
-    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -78,7 +69,7 @@ public class ConsoleService : BackgroundService
                 case "close":
                 case "stop":
                     await Console.Out.WriteLineAsync("Bye 👋");
-                    _hostLifetime.StopApplication();
+                    hostLifetime.StopApplication();
                     _isRunning = false;
                     break;
 
@@ -171,7 +162,7 @@ public class ConsoleService : BackgroundService
 
     private async Task PushUri(Uri uri, CancellationToken stoppingToken)
     {
-        var newObj = await _apClient.Get<ASType>(uri, cancellationToken: stoppingToken);
+        var newObj = await apClient.Get<ASType>(uri, cancellationToken: stoppingToken);
         _focus.Push(newObj);
     }
 
@@ -202,7 +193,7 @@ public class ConsoleService : BackgroundService
             toPrint = await SelectObject(current, parameter, stoppingToken);
         }
 
-        var json = _jsonLdSerializer.Serialize(toPrint);
+        var json = jsonLdSerializer.Serialize(toPrint);
         await Console.Out.WriteLineAsync(json);
     }
 
@@ -239,7 +230,7 @@ public class ConsoleService : BackgroundService
         }
         else if (current is ASLink asLink)
         {
-            current = await _apClient.Get<ASObject>(asLink, cancellationToken: stoppingToken);
+            current = await apClient.Get<ASObject>(asLink, cancellationToken: stoppingToken);
             _focus.Push(current);
         }
         else
@@ -270,7 +261,7 @@ public class ConsoleService : BackgroundService
 
         // If its ASLink, then call Get<ASType>
         if (value is ASLink link)
-            return await _apClient.Get<ASType>(link, cancellationToken: stoppingToken);
+            return await apClient.Get<ASType>(link, cancellationToken: stoppingToken);
 
         var valueType = value.GetType();
 
@@ -298,7 +289,7 @@ public class ConsoleService : BackgroundService
     private async Task<object?> ResolveValueOfLinkableOf<T>(Linkable<T> value, CancellationToken stoppingToken)
         where T : ASObject
     {
-        var result = await _apClient.Resolve(value, cancellationToken: stoppingToken);
+        var result = await apClient.Resolve(value, cancellationToken: stoppingToken);
         return new Linkable<T>(result);
     }
 
@@ -314,7 +305,7 @@ public class ConsoleService : BackgroundService
     private async Task<object?> ResolveValueOfLinkableListOf<T>(LinkableList<T> value, CancellationToken stoppingToken)
         where T : ASObject
     {
-        var results = await _apClient.Resolve(value, cancellationToken: stoppingToken);
+        var results = await apClient.Resolve(value, cancellationToken: stoppingToken);
         return new LinkableList<T>(results);
     }
 
