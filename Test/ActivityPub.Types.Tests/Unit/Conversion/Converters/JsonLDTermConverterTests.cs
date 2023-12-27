@@ -6,7 +6,7 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Unit.Conversion.Converters;
 
-internal abstract class JsonLDTermConverterTests : JsonConverterTests<JsonLDTerm, JsonLDTermConverter>
+public abstract class JsonLDTermConverterTests : JsonConverterTests<JsonLDTerm, JsonLDTermConverter>
 {
     protected override JsonLDTermConverter ConverterUnderTest { get; set; } = new();
 

@@ -3,7 +3,6 @@
 
 using System.Text;
 using System.Text.Json.Serialization;
-using System.Text.Unicode;
 
 namespace ActivityPub.Types.Tests.Unit.Conversion.Converters;
 
