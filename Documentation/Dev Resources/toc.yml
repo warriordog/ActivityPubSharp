@@ -3,15 +3,3 @@ items:
   href: index.md
 - name: Use Case List
   href: use_case_list.md
-- name: ActivityPub Client Package
-  href: ActivityPub.Client/index.md
-- name: ActivityPub Common Library
-  href: ActivityPub.Common/index.md
-- name: ActivityPub Server Package
-  href: ActivityPub.Server/index.md
-- name: ActivityPub Server AspNetCore Extension Package
-  href: ActivityPub.Server.AspNetCore/index.md
-- name: ActivityPub Types Package
-  href: ActivityPub.Types/index.md
-- name: ActivityPub Mastodon Extension Package
-  href: ActivityPub.Extension.Mastodon/index.md
