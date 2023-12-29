@@ -40,4 +40,4 @@ public class ViewActivity : ASActivity, IASModel<ViewActivity, ViewActivityEntit
 }
 
 /// <inheritdoc cref="ViewActivity" />
-public sealed class ViewActivityEntity : ASEntity<ViewActivity, ViewActivityEntity> {}
+public sealed class ViewActivityEntity : ASEntity<ViewActivity, ViewActivityEntity>;

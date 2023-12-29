@@ -70,32 +70,32 @@ public class LinkableList<T> : List<Linkable<T>>
     /// <summary>
     ///     Constructs a linkable list from a single link
     /// </summary>
-    public static implicit operator LinkableList<T>(ASLink link) => new() { link };
+    public static implicit operator LinkableList<T>(ASLink link) => [link];
 
     /// <summary>
     ///     Constructs a linkable list from a single link URI
     /// </summary>
-    public static implicit operator LinkableList<T>(ASUri link) => new() { (ASLink)link };
+    public static implicit operator LinkableList<T>(ASUri link) => [(ASLink)link];
 
     /// <summary>
     ///     Constructs a linkable list from a single link URI
     /// </summary>
-    public static implicit operator LinkableList<T>(Uri link) => new() { (ASLink)link };
+    public static implicit operator LinkableList<T>(Uri link) => [(ASLink)link];
 
     /// <summary>
     ///     Constructs a linkable list from a single link URI
     /// </summary>
-    public static implicit operator LinkableList<T>(string link) => new() { (ASLink)link };
+    public static implicit operator LinkableList<T>(string link) => [(ASLink)link];
 
     /// <summary>
     ///     Constructs a linkable list from a single value
     /// </summary>
-    public static implicit operator LinkableList<T>(T value) => new() { value };
+    public static implicit operator LinkableList<T>(T value) => [value];
 
     /// <summary>
     ///     Constructs a linkable list from a single linkable
     /// </summary>
-    public static implicit operator LinkableList<T>(Linkable<T> linkable) => new() { linkable };
+    public static implicit operator LinkableList<T>(Linkable<T> linkable) => [linkable];
     
     /// <summary>
     ///     Constructs a linkable list from a list of values

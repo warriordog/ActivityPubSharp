@@ -81,7 +81,7 @@ public sealed class RelationshipObjectEntity : ASEntity<RelationshipObject, Rela
 {
     /// <inheritdoc cref="RelationshipObject.Object" />
     [JsonPropertyName("object")]
-    public LinkableList<ASObject> Object { get; set; } = new();
+    public LinkableList<ASObject> Object { get; set; } = [];
 
     /// <inheritdoc cref="RelationshipObject.Subject" />
     [JsonPropertyName("subject")]

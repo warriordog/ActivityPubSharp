@@ -11,9 +11,9 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Smoke.Samples.Firefish;
 
-public class FirefishSampleTests : SampleTests
+public class FirefishSampleTests(JsonLdSerializerFixture fixture)
+    : SampleTests(fixture)
 {
-    public FirefishSampleTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
     public void CreateShouldConvert() => TestSample<CreateActivity>(CreateActivity.CreateType);

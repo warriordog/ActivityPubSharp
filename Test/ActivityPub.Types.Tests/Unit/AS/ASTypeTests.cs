@@ -93,5 +93,5 @@ public abstract class ASTypeTests
         private StubASTypeEntity Entity { get; }
     }
 
-    private sealed class StubASTypeEntity : ASEntity<StubASType, StubASTypeEntity> {}
+    private sealed class StubASTypeEntity : ASEntity<StubASType, StubASTypeEntity>;
 }

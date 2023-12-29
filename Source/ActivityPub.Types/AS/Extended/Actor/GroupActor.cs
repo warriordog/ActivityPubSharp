@@ -41,4 +41,4 @@ public class GroupActor : APActor, IASModel<GroupActor, GroupActorEntity, APActo
 }
 
 /// <inheritdoc cref="GroupActor" />
-public sealed class GroupActorEntity : ASEntity<GroupActor, GroupActorEntity> {}
+public sealed class GroupActorEntity : ASEntity<GroupActor, GroupActorEntity>;

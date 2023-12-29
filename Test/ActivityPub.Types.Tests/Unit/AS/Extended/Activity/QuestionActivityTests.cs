@@ -8,7 +8,8 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Unit.AS.Extended.Activity;
 
-public abstract class QuestionActivityTests : IClassFixture<JsonLdSerializerFixture>
+public abstract class QuestionActivityTests(JsonLdSerializerFixture fixture)
+    : IClassFixture<JsonLdSerializerFixture>
 {
     private string JsonUnderTest
     {
@@ -33,10 +34,10 @@ public abstract class QuestionActivityTests : IClassFixture<JsonLdSerializerFixt
     private Lazy<string> _jsonUnderTest = new(() => throw new InvalidOperationException("Please populate JsonUnderTest or QuestionUnderTest"));
     private Lazy<QuestionActivity> _questionUnderTest = new(() => throw new InvalidOperationException("Please populate JsonUnderTest or QuestionUnderTest"));
     
-    private readonly IJsonLdSerializer _jsonLdSerializer;
-    protected QuestionActivityTests(JsonLdSerializerFixture fixture) => _jsonLdSerializer = fixture.JsonLdSerializer;
+    private readonly IJsonLdSerializer _jsonLdSerializer = fixture.JsonLdSerializer;
 
-    public class OptionsShould : QuestionActivityTests
+    public class OptionsShould(JsonLdSerializerFixture fixture)
+        : QuestionActivityTests(fixture)
     {
         [Fact]
         public void SerializeToOneOf_WhenAllowMultipleIsFalse()
@@ -105,11 +106,11 @@ public abstract class QuestionActivityTests : IClassFixture<JsonLdSerializerFixt
             JsonUnderTest = """{"type":"Question","options":{}}""";
             QuestionUnderTest.Options.Should().BeNull();
         }
-        
-        public OptionsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     }
 
-    public class AllowMultipleShould : QuestionActivityTests
+    public class AllowMultipleShould(JsonLdSerializerFixture fixture)
+        : QuestionActivityTests(fixture)
     {
         [Fact]
         public void DeserializeToFalse_WhenOnOfIsPresent()
@@ -132,7 +133,6 @@ public abstract class QuestionActivityTests : IClassFixture<JsonLdSerializerFixt
             JsonUnderTest = """{"type":"Question","anyOf":{},"oneOf":{}}""";
             QuestionUnderTest.AllowMultiple.Should().BeTrue();   
         }
-        
-        public AllowMultipleShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     }
 }

@@ -7,13 +7,12 @@ using ActivityPub.Types.AS;
 using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
-using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public class ValueStripSerializationTests : SerializationTests
+public class ValueStripSerializationTests(JsonLdSerializerFixture fixture)
+    : SerializationTests(fixture)
 {
-    public ValueStripSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
     public void NullObjectsShould_BeStrippedFromOutput()
@@ -52,7 +51,7 @@ public class ValueStripSerializationTests : SerializationTests
     {
         ObjectUnderTest = new ASObject
         {
-            Attachment = new LinkableList<ASObject>()
+            Attachment = []
         };
 
         JsonUnderTest.Should().NotHaveProperty("attachment");
@@ -103,10 +102,7 @@ public class ValueStripSerializationTests : SerializationTests
     {
         ObjectUnderTest = new ASObject
         {
-            Attachment = new LinkableList<ASObject>
-            {
-                new ASObject()
-            }
+            Attachment = [new ASObject()]
         };
 
         JsonUnderTest.Should().HaveProperty("attachment");
@@ -176,7 +172,7 @@ public sealed class FakeObjectWithSpecialNullabilityEntity : ASEntity<FakeObject
     public int NeverIgnoreInt { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public List<string> NeverIgnoreList { get; set; } = new();
+    public List<string> NeverIgnoreList { get; set; } = [];
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public int IgnoreWhenDefaultInt { get; set; }

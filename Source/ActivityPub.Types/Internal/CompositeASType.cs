@@ -9,9 +9,9 @@ namespace ActivityPub.Types.Internal;
 /// </summary>
 internal class CompositeASType
 {
-    private readonly HashSet<string> _allASTypes = new();
-    private readonly HashSet<string> _flatASTypes = new();
-    private readonly HashSet<string> _replacedASTypes = new();
+    private readonly HashSet<string> _allASTypes = [];
+    private readonly HashSet<string> _flatASTypes = [];
+    private readonly HashSet<string> _replacedASTypes = [];
 
     /// <summary>
     ///     AS type names that are represented by this object, excluding those that have been shadowed.

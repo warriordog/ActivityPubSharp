@@ -41,4 +41,4 @@ public class AudioObject : DocumentObject, IASModel<AudioObject, AudioObjectEnti
 }
 
 /// <inheritdoc cref="AudioObject" />
-public sealed class AudioObjectEntity : ASEntity<AudioObject, AudioObjectEntity> {}
+public sealed class AudioObjectEntity : ASEntity<AudioObject, AudioObjectEntity>;

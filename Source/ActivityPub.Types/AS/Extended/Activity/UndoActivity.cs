@@ -42,4 +42,4 @@ public class UndoActivity : ASActivity, IASModel<UndoActivity, UndoActivityEntit
 }
 
 /// <inheritdoc cref="UndoActivity" />
-public sealed class UndoActivityEntity : ASEntity<UndoActivity, UndoActivityEntity> {}
+public sealed class UndoActivityEntity : ASEntity<UndoActivity, UndoActivityEntity>;

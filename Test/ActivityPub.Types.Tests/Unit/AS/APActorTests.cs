@@ -14,7 +14,7 @@ public abstract class APActorTests
         [Fact]
         public void ExtendRegularObject()
         {
-            var note = new NoteObject()
+            var note = new NoteObject
             {
                 Id = "https://example.com/object",
                 Content = "content"
@@ -33,7 +33,7 @@ public abstract class APActorTests
         [Fact]
         public void ThrowWhenWrappingAnotherActor()
         {
-            var person = new PersonActor()
+            var person = new PersonActor
             {
                 Inbox = "https://example.com/inbox",
                 Outbox = "https://example.com/outbox"

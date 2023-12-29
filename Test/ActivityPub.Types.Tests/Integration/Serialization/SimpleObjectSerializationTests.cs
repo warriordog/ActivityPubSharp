@@ -14,9 +14,9 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
 {
     private SimpleObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
-    public class EmptyObject : SimpleObjectSerializationTests
+    public class EmptyObject(JsonLdSerializerFixture fixture)
+        : SimpleObjectSerializationTests(fixture)
     {
-        public EmptyObject(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void ShouldWriteObject()
@@ -52,9 +52,9 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         }
     }
 
-    public class Subclass : SimpleObjectSerializationTests
+    public class Subclass(JsonLdSerializerFixture fixture)
+        : SimpleObjectSerializationTests(fixture)
     {
-        public Subclass(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void ShouldSerializeToCorrectType()
@@ -89,9 +89,9 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
         }
     }
 
-    public class FullObject : SimpleObjectSerializationTests
+    public class FullObject(JsonLdSerializerFixture fixture)
+        : SimpleObjectSerializationTests(fixture)
     {
-        public FullObject(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void ShouldIncludeAllProperties()
@@ -99,11 +99,11 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
             ObjectUnderTest = new ASObject
             {
                 // From ASObject
-                Attachment = new LinkableList<ASObject> { new ASObject() },
-                Audience = new LinkableList<ASObject> { new ASObject() },
-                BCC = new LinkableList<ASObject> { new ASObject() },
-                BTo = new LinkableList<ASObject> { new ASObject() },
-                CC = new LinkableList<ASObject> { new ASObject(), new ASObject() },
+                Attachment = [new ASObject()],
+                Audience = [new ASObject()],
+                BCC = [new ASObject()],
+                BTo = [new ASObject()],
+                CC = [new ASObject(), new ASObject()],
                 Context = "https://example.com/some/context", // this is the worst field name
                 Generator = new ASObject(),
                 Icon = new ImageObject(),
@@ -114,9 +114,9 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 {
                     Items = new LinkableList<ASObject> { new ASObject() }
                 },
-                Tag = new LinkableList<ASObject> { new ASObject() },
-                To = new LinkableList<ASObject> { new ASObject() },
-                Url = new List<ASLink> { "https://example.com" },
+                Tag = [new ASObject()],
+                To = [new ASObject()],
+                Url = ["https://example.com"],
                 Content = "content",
                 Duration = "PT5S",
                 StartTime = DateTime.Now,
@@ -130,7 +130,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
 
                 // From ASType
                 Id = "https://example.com/some.uri",
-                AttributedTo = new LinkableList<ASObject> { new ASObject() },
+                AttributedTo = [new ASObject()],
                 Preview = new ASObject(),
                 Name = "name",
                 MediaType = "text/html"
@@ -171,7 +171,8 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 .And.HaveStringProperty("mediaType", "text/html");
         }
 
-        public class UntypedObjectShould : SimpleObjectSerializationTests
+        public class UntypedObjectShould(JsonLdSerializerFixture fixture)
+            : SimpleObjectSerializationTests(fixture)
         {
             [Fact]
             public void NotIncludeTypeProperty()
@@ -179,8 +180,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 ObjectUnderTest = new ASType();
                 JsonUnderTest.Should().NotHaveProperty("type");
             }
-            
-            public UntypedObjectShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+
         }
     }
 }

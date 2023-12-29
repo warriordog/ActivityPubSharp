@@ -11,9 +11,9 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Smoke.Samples.GlitchSoc;
 
-public class GlitchSocSampleTests : SampleTests
+public class GlitchSocSampleTests(JsonLdSerializerFixture fixture)
+    : SampleTests(fixture)
 {
-    public GlitchSocSampleTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
     public void AnnounceShouldConvert() => TestSample<AnnounceActivity>(AnnounceActivity.AnnounceType);

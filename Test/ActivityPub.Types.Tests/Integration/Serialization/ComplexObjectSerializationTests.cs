@@ -6,35 +6,34 @@ using ActivityPub.Types.AS.Collection;
 using ActivityPub.Types.AS.Extended.Activity;
 using ActivityPub.Types.AS.Extended.Object;
 using ActivityPub.Types.Tests.Util.Fixtures;
-using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public class ComplexObjectSerializationTests : SerializationTests
+public class ComplexObjectSerializationTests(JsonLdSerializerFixture fixture)
+    : SerializationTests(fixture)
 {
-    public ComplexObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
     [Fact]
     public void AcceptFollowWithObject_ShouldSerializeCorrectly()
     {
         var follower = new ASLink
         {
-            HRef = "https://peer.example/actor",
+            HRef = "https://peer.example/actor"
         };
         var target = new ASLink
         {
-            HRef = "https://home.example/actor",
+            HRef = "https://home.example/actor"
         };
         var follow = new FollowActivity
         {
             Id = "https://peer.example/actor/activities/1",
-            Object = new LinkableList<ASObject> { follower },
-            Target = new LinkableList<ASObject> { target },
+            Object = [follower],
+            Target = [target]
         };
         ObjectUnderTest = new AcceptActivity
         {
-            Actor = new LinkableList<ASObject> { target },
-            Object = new LinkableList<ASObject> { (ASObject)follow },
+            Actor = [target],
+            Object = [follow]
         };
         
         // Accept
@@ -56,28 +55,28 @@ public class ComplexObjectSerializationTests : SerializationTests
     {
         var actor = new ASLink
         {
-            HRef = "https://home.example/actor",
+            HRef = "https://home.example/actor"
         };
         var note = new NoteObject
         {
             Id = "https://peer.example/actor/activities/1",
-            Content = "This is a note",
+            Content = "This is a note"
         };
         var collection = new ASCollection
         {
             Id = "https://home.example/actor/collections/1",
-            Items = new LinkableList<ASObject>(new ASLink[]
-            {
-                new(){HRef = "https://home.example/item/whatever"},
-                new(){HRef = "https://home.example/item/whatever-2"}
-            }),
+            Items =
+            [
+                "https://home.example/item/whatever",
+                "https://home.example/item/whatever-2"
+            ],
             TotalItems = 2
         };
         ObjectUnderTest = new AddActivity
         {
-            Actor = new LinkableList<ASObject> { actor },
-            Object = new LinkableList<ASObject> { note },
-            Target = new LinkableList<ASObject> { collection }
+            Actor = [actor],
+            Object = [note],
+            Target = [collection]
         };
         
         JsonUnderTest.Should()

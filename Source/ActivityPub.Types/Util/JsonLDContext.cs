@@ -41,10 +41,7 @@ public class JsonLDContext : HashSet<JsonLDContextObject>, IJsonLDContext
     ///     Constructs a new context, pre-initialized with the ActivityStreams context.
     /// </summary>
     /// <seealso cref="JsonLDContextObject.ActivityStreams"/>
-    public static JsonLDContext CreateASContext() => new()
-    {
-        JsonLDContextObject.ActivityStreams
-    };
+    public static JsonLDContext CreateASContext() => [JsonLDContextObject.ActivityStreams];
     
     /// <summary>
     ///     Creates a shallow copy of this Json-LD context.

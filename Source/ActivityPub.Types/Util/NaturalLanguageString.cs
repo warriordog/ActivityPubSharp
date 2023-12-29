@@ -35,7 +35,7 @@ public sealed class NaturalLanguageString
     ///     <see langword="true"/> if this string contains any language-tagged values.
     ///     <see cref="DefaultValue"/> is ignored.
     /// </summary>
-    public bool HasLanguages => _languageMap.Any();
+    public bool HasLanguages => _languageMap.Count != 0;
     
     /// <summary>
     ///     Constructs a NaturalLanguageString from a map of BCP47 Language-Tags.

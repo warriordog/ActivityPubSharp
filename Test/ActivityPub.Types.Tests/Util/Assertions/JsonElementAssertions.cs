@@ -8,9 +8,9 @@ namespace ActivityPub.Types.Tests.Util.Assertions;
 /// <summary>
 ///     Special assertions for <see cref="JsonElement" />
 /// </summary>
-public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAssertions>
+public class JsonElementAssertions(JsonElement value)
+    : ObjectAssertions<JsonElement, JsonElementAssertions>(value)
 {
-    public JsonElementAssertions(JsonElement value) : base(value) {}
 
     public AndConstraint<JsonElementAssertions> HaveProperty(string expectedName, JsonValueKind? expectedType = null)
     {
@@ -38,7 +38,7 @@ public class JsonElementAssertions : ObjectAssertions<JsonElement, JsonElementAs
     {
         BeJsonObject();
 
-        if (Subject.TryGetProperty(name, out var _))
+        if (Subject.TryGetProperty(name, out _))
             Assert.Fail($"Expected object to not contain property {name}, but it does");
 
         return new AndConstraint<JsonElementAssertions>(this);

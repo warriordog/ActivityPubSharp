@@ -12,14 +12,14 @@ namespace ActivityPub.Types.Conversion.Modifiers;
 /// </summary>
 public static class BugFixModifier
 {
-    private static readonly HashSet<string> IgnoredPropNames = new()
-    {
+    private static readonly HashSet<string> IgnoredPropNames =
+    [
         nameof(ASEntity.ASTypeName),
         nameof(ASEntity.BaseTypeName),
         nameof(ASEntity.DefiningContext),
         nameof(ASEntity.RequiresObjectForm),
         nameof(IASModel<ASType>.EntityType)
-    };
+    ];
 
     /// <summary>
     ///     Adds all bugfix modifiers to the provided resolver.

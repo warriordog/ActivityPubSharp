@@ -8,9 +8,11 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public abstract class CollectionSerializationTests : SerializationTests
+public abstract class CollectionSerializationTests(JsonLdSerializerFixture fixture)
+    : SerializationTests(fixture)
 {
-    public class ASCollectionSerializationTests : CollectionSerializationTests
+    public class ASCollectionSerializationTests(JsonLdSerializerFixture fixture)
+        : CollectionSerializationTests(fixture)
     {
         [Fact]
         public void EmptyCollectionShould_SerializeToObject()
@@ -59,16 +61,16 @@ public abstract class CollectionSerializationTests : SerializationTests
             };
             ObjectUnderTest = new ASActivity
             {
-                Target = new LinkableList<ASObject> { collection }
+                Target = [collection]
             };
             JsonUnderTest.Should().BeJsonObject().And.HaveProperty("target");
             JsonUnderTest.GetProperty("target").Should().BeJsonObject();
         }
-        
-        public ASCollectionSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     }
 
-    public class ASOrderedCollectionSerializationTests : CollectionSerializationTests
+    public class ASOrderedCollectionSerializationTests(JsonLdSerializerFixture fixture)
+        : CollectionSerializationTests(fixture)
     {
 
         [Fact]
@@ -118,16 +120,16 @@ public abstract class CollectionSerializationTests : SerializationTests
             };
             ObjectUnderTest = new ASActivity
             {
-                Target = new LinkableList<ASObject> { collection }
+                Target = [collection]
             };
             JsonUnderTest.Should().BeJsonObject().And.HaveProperty("target");
             JsonUnderTest.GetProperty("target").Should().BeJsonObject();
         }
-        
-        public ASOrderedCollectionSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     }
 
-    public class ASCollectionPageSerializationTests : CollectionSerializationTests
+    public class ASCollectionPageSerializationTests(JsonLdSerializerFixture fixture)
+        : CollectionSerializationTests(fixture)
     {
 
         [Fact]
@@ -177,16 +179,16 @@ public abstract class CollectionSerializationTests : SerializationTests
             };
             ObjectUnderTest = new ASActivity
             {
-                Target = new LinkableList<ASObject> { collection }
+                Target = [collection]
             };
             JsonUnderTest.Should().BeJsonObject().And.HaveProperty("target");
             JsonUnderTest.GetProperty("target").Should().BeJsonObject();
         }
-        
-        public ASCollectionPageSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     }
 
-    public class ASOrderedCollectionPageSerializationTests : CollectionSerializationTests
+    public class ASOrderedCollectionPageSerializationTests(JsonLdSerializerFixture fixture)
+        : CollectionSerializationTests(fixture)
     {
 
         [Fact]
@@ -236,14 +238,12 @@ public abstract class CollectionSerializationTests : SerializationTests
             };
             ObjectUnderTest = new ASActivity
             {
-                Target = new LinkableList<ASObject> { collection }
+                Target = [collection]
             };
             JsonUnderTest.Should().BeJsonObject().And.HaveProperty("target");
             JsonUnderTest.GetProperty("target").Should().BeJsonObject();
         }
-        
-        public ASOrderedCollectionPageSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     }
 
-    protected CollectionSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 }

@@ -75,4 +75,4 @@ public class MentionLink : ASLink, IASModel<MentionLink, MentionLinkEntity, ASLi
 /// <summary>
 ///     A specialized Link that represents an @mention.
 /// </summary>
-public sealed class MentionLinkEntity : ASEntity<MentionLink, MentionLinkEntity> {}
+public sealed class MentionLinkEntity : ASEntity<MentionLink, MentionLinkEntity>;

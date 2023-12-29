@@ -13,22 +13,22 @@ public class ActivityPubOptions
     ///     This maps to the Content-Type header.
     /// </summary>
     /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type" />
-    public HashSet<string> ResponseContentTypes { get; set; } = new()
-    {
+    public HashSet<string> ResponseContentTypes { get; set; } =
+    [
         "application/activity+json",
         "application/ld+json",
         "application/json"
-    };
+    ];
 
     /// <summary>
     ///     Content types to request from remote servers, in priority order.
     ///     This maps to the Accept header.
     /// </summary>
     /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept" />
-    public List<string> RequestContentTypes { get; set; } = new()
-    {
+    public List<string> RequestContentTypes { get; set; } =
+    [
         "application/activity+json",
         "application/ld+json",
         "application/json"
-    };
+    ];
 }

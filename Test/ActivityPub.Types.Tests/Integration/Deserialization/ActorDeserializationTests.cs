@@ -11,9 +11,9 @@ public abstract class ActorDeserializationTests : DeserializationTests<APActor>
 {
     private ActorDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
-    public class EndpointsShould : ActorDeserializationTests
+    public class EndpointsShould(JsonLdSerializerFixture fixture)
+        : ActorDeserializationTests(fixture)
     {
-        public EndpointsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void ConvertEndpoints()
@@ -70,9 +70,9 @@ public abstract class ActorDeserializationTests : DeserializationTests<APActor>
         }
     }
 
-    public class ActorShould : ActorDeserializationTests
+    public class ActorShould(JsonLdSerializerFixture fixture)
+        : ActorDeserializationTests(fixture)
     {
-        public ActorShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void BeInferredFromInboxAndOutbox()

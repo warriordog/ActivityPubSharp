@@ -40,4 +40,4 @@ public class InviteActivity : OfferActivity, IASModel<InviteActivity, InviteActi
 }
 
 /// <inheritdoc cref="InviteActivity" />
-public sealed class InviteActivityEntity : ASEntity<InviteActivity, InviteActivityEntity> {}
+public sealed class InviteActivityEntity : ASEntity<InviteActivity, InviteActivityEntity>;

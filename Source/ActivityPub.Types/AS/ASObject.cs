@@ -330,23 +330,23 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, IJsonOn
 {
     /// <inheritdoc cref="ASObject.Attachment" />
     [JsonPropertyName("attachment")]
-    public LinkableList<ASObject> Attachment { get; set; } = new();
+    public LinkableList<ASObject> Attachment { get; set; } = [];
 
     /// <inheritdoc cref="ASObject.Audience" />
     [JsonPropertyName("audience")]
-    public LinkableList<ASObject> Audience { get; set; } = new();
+    public LinkableList<ASObject> Audience { get; set; } = [];
 
     /// <inheritdoc cref="ASObject.BCC" />
     [JsonPropertyName("bcc")]
-    public LinkableList<ASObject> BCC { get; set; } = new();
+    public LinkableList<ASObject> BCC { get; set; } = [];
 
     /// <inheritdoc cref="ASObject.BTo" />
     [JsonPropertyName("bto")]
-    public LinkableList<ASObject> BTo { get; set; } = new();
+    public LinkableList<ASObject> BTo { get; set; } = [];
 
     /// <inheritdoc cref="ASObject.CC" />
     [JsonPropertyName("cc")]
-    public LinkableList<ASObject> CC { get; set; } = new();
+    public LinkableList<ASObject> CC { get; set; } = [];
 
     /// <inheritdoc cref="ASObject.Context" />
     [JsonPropertyName("context")]
@@ -378,15 +378,15 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, IJsonOn
 
     /// <inheritdoc cref="ASObject.Tag" />
     [JsonPropertyName("tag")]
-    public LinkableList<ASObject> Tag { get; set; } = new();
+    public LinkableList<ASObject> Tag { get; set; } = [];
 
     /// <inheritdoc cref="ASObject.To" />
     [JsonPropertyName("to")]
-    public LinkableList<ASObject> To { get; set; } = new();
+    public LinkableList<ASObject> To { get; set; } = [];
 
     /// <inheritdoc cref="ASObject.Url" />
     [JsonPropertyName("url")]
-    public List<ASLink> Url { get; set; } = new();
+    public List<ASLink> Url { get; set; } = [];
 
     /// <inheritdoc cref="ASObject.Content" />
     [JsonPropertyName("contentMap")]

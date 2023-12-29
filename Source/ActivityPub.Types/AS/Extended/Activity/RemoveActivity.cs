@@ -41,4 +41,4 @@ public class RemoveActivity : ASActivity, IASModel<RemoveActivity, RemoveActivit
 }
 
 /// <inheritdoc cref="RemoveActivity" />
-public sealed class RemoveActivityEntity : ASEntity<RemoveActivity, RemoveActivityEntity> {}
+public sealed class RemoveActivityEntity : ASEntity<RemoveActivity, RemoveActivityEntity>;

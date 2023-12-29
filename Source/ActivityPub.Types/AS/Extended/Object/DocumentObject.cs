@@ -41,4 +41,4 @@ public class DocumentObject : ASObject, IASModel<DocumentObject, DocumentObjectE
 }
 
 /// <inheritdoc cref="DocumentObject" />
-public sealed class DocumentObjectEntity : ASEntity<DocumentObject, DocumentObjectEntity> {}
+public sealed class DocumentObjectEntity : ASEntity<DocumentObject, DocumentObjectEntity>;

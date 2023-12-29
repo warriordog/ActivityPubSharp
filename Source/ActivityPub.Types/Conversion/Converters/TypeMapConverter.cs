@@ -20,16 +20,17 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         // Read input into temporary object
         var jsonElement = JsonElement.ParseValue(ref reader);
 
-        // String input is a special case of Link
-        if (jsonElement.ValueKind == JsonValueKind.String)
-            return ReadString(jsonElement);
-
-        // Object input can be anything
-        if (jsonElement.ValueKind == JsonValueKind.Object)
-            return ReadObject(jsonElement, options);
-
-        // Any other input is an error
-        throw new JsonException($"Can't convert TypeMap from {jsonElement.ValueKind}");
+        return jsonElement.ValueKind switch
+        {
+            // String input is a special case of Link
+            JsonValueKind.String => ReadString(jsonElement),
+            
+            // Object input can be anything
+            JsonValueKind.Object => ReadObject(jsonElement, options),
+          
+            // Any other input is an error  
+            _ => throw new JsonException($"Can't convert TypeMap from {jsonElement.ValueKind}")
+        };
     }
     
     private static TypeMap ReadString(JsonElement jsonElement)
@@ -128,7 +129,7 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     private static bool TryWriteAsLink(Utf8JsonWriter writer, TypeMap typeMap)
     {
         // If there are any unmapped properties, then bail
-        if (typeMap.UnmappedProperties?.Any() == true)
+        if (typeMap.UnmappedProperties is { Count: > 0 })
             return false;
 
         // If there is any data in any link entities, then bail

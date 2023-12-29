@@ -65,12 +65,15 @@ public class ASType : IASModel<ASType, ASTypeEntity>
     /// <summary>
     ///     Type graph that contains this object.
     /// </summary>
+    [JsonIgnore]
     public TypeMap TypeMap { get; }
 
     /// <inheritdoc cref="TypeMap.ASTypes"/>
+    [JsonIgnore]
     public IReadOnlySet<string> Type => TypeMap.ASTypes;
 
     /// <inheritdoc cref="TypeMap.LDContext"/>
+    [JsonIgnore]
     public IJsonLDContext JsonLDContext => TypeMap.LDContext;
     
     /// <summary>
@@ -181,7 +184,7 @@ public sealed class ASTypeEntity : ASEntity<ASType, ASTypeEntity>
 
     /// <inheritdoc cref="ASType.AttributedTo" />
     [JsonPropertyName("attributedTo")]
-    public LinkableList<ASObject> AttributedTo { get; set; } = new();
+    public LinkableList<ASObject> AttributedTo { get; set; } = [];
 
     /// <inheritdoc cref="ASType.Preview" />
     [JsonPropertyName("preview")]
@@ -196,5 +199,6 @@ public sealed class ASTypeEntity : ASEntity<ASType, ASTypeEntity>
     public string? MediaType { get; set; }
 
     /// <inheritdoc />
+    [JsonIgnore]
     public override bool RequiresObjectForm => Id != null || AttributedTo.Count != 0 || Preview != null || Name != null || MediaType != null;
 }

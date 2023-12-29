@@ -6,13 +6,13 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public abstract class LinkSerializationTests : SerializationTests
+public abstract class LinkSerializationTests(JsonLdSerializerFixture fixture)
+    : SerializationTests(fixture)
 {
-    protected LinkSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
-    public class ASLinkShould : LinkSerializationTests
+    public class ASLinkShould(JsonLdSerializerFixture fixture)
+        : LinkSerializationTests(fixture)
     {
-        public ASLinkShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void SerializeToString_WhenOnlyHRefIsSet()

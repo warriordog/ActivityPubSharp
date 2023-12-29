@@ -158,7 +158,8 @@ public class JsonLdSerializer : IJsonLdSerializer
         ListableConverter listableConverter,
         ListableReadOnlyConverter listableReadOnlyConverter
     )
-        => SerializerOptions = new JsonSerializerOptions(serializerOptions.Value.DefaultJsonSerializerOptions)
+    {
+        SerializerOptions = new JsonSerializerOptions(serializerOptions.Value.DefaultJsonSerializerOptions)
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             TypeInfoResolver = new DefaultJsonTypeInfoResolver()
@@ -173,6 +174,8 @@ public class JsonLdSerializer : IJsonLdSerializer
                 listableReadOnlyConverter
             }
         };
+        SerializerOptions.MakeReadOnly();
+    }
 
     /// <inheritdoc />
     public JsonSerializerOptions SerializerOptions { get; }
@@ -248,13 +251,13 @@ public class JsonLdSerializer : IJsonLdSerializer
     public void Serialize<T>(Stream stream, T? value) => JsonSerializer.Serialize(stream, value, SerializerOptions);
 
     /// <inheritdoc />
-    public void Serialize(Stream stream, object? value, Type type) => JsonSerializer.Serialize(value, type, SerializerOptions);
+    public void Serialize(Stream stream, object? value, Type type) => JsonSerializer.Serialize(stream, value, type, SerializerOptions);
 
     /// <inheritdoc />
     public void Serialize<T>(Utf8JsonWriter writer, T? value) => JsonSerializer.Serialize(writer, value, SerializerOptions);
 
     /// <inheritdoc />
-    public void Serialize(Utf8JsonWriter writer, object? value, Type type) => JsonSerializer.Serialize(value, type, SerializerOptions);
+    public void Serialize(Utf8JsonWriter writer, object? value, Type type) => JsonSerializer.Serialize(writer, value, type, SerializerOptions);
 
     /// <inheritdoc />
     public byte[] SerializeToUtf8Bytes<T>(T? value) => JsonSerializer.SerializeToUtf8Bytes(value, SerializerOptions);

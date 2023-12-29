@@ -40,4 +40,4 @@ public class IgnoreActivity : ASActivity, IASModel<IgnoreActivity, IgnoreActivit
 }
 
 /// <inheritdoc cref="IgnoreActivity" />
-public sealed class IgnoreActivityEntity : ASEntity<IgnoreActivity, IgnoreActivityEntity> {}
+public sealed class IgnoreActivityEntity : ASEntity<IgnoreActivity, IgnoreActivityEntity>;

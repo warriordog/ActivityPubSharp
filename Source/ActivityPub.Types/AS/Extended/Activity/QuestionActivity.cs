@@ -96,19 +96,13 @@ public class QuestionActivity : ASIntransitiveActivity, IASModel<QuestionActivit
 /// <inheritdoc cref="QuestionActivity" />
 public sealed class QuestionActivityEntity : ASEntity<QuestionActivity, QuestionActivityEntity>, IJsonOnDeserialized, IJsonOnSerializing
 {
-    /// <summary>
-    ///     Use <see cref="Options"/> instead.
-    ///     This internal property exists only for serialization purposes.
-    /// </summary>
     [JsonPropertyName("oneOf")]
-    public LinkableList<ASObject>? OneOf { get; set; }
+    [JsonInclude]
+    private LinkableList<ASObject>? OneOf { get; set; }
 
-    /// <summary>
-    ///     Use <see cref="Options"/> instead.
-    ///     This internal property exists only for serialization purposes.
-    /// </summary>
     [JsonPropertyName("anyOf")]
-    public LinkableList<ASObject>? AnyOf { get; set; }
+    [JsonInclude]
+    private LinkableList<ASObject>? AnyOf { get; set; }
 
     /// <inheritdoc cref="QuestionActivity.Options" />
     [JsonIgnore]

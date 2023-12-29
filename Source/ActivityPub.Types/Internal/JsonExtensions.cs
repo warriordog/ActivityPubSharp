@@ -91,5 +91,5 @@ internal static class JsonExtensions
     ///     Checks if the <see cref="JsonElement"/> contains a property with a specified name.
     /// </summary>
     internal static bool HasProperty(this JsonElement element, string name)
-        => element.ValueKind == JsonValueKind.Object && element.TryGetProperty(name, out var _);
+        => element.ValueKind == JsonValueKind.Object && element.TryGetProperty(name, out _);
 }

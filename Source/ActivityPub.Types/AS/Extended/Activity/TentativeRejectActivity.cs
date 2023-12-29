@@ -40,4 +40,4 @@ public class TentativeRejectActivity : RejectActivity, IASModel<TentativeRejectA
 }
 
 /// <inheritdoc cref="TentativeRejectActivity" />
-public sealed class TentativeRejectActivityEntity : ASEntity<TentativeRejectActivity, TentativeRejectActivityEntity> {}
+public sealed class TentativeRejectActivityEntity : ASEntity<TentativeRejectActivity, TentativeRejectActivityEntity>;

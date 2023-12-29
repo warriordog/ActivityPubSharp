@@ -7,10 +7,10 @@ using ActivityPub.Types.Tests.Util.Fixtures;
 
 namespace ActivityPub.Types.Tests.Smoke.Samples;
 
-public abstract class SampleTests : IClassFixture<JsonLdSerializerFixture>
+public abstract class SampleTests(JsonLdSerializerFixture fixture)
+    : IClassFixture<JsonLdSerializerFixture>
 {
-    private readonly IJsonLdSerializer _jsonLdSerializer;
-    protected SampleTests(JsonLdSerializerFixture fixture) => _jsonLdSerializer = fixture.JsonLdSerializer;
+    private readonly IJsonLdSerializer _jsonLdSerializer = fixture.JsonLdSerializer;
 
     protected void TestSample<TExpectedType>(string sampleType)
         where TExpectedType : ASType, IASModel<TExpectedType>

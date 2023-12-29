@@ -11,9 +11,9 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
 {
     private CollectionDeserializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
-    public class ItemsShould : CollectionDeserializationTests
+    public class ItemsShould(JsonLdSerializerFixture fixture)
+        : CollectionDeserializationTests(fixture)
     {
-        public ItemsShould(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void PopulateInCollection()
@@ -64,9 +64,9 @@ public abstract class CollectionDeserializationTests : DeserializationTests<ASOb
         }
     }
 
-    public class LinkElementTests : CollectionDeserializationTests
+    public class LinkElementTests(JsonLdSerializerFixture fixture)
+        : CollectionDeserializationTests(fixture)
     {
-        public LinkElementTests(JsonLdSerializerFixture fixture) : base(fixture) {}
 
         [Fact]
         public void PopulateLinkElements()

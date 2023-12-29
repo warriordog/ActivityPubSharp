@@ -7,9 +7,11 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Tests.Integration.Serialization;
 
-public abstract class ObjectSerializationTests : SerializationTests
+public abstract class ObjectSerializationTests(JsonLdSerializerFixture fixture)
+    : SerializationTests(fixture)
 {
-    public class ContentPropertyShould : ObjectSerializationTests
+    public class ContentPropertyShould(JsonLdSerializerFixture fixture)
+        : ObjectSerializationTests(fixture)
     {
         [Fact]
         public void WriteAllLanguagesToContentMapJson()
@@ -101,9 +103,7 @@ public abstract class ObjectSerializationTests : SerializationTests
 
             JsonUnderTest.Should().NotHaveProperty("contentMap");
         }
-        
-        public ContentPropertyShould(JsonLdSerializerFixture fixture) : base(fixture) {}
+
     }
-    
-    protected ObjectSerializationTests(JsonLdSerializerFixture fixture) : base(fixture) {}
+
 }
