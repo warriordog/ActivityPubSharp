@@ -335,7 +335,7 @@ public class TypeMap
         NarrowUnmappedProperties(entity);
 
         // Register the JSON-LD context
-        _ldContext.AddRange(entity.DefiningContext);
+        _ldContext.Add(entity.DefiningContext);
         
         return true;
     }

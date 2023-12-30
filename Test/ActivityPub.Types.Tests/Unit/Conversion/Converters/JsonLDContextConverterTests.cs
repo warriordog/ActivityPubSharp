@@ -96,12 +96,10 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         [Fact]
         public void WriteSingleDirectly()
         {
-            var input = new JsonLDContext(
-                new HashSet<JsonLDContextObject>
-                {
-                    new("https://example.com/context.jsonld")
-                }
-            );
+            var input = new JsonLDContext
+            {
+                "https://example.com/context.jsonld"
+            };
 
             var json = Write(input);
 
@@ -111,13 +109,11 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
         [Fact]
         public void WriteMultiAsArray()
         {
-            var input = new JsonLDContext(
-                new HashSet<JsonLDContextObject>
-                {
-                    new("https://example.com/first.jsonld"),
-                    new("https://example.com/second.jsonld")
-                }
-            );
+            var input = new JsonLDContext
+            {
+                "https://example.com/first.jsonld",
+                "https://example.com/second.jsonld"
+            };
 
             var json = Write(input);
 

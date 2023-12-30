@@ -239,4 +239,89 @@ public abstract class JsonLDContextObjectTests
             first.GetHashCode().Should().NotBe(second.GetHashCode());
         }
     }
+    
+    public class ContainsTermShould : JsonLDContextObjectTests
+    {
+        private JsonLDContextObject ObjectUnderTest { get; } = new(
+            new Dictionary<string, JsonLDTerm>
+            {
+                ["key1"] = new() { Id = "key1" },
+                ["key2"] = new JsonLDExpandedTerm { Id = "key2", Type = "type2" }
+            }
+        );
+        
+        [Fact]
+        public void ReturnFalse_WhenTermsIsNull()
+        {
+            var remoteContext = new JsonLDContextObject("https://example.com/context.jsonld");
+            remoteContext.Contains(new JsonLDTerm { Id = "id" }).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ReturnFalse_WhenIdDoesNotMatch()
+        {
+            ObjectUnderTest.Contains(new JsonLDTerm { Id = "key3" }).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ReturnFalse_WhenValueIsMissing()
+        {
+            ObjectUnderTest.Contains(new JsonLDTerm { Id = "key2" }).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ReturnFalse_WhenValueDoesNotMatch()
+        {
+            ObjectUnderTest.Contains(new JsonLDExpandedTerm { Id = "key2", Type = "type3" }).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ReturnTrue_WhenIdAndValueMatch()
+        {
+            ObjectUnderTest.Contains(new JsonLDExpandedTerm { Id = "key2", Type = "type2" }).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ReturnTrue_WhenIdMatchesAndNeitherHaveValue()
+        {
+            ObjectUnderTest.Contains(new JsonLDTerm { Id = "key1" }).Should().BeTrue();
+        }
+    }
+
+    public class ContainsStringShould : JsonLDContextObjectTests
+    {
+        private JsonLDContextObject ObjectUnderTest { get; } = new(
+            new Dictionary<string, JsonLDTerm>
+            {
+                ["key1"] = new() { Id = "key1" },
+                ["key2"] = new JsonLDExpandedTerm { Id = "key2", Type = "type2" }
+            }
+        );
+        
+        
+        [Fact]
+        public void ReturnFalse_WhenTermsIsNull()
+        {
+            var remoteContext = new JsonLDContextObject("https://example.com/context.jsonld");
+            remoteContext.Contains(new JsonLDTerm { Id = "id" }).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ReturnFalse_WhenIdDoesNotMatch()
+        {
+            ObjectUnderTest.Contains("key3").Should().BeFalse();
+        }
+
+        [Fact]
+        public void ReturnTrue_WhenIdMatches()
+        {
+            ObjectUnderTest.Contains("key1").Should().BeTrue();
+        }
+
+        [Fact]
+        public void ReturnTrue_WhenIdMatchesAndTermHasValue()
+        {
+            ObjectUnderTest.Contains("key2").Should().BeTrue();
+        }
+    }
 }

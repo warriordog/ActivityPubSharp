@@ -83,7 +83,7 @@ internal class TypeGraphReader : ITypeGraphReader
         where TModel : ASType, IASModel<TModel>
     {
         // Check context first
-        if (!_context.IsSupersetOf(TModel.DefiningContext))
+        if (!_context.Contains(TModel.DefiningContext))
             return false;
         
         // If this is a nameless entity, then we're done.
