@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Text.Json.Serialization;
 using ActivityPub.Types.Conversion.Converters;
+using ActivityPub.Types.Internal;
 
 namespace ActivityPub.Types.Util;
 
@@ -65,10 +66,13 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     /// </summary>
     /// <seealso cref="JsonLDContextObject.ActivityStreams"/>
     public static JsonLDContext CreateASContext(IJsonLDContext? parent = null)
-        => new(parent, [JsonLDContextObject.ActivityStreams]);
+        => new(parent)
+        {
+            JsonLDContextObject.ActivityStreams
+        };
 
     /// <inheritdoc />
-    public IJsonLDContext? Parent { get; }
+    public IJsonLDContext? Parent { get; private set; }
 
     /// <inheritdoc />
     public IEnumerable<JsonLDContextObject> Contexts
@@ -78,7 +82,12 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
 
     /// <inheritdoc />
     public IEnumerable<JsonLDContextObject> LocalContexts => _localContexts;
-    private readonly HashSet<JsonLDContextObject> _localContexts = [];
+    private HashSet<JsonLDContextObject> _localContexts = [];
+    
+    /// <summary>
+    ///     All local contexts that have been declared directly on this object, including those that are hidden by the parent.
+    /// </summary>
+    private readonly HashSet<JsonLDContextObject> _declaredContexts = [];
 
     /// <summary>
     ///     Creates a new, empty context.
@@ -88,18 +97,8 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     /// <summary>
     ///     Derives a new child context from the specified parent
     /// </summary>
-    public JsonLDContext(IJsonLDContext parent)
+    public JsonLDContext(IJsonLDContext? parent)
         => Parent = parent;
-
-    /// <summary>
-    ///     Derives a new child context from the specified parent and pre-existing local contexts.
-    ///     Implements a "copy" operation.
-    /// </summary>
-    internal JsonLDContext(IJsonLDContext? parent, HashSet<JsonLDContextObject> localContexts)
-    {
-        _localContexts = localContexts;
-        Parent = parent;
-    }
 
     /// <summary>
     ///     Adds all context objects from the specified context.
@@ -117,6 +116,7 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     /// </summary>
     public void Add(JsonLDContextObject contextObject)
     {
+        _declaredContexts.Add(contextObject);
         if (Parent?.Contains(contextObject) != true)
             _localContexts.Add(contextObject);
     }
@@ -125,8 +125,12 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     ///     Removes all local context objects from the context.
     ///     Objects in the parent are ignored.
     /// </summary>
-    public void Clear() => _localContexts.Clear();
-    
+    public void Clear()
+    {
+        _declaredContexts.Clear();
+        _localContexts.Clear();
+    }
+
     /// <inheritdoc cref="Contains(IJsonLDContext)" />
     public bool Contains(IJsonLDContext context)
         => context.All(Contains);
@@ -159,7 +163,11 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     ///     Removes the specified context object from the context.
     ///     Only applies to local objects - inherited objects are ignored.
     /// </summary>
-    public bool Remove(JsonLDContextObject item) => _localContexts.Remove(item);
+    public bool Remove(JsonLDContextObject item)
+    {
+        _declaredContexts.Remove(item);
+        return _localContexts.Remove(item);
+    }
 
     /// <inheritdoc cref="ICollection{JsonLDContextObject}.Count" />
     public int Count
@@ -175,4 +183,23 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     
     /// <inheritdoc />
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    /// <summary>
+    ///     Sets or changes the parent associated with this context.
+    ///     Local contexts will be updated with new shadowing.
+    /// </summary>
+    public void SetParent(IJsonLDContext? parent)
+    {
+        if (parent == Parent)
+            return;
+        
+        if (parent == null)
+            _localContexts.AddRange(_declaredContexts);
+        else
+            _localContexts = _declaredContexts
+                .Where(c => !parent.Contains(c))
+                .ToHashSet();
+        
+        Parent = parent;
+    }
 }

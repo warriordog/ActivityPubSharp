@@ -7,8 +7,6 @@ using ActivityPub.Types.Util;
 
 namespace ActivityPub.Types.Conversion.Converters;
 
-// TODO refactor so that parent can be changed, then remove the copy stuff during conversion
-
 /// <summary>
 ///     Custom JSON converter for the JSON-LD <code>@context</code> property.
 /// </summary>

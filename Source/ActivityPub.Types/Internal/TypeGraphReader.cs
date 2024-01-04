@@ -125,12 +125,11 @@ internal class TypeGraphReader : ITypeGraphReader
             return JsonLDContext.CreateASContext(parentContext);
 
         // Convert context
-        var rawContext = contextProp.Deserialize<JsonLDContext>(options)
+        var context = contextProp.Deserialize<JsonLDContext>(options)
                ?? throw new JsonException("Can't convert TypeMap - \"@context\" property is null");
-        return new JsonLDContext(parentContext, rawContext.LocalContexts.ToHashSet())
-        {
-            JsonLDContextObject.ActivityStreams
-        };
+        context.Add(JsonLDContextObject.ActivityStreams);
+        context.SetParent(parentContext);
+        return context;
     }
 
     private static CompositeASType ReadASTypes(JsonElement element, JsonSerializerOptions options)

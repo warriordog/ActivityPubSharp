@@ -542,4 +542,81 @@ public abstract class JsonLDContextTests
                 .And.Contain("https://example.com/child.jsonld");
         }
     }
+
+    public class SetParentShould : JsonLDContextTests
+    {
+        private JsonLDContext NewParent { get; } =
+        [
+            "https://example.com/first.jsonld",
+            "https://example.com/third.jsonld"
+        ];
+        
+        private JsonLDContext ParentContext { get; }
+        private JsonLDContext ContextUnderTest { get; }
+
+        public SetParentShould()
+        {
+            ParentContext = new JsonLDContext
+            {
+                "https://example.com/first.jsonld",
+                "https://example.com/second.jsonld"
+            };
+            ContextUnderTest = new JsonLDContext(ParentContext)
+            {
+                "https://example.com/second.jsonld",
+                "https://example.com/third.jsonld"
+            };
+        }
+        
+        [Fact]
+        public void DoNothing_WhenParentIsSameValue()
+        {
+            var expectedContexts = ContextUnderTest.LocalContexts.ToHashSet();
+            
+            ContextUnderTest.SetParent(ParentContext);
+
+            var actualContexts = ContextUnderTest.LocalContexts.ToHashSet();
+            actualContexts.Should().BeEquivalentTo(expectedContexts);
+        }
+
+        [Fact]
+        public void DoNothing_WhenParentIsSameNull()
+        {
+            ContextUnderTest.SetParent(null);
+            var expectedContexts = ContextUnderTest.LocalContexts.ToHashSet();
+            
+            ContextUnderTest.SetParent(null);
+
+            var actualContexts = ContextUnderTest.LocalContexts.ToHashSet();
+            actualContexts.Should().BeEquivalentTo(expectedContexts);
+        }
+
+        [Fact]
+        public void SetParentProperty()
+        {
+            ContextUnderTest.SetParent(NewParent);
+            ContextUnderTest.Parent.Should().BeSameAs(NewParent);
+        }
+        
+        [Fact]
+        public void PromoteAllDeclared_WhenParentIsNull()
+        {
+            ContextUnderTest.SetParent(null);
+            ContextUnderTest.LocalContexts.Should().Contain("https://example.com/second.jsonld");
+        }
+
+        [Fact]
+        public void FilterByNewParent()
+        {
+            ContextUnderTest.SetParent(NewParent);
+            ContextUnderTest.LocalContexts.Should().NotContain("https://example.com/third.jsonld");
+        }
+
+        [Fact]
+        public void RestoreByNewParent()
+        {
+            ContextUnderTest.SetParent(NewParent);
+            ContextUnderTest.LocalContexts.Should().Contain("https://example.com/second.jsonld");
+        }
+    }
 }
