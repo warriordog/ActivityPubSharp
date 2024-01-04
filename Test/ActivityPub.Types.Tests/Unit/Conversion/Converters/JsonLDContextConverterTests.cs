@@ -119,5 +119,22 @@ public class JsonLDContextConverterTests : JsonConverterTests<JsonLDContext, Jso
 
             json.Should().Be("[\"https://example.com/first.jsonld\",\"https://example.com/second.jsonld\"]");
         }
+
+        [Fact]
+        public void WriteOnlyLocalContexts()
+        {
+            var parent = new JsonLDContext()
+            {
+                "https://example.com/parent.jsonld",
+            };
+            var input = new JsonLDContext(parent)
+            {
+                "https://example.com/child.jsonld",
+            };
+
+            var json = Write(input);
+
+            json.Should().Be("\"https://example.com/child.jsonld\"");
+        }
     }
 }

@@ -27,9 +27,14 @@ public interface IJsonLDContext : IReadOnlyCollection<JsonLDContextObject>
     public IJsonLDContext? Parent { get; }
     
     /// <summary>
-    ///     All context objects that either defined in this context, or inherited from the parent.
+    ///     All context objects that are either defined in this context, or inherited from the parent.
     /// </summary>
     public IEnumerable<JsonLDContextObject> Contexts { get; }
+    
+    /// <summary>
+    ///     All context objects that are defined in this context, <em>not</em> inherited from the parent.
+    /// </summary>
+    public IEnumerable<JsonLDContextObject> LocalContexts { get; }
     
     /// <summary>
     ///     Checks if this context contains all objects from another.
@@ -61,15 +66,17 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     public static JsonLDContext CreateASContext() => [JsonLDContextObject.ActivityStreams];
     
     /// <inheritdoc />
-    public IJsonLDContext? Parent { get; private init; }
+    public IJsonLDContext? Parent { get; }
 
     /// <inheritdoc />
     public IEnumerable<JsonLDContextObject> Contexts
         => Parent != null
         ? LocalContexts.Concat(Parent.Contexts)
         : LocalContexts;
-    
-    private HashSet<JsonLDContextObject> LocalContexts { get; init; } = [];
+
+    /// <inheritdoc />
+    public IEnumerable<JsonLDContextObject> LocalContexts => _localContexts;
+    private readonly HashSet<JsonLDContextObject> _localContexts = [];
 
     /// <summary>
     ///     Creates a new, empty context.
@@ -83,13 +90,20 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
         => Parent = parent;
 
     /// <summary>
+    ///     Derives a new child context from the specified parent and pre-existing local contexts.
+    ///     Implements a "copy" operation.
+    /// </summary>
+    private JsonLDContext(IJsonLDContext? parent, HashSet<JsonLDContextObject> localContexts)
+    {
+        _localContexts = localContexts;
+        Parent = parent;
+    }
+
+    /// <summary>
     ///     Creates a shallow copy of this Json-LD context.
     /// </summary>
-    public JsonLDContext Clone() => new()
-    {
-        Parent = Parent,
-        LocalContexts = [..LocalContexts]
-    };
+    public JsonLDContext Clone()
+        => new(Parent, _localContexts);
 
     /// <summary>
     ///     Adds all context objects from the specified context.
@@ -108,14 +122,14 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     public void Add(JsonLDContextObject contextObject)
     {
         if (Parent?.Contains(contextObject) != true)
-            LocalContexts.Add(contextObject);
+            _localContexts.Add(contextObject);
     }
 
     /// <summary>
     ///     Removes all local context objects from the context.
     ///     Objects in the parent are ignored.
     /// </summary>
-    public void Clear() => LocalContexts.Clear();
+    public void Clear() => _localContexts.Clear();
     
     /// <inheritdoc cref="Contains(IJsonLDContext)" />
     public bool Contains(IJsonLDContext context)
@@ -149,13 +163,13 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     ///     Removes the specified context object from the context.
     ///     Only applies to local objects - inherited objects are ignored.
     /// </summary>
-    public bool Remove(JsonLDContextObject item) => LocalContexts.Remove(item);
+    public bool Remove(JsonLDContextObject item) => _localContexts.Remove(item);
 
     /// <inheritdoc cref="ICollection{JsonLDContextObject}.Count" />
     public int Count
         => Parent != null
-            ? LocalContexts.Count + Parent.Contexts.Count()
-            : LocalContexts.Count;
+            ? _localContexts.Count + Parent.Contexts.Count()
+            : _localContexts.Count;
 
     /// <inheritdoc />
     public bool IsReadOnly => false;

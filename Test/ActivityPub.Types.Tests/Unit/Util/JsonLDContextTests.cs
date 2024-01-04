@@ -103,6 +103,47 @@ public abstract class JsonLDContextTests
         }
     }
 
+    public class LocalContextsShould : JsonLDContextTests
+    {
+        private JsonLDContext ParentContext { get; }
+        private JsonLDContext ContextUnderTest { get; }
+        
+        public LocalContextsShould()
+        {
+            ParentContext =
+            [
+                "https://example.com/context-1.jsonld",
+                "https://example.com/context-2.jsonld"
+            ];
+            ContextUnderTest = new JsonLDContext(ParentContext)
+            {
+                "https://example.com/context-2.jsonld",
+                "https://example.com/context-3.jsonld",
+                "https://example.com/context-4.jsonld"
+            };
+        }
+
+        [Fact]
+        public void ContainAllLocalContexts()
+        {
+            ContextUnderTest.LocalContexts.Should()
+                .Contain("https://example.com/context-3.jsonld")
+                .And.Contain("https://example.com/context-4.jsonld");
+        }
+
+        [Fact]
+        public void NotContainInheritedContexts()
+        {
+            ContextUnderTest.LocalContexts.Should().NotContain("https://example.com/context-1.jsonld");
+        }
+
+        [Fact]
+        public void NotContainSharedContexts()
+        {
+            ContextUnderTest.LocalContexts.Should().NotContain("https://example.com/context-2.jsonld");
+        }
+    }
+
     public class ContainsContextShould : JsonLDContextTests
     {
         private JsonLDContext ParentContext { get; }
