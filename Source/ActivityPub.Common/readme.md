@@ -8,8 +8,4 @@ All important services and configuration classes are bound through DI.
 This module does *not* publish a package.
 Instead, its included as a dependency by other packages that need it.
 
-## Available Options
-
-| Options Class                                    | Configuration Path    | Description                                       |
-|--------------------------------------------------|-----------------------|---------------------------------------------------|
-| [ActivityPubOptions](Util/ActivityPubOptions.cs) | TBD - not implemented | Common, general-purpose ActivityPub configuration |
+[Package Reference](https://warriordog.github.io/ActivityPubSharp/User%20Guide/Package%20Reference/ActivityPub.Common)
