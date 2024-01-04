@@ -41,8 +41,8 @@ public class TypeMap
     internal TypeMap(ITypeGraphReader sourceJson)
     {
         _sourceJson = sourceJson;
-        _ldContext = sourceJson.GetASContext();
-        _asTypes.AddRange(sourceJson.GetASTypes());
+        _ldContext = sourceJson.ASContext;
+        _asTypes = sourceJson.ASTypes;
     }
 
     /// <summary>

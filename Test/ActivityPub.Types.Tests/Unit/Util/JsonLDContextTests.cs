@@ -55,6 +55,14 @@ public abstract class JsonLDContextTests
             var second = JsonLDContext.CreateASContext();
             first.Should().NotBeSameAs(second);
         }
+
+        [Fact]
+        public void SetParent()
+        {
+            var parent = new JsonLDContext();
+            var context = JsonLDContext.CreateASContext(parent);
+            context.Parent.Should().BeSameAs(parent);
+        }
     }
 
     public class ContextsShould : JsonLDContextTests

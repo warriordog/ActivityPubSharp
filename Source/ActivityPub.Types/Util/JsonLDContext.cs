@@ -61,10 +61,12 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
 {
     /// <summary>
     ///     Constructs a new context, pre-initialized with the ActivityStreams context.
+    ///     A parent can optionally be linked.
     /// </summary>
     /// <seealso cref="JsonLDContextObject.ActivityStreams"/>
-    public static JsonLDContext CreateASContext() => [JsonLDContextObject.ActivityStreams];
-    
+    public static JsonLDContext CreateASContext(IJsonLDContext? parent = null)
+        => new(parent, [JsonLDContextObject.ActivityStreams]);
+
     /// <inheritdoc />
     public IJsonLDContext? Parent { get; }
 
@@ -93,17 +95,11 @@ public class JsonLDContext : IJsonLDContext, ICollection<JsonLDContextObject>
     ///     Derives a new child context from the specified parent and pre-existing local contexts.
     ///     Implements a "copy" operation.
     /// </summary>
-    private JsonLDContext(IJsonLDContext? parent, HashSet<JsonLDContextObject> localContexts)
+    internal JsonLDContext(IJsonLDContext? parent, HashSet<JsonLDContextObject> localContexts)
     {
         _localContexts = localContexts;
         Parent = parent;
     }
-
-    /// <summary>
-    ///     Creates a shallow copy of this Json-LD context.
-    /// </summary>
-    public JsonLDContext Clone()
-        => new(Parent, _localContexts);
 
     /// <summary>
     ///     Adds all context objects from the specified context.
