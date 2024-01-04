@@ -14,6 +14,12 @@ namespace ActivityPub.Types.Conversion.Converters;
 /// <inheritdoc />
 public class TypeMapConverter : JsonConverter<TypeMap>
 {
+    /// <summary>
+    ///     Chain of contexts that inherit from each other.
+    ///     If a value is present, then it should be the parent of the current object's context.
+    /// </summary>
+    private NestedContextStack NestedContextStack { get; } = new();
+    
     /// <inheritdoc />
     public override TypeMap Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -33,29 +39,28 @@ public class TypeMapConverter : JsonConverter<TypeMap>
         };
     }
     
-    private static TypeMap ReadString(JsonElement jsonElement)
+    private TypeMap ReadString(JsonElement jsonElement)
     {
-        // Read Link entity
-        var link = new ASLinkEntity
+        // Construct the JSON-LD context
+        var parentContext = NestedContextStack.Peek();
+        var context = JsonLDContext.CreateASContext(parentContext);
+        
+        // Create and prep the type graph
+        var typeMap = new TypeMap(context);
+        typeMap.Extend<ASType, ASTypeEntity>();
+        
+        // Read Link from string
+        var link = new ASLink(typeMap)
         {
             HRef = jsonElement.GetString()!
         };
-        
-        // Create TypeGraph around it
-        var context = JsonLDContext.CreateASContext();
-        var types = new List<string> { ASLink.LinkType };
-        var typeMap = new TypeMap(context, types);
-        
-        // Attach entities
-        typeMap.AddEntity(link);
-        typeMap.AddEntity(new ASTypeEntity());
 
-        return typeMap;
+        return link.TypeMap;
     }
 
-    private static TypeMap ReadObject(JsonElement jsonElement, JsonSerializerOptions options)
+    private TypeMap ReadObject(JsonElement jsonElement, JsonSerializerOptions options)
     {
-        var typeGraphReader = new TypeGraphReader(options, jsonElement);
+        var typeGraphReader = new TypeGraphReader(options, jsonElement, NestedContextStack);
         return new TypeMap(typeGraphReader);
     }
 

@@ -1,13 +1,15 @@
 ﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Collections;
+
 namespace ActivityPub.Types.Internal;
 
 /// <summary>
 ///     Represents the AS type name of a composite object.
 ///     More-specific subtypes will "shadow" (replace) more-generic base types. 
 /// </summary>
-internal class CompositeASType
+internal class CompositeASType : IEnumerable<string>
 {
     private readonly HashSet<string> _allASTypes = [];
     private readonly HashSet<string> _flatASTypes = [];
@@ -61,4 +63,7 @@ internal class CompositeASType
             Add(asType);
         }
     }
+    
+    public IEnumerator<string> GetEnumerator() => Types.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

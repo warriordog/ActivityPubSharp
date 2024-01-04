@@ -41,10 +41,10 @@ public class TypeMap
     internal TypeMap(ITypeGraphReader sourceJson)
     {
         _sourceJson = sourceJson;
-        _ldContext = sourceJson.GetASContext();
-        _asTypes.AddRange(sourceJson.GetASTypes());
+        _ldContext = sourceJson.ASContext;
+        _asTypes = sourceJson.ASTypes;
     }
-
+    
     /// <summary>
     ///     Constructs an empty TypeMap from pre-constructed context.
     ///     The caller is responsible for populating any associated entities. 
@@ -53,13 +53,6 @@ public class TypeMap
     ///     This constructor is required to convert links in string-form.
     ///     That specific case is not supported by <see cref="TypeGraphReader"/>. 
     /// </remarks>
-    internal TypeMap(JsonLDContext ldContext, IEnumerable<string> asTypes)
-    {
-        _ldContext = ldContext;
-        _asTypes.AddRange(asTypes);
-    }
-    
-    /// <inheritdoc cref="TypeMap(JsonLDContext, IEnumerable{string})"/>
     internal TypeMap(JsonLDContext ldContext) => _ldContext = ldContext;
 
     /// <inheritdoc cref="CompositeASType.Types"/>
@@ -335,7 +328,7 @@ public class TypeMap
         NarrowUnmappedProperties(entity);
 
         // Register the JSON-LD context
-        _ldContext.AddRange(entity.DefiningContext);
+        _ldContext.Add(entity.DefiningContext);
         
         return true;
     }
