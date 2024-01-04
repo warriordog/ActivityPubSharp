@@ -41,24 +41,21 @@ public class TypeMapConverter : JsonConverter<TypeMap>
     
     private TypeMap ReadString(JsonElement jsonElement)
     {
-        // Read Link entity
-        // TODO pass TypeMap into constructor
-        var link = new ASLinkEntity
+        // Construct the JSON-LD context
+        var parentContext = NestedContextStack.Peek();
+        var context = JsonLDContext.CreateASContext(parentContext);
+        
+        // Create and prep the type graph
+        var typeMap = new TypeMap(context);
+        typeMap.Extend<ASType, ASTypeEntity>();
+        
+        // Read Link from string
+        var link = new ASLink(typeMap)
         {
             HRef = jsonElement.GetString()!
         };
-        
-        // Create TypeGraph around it
-        var parentContext = NestedContextStack.Peek();
-        var context = JsonLDContext.CreateASContext(parentContext);
-        var types = new List<string> { ASLink.LinkType };
-        var typeMap = new TypeMap(context, types);
-        
-        // Attach entities
-        typeMap.AddEntity(link);
-        typeMap.AddEntity(new ASTypeEntity());
 
-        return typeMap;
+        return link.TypeMap;
     }
 
     private TypeMap ReadObject(JsonElement jsonElement, JsonSerializerOptions options)
