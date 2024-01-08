@@ -150,7 +150,7 @@ public class ASObject : ASType, IASModel<ASObject, ASObjectEntity, ASType>
     ///     Indicates one or more entities for which this object is considered a response.
     /// </summary>
     /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-inReplyTo" />
-    public Linkable<ASObject>? InReplyTo
+    public LinkableList<ASObject>? InReplyTo
     {
         get => Entity.InReplyTo;
         set => Entity.InReplyTo = value;
@@ -366,7 +366,7 @@ public sealed class ASObjectEntity : ASEntity<ASObject, ASObjectEntity>, IJsonOn
 
     /// <inheritdoc cref="ASObject.InReplyTo" />
     [JsonPropertyName("inReplyTo")]
-    public Linkable<ASObject>? InReplyTo { get; set; }
+    public LinkableList<ASObject>? InReplyTo { get; set; }
 
     /// <inheritdoc cref="ASObject.Location" />
     [JsonPropertyName("location")]
