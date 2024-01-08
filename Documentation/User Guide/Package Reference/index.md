@@ -1,4 +1,4 @@
-# Packaeg Reference
+# Package Reference
 
 ## About
 ActivityPubSharp is a toolkit of modular packages that support the use of ActivityPub in .NET applications.
