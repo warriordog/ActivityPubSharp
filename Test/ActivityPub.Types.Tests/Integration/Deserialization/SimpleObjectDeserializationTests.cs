@@ -49,6 +49,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
                                 "type": "Person",
                                 "inbox": "https://example.com/actor/inbox",
                                 "outbox": "https://example.com/actor/outbox",
+                                "sharedInbox": "https://example.com/actor/shared_inbox",
                                 "image": {
                                     "type": "Image"
                                 },
@@ -60,6 +61,7 @@ public abstract class SimpleObjectDeserializationTests : DeserializationTests<AS
             var personUnderTest = ObjectUnderTest.As<PersonActor>();
             personUnderTest.Inbox.HRef.Should().Be("https://example.com/actor/inbox");
             personUnderTest.Outbox.HRef.Should().Be("https://example.com/actor/outbox");
+            personUnderTest.SharedInbox?.HRef.Should().Be("https://example.com/actor/shared_inbox");
             personUnderTest.Image.Should().NotBeNull();
             personUnderTest.Id.Should().Be("https://example.com/actor/id");
         }

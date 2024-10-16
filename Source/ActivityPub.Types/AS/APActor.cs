@@ -66,6 +66,15 @@ public class APActor : ASObject, IASModel<APActor, APActorEntity, ASObject>
     }
 
     /// <summary>
+    /// An optional endpoint used for wide delivery of activities addressed to public or other collections
+    /// </summary>
+    public ASLink? SharedInbox
+    {
+        get => Entity.SharedInbox;
+        set => Entity.SharedInbox = value;
+    }
+
+    /// <summary>
     ///     A reference to an ActivityStreams collection of the actors that this actor is following.
     ///     This is a list of everybody that the actor has followed, added as a side effect.
     /// </summary>
@@ -155,6 +164,10 @@ public sealed class APActorEntity : ASEntity<APActor, APActorEntity>
     /// <inheritdoc cref="APActor.Outbox" />
     [JsonPropertyName("outbox")]
     public ASLink? Outbox { get; set; }
+    
+    /// <inheritdoc cref="APActor.SharedInbox"/>
+    [JsonPropertyName("sharedInbox")]
+    public ASLink? SharedInbox { get; set; }
 
     /// <inheritdoc cref="APActor.Following" />
     [JsonPropertyName("following")]

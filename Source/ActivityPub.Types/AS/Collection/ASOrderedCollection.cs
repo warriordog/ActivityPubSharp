@@ -19,7 +19,7 @@ namespace ActivityPub.Types.AS.Collection;
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection" />
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection" />
-public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrderedCollectionEntity, ASObject>, IEnumerable<Linkable<ASObject>>
+public class ASOrderedCollection : ASCollection, IASModel<ASOrderedCollection, ASOrderedCollectionEntity, ASCollection>, IEnumerable<Linkable<ASObject>>
 {
     /// <summary>
     ///     ActivityStreams type name for "OrderedCollection" types.
