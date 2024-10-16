@@ -46,7 +46,7 @@ public class ASOrderedCollection : ASCollection, IASModel<ASOrderedCollection, A
     static ASOrderedCollection IASModel<ASOrderedCollection>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 
     private ASOrderedCollectionEntity Entity { get; }
-
+    
 
     /// <summary>
     ///     In a paged Collection, indicates the page that contains the most recently updated member items.

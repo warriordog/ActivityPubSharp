@@ -46,6 +46,7 @@ public class ASCollection : ASObject, IASModel<ASCollection, ASCollectionEntity,
     static ASCollection IASModel<ASCollection>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 
     private ASCollectionEntity Entity { get; }
+    
 
     /// <summary>
     ///     In a paged Collection, indicates the page that contains the most recently updated member items.
