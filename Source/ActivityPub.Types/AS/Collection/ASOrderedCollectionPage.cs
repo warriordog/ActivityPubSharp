@@ -89,7 +89,10 @@ public class ASOrderedCollectionPage : ASOrderedCollection, IASModel<ASOrderedCo
     /// <summary>
     ///     Converts a list of objects into an ordered collection page.
     /// </summary>
-    public static implicit operator ASOrderedCollectionPage(List<ASObject> collection) => new() { Items = new LinkableList<ASObject>(collection) };
+    public static implicit operator ASOrderedCollectionPage(List<ASObject> collection) => new()
+    {
+        Items = new LinkableList<ASObject>(collection)
+    };
 }
 
 /// <inheritdoc cref="ASOrderedCollectionPage" />

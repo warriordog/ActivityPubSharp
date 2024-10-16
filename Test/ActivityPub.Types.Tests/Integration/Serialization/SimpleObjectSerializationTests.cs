@@ -71,6 +71,7 @@ public abstract class SimpleObjectSerializationTests : SerializationTests
                 // From APActor
                 Inbox = "https://example.com/actor/inbox",
                 Outbox = "https://example.com/actor/outbox",
+                SharedInbox = "https://example.com/actor/shared_inbox",
 
                 // From ASObject
                 Image = new ImageObject(),

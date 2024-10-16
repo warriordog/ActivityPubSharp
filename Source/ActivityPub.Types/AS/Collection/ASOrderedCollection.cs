@@ -19,7 +19,7 @@ namespace ActivityPub.Types.AS.Collection;
 /// </remarks>
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-collection" />
 /// <seealso href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-orderedcollection" />
-public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrderedCollectionEntity, ASObject>, IEnumerable<Linkable<ASObject>>
+public class ASOrderedCollection : ASCollection, IASModel<ASOrderedCollection, ASOrderedCollectionEntity, ASCollection>, IEnumerable<Linkable<ASObject>>
 {
     /// <summary>
     ///     ActivityStreams type name for "OrderedCollection" types.
@@ -46,7 +46,7 @@ public class ASOrderedCollection : ASObject, IASModel<ASOrderedCollection, ASOrd
     static ASOrderedCollection IASModel<ASOrderedCollection>.FromGraph(TypeMap typeMap) => new(typeMap, null);
 
     private ASOrderedCollectionEntity Entity { get; }
-
+    
 
     /// <summary>
     ///     In a paged Collection, indicates the page that contains the most recently updated member items.
