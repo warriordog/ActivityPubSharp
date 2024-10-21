@@ -33,7 +33,10 @@ public class ActivityPubClient : IActivityPubClient
         // https://stackoverflow.com/questions/47176104/c-sharp-add-accept-header-to-httpclient
         foreach (var mimeType in apOptions.RequestContentTypes)
         {
-            var mediaType = new MediaTypeWithQualityHeaderValue(mimeType);
+            var mediaType = new MediaTypeWithQualityHeaderValue(mimeType.MediaType);
+            if (mimeType.Profile != "") {
+                mediaType.Parameters.Add(new NameValueHeaderValue("profile", mimeType.Profile));
+            }
             _httpClient.DefaultRequestHeaders.Accept.Add(mediaType);
         }
     }
@@ -83,9 +86,9 @@ public class ActivityPubClient : IActivityPubClient
         if (!resp.IsSuccessStatusCode)
             throw new ApplicationException($"Request failed: got status {resp.StatusCode}");
 
-        var mediaType = resp.Content.Headers.ContentType?.MediaType;
-        if (mediaType == null || !_apOptions.ResponseContentTypes.Contains(mediaType))
-            throw new ApplicationException($"Request failed: unsupported content type {mediaType}");
+        var contentType = resp.Content.Headers.ContentType;
+        if (contentType == null || !_apOptions.ResponseContentTypes.Any(expectedContentType => IsContentTypeMatch(contentType, expectedContentType)))
+            throw new ApplicationException($"Request failed: unsupported content type {contentType?.MediaType}");
 
         var json = await resp.Content.ReadAsStringAsync(cancellationToken);
         var jsonObj = _jsonLdSerializer.Deserialize(json, targetType);
@@ -98,6 +101,17 @@ public class ActivityPubClient : IActivityPubClient
             obj = await Get(link.HRef.Uri, targetType, maxRecursion - 1, cancellationToken);
 
         return obj;
+    }
+
+    private static bool IsContentTypeMatch(MediaTypeHeaderValue actual, ActivityPubOptions.ContentType expected) {
+        if (!expected.MediaType.Equals(actual.MediaType)) {
+            return false;
+        }
+
+        var actualProfile = actual.Parameters.FirstOrDefault(p => p.Name.Equals("profile"))?.Value ?? "";
+
+        return string.Equals(actualProfile, expected.Profile,
+            StringComparison.OrdinalIgnoreCase);
     }
 
 

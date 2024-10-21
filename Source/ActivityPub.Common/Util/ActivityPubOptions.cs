@@ -13,11 +13,12 @@ public class ActivityPubOptions
     ///     This maps to the Content-Type header.
     /// </summary>
     /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type" />
-    public HashSet<string> ResponseContentTypes { get; set; } =
+    public HashSet<ContentType> ResponseContentTypes { get; set; } =
     [
-        "application/activity+json",
-        "application/ld+json",
-        "application/json"
+        new ContentType("application/ld+json", "https://www.w3.org/ns/activitystreams"),
+        new ContentType("application/activity+json", ""),
+        new ContentType("application/ld+json", ""),
+        new ContentType("application/json", "")
     ];
 
     /// <summary>
@@ -25,10 +26,18 @@ public class ActivityPubOptions
     ///     This maps to the Accept header.
     /// </summary>
     /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept" />
-    public List<string> RequestContentTypes { get; set; } =
+    public List<ContentType> RequestContentTypes { get; set; } =
     [
-        "application/activity+json",
-        "application/ld+json",
-        "application/json"
+        new ContentType("application/ld+json", "https://www.w3.org/ns/activitystreams"),
+        new ContentType("application/activity+json", ""),
+        new ContentType("application/ld+json", ""),
+        new ContentType("application/json", "")
     ];
+
+    /// <summary>
+    ///     A Record that contains the MediaType and Profile for the HTTP Content-Type and Accept Headers
+    /// </summary>
+    /// <param name="MediaType">A MIME type for the header</param>
+    /// <param name="Profile">A profile to append to the MIME type, leave empty for none</param>
+    public record struct ContentType(string MediaType, string Profile);
 }
